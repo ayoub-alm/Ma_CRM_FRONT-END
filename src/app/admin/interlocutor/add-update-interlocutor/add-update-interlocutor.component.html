@@ -1,0 +1,143 @@
+<div class="shadow-sm bg-light d-flex justify-content-between pt-2" mat-dialog-title>
+  <div class="text-start col-10 fs-6">
+    <button color="primary" mat-icon-button>
+      <mat-icon>domain</mat-icon>
+    </button>
+    <span *ngIf="!interlocutorToUpdate?.id">Créer</span>
+    <span *ngIf="interlocutorToUpdate?.id">Mettre à jour</span> l'entreprise
+  </div>
+  <!-- Reset Button -->
+  <div class="col-2 text-end">
+    <button class="mx-2" color="primary" mat-icon-button (click)="onReset()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <!-- Close Button -->
+    <button class="" color="warn" mat-dialog-close mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+
+<mat-dialog-content class="container-fluid w-100">
+  <form [formGroup]="interlocutorForm" class="row py-4">
+    <!-- Full Name -->
+    <div class="col-lg-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Nom complet</mat-label>
+        <input formControlName="fullName" matInput placeholder="John Doe" required>
+        <mat-error *ngIf="interlocutorForm.get('fullName')?.hasError('required')">
+          Le nom complet est obligatoire.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Email Address -->
+    <div class="col-lg-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Email</mat-label>
+        <input formControlName="emailAddress" matInput placeholder="john.doe@example.com" required>
+        <mat-error *ngIf="interlocutorForm.get('emailAddress')?.hasError('required')">
+          L'email est obligatoire.
+        </mat-error>
+        <mat-error *ngIf="interlocutorForm.get('emailAddress')?.hasError('email')">
+          Adresse email invalide.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Phone Number -->
+    <div class="col-lg-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Téléphone</mat-label>
+        <input formControlName="phoneNumber" matInput placeholder="+212600000000" required>
+        <mat-error *ngIf="interlocutorForm.get('phoneNumber')?.hasError('required')">
+          Le numéro de téléphone est obligatoire.
+        </mat-error>
+        <mat-error *ngIf="interlocutorForm.get('phoneNumber')?.hasError('pattern')">
+          Numéro de téléphone invalide.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+
+    <!-- Prospect ID (Select Box) -->
+    <div class="col-lg-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Prospect </mat-label>
+        <mat-select formControlName="prospectId" required>
+          <mat-option *ngFor="let prospect of prospects | async" [value]="prospect.id">
+            {{ prospect.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="interlocutorForm.get('prospectId')?.hasError('required')">
+          Le prospect est obligatoire.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <!-- Job Title (Select Box) -->
+    <div class="col-lg-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Titre du poste</mat-label>
+        <mat-select formControlName="jobTitle" >
+          <mat-option *ngFor="let title of jobTitles | async" [value]="title.id">
+            {{ title.name }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="interlocutorForm.get('jobTitle')?.hasError('required')">
+          Le titre du poste est obligatoire.
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+
+
+    <!-- department (Select Box) -->
+    <div class="col-lg-6">
+      <mat-form-field appearance="outline" class="w-100">
+        <mat-label>Départment </mat-label>
+        <mat-select formControlName="departmentId" >
+          <mat-option *ngFor="let department of departments | async" [value]="department.id">
+            {{ department.name }}
+          </mat-option>
+        </mat-select>
+        <!--        <mat-error *ngIf="interlocutorForm.get('departmentId')?.hasError('required')">-->
+        <!--          Le prospect est obligatoire.-->
+        <!--        </mat-error>-->
+      </mat-form-field>
+    </div>
+
+
+    <!-- Active Checkbox -->
+    <div class="col-lg-12 px-5 pt-3">
+      <mat-slide-toggle
+        formControlName="active"
+        class="example-margin"
+        color="primary"
+        [checked]="interlocutorForm.get('active')?.value === 'Active' "
+      >
+        {{ interlocutorForm.get('active')?.value ? 'Active' : 'Inactive' }}
+
+      </mat-slide-toggle>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="shadow">
+  <!-- Cancel Button -->
+  <button [color]="'warn'" class="btn py-1" mat-button mat-dialog-close>
+    Annuler
+  </button>
+
+  <!-- Submit Button -->
+  <button
+    (click)="createOrUpdateInterlocutor()"
+    [disabled]="!interlocutorForm.valid"
+    class="btn mat-primary"
+    mat-raised-button>
+    <span *ngIf="!interlocutorToUpdate?.id">Créer</span>
+    <span *ngIf="interlocutorToUpdate?.id">Mettre à jour</span>
+    l'interlocuteur
+  </button>
+</mat-dialog-actions>

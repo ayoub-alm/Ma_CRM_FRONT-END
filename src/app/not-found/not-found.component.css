@@ -1,0 +1,19 @@
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+mat-icon {
+  font-size: 100px;
+  color: #ff5722;
+}
+
+button {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}

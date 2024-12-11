@@ -1,0 +1,88 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family:"Poppins", Roboto, "Helvetica Neue", sans-serif; }
+
+* {
+  font-family: "Poppins", Roboto, "Helvetica Neue", sans-serif !important;
+}
+
+mat-icon {
+  font-family: "Material Icons", sans-serif !important;
+}
+/**************** Table Css ***********************/
+  table {
+    width: 100%;
+  }
+
+  .mat-mdc-form-field {
+    font-size: 12px;
+    width: 100%;
+    transform: scale(0.8);
+  }
+
+.mat-mdc-table .mdc-data-table__row{
+  height: 10px!important;
+}
+
+
+
+.mat-mdc-row:hover .mat-mdc-cell {
+  background-color: #edf6ff !important;
+}
+/*********************************************/
+
+.primary-blue-color{
+  color: #005cbb !important;
+}
+
+
+.custom-table th.mat-header-cell, .custom-table td.mat-cell {
+  height: 15px; /* Set your desired height */
+  line-height: 2px; /* Center text vertically */
+  padding: 0px; /* Adjust padding if needed */
+}
+
+.table-container {
+  max-height:80vh; /* Set a max height for the table container */
+  overflow: auto;
+  max-width: 100%;
+  /* Enable vertical scrolling */
+}
+
+
+
+/* Custom scrollbar styling for horizontal scrollbar */
+*::-webkit-scrollbar {
+  height: 4px;
+  width: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #005cbb; /* Color of the scrollbar thumb */
+  border-radius: 4px; /* Round corners of the scrollbar */
+}
+
+*::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background of the scrollbar track */
+}
+
+
+.bg-dark-ma{
+  background-color:  #8e8e8e!important;
+}
+
+.bg-dark-light-ma{
+  background: #F8F9FA!important;
+}
+
+:host ::ng-deep .period-container .period-inner-container {
+  color: #fff;
+  border-radius: 20px;
+  background: black !important;
+  width: max-content;
+  padding: 0.2rem 0.5rem;
+  z-index: 10;
+}
+
+

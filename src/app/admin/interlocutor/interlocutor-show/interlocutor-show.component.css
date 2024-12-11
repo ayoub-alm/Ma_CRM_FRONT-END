@@ -1,0 +1,8 @@
+.custom-theme {
+  --ngx-timeline-icon: #005cbb;
+  --ngx-timeline-period-inner-container: #005cbb;
+  --ngx-timeline-line-background: darkgray;
+
+   width:100%
+}
+

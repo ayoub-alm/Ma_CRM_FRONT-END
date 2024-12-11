@@ -1,0 +1,179 @@
+<div class="container-fluid bg-white vh-75 w-100 rounded-top-4  shadow-sm">
+  <p class="rounded-3 p-1  mat-elevation-z0">
+    <span class="mx-2 text-secondary">
+          <a routerLink="/admin">
+             <button mat-button>
+               <mat-icon class=" primary-blue-color">home</mat-icon>
+                home
+             </button>
+          </a> >
+          <a routerLink="/admin/interlocutors">
+            <button mat-button>
+               <mat-icon class=" primary-blue-color">business_center</mat-icon>
+              Interlocuteurs
+             </button>
+          </a> >
+          <button mat-button>
+               <mat-icon class=" primary-blue-color">details</mat-icon>
+              Détails
+          </button>
+      </span>
+  </p>
+
+
+    <mat-card class="mt-1 container bg-light shadow-sm p-3 rounded-2">
+      <mat-card-title class="d-flex justify-content-between" >
+        <p class="d-flex ">
+          <mat-icon class="example-tab-icon mx-2 primary-blue-color">business</mat-icon>
+          <span class="fs-5">Détails de l'interlocuteur</span>
+        </p>
+        <p>
+          <button mat-button (click)="openUpdateInterlocutorDialog()">
+            Modifier
+            <mat-icon>edit</mat-icon>
+          </button>
+        </p>
+      </mat-card-title>
+      <mat-card-content>
+        <div class="row">
+          <p class="col-lg-6">
+      <span class="text-secondary">
+        <i class="primary-blue-color  mx-2 bi  bi-person-fill"></i>Nom complet :
+      </span>
+            <span class="mx-2 my-3">{{ interlocutor.getValue().fullName }}</span>
+          </p>
+
+          <p class="col-lg-6">
+      <span class="text-secondary">
+        <i class="primary-blue-color  mx-2 bi  bi-building"></i>Entreprise :
+      </span>
+            <span class="mx-2 my-3">{{ interlocutor.getValue().prospect.name }}</span>
+          </p>
+
+          <p class="col-lg-6">
+      <span class="text-secondary">
+        <i class="primary-blue-color  mx-2 bi  bi-briefcase-fill"></i>Département :
+      </span>
+            <span class="mx-2 my-3">{{ interlocutor.getValue().department.name }}</span>
+          </p>
+
+          <p class="col-lg-6">
+      <span class="text-secondary">
+        <i class="primary-blue-color  mx-2 bi  bi-award-fill"></i>Titre de poste :
+      </span>
+            <span class="mx-2 my-3">{{ interlocutor.getValue().jobTitle.name }}</span>
+          </p>
+
+          <p class="col-lg-6">
+      <span class="text-secondary">
+        <i class="primary-blue-color  mx-2 bi  bi-envelope-fill"></i>Email :
+      </span>
+            <span class="mx-2 my-3">{{ interlocutor.getValue().emailAddress.address }}</span>
+          </p>
+
+          <p class="col-lg-6">
+      <span class="text-secondary">
+        <i class="primary-blue-color  mx-2 bi  bi-telephone-fill"></i>Téléphone :
+      </span>
+            <span class="mx-2 my-3">{{ interlocutor.getValue().phoneNumber.number }}</span>
+          </p>
+        </div>
+      </mat-card-content>
+
+
+    </mat-card>
+
+
+<!--  <div class="container mat-elevation-z2 p-3  mt-3 rounded-2">-->
+    <div class="container text-dark row  d-flex justify-content-between ">
+      <div class="col-lg-5 mt-3 shadow-sm bg-light rounded-3 p-3 ">
+        <p class="d-flex ">
+          <mat-icon class="example-tab-icon mx-2 primary-blue-color">forum</mat-icon>
+          <span class="fs-5">Interactions</span>
+        </p>
+
+        <ng-container *ngFor="let interaction of interactions | async">
+          <mat-expansion-panel class="bg-white mt-3">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="bi bi-telephone-fill me-2 primary-blue-color"></i>
+                <span class="text-dark">{{ interaction.interactionType }}</span>
+                <small class="mx-3 text-secondary" style="font-size:0.8rem;">
+                  {{ interaction.createdAt | date:'short' }}
+                </small>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <!-- Interaction Details -->
+            <div class="px-3">
+              <p>
+                <i class="bi bi-building me-2 primary-blue-color"></i>
+                <span class="text-dark">Prospect:</span>
+                <span class="text-secondary">{{ interaction.prospectName }}</span>
+              </p>
+              <p *ngIf="interaction.interlocutorName">
+                <i class="bi bi-person-fill me-2 primary-blue-color"></i>
+                <span class="text-dark">Interlocuteur:</span>
+                <span class="text-secondary">{{ interaction.interlocutorName }}</span>
+              </p>
+              <p>
+                <i class="bi bi-chat-dots-fill me-2 primary-blue-color"></i>
+                <span class="text-dark">Sujet d'interaction:</span>
+                <span class="text-secondary">{{ interaction.interactionSubject }}</span>
+              </p>
+              <p *ngIf="interaction.report">
+                <i class="bi bi-file-earmark-text-fill me-2 primary-blue-color"></i>
+                <span class="text-dark">Rapport:</span>
+                <span class="text-secondary">{{ interaction.report }}</span>
+              </p>
+              <p *ngIf="interaction.planningDate">
+                <i class="bi bi-calendar-event-fill me-2 primary-blue-color"></i>
+                <span class="text-dark">Date planifiée:</span>
+                <span class="text-secondary">{{ interaction.planningDate | date:'shortDate' }}</span>
+              </p>
+              <p *ngIf="interaction.address">
+                <i class="bi bi-geo-alt-fill me-2 primary-blue-color"></i>
+                <span class="text-dark">Adresse:</span>
+                <span class="text-secondary">{{ interaction.address }}</span>
+              </p>
+              <p *ngIf="interaction.agentName">
+                <i class="bi bi-person-badge-fill me-2 primary-blue-color"></i>
+                <span class="text-dark">Agent:</span>
+                <span class="text-secondary">{{ interaction.agentName }}</span>
+              </p>
+              <p *ngIf="interaction.affectedToName">
+                <i class="bi bi-person-lines-fill me-2 primary-blue-color"></i>
+                <span class="text-dark">Affecté à:</span>
+                <span class="text-secondary">{{ interaction.affectedToName }}</span>
+              </p>
+            </div>
+          </mat-expansion-panel>
+        </ng-container>
+      </div>
+
+      <div class="col-lg-7 mt-3 row d-flex justify-content-end shadowhite rounded-3">
+        <p class="d-flex col-12 mt-4 ">
+          <mat-icon class="example-tab-icon mx-2 primary-blue-color">list_alt</mat-icon>
+          <span class="fs-5">Suivi des activités</span>
+        </p>
+        <ng-template class="col-12" #innerEventCustomTemplate let-event=event>
+          <div class="event ">
+            <mat-expansion-panel class="bg-white mt-3 event">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <mat-icon class="mx-2 text-secondary">group</mat-icon> {{event.eventInfo.title}}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+                {{ event.eventInfo.description }}
+            </mat-expansion-panel>
+          </div>
+        </ng-template>
+        <ngx-timeline [enableAnimation]="false" [events]="events" [innerEventCustomTemplate]="innerEventCustomTemplate"
+                      [langCode]="'fr'" [ngClass]="'custom-theme'"
+                      class="col-6">
+        </ngx-timeline>
+      </div>
+    </div>
+  </div>
+<!--</div>-->
+

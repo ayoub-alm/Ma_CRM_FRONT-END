@@ -1,0 +1,88 @@
+<div class="container-fluid bg-white vh-75 w-100 rounded-top-4  shadow-sm">
+  <p class="rounded-3 p-1  mat-elevation-z0">
+    <span class="mx-2 text-secondary">
+          <a routerLink="/admin">
+             <button mat-button>
+               <mat-icon class=" primary-blue-color">home</mat-icon>
+                home
+             </button>
+          </a> >
+          <a routerLink="/admin/interactions">
+            <button mat-button>
+               <mat-icon class=" primary-blue-color">forum</mat-icon>
+              Interactions
+             </button>
+          </a> >
+          <button mat-button>
+               <mat-icon class=" primary-blue-color">details</mat-icon>
+              Détails
+          </button>
+      </span>
+  </p>
+
+
+  <mat-card class="mt-1 container bg-light shadow-sm p-3 rounded-2">
+    <mat-card-title class="d-flex justify-content-between" >
+      <p class="d-flex ">
+        <mat-icon class="example-tab-icon mx-2 primary-blue-color">business</mat-icon>
+        <span class="fs-5">Détails de l'interaction</span>
+      </p>
+      <p>
+        <button mat-button >
+          {{ interaction.getValue().createdAt }}
+          <mat-icon>date</mat-icon>
+        </button>
+      </p>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="px-3">
+        <p>
+          <i class="bi bi-building me-2 primary-blue-color"></i>
+          <span class="text-dark">Prospect:</span>
+          <span class="text-secondary">{{ interaction.getValue().prospectName }}</span>
+        </p>
+        <p *ngIf="interaction.getValue().interlocutorName">
+          <i class="bi bi-person-fill me-2 primary-blue-color"></i>
+          <span class="text-dark">Interlocuteur: </span>
+          <span class="text-secondary">{{ interaction.getValue().interlocutorName }}</span>
+        </p>
+        <p>
+          <i class="bi bi-chat-dots-fill me-2 primary-blue-color"></i>
+          <span class="text-dark">Sujet d'interaction: </span>
+          <span class="text-secondary">{{ interaction.getValue().interactionSubject }}</span>
+        </p>
+        <p *ngIf="interaction.getValue().report">
+          <i class="bi bi-file-earmark-text-fill me-2 primary-blue-color"></i>
+          <span class="text-dark">Rapport:</span>
+          <span class="text-secondary">{{ interaction.getValue().report }}</span>
+        </p>
+        <p *ngIf="interaction.getValue().planningDate">
+          <i class="bi bi-calendar-event-fill me-2 primary-blue-color"></i>
+          <span class="text-dark">Date planifiée: </span>
+          <span class="text-secondary">{{ interaction.getValue().planningDate | date:'shortDate' }}</span>
+        </p>
+        <p *ngIf="interaction.getValue().address">
+          <i class="bi bi-geo-alt-fill me-2 primary-blue-color"></i>
+          <span class="text-dark">Adresse: </span>
+          <span class="text-secondary">{{ interaction.getValue().address }}</span>
+        </p>
+        <p *ngIf="interaction.getValue().agentName">
+          <i class="bi bi-person-badge-fill me-2 primary-blue-color"></i>
+          <span class="text-dark">Agent: </span>
+          <span class="text-secondary">{{ interaction.getValue().agentName }}</span>
+        </p>
+        <p *ngIf="interaction.getValue().affectedToName">
+          <i class="bi bi-person-lines-fill me-2 primary-blue-color"></i>
+          <span class="text-dark">Affecté à: </span>
+          <span class="text-secondary">{{ interaction.getValue().affectedToName }}</span>
+        </p>
+      </div>
+    </mat-card-content>
+
+
+  </mat-card>
+
+
+</div>
+<!--</div>-->
+

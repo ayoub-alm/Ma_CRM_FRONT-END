@@ -1,0 +1,69 @@
+<div class="container-fluid bg-white pt-3 vh-100">
+  <div class="container">
+    <div class="row  d-flex justify-content-around">
+
+      <mat-card class="col-2 bg-light">
+        <h6>84</h6>
+        <p>Nouvelle</p>
+      </mat-card>
+
+      <mat-card class="col-2 bg-light">
+        <h6>84</h6>
+        <p>Nouvelle</p>
+      </mat-card>
+
+      <mat-card class="col-2 bg-light">
+        <h6>84</h6>
+        <p>Nouvelle</p>
+      </mat-card>
+
+      <mat-card class="col-2 bg-light">
+        <h6>84</h6>
+        <p>Nouvelle</p>
+      </mat-card>
+
+      <mat-card class="col-2 bg-light">
+        <h6>84</h6>
+        <p>Nouvelle</p>
+      </mat-card>
+    </div>
+  </div>
+
+
+
+<div class="container p-3 row">
+    <div class="col-6">
+      <canvas baseChart
+              [datasets]="barChartData"
+              [labels]="barChartLabels"
+              [options]="chartOptions"
+              [type]="'line'"
+              class="col-6"
+              [legend]="true">
+      </canvas>
+    </div>
+
+
+  <div class="col-6">
+    <canvas baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="chartOptions"
+            [type]="'bar'"
+            class="col-6"
+            [legend]="true">
+    </canvas>
+  </div>
+
+  <div class="col-6">
+    <canvas baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="chartOptions"
+            [type]="'bar'"
+            class="col-6"
+            [legend]="true">
+    </canvas>
+  </div>
+</div>
+</div>

@@ -1,0 +1,55 @@
+<div class="container-fluid h-100">
+  <div class="row align-items-center vh-100" style="background:url('/covid-transport-routier-france-scaled.jpg');background-size: cover;">
+    <!-- Left Column: Login Form -->
+    <div class=" col-12 m-auto  w-100 h-100 d-flex justify-content-center align-items-center">
+      <form [formGroup]="loginForm" class=" w-10 p-4 bg-white shadow rounded">
+        <div class="text-center">
+          <img src="/ma-logo.png" alt="logo" width="300" class="mb-4 img-fluid">
+        </div>
+        <h6 class="mb-4 fw-normal text-center">Veuillez vous connecter</h6>
+
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Email</mat-label>
+          <input matInput
+                 type="email"
+                 formControlName="email"
+                 placeholder="name@example.com">
+          <mat-error *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('required')">
+            Veuillez entrer une adresse e-mail valide.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="w-100 mb-2">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput
+                 type="password"
+                 formControlName="password"
+                 placeholder="Password">
+          <mat-error *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')">
+            Veuillez entrer un mot de passe valide.
+          </mat-error>
+        </mat-form-field>
+
+        <div class="text-center px-5">
+          <button mat-raised-button color="primary"
+                  class="w-100 py-2 text-secondary rounded-2 "
+                  (click)="login()"
+                  [disabled]="!loginForm.valid"
+                  type="button">
+            Se connecter
+          </button>
+        </div>
+
+        <p class="mt-5 mb-3 text-center text-muted">
+          &copy; 2024–2025 <br>
+          <a class="fw-light text-reset" href="http://3abc.ma">3ABC.ma</a>
+        </p>
+      </form>
+    </div>
+<!--    <div class="col-lg-6 d-none d-lg-block">-->
+<!--      <img src="/covid-transport-routier-france-scaled.jpg" alt="Login Visual" class="img-fluid h-100 w-100 object-fit-cover">-->
+<!--    </div>-->
+    <!-- Right Column: Image -->
+
+  </div>
+</div>

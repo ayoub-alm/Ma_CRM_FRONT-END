@@ -1,0 +1,398 @@
+<div class="container-fluid bg-white   rounded-top-5 border border-2 border-secondary-subtle shadow p-3 px-4 ">
+  <p class="rounded-3 p-1  mat-elevation-z0">
+    <span class="mx-2 text-secondary">
+          <a routerLink="/admin">
+             <button mat-button>
+               <mat-icon class=" primary-blue-color">home</mat-icon>
+                home
+             </button>
+          </a> >
+          <a routerLink="/admin/prospects">
+            <button mat-button>
+               <mat-icon class=" primary-blue-color">business_center</mat-icon>
+              Prospects
+             </button>
+          </a> >
+          <button mat-button>
+               <mat-icon class=" primary-blue-color">details</mat-icon>
+              Détails
+          </button>
+      </span>
+  </p>
+
+  <div class="container-fluid tab-container p-3 mat-elevation-z2  rounded-3  ">
+    <section class="mt-1">
+      <mat-card-title class="d-flex justify-content-between align-items-center" >
+        <p class="d-flex align-baseline">
+          <mat-icon class="example-tab-icon mx-2 primary-blue-color">business</mat-icon>
+          <span class="fs-5">Détails de l'entreprise</span>
+            <button
+                [ngClass]="[getChipClass(prospect.getValue().prospectStatus), 'btn btn-sm rounded-4 px-3 ']"
+                style="transform:scale(0.8)">
+                 {{ getProspectStatusLabel(prospect.getValue().prospectStatus)}}
+            </button>
+        </p>
+        <p>
+          <button mat-button (click)="editProspect(prospect)">
+            Modifier
+            <mat-icon>edit</mat-icon>
+          </button>
+        </p>
+      </mat-card-title>
+      <mat-card-content>
+        <div class="justify-content-around">
+          <div class="d-flex justify-content-around row">
+            <!-- Logo Section -->
+            <div class="col-lg-3 col-12 mt-4">
+              <p class="text-center">
+                <img
+                  *ngIf="!prospect.getValue().logo"
+                  class="img-fluid rounded-2 shadow-sm"
+                  src="https://placehold.co/400"
+                />
+                <img
+                  *ngIf="prospect.getValue().logo"
+                  [src]="environment.baseUrl + '/api/images/' + prospect.getValue().logo"
+                  alt="Logo"
+                  class="img-fluid  rounded-2 "
+                  width="400"
+                />
+              </p>
+            </div>
+
+            <!-- Company Information Section -->
+            <div class="col-lg-8 row d-flex justify-content-around">
+              <div class="col-lg-6 col-12">
+                <!-- Company Name -->
+                <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-building"></i> Nom de l'entreprise :
+                  </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().name }}</span>
+                </p>
+
+
+                <p class="d-flex align-items-center">
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-exclamation-circle"></i> Statut :
+                  </span>
+                  <span class="m-0 p-0" >
+                    <form  [formGroup]="statusForm">
+                      <select formControlName="status" class="form-select mx-2 form-select-sm"
+                              aria-label="Default select example">
+                      <option  *ngFor="let status of ProspectStatus | keyvalue"
+                               [selected]="getProspectStatusLabel(prospect.getValue().prospectStatus) ===  status.value"
+                               [value]="status.key"
+                      >
+                        {{ status.value }}
+                      </option>
+                      </select>
+                    </form>
+<!--                     <button  (click)="isEditStatus = !isEditStatus"-->
+<!--                             *ngIf="!isEditStatus" style="transform:scale(0.8)" [ngClass]="[getChipClass(prospect.getValue().status), 'btn btn-sm p-1 rounded-4 px-3 ']">-->
+<!--                             {{ getProspectStatusLabel(prospect.getValue().status)}}-->
+<!--                     </button>-->
+                  </span>
+                </p>
+
+
+
+
+                <!-- Sigle -->
+                <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-briefcase-fill"></i> Sigle :
+            </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().sigle }}</span>
+                </p>
+
+                <!-- Capital -->
+                <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-currency-exchange"></i> Capital :
+            </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().capital }} MAD</span>
+                </p>
+
+                <!-- Head Office -->
+                <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-geo-alt-fill"></i> Siège social :
+            </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().headOffice }}</span>
+                </p>
+
+                <!-- Ownership Structure -->
+                <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-diagram-2-fill"></i> Structure propriété :
+            </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().proprietaryStructure?.name }}</span>
+                </p>
+
+                <!-- Industry -->
+                <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-hammer"></i> Industrie :
+            </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().industry?.name }}</span>
+                </p>
+              </div>
+
+              <div class="col-lg-6 col-12">
+                <!-- Year of Creation -->
+                <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-calendar-check-fill"></i> Année de création :
+            </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().yearOfCreation }}</span>
+                </p>
+
+                <!-- Company Size -->
+                <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-people-fill"></i> Taille de l'entreprise :
+            </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().companySize?.name }}</span>
+                </p>
+
+                <!-- City -->
+                <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-geo-fill"></i> Ville :
+            </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().city?.name }}</span>
+                </p>
+
+                <!-- Country -->
+                <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-flag-fill"></i> Pays :
+            </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().country?.name }}</span>
+                </p>
+              </div>
+
+              <!-- Business Description -->
+              <div class="col-12 col-lg-12">
+                <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-card-text"></i> Description de l'activité : <br />
+            </span>
+                  <span class="mx-2 my-3">{{ prospect.getValue().businessDescription }}</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card-content>
+
+
+    </section>
+
+
+    <mat-divider class="my-2"></mat-divider>
+    <mat-tab-group class="rounded-3 bg-light border-1 border-secondary border" mat-align-tabs="start" mat-stretch-tabs="true">
+      <!-- Informations de contact Tab -->
+      <mat-tab label="Informations de contact">
+        <ng-template mat-tab-label>
+          <i class="bi bi-person-lines-fill mx-2 primary-blue-color"></i>
+          Informations de contact
+        </ng-template>
+        <div class="d-flex mt-3 p-4">
+          <div class="col-lg-6">
+            <p >
+              <span class="text-secondary"><i class="bi bi-envelope-fill primary-blue-color"></i> Email :</span>
+              <span class="mx-2">{{ prospect.getValue().email }}</span>
+            </p>
+            <p>
+              <span class="text-secondary"><i class="bi bi-telephone-fill primary-blue-color"></i> Téléphone :</span>
+              <span class="mx-2">{{ prospect.getValue().phone }}</span>
+            </p>
+            <p>
+              <span class="text-secondary"><i class="bi bi-printer-fill primary-blue-color"></i> Fax :</span>
+              <span class="mx-2">{{ prospect.getValue().fax }}</span>
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <p>
+              <span class="text-secondary"><i class="bi bi-chat-dots-fill primary-blue-color"></i> WhatsApp :</span>
+              <span class="mx-2">{{ prospect.getValue().whatsapp }}</span>
+            </p>
+            <p>
+              <span class="text-secondary"><i class="bi bi-globe primary-blue-color"></i> Site Web :</span>
+              <span class="mx-2">{{ prospect.getValue().website }}</span>
+            </p>
+            <p>
+              <span class="text-secondary"><i class="bi bi-linkedin primary-blue-color"></i> LinkedIn :</span>
+              <span class="mx-2">{{ prospect.getValue().linkedin }}</span>
+            </p>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Informations légales Tab -->
+      <mat-tab label="Informations légales">
+        <ng-template mat-tab-label>
+          <i class="bi bi-gavel mx-2 primary-blue-color"></i>
+          Informations légales
+        </ng-template>
+        <div class="d-flex mt-3 p-4">
+          <div class="col-lg-6">
+            <p><span class="text-secondary"><i class="bi bi-card-checklist primary-blue-color"></i> Certificat :</span>
+              <span class="mx-2">{{ prospect.getValue().certificationText }}</span>
+            </p>
+            <p><span class="text-secondary"><i class="bi bi-person-check-fill primary-blue-color"></i> Représentant légal :</span>
+              <span class="mx-2">{{ prospect.getValue().legalRepresentative }}</span>
+            </p>
+            <p><span class="text-secondary"><i class="bi bi-award-fill primary-blue-color"></i> Titre du représentant légal :</span>
+              <span class="mx-2">{{ prospect.getValue().title?.title }}</span>
+            </p>
+            <p><span class="text-secondary"><i class="bi bi-briefcase-fill primary-blue-color"></i> Function du représentant légal :</span>
+              <span class="mx-2">{{ prospect.getValue().reprosentaveJobTitle?.name }}</span>
+            </p>
+          </div>
+          <div class="col-lg-6">
+            <p><span class="text-secondary"><i class="bi bi-file-earmark-code-fill primary-blue-color"></i> ICE :</span>
+              <span class="mx-2">{{ prospect.getValue().ice }}</span>
+            </p>
+            <p><span class="text-secondary"><i class="bi bi-briefcase-fill primary-blue-color"></i> RC :</span>
+              <span class="mx-2">{{ prospect.getValue().rc }}</span>
+            </p>
+            <p><span class="text-secondary"><i class="bi bi-cash-stack primary-blue-color"></i> IFM :</span>
+              <span class="mx-2">{{ prospect.getValue().ifm }}</span>
+            </p>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Paramètre Tab -->
+      <mat-tab label="Paramètre">
+        <ng-template mat-tab-label>
+          <i class="bi bi-gear-fill mx-2 primary-blue-color"></i>
+          Paramètre
+        </ng-template>
+        <div class="d-flex mt-3 p-4">
+          <div class="col-12">
+            <p>
+          <span class="text-secondary">
+            <section class="example-section fs-6">
+              <i class="bi bi-toggle-on primary-blue-color"></i> Status :
+              <mat-slide-toggle [checked]="true" [color]="'primary'" [disabled]="false" class="custom-toggle" style="transform:scale(0.8) !important;">
+                Active
+              </mat-slide-toggle>
+            </section>
+          </span>
+            </p>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+<mat-divider class="my-2" ></mat-divider>
+<div class="container-fluid mt-3">
+  <div class=" text-dark row  d-flex justify-content-around ">
+    <div class="col-lg-6 p-4 align-baseline bg-light rounded-2 shadow-sm ">
+      <p class="d-flex align-baseline ">
+        <mat-icon class="m-0 p-0 mx-2 primary-blue-color">group</mat-icon>
+        <span class="fs-5">Interlocuteurs</span>
+      </p>
+
+      <ng-container *ngFor="let interlocutor of interlocutors | async">
+        <mat-expansion-panel class=" mb-2 bg-white ">
+          <mat-expansion-panel-header>
+            <mat-panel-title><mat-icon class="p mx-2 text-secondary">account_circle</mat-icon> {{interlocutor.fullName}}
+
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="px-3">
+            <p>
+              <i class="bi bi-person-badge-fill me-2 primary-blue-color"></i>
+              <span>Nom complet :</span> <span class="text-dark">{{ interlocutor.fullName }}</span>
+            </p>
+            <p>
+              <i class="bi bi-envelope-fill me-2 primary-blue-color"></i>
+              <span>Email :</span> <span class="text-dark">{{ interlocutor.emailAddress.address }}</span>
+            </p>
+            <p>
+              <i class="bi bi-telephone-fill me-2 primary-blue-color"></i>
+              <span>Téléphone :</span> <span class="text-dark">{{ interlocutor.phoneNumber.number }}</span>
+            </p>
+            <p>
+              <i class="bi bi-building me-2 primary-blue-color"></i>
+              <span>Département :</span> <span class="text-dark">{{ interlocutor.department.name }}</span>
+            </p>
+            <p>
+              <i class="bi bi-briefcase-fill me-2 primary-blue-color"></i>
+              <span>Titre de poste :</span> <span class="text-dark">{{ interlocutor.jobTitle.name }}</span>
+            </p>
+          </div>
+
+        </mat-expansion-panel>
+      </ng-container>
+<!--      <mat-expansion-panel class="bg-light mt-3">-->
+<!--        <mat-expansion-panel-header>-->
+<!--          <mat-panel-title><mat-icon class="mx-2 text-secondary">person</mat-icon> Ahmad <small class="text-bg-secondary rounded-3 mx-2"> Commercial</small> </mat-panel-title>-->
+<!--        </mat-expansion-panel-header>-->
+<!--      </mat-expansion-panel>-->
+
+<!--      <mat-expansion-panel class="bg-light mt-3">-->
+<!--        <mat-expansion-panel-header>-->
+<!--          <mat-panel-title><mat-icon class="mx-2 text-secondary">person</mat-icon> Yassin - Achteur</mat-panel-title>-->
+<!--        </mat-expansion-panel-header>-->
+<!--      </mat-expansion-panel>-->
+
+<!--      <mat-expansion-panel class="bg-light mt-3">-->
+<!--        <mat-expansion-panel-header>-->
+<!--          <mat-panel-title><mat-icon class="mx-2 text-secondary">person</mat-icon> Malak - marketing</mat-panel-title>-->
+<!--        </mat-expansion-panel-header>-->
+<!--      </mat-expansion-panel>-->
+    </div>
+
+    <div class="col-lg-6 row  d-flex flex-column justify-content-end shadow-sm bg-white rounded-3 p-4">
+      <!-- Header Section -->
+      <div class="d-flex align-items-end mb-3">
+        <mat-icon class="example-tab-icon mx-2 primary-blue-color fs-4">list_alt</mat-icon>
+        <span class="fs-5 text-dark">Suivi des activités</span>
+      </div>
+
+      <!-- Custom Event Template -->
+      <ng-template #innerEventCustomTemplate let-event="event" class="">
+        <div class="event d-flex justify-content-end">
+          <mat-expansion-panel class="bg-light mt-3 col-12 shadow-sm rounded-3 w-100">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon class="me-2 text-secondary">group</mat-icon>
+                <span class="small">{{ event.eventInfo.title }}</span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="p-1">
+<!--              <p class="mb-0 primary-blue-color text-secondary d-flex align-items-center">-->
+<!--                <mat-icon class="me-2 text-secondary">person</mat-icon>-->
+<!--                {{ event.eventInfo.user.name }}-->
+<!--              </p>-->
+              <p class="text-muted mb-2">{{ event.eventInfo.description }}</p>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </ng-template>
+
+      <!-- Timeline Component -->
+      <ngx-timeline
+        [enableAnimation]="true"
+        [events]="events"
+        [reverseOrder]="true"
+        [innerEventCustomTemplate]="innerEventCustomTemplate"
+        [langCode]="'fr'"
+        [ngClass]="'custom-theme right-aligned justify-content-end'"
+        class="mt-4 "
+      >
+      </ngx-timeline>
+    </div>
+
+  </div>
+</div>
+
+
+</div>
+</div>

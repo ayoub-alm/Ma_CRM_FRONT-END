@@ -1,0 +1,35 @@
+.example-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.custom-drawer-width {
+  width: 250px;
+}
+
+.example-sidenav-content {
+  flex: 1;
+  padding: 16px;
+}
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+.mat-toolbar {
+  background-color: white;
+  color: black;
+}
+
+mat-list-item:hover button {
+  border-left: solid 3px #005cbb;
+}
+
+.active-item-nav {
+  border-left: solid 3px #005cbb;
+}
