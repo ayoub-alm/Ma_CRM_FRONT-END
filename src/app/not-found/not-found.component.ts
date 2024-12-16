@@ -17,6 +17,6 @@ export class NotFoundComponent {
   constructor(private router: Router) {}
 
   navigateToAdmin() {
-    this.router.navigate(['/admin']);
+   window.location.href = '/admin'
   }
 }

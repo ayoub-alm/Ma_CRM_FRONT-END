@@ -206,22 +206,34 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
       this.prospect.country, this.prospect.proprietaryStructure, this.prospect.title, this.prospect.reprosentaveJobTitle);
     // Call the service to create the company
     this.prospectService.createProspect(newProspect).subscribe({
-      next: (response :CreateProspectDto) => {
-        // Close the dialog or navigate as needed
-        this.snackBar.open(`${response.name} a été créé avec succès`, "OK",{
-          verticalPosition: "bottom",
-          duration: 3000,
-        })
+      next: (response: CreateProspectDto) => {
+        this.showSnackBar(`${response.name} a été créé avec succès`);
         this.dialogRef.close(response);
-      }, error: (error) => {
-        this.snackBar.open(`Error creating company: ${error}`, "OK",{
-          verticalPosition: "bottom",
-          duration: 3000,
-        })
-      }
+      },
+      error: (error) => {
+        if (error.status === 201) {
+          this.showSnackBar(`${this.prospect.name} a été mis à jour avec succès`);
+          this.dialogRef.close(newProspect);
+        } else {
+          this.showSnackBar(`Error creating company: ${error.status}`, true);
+        }
+      },
     });
   }
 
+
+  /**
+   * Helper function to show snack bar notifications.
+   * @param message The message to display in the snack bar.
+   * @param isError Optional: true if the notification is for an error.
+   */
+  private showSnackBar(message: string, isError: boolean = false): void {
+    this.snackBar.open(message, "OK", {
+      verticalPosition: "bottom",
+      duration: 3000,
+      panelClass: isError ? ['snack-bar-error'] : ['snack-bar-success'],
+    });
+  }
   /**
    *
    * @param event

@@ -2,11 +2,13 @@
   import {LoginComponent} from './login/login.component';
   import {NotFoundComponent} from './not-found/not-found.component';
 
-export const routes: Routes = [
-    {path:'admin', loadChildren: async () => {
-        const m = await import('./admin/admin.module');
-        return m.AdminModule;}},
-    {path:'login',component:LoginComponent},
-  { path: '', redirectTo: '/admin', pathMatch: 'full' },
-  { path: '**', component: NotFoundComponent }
-];
+  export const routes: Routes = [
+    {
+      path: 'admin',
+      loadChildren: () =>
+        import('./admin/admin.module').then((m) => m.AdminModule),
+    },
+    { path: 'login', component: LoginComponent },
+    { path: '**', component: NotFoundComponent },
+  ];
+

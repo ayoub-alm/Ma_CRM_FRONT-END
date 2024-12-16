@@ -10,15 +10,25 @@ import {InteractionComponent} from './interaction/interaction.component';
 import {InteractionShowComponent} from './interaction/interaction-show/interaction-show.component';
 
 const routes: Routes = [
-  {path:'', component: IndexComponent, children:[
-    {path:'', component: DashboardComponent},
-    {path:'prospects', component: ProspectComponent},
-    {path:'prospects/:id', component: ShowProspectComponent},
-    {path:'interlocutors', component: InterlocutorComponent},
-    {path:'interlocutors/:id', component: InterlocutorShowComponent},
-    {path:'interactions', component: InteractionComponent},
-    {path:'interactions/:id', component: InteractionShowComponent},
-  ]}
+  {
+    path: '',
+    component: IndexComponent,
+    children: [
+      { path: '', component: DashboardComponent },
+      { path: 'prospects', component: ProspectComponent },
+      { path: 'prospects/:id', component: ShowProspectComponent },
+      { path: 'interlocutors', component: InterlocutorComponent },
+      { path: 'interlocutors/:id', component: InterlocutorShowComponent },
+      { path: 'interactions', component: InteractionComponent },
+      { path: 'interactions/:id', component: InteractionShowComponent },
+      {
+        path: 'crm',
+        loadChildren: () =>
+          import('../crm/crm.module').then((m) => m.CrmModule),
+      },
+    ],
+  },
+  { path: '**', redirectTo: '', pathMatch: 'full' }, // Catch-all route to handle 404s
 ];
 
 @NgModule({

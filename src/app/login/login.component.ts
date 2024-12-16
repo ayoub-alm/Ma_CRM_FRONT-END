@@ -63,7 +63,7 @@ export class LoginComponent  {
             this.localStorageService.setUser(response.userResponseDto);
             localStorage.setItem('authToken', response.token);
             // Navigate to the admin dashboard
-            this.router.navigateByUrl('/admin');
+            window.location.href = "/admin"
           }),
           catchError((err) => {
             this.showErrorMessage('Authentication failed. Please check your credentials.');

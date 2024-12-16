@@ -1,183 +1,46 @@
 <mat-drawer-container class="example-container vh-100">
-  <!-- Left Drawer for Sub-Menu -->
+  <!-- Left Drawer -->
   <mat-drawer
     #leftDrawer
-    class="example-sidenav custom-drawer-width  bg-light"
+    class="example-sidenav custom-drawer-width bg-light"
     mode="side"
     position="start"
     [opened]="true"
   >
     <div class="container-fluid side-nav">
-      <mat-list class="mt-2">
-        <p class="d-flex justify-content-between">
+      <mat-toolbar>
+        <button mat-icon-button (click)="rightDrawer.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <img src="/ma-logo.png" alt="Logo" class="ms-2 img-fluid">
+        <button mat-icon-button (click)="leftDrawer.toggle()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-toolbar>
 
-            <button (click)="rightDrawer.toggle()"
-                    mat-icon-button class="text-dark border-1 bg-light  text-center">
-              <mat-icon>menu</mat-icon>
-            </button>
-          <span class="mt-3">
-            <img src="/ma-logo.png" alt="logo" class="img-fluid">
-          </span>
-          <button mat-icon-button class="text-dark border-1 bg-light  text-center">
-            <mat-icon (click)="leftDrawer.toggle()" >close</mat-icon>
-          </button>
-        </p>
+      <mat-divider></mat-divider>
 
-        <mat-divider class=""></mat-divider>
-<!--        <mat-card class="my-0  bg-white rounded-0">-->
-<!--          <p class="fs-5 m-auto text-center bolder text-secondary p-2  border-2 border-primary">-->
-<!--            <mat-icon class="primary-blue-color m-auto">travel_explore</mat-icon>-->
-<!--            Prospection-->
-<!--          </p>-->
-<!--        </mat-card>-->
-
-       <a routerLink="/admin my-2 fs-5">
-         <button mat-button class="p-2 fs-5  rounded-2 w-100 " [autofocus]="true" [color]="'primary'">
-         <mat-icon class="primary-blue-color ">travel_explore</mat-icon>
-         Prospection
-       </button>
-       </a>
-
-        <mat-divider class="mt-0"></mat-divider>
-        <!-- Global Navigation Links -->
-
-
-        <a [routerLink]="'/admin'" class="text-decoration-none">
+      <!-- Dynamic Left Menu -->
+      <mat-list>
+        <a *ngFor="let item of menuItems"
+           [routerLink]="item.route"  routerLinkActive="active"  class="text-decoration-none">
           <mat-list-item class="d-flex justify-content-start align-items-center">
             <button
               mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
+              [class]="'text-start d-flex justify-content-start text-secondary rounded-1' "
               aria-label="PMS"
               style="width: 100%;"
             >
-              Tableau de bord
-              <mat-icon>bar_chart</mat-icon>
+              {{ item.name }}
+              <mat-icon>{{ item.icon }}</mat-icon>
             </button>
           </mat-list-item>
         </a>
-
-
-        <a [routerLink]="'/admin/prospects'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="PMS"
-              style="width: 100%;"
-            >
-              Prospects
-              <mat-icon>business_center</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
-        <a [routerLink]="'/admin/interlocutors'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="Interlocutors"
-              style="width: 100%;"
-            >
-              Interlocutors
-              <mat-icon>contacts</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
-        <a [routerLink]="'/admin/interactions'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="Interactions"
-              style="width: 100%;"
-            >
-              Interactions
-              <mat-icon>forum</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
-
-
-
-
-<!--        <a [routerLink]="'/wms'" class="text-decoration-none">-->
-<!--          <mat-list-item class="d-flex justify-content-start align-items-center">-->
-<!--            <button-->
-<!--              mat-button-->
-<!--              class="text-start d-flex justify-content-start text-secondary rounded-1"-->
-<!--              aria-label="WMS"-->
-<!--              style="width: 100%;"-->
-<!--            >-->
-<!--              WMS-->
-<!--              <mat-icon>store</mat-icon>-->
-<!--            </button>-->
-<!--          </mat-list-item>-->
-<!--        </a>-->
-
-<!--        <a [routerLink]="'/purchasing'" class="text-decoration-none">-->
-<!--          <mat-list-item class="d-flex justify-content-start align-items-center">-->
-<!--            <button-->
-<!--              mat-button-->
-<!--              class="text-start d-flex justify-content-start text-secondary rounded-1"-->
-<!--              aria-label="Purchasing Management System"-->
-<!--              style="width: 100%;"-->
-<!--            >-->
-<!--              PMS-->
-<!--              <mat-icon>shopping_cart</mat-icon>-->
-<!--            </button>-->
-<!--          </mat-list-item>-->
-<!--        </a>-->
-
-<!--        <a [routerLink]="'/hms'" class="text-decoration-none">-->
-<!--          <mat-list-item class="d-flex justify-content-start align-items-center">-->
-<!--            <button-->
-<!--              mat-button-->
-<!--              class="text-start d-flex justify-content-start text-secondary rounded-1"-->
-<!--              aria-label="Human Resource Management System"-->
-<!--              style="width: 100%;"-->
-<!--            >-->
-<!--              HMS-->
-<!--              <mat-icon>people</mat-icon>-->
-<!--            </button>-->
-<!--          </mat-list-item>-->
-<!--        </a>-->
-
-        <a [routerLink]="'/chat'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="Chat"
-              style="width: 100%;"
-            >
-              Chat
-              <mat-icon>chat</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-        <mat-divider></mat-divider>
-        <a [routerLink]="'/tms'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="Interactions"
-              style="width: 100%;"
-            >
-              Configuration
-              <mat-icon>settings</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
       </mat-list>
     </div>
   </mat-drawer>
 
-  <!-- Right Drawer for Global Menu -->
+  <!-- Right Drawer -->
   <mat-drawer
     #rightDrawer
     class="example-sidenav custom-drawer-width shadow-sm bg-white"
@@ -186,182 +49,57 @@
     [opened]="false"
   >
     <div class="container-fluid side-nav">
-      <mat-list class="mt-2">
-        <p class="text-end">
+      <mat-toolbar >
+        <span class="m-auto">Applications</span>
+        <button mat-icon-button (click)="rightDrawer.toggle()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-toolbar>
 
 
-        </p>
-
-        <p class="d-flex justify-content-between">
-          <span class="m-auto fs-5">Applications</span>
-          <button mat-icon-button class="text-dark border-1 shadow-sm  text-center">
-            <mat-icon (click)="rightDrawer.toggle()" >close</mat-icon>
-          </button>
-        </p>
-        <mat-divider class="mt-4"></mat-divider>
-        <!-- Global Navigation Links -->
-        <a [routerLink]="'/global/settings'" class="text-decoration-none">
+      <!-- Right Menu for Application Selection -->
+      <mat-list>
+        <a  *ngFor="let app of [{name:'prospection',route:'/admin'},{name:'crm',route:'/admin/crm'},{name:'tms',route:'tms'}]"
+           routerLinkActive="active" [routerLink]="app.route"  class="text-decoration-none">
           <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
+            <button   (click)="selectApplication(app.name)"
               mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="Settings"
-              style="width: 100%;"
-            >
-              Settings
-              <mat-icon>settings</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
-        <a [routerLink]="'/pms'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
+              [class]="'text-start d-flex justify-content-start text-secondary rounded-1' "
               aria-label="PMS"
               style="width: 100%;"
             >
-              PMS
-              <mat-icon>business_center</mat-icon>
+              {{ app.name.toUpperCase() }}
+              <mat-icon>{{ menuData[app.name].icon }}</mat-icon>
             </button>
           </mat-list-item>
         </a>
-
-        <a [routerLink]="'/crm'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="CRM"
-              style="width: 100%;"
-            >
-              CRM
-              <mat-icon>contacts</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
-        <a [routerLink]="'/tms'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="TMS"
-              style="width: 100%;"
-            >
-              TMS
-              <mat-icon>local_shipping</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
-        <a [routerLink]="'/wms'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="WMS"
-              style="width: 100%;"
-            >
-              WMS
-              <mat-icon>store</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
-        <a [routerLink]="'/purchasing'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="Purchasing Management System"
-              style="width: 100%;"
-            >
-              PMS
-              <mat-icon>shopping_cart</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
-        <a [routerLink]="'/hms'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="Human Resource Management System"
-              style="width: 100%;"
-            >
-              HMS
-              <mat-icon>people</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
-        <a [routerLink]="'/chat'" class="text-decoration-none">
-          <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              class="text-start d-flex justify-content-start text-secondary rounded-1"
-              aria-label="Chat"
-              style="width: 100%;"
-            >
-              Chat
-              <mat-icon>chat</mat-icon>
-            </button>
-          </mat-list-item>
-        </a>
-
-        <mat-divider></mat-divider>
-        <!-- Add more global links as needed -->
       </mat-list>
     </div>
   </mat-drawer>
 
   <!-- Main Content -->
-  <div class="example-sidenav-content bg-white p-0 m-0">
-    <!-- Toolbar -->
-    <mat-toolbar class="sticky-top  bg-body-tertiary">
-      <p class="m-auto" *ngIf="!leftDrawer.opened">
-        <img src="/ma-logo.png" width="100px" alt="logo" class="img-fluid">
-      </p>
-      <button
-        mat-icon-button
-        (click)="leftDrawer.toggle()"
-        class="example-icon"
-        aria-label="Toggle left sidenav"
-      >
+  <div class="example-sidenav-content bg-light p-0 m-0">
+    <mat-toolbar class="bg-light sticky-top">
+      <button mat-icon-button (click)="leftDrawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
-
+      <img *ngIf="!leftDrawer.opened" src="/ma-logo.png"  alt="Logo" class="ms-2 p-1 img-fluid">
       <span class="example-spacer"></span>
-      <button mat-icon-button class="example-icon" aria-label="Account">
+      <button mat-icon-button>
         <mat-icon>account_circle</mat-icon>
-<!--        {{userName.getValue()}}-->
       </button>
-
       <a routerLink="/login">
-        <button  mat-icon-button class="example-icon" aria-label="Logout">
+        <button mat-icon-button>
           <mat-icon>logout</mat-icon>
         </button>
-
       </a>
-
-      <button
-        mat-icon-button
-        (click)="rightDrawer.toggle()"
-        class="example-icon"
-        aria-label="Toggle right sidenav"
-      >
-          <mat-icon>apps</mat-icon>
+      <button mat-icon-button (click)="rightDrawer.toggle()">
+        <mat-icon>apps</mat-icon>
       </button>
     </mat-toolbar>
 
-    <!-- Dynamic Content -->
-    <div class="content-container container-fluid bg-light ">
+    <div class="content-container container-fluid vh-100">
       <router-outlet></router-outlet>
     </div>
   </div>
 </mat-drawer-container>
-
-

@@ -79,6 +79,7 @@ export class AddEditInteractionDialogComponent implements OnInit {
   isEditMode = false;
   prospects: BehaviorSubject<ProspectResponseDto[]> =  new BehaviorSubject<ProspectResponseDto[]>([]);
   interlocutors: BehaviorSubject<InterlocutorResDto[]> =  new BehaviorSubject<InterlocutorResDto[]>([]);
+  allInterlocutors: BehaviorSubject<InterlocutorResDto[]> =  new BehaviorSubject<InterlocutorResDto[]>([]);
   users: BehaviorSubject<UserDto[]> =  new BehaviorSubject<UserDto[]>([]);
   dragHintText = 'Drag and drop a file here or click to select';
   selectedFile: File | null = null;
@@ -123,17 +124,23 @@ export class AddEditInteractionDialogComponent implements OnInit {
     this.interlocutorService.getAllInterlocutors().pipe(
       tap(data => {
         this.interlocutors.next(data)
+        this.allInterlocutors.next(data)
         if (this.data){
           this.interactionForm.get('interlocutorId')?.setValue(this.data?.interlocutorId)
         }
       })
     ).subscribe()
-
+    // fetch all users
     this.usersService.getAllUsers().pipe(
       tap(data => {
         this.users.next(data)
       })
     ).subscribe()
+    // subscribe to company changes and select interlocutors based on selected company
+    this.interactionForm.get('prospectId')?.valueChanges.pipe(tap(value => {
+      const selectedInterlocutors: InterlocutorResDto[] = this.allInterlocutors.getValue().filter((interlocutor => interlocutor.prospect.id === value ))
+      this.interlocutors.next(selectedInterlocutors)
+    })).subscribe()
   }
 
   saveInteraction(): void {

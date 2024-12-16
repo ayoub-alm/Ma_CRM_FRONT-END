@@ -1,29 +1,29 @@
-<div class="container-fluid bg-white pt-3 vh-100">
+<div class="container-fluid bg-white vh-75 w-100 rounded-top-4 pt-4 shadow">
   <div class="container">
     <div class="row  d-flex justify-content-around">
 
       <mat-card class="col-2 bg-light">
-        <h6>84</h6>
+        <h6 class="primary-blue-color">84</h6>
         <p>Nouvelle</p>
       </mat-card>
 
       <mat-card class="col-2 bg-light">
-        <h6>84</h6>
+        <h6 class="primary-blue-color">84</h6>
         <p>Nouvelle</p>
       </mat-card>
 
       <mat-card class="col-2 bg-light">
-        <h6>84</h6>
+        <h6 class="primary-blue-color">84</h6>
         <p>Nouvelle</p>
       </mat-card>
 
       <mat-card class="col-2 bg-light">
-        <h6>84</h6>
+        <h6 class="primary-blue-color">84</h6>
         <p>Nouvelle</p>
       </mat-card>
 
       <mat-card class="col-2 bg-light">
-        <h6>84</h6>
+        <h6 class="primary-blue-color">84</h6>
         <p>Nouvelle</p>
       </mat-card>
     </div>
@@ -31,8 +31,9 @@
 
 
 
-<div class="container p-3 row">
-    <div class="col-6">
+<div class="container-fluid p-3 row d-flex justify-content-around">
+    <div class="col-5 mat-elevation-z2  p-3 rounded-4">
+      <h6 class="text-secondary bi-bar-chart  lh-1"><span class="mx-2">Converted customers per month</span></h6>
       <canvas baseChart
               [datasets]="barChartData"
               [labels]="barChartLabels"
@@ -44,7 +45,8 @@
     </div>
 
 
-  <div class="col-6">
+  <div class="col-5 mat-elevation-z2  p-3 rounded-4">
+    <h6 class="text-secondary bi-bar-chart  lh-1"><span class="mx-2">Converted customers per month</span></h6>
     <canvas baseChart
             [datasets]="barChartData"
             [labels]="barChartLabels"
@@ -55,12 +57,26 @@
     </canvas>
   </div>
 
-  <div class="col-6">
+  <div class="col-5 mt-lg-3 mat-elevation-z2 p-3 rounded-4">
+    <h6 class="text-secondary bi-bar-chart  lh-1"><span class="mx-2">Converted customers per month</span></h6>
     <canvas baseChart
             [datasets]="barChartData"
             [labels]="barChartLabels"
             [options]="chartOptions"
-            [type]="'bar'"
+            [type]="'polarArea'"
+            class="col-6"
+            [legend]="true">
+    </canvas>
+  </div>
+
+
+  <div class="col-5 mt-lg-3 mat-elevation-z2  p-3 rounded-4">
+    <h6 class="text-secondary bi-bar-chart  lh-1"><span class="mx-2">Converted customers per month</span></h6>
+    <canvas baseChart
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="chartOptions"
+            [type]="'line'"
             class="col-6"
             [legend]="true">
     </canvas>

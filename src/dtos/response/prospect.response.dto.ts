@@ -49,6 +49,7 @@ export class ProspectResponseDto {
   certificationText: string | null;
   trackingLogs: TrackingLogResponseDto[];
 
+
   constructor(data: any) {
     this.createdAt = data?.createdAt || '';
     this.updatedAt = data?.updatedAt || '';

@@ -1,5 +1,5 @@
 {
-  "name": "sales-scout",
+  "name": "MaLogistics",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:SalesScout": "node dist/sales-scout/server/server.mjs"
+    "serve:ssr:MaLogistics": "node dist/sales-scout/server/server.mjs"
   },
   "private": true,
   "dependencies": {

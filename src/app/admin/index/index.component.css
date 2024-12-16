@@ -33,3 +33,22 @@ mat-list-item:hover button {
 .active-item-nav {
   border-left: solid 3px #005cbb;
 }
+
+
+.active {
+  background-color: #e0f7fa;
+  font-weight: bold;
+
+}
+
+.container-fluid {
+  padding: 1rem;
+}
+
+.mat-toolbar {
+  justify-content: space-between;
+}
+
+img.img-fluid {
+  height: 40px;
+}
