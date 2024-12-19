@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { IndexComponent } from './index/index.component';
+
 import { ProspectComponent } from './prospect/prospect.component';
 import {ShowProspectComponent} from './prospect/show-prospect/show-prospect.component';
 import {InterlocutorComponent} from './interlocutor/interlocutor.component';
@@ -8,6 +8,7 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {InterlocutorShowComponent} from './interlocutor/interlocutor-show/interlocutor-show.component';
 import {InteractionComponent} from './interaction/interaction.component';
 import {InteractionShowComponent} from './interaction/interaction-show/interaction-show.component';
+import {IndexComponent} from './index/index.component';
 
 const routes: Routes = [
   {
@@ -26,6 +27,7 @@ const routes: Routes = [
         loadChildren: () =>
           import('../crm/crm.module').then((m) => m.CrmModule),
       },
+
     ],
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }, // Catch-all route to handle 404s

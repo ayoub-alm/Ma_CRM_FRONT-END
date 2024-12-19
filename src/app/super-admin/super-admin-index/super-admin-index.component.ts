@@ -12,19 +12,28 @@ import { LocalStorageService } from '../../../services/local.storage.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatCard} from '@angular/material/card';
 import {CdkTrapFocus} from '@angular/cdk/a11y';
-import {MatIconModule} from '@angular/material/icon';
-import {MatDrawer, MatSidenavModule} from '@angular/material/sidenav';
-import {MatButtonModule} from '@angular/material/button';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatTreeModule} from '@angular/material/tree';
-import {MatListModule} from '@angular/material/list';
+import {MatIcon, MatIconModule} from '@angular/material/icon';
+import {MatDrawer, MatDrawerContainer, MatSidenavModule} from '@angular/material/sidenav';
+import {MatButton, MatButtonModule, MatIconButton} from '@angular/material/button';
+import {MatToolbar, MatToolbarModule} from '@angular/material/toolbar';
+import {MatDivider, MatDividerModule} from '@angular/material/divider';
+import {
+  MatTree,
+  MatTreeModule, MatTreeNestedDataSource,
+  MatTreeNode,
+  MatTreeNodeDef,
+  MatTreeNodePadding,
+  MatTreeNodeToggle
+} from '@angular/material/tree';
+import {MatList, MatListItem, MatListModule} from '@angular/material/list';
 import {filter} from 'rxjs';
+import {NestedTreeControl} from '@angular/cdk/tree';
 
 interface MenuItem {
   name: string;
   icon: string;
   route: string;
+  color?: string | "black";
   children?: string[] | [];
 }
 
@@ -42,15 +51,15 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
     icon: 'business_center', // Updated icon for CRM
     items: [
       { name: 'Dashboard', icon: 'bar_chart', route: '/admin/crm' },
-      { name: 'Produits & Services', icon: 'inventory', route: '/crm/products' },
-      { name: 'Contrats', icon: 'assignment', route: '/crm/contracts'},
-      { name: 'Tarifs', icon: 'price_change', route: '/crm/pricing' },
-      { name: 'Devis', icon: 'request_quote', route: '/crm/quotes'},
-      { name: 'Commandes', icon: 'shopping_cart', route: '/crm/orders'},
-      { name: 'Bons de livraison', icon: 'local_shipping', route: '/crm/delivery-notes' },
-      { name: 'Factures', icon: 'receipt_long', route: '/admin/crm/invoices'},
-      { name: 'Recouvrement', icon: 'account_balance_wallet', route: '/crm/collections' },
-      { name: 'Avoirs', icon: 'credit_score', route: '/crm/credits' },
+      { name: 'Produits & Services', icon: 'inventory', route: '/crm/products', color: '#1976d2' },
+      { name: 'Contrats', icon: 'assignment', route: '/crm/contracts', color: '#ff5722' },
+      { name: 'Tarifs', icon: 'price_change', route: '/crm/pricing', color: '#4caf50' },
+      { name: 'Devis', icon: 'request_quote', route: '/crm/quotes', color: '#ffc107' },
+      { name: 'Commandes', icon: 'shopping_cart', route: '/crm/orders', color: '#673ab7' },
+      { name: 'Bons de livraison', icon: 'local_shipping', route: '/crm/delivery-notes', color: '#2196f3' },
+      { name: 'Factures', icon: 'receipt_long', route: '/admin/crm/invoices', color: '#9c27b0' },
+      { name: 'Recouvrement', icon: 'account_balance_wallet', route: '/crm/collections', color: '#009688' },
+      { name: 'Avoirs', icon: 'credit_score', route: '/crm/credits', color: '#f44336' },
     ],
   },
   tms: {
@@ -60,26 +69,17 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
       { name: 'Orders', icon: 'shopping_cart', route: '/tms/orders' },
     ],
   },
-  workspace: {
-    icon: 'workspace',
-    items: [
-      { name: ' Entreprises', icon: 'domain', route: '/super-admin/companies' },
-      { name: 'Project', icon: 'work_outline ', route: '/super-admin/projects' },
-      { name: 'Utilisateur', icon: 'person', route: '/super-admin/users' },
-      { name: 'Mes application', icon: 'apps', route: '/super-admin/users'},
-    ],
-  },
   admin: {
     icon: 'admin_panel_settings',
     items: [
       { name: ' Entreprises', icon: 'domain', route: '/super-admin/companies' },
-      { name: 'filiale', icon: 'apartment', route: '/super-admin/users' },
-      { name: 'Project', icon: 'work_outline ', route: '/super-admin/projects' },
       { name: 'Utilisateur', icon: 'person', route: '/super-admin/users' },
-      { name: 'Taxonomies', icon: 'category', route: '/super-admin/users', children: ["Pays", "Villes","Banques"] },
+      { name: 'Project', icon: 'work_outline ', route: '/super-admin/projects' },
+      { name: 'Taxonomie', icon: 'person', route: '/super-admin/users', children: ["test", "test"] },
     ],
   },
 };
+
 
 /**
  * Food data with nested structure.
@@ -92,21 +92,52 @@ interface FoodNode {
 
 const TREE_DATA: FoodNode[] = [
   {
-    name: 'Taxonomies',
+    name: 'Fruit',
     children: [{name: 'Apple'}, {name: 'Banana'}, {name: 'Fruit loops'}],
-  }
+  },
+  {
+    name: 'Vegetables',
+    children: [
+      {
+        name: 'Green',
+        children: [{name: 'Broccoli'}, {name: 'Brussels sprouts'}],
+      },
+      {
+        name: 'Orange',
+        children: [{name: 'Pumpkins'}, {name: 'Carrots'}],
+      },
+    ],
+  },
 ];
 
-
 @Component({
+  selector: 'app-super-admin-index',
   standalone: true,
-  imports: [MatTreeModule, RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule,
-    MatListModule, MatDividerModule, RouterLink, RouterLinkWithHref, CdkTrapFocus, NgIf, MatCard, RouterLinkActive, NgForOf],
-  selector: 'app-index',
-  templateUrl: './index.component.html',
-  styleUrls: ['./index.component.css'],
+  imports: [
+    MatButton,
+    MatDivider,
+    MatDrawer,
+    MatDrawerContainer,
+    MatIcon,
+    MatIconButton,
+    MatList,
+    MatListItem,
+    MatToolbar,
+    NgForOf,
+    NgIf,
+    RouterLink,
+    RouterLinkActive,
+    RouterOutlet,
+    MatTreeNode,
+    MatTree,
+    MatTreeNodeDef,
+    MatTreeNodePadding,
+    MatTreeNodeToggle
+  ],
+  templateUrl: './super-admin-index.component.html',
+  styleUrl: './super-admin-index.component.css'
 })
-export class IndexComponent implements OnInit , AfterViewInit{
+export class SuperAdminIndexComponent implements OnInit , AfterViewInit{
   user: any;
   currentRoute: string = '';
   activeRouteParams: any = {};
@@ -114,18 +145,18 @@ export class IndexComponent implements OnInit , AfterViewInit{
   selectedApplication: string = 'prospection';
   menuItems: MenuItem[] = menuData[this.selectedApplication].items;
   @ViewChild('rightDrawer') rightDrawer!: MatDrawer;
+  // TreeControl for nested structure
+  treeControl = new NestedTreeControl<FoodNode>((node) => node.children);
+
+  // DataSource for tree
+  dataSource = new MatTreeNestedDataSource<FoodNode>();
   constructor(
     private localStorageService: LocalStorageService,
     private router: Router,
     private activeRoute: ActivatedRoute,
   ) {}
-  a =1
-  b=2
-  dataSource = TREE_DATA;
 
-  childrenAccessor = (node: FoodNode) => node.children ?? [];
 
-  hasChild = (_: number, node: FoodNode) => !!node.children && node.children.length > 0;
 
   /**
    *
@@ -141,6 +172,7 @@ export class IndexComponent implements OnInit , AfterViewInit{
       });
     // Initial setup
     this.updateSelectedApplication();
+    this.dataSource.data = TREE_DATA;
   }
 
   /**
@@ -172,11 +204,10 @@ export class IndexComponent implements OnInit , AfterViewInit{
       this.selectApplication('crm');
     } else if (this.currentRoute.includes('/admin/tms')) {
       this.selectApplication('tms');
-    } else if (this.currentRoute.includes('/super-admin')) {
+    }
+    else if (this.currentRoute.includes('/admin/super-admin')) {
       this.selectApplication('admin');
-    } else if (this.currentRoute.includes('/workspace')) {
-      this.selectApplication('admin');
-    }else {
+    } else {
       this.selectApplication('prospection'); // Default case
     }
   }
@@ -196,5 +227,6 @@ export class IndexComponent implements OnInit , AfterViewInit{
 
   protected readonly menuData = menuData;
 
-
+  hasChild = (_: number, node: FoodNode) => !!node.children && node.children.length > 0;
 }
+

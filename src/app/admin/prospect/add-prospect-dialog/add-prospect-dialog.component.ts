@@ -62,7 +62,6 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
   legalInfoFormGroup!: FormGroup;
   businessDescriptionFormGroup!: FormGroup;
   stepperOrientation: Observable<StepperOrientation>;
-
   titles: BehaviorSubject<TitleResponseDto[]> = new BehaviorSubject<TitleResponseDto[]>([]);
   companySizes: BehaviorSubject<CompanySizeResponseDto[]> = new BehaviorSubject<CompanySizeResponseDto[]>([]);
   jobTitles: BehaviorSubject<JobTitleResponseDto[]> = new BehaviorSubject<JobTitleResponseDto[]>([]);
@@ -75,6 +74,10 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
   subscriptions: Subscription[] = [];
   private _formBuilder = inject(FormBuilder);
 
+  /**
+   *
+   * Constructor
+   */
   constructor(private dialogRef: MatDialogRef<AddProspectDialogComponent>, @Inject(MAT_DIALOG_DATA) public prospect: ProspectResponseDto,
               private titleService: TitleService, private companySizesService: CompanySizeService,
               private jobTitleService: JobTitleService, private proprietaryStructureService: ProprietaryStructureService,
@@ -129,11 +132,12 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
   }
 
 
-
+  /**
+   * On inti function
+   */
   ngOnInit() {
     // Load data for select inputs
     // Subscribe to form control changes for select elements and update the company object
-
     this.titleService.getAllTitles().subscribe(titles => this.titles.next(titles));
     this.companySizesService.getAllCompaniesSizes().subscribe(sizes => this.companySizes.next(sizes));
     this.jobTitleService.getAllJobTitles().subscribe(jobTitles => this.jobTitles.next(jobTitles));
@@ -143,11 +147,6 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
     this.industryService.getAllIndustries().subscribe(industries => this.industries.next(industries));
     this.courtService.getAllCourt().subscribe(courts => this.courts.next(courts));
     this.legalStatusService.getAllLegalStatus().subscribe(legalStatuses => this.legalStatuses.next(legalStatuses));
-
-
-
-
-
   }
 
   ngAfterViewInit() {

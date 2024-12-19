@@ -108,7 +108,6 @@ export class ProspectComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
@@ -130,7 +129,6 @@ export class ProspectComponent implements OnInit, AfterViewInit {
           // Check if the item already exists in the data source based on the ID
           const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
           console.log("message " ,existingItemIndex)
-
           if (existingItemIndex > -1) {
             // If the item exists, update it
             const updatedData = [...this.dataSource.data];
@@ -140,7 +138,6 @@ export class ProspectComponent implements OnInit, AfterViewInit {
             // If it doesn't exist, add the new item to the data
             this.dataSource.data = [...this.dataSource.data, response]; // Add new item and trigger Change Detection
           }
-
           // Reset paginator to the first page
           if (this.paginator) {
             this.paginator.firstPage();

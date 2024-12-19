@@ -35,8 +35,27 @@
               <mat-icon>{{ item.icon }}</mat-icon>
             </button>
           </mat-list-item>
+          <mat-list *ngIf="item.children && item.children.length > 0" class="mx-2">
+            <a *ngFor="let child of item?.children"
+               [routerLink]="child"  routerLinkActive="active"  class="text-decoration-none">
+              <mat-list-item class="d-flex justify-content-start align-items-center">
+                <button
+                  mat-button
+                  [class]="'text-start d-flex justify-content-start text-secondary rounded-1' "
+                  aria-label="PMS"
+                  style="width: 100%;"
+                >
+                  {{ child }}
+                  <mat-icon>{{ 'settings' }}</mat-icon>
+                </button>
+              </mat-list-item>
+
+            </a>
+          </mat-list>
+
         </a>
       </mat-list>
+
     </div>
   </mat-drawer>
 
@@ -59,7 +78,8 @@
 
       <!-- Right Menu for Application Selection -->
       <mat-list>
-        <a  *ngFor="let app of [{name:'prospection',route:'/admin'},{name:'crm',route:'/admin/crm'},{name:'tms',route:'tms'}]"
+        <a  *ngFor="let app of [{name:'prospection',route:'/admin'},
+        {name:'crm',route:'/admin/crm'},{name:'tms',route:'tms'},{name:'admin',route:'/super-admin'},{name:'workspace',route:'/super-admin'}]"
            routerLinkActive="active" [routerLink]="app.route"  class="text-decoration-none">
           <mat-list-item class="d-flex justify-content-start align-items-center">
             <button   (click)="selectApplication(app.name)"
@@ -93,6 +113,8 @@
           <mat-icon>logout</mat-icon>
         </button>
       </a>
+
+
       <button mat-icon-button (click)="rightDrawer.toggle()">
         <mat-icon>apps</mat-icon>
       </button>

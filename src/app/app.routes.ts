@@ -8,6 +8,11 @@
       loadChildren: () =>
         import('./admin/admin.module').then((m) => m.AdminModule),
     },
+    {
+      path: 'super-admin',
+      loadChildren: () =>
+        import('./super-admin/super-admin.module').then((m) => m.SuperAdminModule), // Lazy load Super Admin
+    },
     { path: 'login', component: LoginComponent },
     { path: '**', component: NotFoundComponent },
   ];
