@@ -1,0 +1,44 @@
+.form-control{
+    box-shadow: none;
+    border-color: transparent;
+    /*font-size:1rem;*/
+    border-bottom: solid 0.5px #005cbb;
+    margin:0% !important;
+    padding:0% !important;
+    padding-left:0.5rem !important;
+    /*background-color: #e0e2ec !important;*/
+}
+.user-info {
+    display: flex;
+    align-items: center; /* Centers the icon and text vertically */
+}
+.user-icon {
+    font-size: 24px; /* Adjust icon size */
+    margin-right: 8px; /* Add spacing between icon and text */
+    color: #3f51b5;
+}
+.comments-button{
+    position: fixed;
+    bottom: 6px;
+    right: 16px;
+    zIndex: 1050;
+    transition: right 0.3s ease-in-out;
+}
+.commentdate{
+    font-size:0.7rem !important;
+}
+
+.reply{
+    font-size:0.8rem !important;
+}
+
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.demo-section + .demo-section {
+    margin-top: 16px;
+    color: red;
+}

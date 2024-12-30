@@ -35,6 +35,9 @@ mat-icon {
 .primary-blue-color{
   color: #005cbb !important;
 }
+.bg-primary-blue-color{
+  background: #005cbb !important;
+}
 
 
 .custom-table th.mat-header-cell, .custom-table td.mat-cell {
