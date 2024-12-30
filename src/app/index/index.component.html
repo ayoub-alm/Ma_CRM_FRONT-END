@@ -17,7 +17,6 @@
           <mat-icon>close</mat-icon>
         </button>
       </mat-toolbar>
-
       <mat-divider></mat-divider>
 
       <!-- Dynamic Left Menu -->
@@ -103,8 +102,32 @@
       <button mat-icon-button (click)="leftDrawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
-      <img *ngIf="!leftDrawer.opened" src="/ma-logo.png"  alt="Logo" class="ms-2 p-1 img-fluid">
+      <img *ngIf="!leftDrawer.opened" src="/ma-logo.png" alt="Logo" class="ms-2 p-1 img-fluid">
+<!--      <mat-form-field appearance="fill" class="w-25 p-2 m-auto">-->
+<!--        <mat-select value="one"class=" " >-->
+<!--          <mat-option class=" bg-white"  value="one">Ma Logistics</mat-option>-->
+<!--          <mat-option class=" bg-white" value="two">3Abc business</mat-option>-->
+<!--        </mat-select>-->
+<!--      </mat-form-field>-->
+
+
       <span class="example-spacer"></span>
+      <button mat-button class="mat-dark bg-light rounded-3 mx-1 bg-white border border-1 border-secondary-subtle shadow-sm"
+              [color]="'primary'"
+              [matMenuTriggerFor]="menu_action"
+              aria-label="Example icon-button with a menu">
+        <mat-icon>domain</mat-icon>
+        <span class="d-none d-md-block">Entreprises</span>
+      </button>
+      <mat-menu #menu_action="matMenu" xPosition="before" class="bg-light">
+        <button
+          mat-menu-item class="mat-primary">
+          <mat-icon>domain</mat-icon>  Ma logistics
+        </button>
+        <button  mat-menu-item class="mat-primary">
+          <mat-icon>domain</mat-icon>  3Abc
+        </button>
+      </mat-menu>
       <button mat-icon-button>
         <mat-icon>account_circle</mat-icon>
       </button>

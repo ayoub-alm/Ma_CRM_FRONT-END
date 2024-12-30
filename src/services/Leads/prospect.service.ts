@@ -2,10 +2,10 @@ import {Injectable} from "@angular/core";
 
 import {HttpClient} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
-import {CreateCompanyRequest} from "../dtos/request/CreateCompanyDto";
-import {environment} from '../environments/environment';
-import {ProspectResponseDto} from '../dtos/response/prospect.response.dto';
-import {CreateProspectDto} from '../dtos/request/CreateProspectDto';
+import {CreateCompanyRequest} from "../../dtos/request/CreateCompanyDto";
+import {environment} from '../../environments/environment';
+import {ProspectResponseDto} from '../../dtos/response/prospect.response.dto';
+import {CreateProspectDto} from '../../dtos/request/CreateProspectDto';
 
 @Injectable({
   providedIn: 'root'

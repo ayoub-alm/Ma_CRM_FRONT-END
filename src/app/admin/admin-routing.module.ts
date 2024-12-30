@@ -8,7 +8,7 @@ import {DashboardComponent} from './dashboard/dashboard.component';
 import {InterlocutorShowComponent} from './interlocutor/interlocutor-show/interlocutor-show.component';
 import {InteractionComponent} from './interaction/interaction.component';
 import {InteractionShowComponent} from './interaction/interaction-show/interaction-show.component';
-import {IndexComponent} from './index/index.component';
+import {IndexComponent} from '../index/index.component';
 
 const routes: Routes = [
   {

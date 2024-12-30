@@ -5,7 +5,7 @@ import {UsersComponent} from './users/users.component';
 import {CompaniesComponent} from './companies/companies.component';
 import {SuperAdminIndexComponent} from './super-admin-index/super-admin-index.component';
 import {ProjectComponent} from './project/project.component';
-import {IndexComponent} from '../admin/index/index.component';
+import {IndexComponent} from '../index/index.component';
 
 
 

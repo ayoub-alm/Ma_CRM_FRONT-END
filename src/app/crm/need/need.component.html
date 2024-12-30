@@ -1,0 +1,36 @@
+<div class="container-fluid bg-white vh-75 w-100 rounded-top-4 shadow-sm">
+  <div class="row rounded-1 my-2 mx-auto pt-2 w-100 d-flex justify-content-between align-items-center">
+    <!-- Navigation Section -->
+    <p class="fs-5 my-auto col-lg-6 col-md-12 d-flex align-items-center">
+    <span class="text-secondary">
+      <a routerLink="/admin" class="text-decoration-none">
+        <button mat-button>
+          <mat-icon class="primary-blue-color">home</mat-icon>
+          Home
+        </button>
+      </a>
+      <span class="mx-1">></span>
+      <button mat-button>
+        <mat-icon class="primary-blue-color">forum</mat-icon>
+        Besoins
+      </button>
+    </span>
+    </p>
+    <!-- Toggle Button Section -->
+    <div class="col-lg-6 col-12 d-flex justify-content-end">
+      <mat-button-toggle-group
+        class="custom-toggle-group  rounded-2"
+        [formControl]="crmType"
+        name="crmType"
+        aria-label="CRM Type"
+      >
+        <mat-button-toggle class="primary-blue-color"  value="WMS">Entreposage</mat-button-toggle>
+        <mat-button-toggle class="primary-blue-color" value="TMS">Transport</mat-button-toggle>
+        <mat-button-toggle  [disabled]="true" value="TMSI">Transport Internationnal</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <!-- Search Bar -->
+
+  </div>
+ <router-outlet></router-outlet>
+</div>

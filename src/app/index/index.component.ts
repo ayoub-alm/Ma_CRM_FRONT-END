@@ -8,7 +8,7 @@ import {
   RouterLinkWithHref,
   RouterOutlet
 } from '@angular/router';
-import { LocalStorageService } from '../../../services/local.storage.service';
+import { LocalStorageService } from '../../services/local.storage.service';
 import {NgForOf, NgIf} from '@angular/common';
 import {MatCard} from '@angular/material/card';
 import {CdkTrapFocus} from '@angular/cdk/a11y';
@@ -20,6 +20,11 @@ import {MatDividerModule} from '@angular/material/divider';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatListModule} from '@angular/material/list';
 import {filter} from 'rxjs';
+import {MatFormField} from '@angular/material/form-field';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
+import {FormControl} from '@angular/forms';
 
 interface MenuItem {
   name: string;
@@ -33,7 +38,7 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
     icon: 'public',
     items: [
       { name: 'Dashboard', icon: 'bar_chart', route: '/admin' },
-      { name: 'Prospects', icon: 'business_center', route: '/admin/prospects' },
+      { name: 'Prospects', icon: 'domain', route: '/admin/prospects' },
       { name: 'Interlocutors', icon: 'contacts', route: '/admin/interlocutors' },
       { name: 'Interactions', icon: 'forum', route: '/admin/interactions' },
     ],
@@ -45,12 +50,14 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
       { name: 'Produits & Services', icon: 'inventory', route: '/crm/products' },
       { name: 'Contrats', icon: 'assignment', route: '/crm/contracts'},
       { name: 'Tarifs', icon: 'price_change', route: '/crm/pricing' },
+      { name: 'Besoins', icon: 'checklist', route: '/admin/crm/need' },
       { name: 'Devis', icon: 'request_quote', route: '/crm/quotes'},
       { name: 'Commandes', icon: 'shopping_cart', route: '/crm/orders'},
       { name: 'Bons de livraison', icon: 'local_shipping', route: '/crm/delivery-notes' },
       { name: 'Factures', icon: 'receipt_long', route: '/admin/crm/invoices'},
       { name: 'Recouvrement', icon: 'account_balance_wallet', route: '/crm/collections' },
       { name: 'Avoirs', icon: 'credit_score', route: '/crm/credits' },
+      { name: 'Clients', icon: 'contacts', route: '/crm/credits' },
     ],
   },
   tms: {
@@ -101,7 +108,7 @@ const TREE_DATA: FoodNode[] = [
 @Component({
   standalone: true,
   imports: [MatTreeModule, RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule,
-    MatListModule, MatDividerModule, RouterLink, RouterLinkWithHref, CdkTrapFocus, NgIf, MatCard, RouterLinkActive, NgForOf],
+    MatListModule, MatDividerModule, RouterLink, RouterLinkWithHref, CdkTrapFocus, NgIf, MatCard, RouterLinkActive, NgForOf, MatFormField, MatSelect, MatOption, MatMenu, MatMenuItem, MatMenuTrigger, MatButtonToggle, MatButtonToggleGroup],
   selector: 'app-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.css'],

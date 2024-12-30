@@ -20,7 +20,7 @@ import {MatSort, MatSortHeader} from '@angular/material/sort';
 import {MatTabLink, MatTabNav, MatTabNavPanel} from '@angular/material/tabs';
 import {Router, RouterLink} from '@angular/router';
 import {BehaviorSubject, catchError, EMPTY, filter, tap} from 'rxjs';
-import {InterlocutorService} from '../../../services/interlocutor.service';
+import {InterlocutorService} from '../../../services/Leads/interlocutor.service';
 import {MatDialog} from '@angular/material/dialog';
 import {ProspectStatus} from '../../../enums/prospect.status';
 import {AddUpdateInterlocutorComponent} from './add-update-interlocutor/add-update-interlocutor.component';
