@@ -1,11 +1,25 @@
-.form-control{
-  box-shadow: none;
-  /*font-size:1rem;*/
-  border: solid 0.5px #005cbb;
-  margin:0% !important;
-  padding:0% !important;
-  padding-left:0.5rem !important;
-  /*background-color: #e0e2ec !important;*/
+.search-input {
+ /* Removes box shadow */
+  outline: none; /* Removes the default outline */
+  border: none; /* Removes the initial border */
+  /* border: solid 0.5px #005cbb; !* Defines a subtle border *!*/
+  border-radius: 4px; /* Adds rounded corners for a cleaner look */
+  margin: 0 !important; /* Removes any extra margin */
+  padding: 0.25rem 0.5rem !important; /* Balanced padding for better spacing */
+  transition: all 0.5s ease-in-out; /* Smooth transition for focus and width changes */
+  background-color: #f9f9f9; /* Light background for readability */
+  font-size: 1rem; /* Adjust font size for consistency */
+  color: #333; /* Ensures text color contrast */
+}
+
+.search-input:focus {
+  outline: none; /* Removes the default outline */
+  border: none; /* Removes the initial border */
+  box-shadow: none; /* No shadow on focus */
+  border-bottom: solid 2px #005cbb; /* Adds a distinct bottom border */
+  width: 100%; /* Expands width smoothly */
+  background-color: #ffffff; /* Ensures focus background contrasts well */
+  color: #000; /* Sharpens text color on focus */
 }
 .fixed-header {
   position: sticky;
