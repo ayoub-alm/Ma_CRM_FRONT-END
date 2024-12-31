@@ -39,7 +39,7 @@ import {CourtService} from '../../../../services/data/court.service';
 
 import {HttpClient} from '@angular/common/http';
 import {BreakpointObserver} from '@angular/cdk/layout';
-import {ProspectService} from '../../../../services/prospect.service';
+import {ProspectService} from '../../../../services/Leads/prospect.service';
 import {CreateProspectDto} from '../../../../dtos/request/CreateProspectDto';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ProspectResponseDto} from '../../../../dtos/response/prospect.response.dto';

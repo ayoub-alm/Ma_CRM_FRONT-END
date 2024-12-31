@@ -16,7 +16,7 @@ import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 import {MatPaginator} from '@angular/material/paginator';
 import {MatSort, MatSortHeader} from '@angular/material/sort';
-import {InteractionService} from '../../../services/interaction.service';
+import {InteractionService} from '../../../services/Leads/interaction.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';

@@ -14,7 +14,7 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {environment} from '../../../../environments/environment';
-import {ProspectService} from '../../../../services/prospect.service';
+import {ProspectService} from '../../../../services/Leads/prospect.service';
 import {ProspectResponseDto} from '../../../../dtos/response/prospect.response.dto';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
@@ -26,7 +26,7 @@ import {InLineEditInputComponent} from '../../../../utile/in-line-edit-input/in-
 import {MatDivider} from '@angular/material/divider';
 import {AddProspectDialogComponent} from '../add-prospect-dialog/add-prospect-dialog.component';
 import {InterlocutorResDto} from '../../../../dtos/response/interlocutor.dto';
-import {InterlocutorService} from '../../../../services/interlocutor.service';
+import {InterlocutorService} from '../../../../services/Leads/interlocutor.service';
 import {ProspectStatus} from '../../../../enums/prospect.status';
 import {MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatOption} from '@angular/material/core';

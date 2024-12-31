@@ -11,11 +11,11 @@ import {NgxTimelineComponent, NgxTimelineEvent} from '@frxjs/ngx-timeline';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {BehaviorSubject, filter, tap} from 'rxjs';
 import {InterlocutorResDto} from '../../../../dtos/response/interlocutor.dto';
-import {InterlocutorService} from '../../../../services/interlocutor.service';
+import {InterlocutorService} from '../../../../services/Leads/interlocutor.service';
 import {AddUpdateInterlocutorComponent} from '../add-update-interlocutor/add-update-interlocutor.component';
 import {MatDialog} from '@angular/material/dialog';
 import {InteractionResponseDto} from '../../../../dtos/response/interaction.response.dto';
-import {InteractionService} from '../../../../services/interaction.service';
+import {InteractionService} from '../../../../services/Leads/interaction.service';
 
 @Component({
   selector: 'app-interlocutor-show',

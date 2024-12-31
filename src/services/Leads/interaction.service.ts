@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
-import {InteractionResponseDto} from '../dtos/response/interaction.response.dto';
-import {InteractionRequestDto} from '../dtos/request/interaction.request.dto';
-import {environment} from '../environments/environment';
+import {InteractionResponseDto} from '../../dtos/response/interaction.response.dto';
+import {InteractionRequestDto} from '../../dtos/request/interaction.request.dto';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

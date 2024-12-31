@@ -8,7 +8,7 @@ import {NgxTimelineComponent} from "@frxjs/ngx-timeline";
 import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {BehaviorSubject, tap} from 'rxjs';
 import {InteractionResponseDto} from '../../../../dtos/response/interaction.response.dto';
-import {InteractionService} from '../../../../services/interaction.service';
+import {InteractionService} from '../../../../services/Leads/interaction.service';
 
 @Component({
   selector: 'app-interaction-show',

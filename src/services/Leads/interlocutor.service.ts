@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from '../environments/environment';
+import {environment} from '../../environments/environment';
 import {Observable, tap} from 'rxjs';
-import {InterlocutorRequestDto} from '../dtos/request/interlocutorRequestDto';
-import {InterlocutorResDto} from '../dtos/response/interlocutor.dto';
+import {InterlocutorRequestDto} from '../../dtos/request/interlocutorRequestDto';
+import {InterlocutorResDto} from '../../dtos/response/interlocutor.dto';
 
 @Injectable({
   providedIn: 'root'

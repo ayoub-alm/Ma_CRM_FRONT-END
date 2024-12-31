@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddProspectDialogComponent } from './add-prospect-dialog/add-prospect-dialog.component';
 import {BehaviorSubject, tap} from 'rxjs';
 import { ProspectResponseDto } from '../../../dtos/response/prospect.response.dto';
-import { ProspectService } from '../../../services/prospect.service';
+import { ProspectService } from '../../../services/Leads/prospect.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {Router, RouterLink} from '@angular/router';
