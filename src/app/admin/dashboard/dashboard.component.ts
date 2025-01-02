@@ -33,7 +33,9 @@ const year = today.getFullYear();
     ChartModule, MatNativeDateModule,
     MatCardHeader, MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule,
     MatCardContent,
-    BaseChartDirective, MatCardTitle, MatIcon, MatInput, MatFormField, MatLabel, MatAccordion, MatExpansionPanelDescription, MatExpansionPanelTitle, MatExpansionPanelHeader, MatExpansionPanel, MatButton, MatIconButton, MatMenu, MatMenuItem, RouterLink
+    BaseChartDirective, MatCardTitle, MatIcon, MatInput, MatFormField, MatLabel, MatAccordion,
+    MatExpansionPanelDescription, MatExpansionPanelTitle, MatExpansionPanelHeader, MatExpansionPanel, MatButton,
+    MatIconButton, MatMenu, MatMenuItem, RouterLink
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',

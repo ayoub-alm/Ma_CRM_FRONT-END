@@ -22,6 +22,7 @@ import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {LocalStorageService} from '../../../services/local.storage.service';
 import {AuthService} from '../../../services/AuthService';
 import {Subscription} from 'rxjs';
+import {MatDivider} from '@angular/material/divider';
 
 
 @Component({
@@ -60,7 +61,8 @@ import {Subscription} from 'rxjs';
     ReactiveFormsModule,
     MatLabel,
     MatFormField,
-    RouterOutlet
+    RouterOutlet,
+    MatDivider
   ],
   templateUrl: './need.component.html',
   styleUrl: './need.component.css'
@@ -71,8 +73,13 @@ export class NeedComponent implements OnInit, OnDestroy{
   constructor(private authService: AuthService,private localStorageService: LocalStorageService, private router: Router) {
   }
   ngOnInit(): void {
-    this.crmType.setValue(this.localStorageService.getItem("current_crm"))
-    this.router.navigateByUrl('/admin/crm/need/'+this.localStorageService.getItem("current_crm").toLowerCase()).then((data => {return}));
+    if(this.localStorageService.getItem("current_crm") !== "" && this.localStorageService.getItem("current_crm") !== null){
+      this.crmType.setValue(this.localStorageService.getItem("current_crm"))
+    }else{
+      this.crmType.setValue("WMS")
+      this.localStorageService.setItem("current_crm", "WMS")
+    }
+    // this.router.navigateByUrl('/admin/crm/need/'+this.localStorageService.getItem("current_crm").toLowerCase()).then((data => {return}));
      this.subscriptions.push(
        this.crmType.valueChanges.subscribe(data => {
        this.localStorageService.setItem("current_crm", data);

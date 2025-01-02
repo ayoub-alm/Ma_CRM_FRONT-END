@@ -28,6 +28,7 @@ import {
 } from '../../../admin/interaction/add-edit-interaction-dialog/add-edit-interaction-dialog.component';
 import {WmsNeedCreatEditComponent} from './wms-need-creat-edit/wms-need-creat-edit.component';
 import {InputTextModule} from 'primeng/inputtext';
+import {NeedComponent} from '../need.component';
 
 @Component({
   selector: 'app-wms-need',
@@ -55,7 +56,8 @@ import {InputTextModule} from 'primeng/inputtext';
     MatNoDataRow,
     MatHeaderCellDef,
     MatMenuTrigger,
-    InputTextModule
+    InputTextModule,
+    NeedComponent
   ],
   templateUrl: './wms-need.component.html',
   styleUrl: './wms-need.component.css'
@@ -111,16 +113,9 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(WmsNeedCreatEditComponent, {
-      maxWidth: '900px',
-    });
+  createEditWmsNeed(): void {
+    this.router.navigateByUrl('/admin/crm/need/wms/create').then(value => {return;});
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadNeedBasedOnSelectedType();
-      }
-    });
   }
 
 

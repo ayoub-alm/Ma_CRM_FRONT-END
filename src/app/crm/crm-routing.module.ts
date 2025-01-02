@@ -4,13 +4,12 @@ import {InvoicesComponent} from './invoices/invoices.component';
 import {NeedComponent} from './need/need.component';
 import {WmsNeedComponent} from './need/wms-need/wms-need.component';
 import {TmsNeedShowComponent} from './need/tms-need/tms-need-show/tms-need-show.component';
+import {WmsNeedCreatEditComponent} from './need/wms-need/wms-need-creat-edit/wms-need-creat-edit.component';
 
 const routes: Routes = [
   {path:'invoices', component: InvoicesComponent},
-  {path:'need', component: NeedComponent, children:[
-      {path:'wms', component: WmsNeedComponent},
-      {path:'tms', component: TmsNeedShowComponent},
-    ]},
+  {path:'need', loadChildren: () =>
+      import('./need/crm.need.module').then((m) => m.CrmNeedModule), },
 
 ];
 

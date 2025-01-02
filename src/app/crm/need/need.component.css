@@ -22,7 +22,7 @@
 
 
 .custom-toggle-group {
-  font-size: 5px;
+  font-size: 5rem !important;
   transform:scale(0.8)/* Adjust as needed */
 }
 

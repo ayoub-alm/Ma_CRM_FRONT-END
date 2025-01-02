@@ -15,7 +15,7 @@ import {
   MAT_DATE_FORMATS,
   MAT_NATIVE_DATE_FORMATS,
   MatOption,
-  NativeDateAdapter
+  NativeDateAdapter, provideNativeDateAdapter
 } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -71,6 +71,7 @@ export const CUSTOM_DATE_FORMATS = {
   ],
   templateUrl: './add-edit-interaction-dialog.component.html',
   styleUrls: ['./add-edit-interaction-dialog.component.css'],
+  providers: [provideNativeDateAdapter()],
 })
 export class AddEditInteractionDialogComponent implements OnInit {
   interactionForm!: FormGroup;

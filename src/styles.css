@@ -5,7 +5,6 @@ body { margin: 0; font-family:"Poppins", Roboto, "Helvetica Neue", sans-serif; }
 
 * {
   font-family: "Poppins", Roboto, "Helvetica Neue", sans-serif !important;
-
 }
 
 mat-icon {
@@ -17,9 +16,8 @@ mat-icon {
   }
 
   .mat-mdc-form-field {
-    font-size: 12px;
-    width: 100%;
-    transform: scale(0.8);
+    font-size: small;
+    transform:scaleY(0.9);
   }
 
 .mat-mdc-table .mdc-data-table__row{
@@ -89,4 +87,8 @@ mat-icon {
   z-index: 10;
 }
 
+
+.full-height-size{
+  min-height:max(100vh);
+}
 
