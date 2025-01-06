@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
 import {MatButton, MatFabButton, MatIconButton} from "@angular/material/button";
 
 import {PaginatorModule} from "primeng/paginator";
@@ -13,6 +13,7 @@ import {CommentResponseDto} from "../../../dtos/response/CommentResponseDto";
 import {CommentService} from "../../../services/comment.service";
 import {EntityEnum} from "../../../enums/entity.enum";
 import {AuthService} from "../../../services/AuthService";
+import {MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
 
 
 
@@ -31,18 +32,20 @@ import {AuthService} from "../../../services/AuthService";
     DatePipe,
     MatBadge,
     MatFabButton,
-    AsyncPipe
+    AsyncPipe,
+    MatSidenavContent,
+    MatSidenavContainer
   ],
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.css'
 })
-export class CommentComponent implements OnInit {
+export class CommentComponent implements OnInit, AfterViewInit {
   comments: BehaviorSubject<CommentResponseDto[]> = new BehaviorSubject<CommentResponseDto[]>([]);
   @Input() replies: CommentResponseDto[] = [];
-
-
   @Input() entity!: EntityEnum;
   @Input() entityId!: number;
+
+  @ViewChild('commentInput') commentInput!: ElementRef<HTMLInputElement>;
 
   isCommentOpen: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   hoveredCommentIndex: number | null = null; // Track hovered comment index
@@ -65,7 +68,14 @@ export class CommentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadComments(); // Load comments on component initialization
+    // this.loadComments(); // Load comments on component initialization
+  }
+
+
+  ngAfterViewInit() {
+    setTimeout(()=>{
+      this.loadComments()
+    },1000)
   }
 
   /**

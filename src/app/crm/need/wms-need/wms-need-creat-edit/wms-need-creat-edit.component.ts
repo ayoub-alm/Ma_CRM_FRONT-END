@@ -1,4 +1,12 @@
-import {ChangeDetectionStrategy, Component, Inject, OnInit, signal} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnInit,
+  signal, ViewChild
+} from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -51,27 +59,76 @@ import {
   styleUrl: './wms-need-creat-edit.component.css',
   providers: [provideNativeDateAdapter()],
 })
-export class WmsNeedCreatEditComponent implements OnInit {
-  formGroup!: FormGroup;
+export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
+  generalInfoFormGroup!: FormGroup;
+  itemToStoreFormGroup!: FormGroup;
+  unloadForm!: FormGroup;
+  managementFeesForm!: FormGroup;
+  insuranceForm!: FormGroup;
+  readonly panelOpenState = signal(false);
+  @ViewChild(MatExpansionPanel) expansionPanel!: MatExpansionPanel;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder,private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.formGroup = this.fb.group({
-      statut: ['', Validators.required],
-      dateReception: [ new Date(), Validators.required],
-      entreprise: ['', Validators.required],
-      interlocuteurs: ['', Validators.required],
-      typeProduits: ['', Validators.required],
-      dureeStockage: [12, [Validators.required, Validators.min(1)]],
-      nombreSku: ['', Validators.required],
-      raisonStockage: ['', Validators.required],
-      livre: ['', Validators.required],
-      tauxCommandes: ['', [Validators.required, Validators.min(0)]],
+    this.initializeGeneralInfoForm()
+    this.initializeItemToStoreForm()
+    this.initializeUnloadForm()
+    this.initializeManagementFeesForm()
+    this.initializeInsuranceForm()
+    this.generalInfoFormGroup.get('livre')?.setValue("Ouvert")
+  }
+  ngAfterViewInit(): void {
+    this.generalInfoFormGroup.get('livre')?.setValue("Ouvert")
+  }
+
+  initializeGeneralInfoForm(): void{
+     this.generalInfoFormGroup = this.fb.group({
+       statut: ['', Validators.required],
+       dateReception: [ new Date(), Validators.required],
+       entreprise: ['', Validators.required],
+       interlocuteurs: ['', Validators.required],
+       typeProduits: ['', Validators.required],
+       dureeStockage: [12, [Validators.required, Validators.min(1)]],
+       nombreSku: ['', Validators.required],
+       raisonStockage: ['', Validators.required],
+       livre: ['', Validators.required],
+       tauxCommandes: ['', [Validators.required, Validators.min(0)]],
+     });
+  }
+
+  initializeItemToStoreForm(): void {
+    this.itemToStoreFormGroup = this.fb.group({
+      conditionnement: ['', Validators.required],
+      structure: [''],
+      temperatureStockage: ['', Validators.required],
+      largeur: ['', [Validators.min(0)]],
+      longueur: ['', [Validators.min(0)]],
+      hauteur: ['', [Validators.min(0)]],
+      hauteurMax: ['', [Validators.min(0)]],
+      poids: ['', [Validators.min(0)]],
+      metreCubeMax: ['', [Validators.min(0)]],
+      niveauxGerbabilite: [0, [Validators.required, Validators.min(0)]],
+      volumeStock: ['', [Validators.min(0)]],
+      nombreUvc: ['', [Validators.min(0)]],
     });
   }
 
+  initializeUnloadForm():void {
+    this.unloadForm = this.fb.group({
+      unload: [[], Validators.required],
+    })
+  }
 
+  initializeManagementFeesForm():void {
+    this.managementFeesForm = this.fb.group({
+      fees: [[], ]
+    })
+  }
 
-  readonly panelOpenState = signal(false);
+  initializeInsuranceForm(): void{
+    this.insuranceForm = this.fb.group({
+      insurance: [[],],
+    })
+  }
 }

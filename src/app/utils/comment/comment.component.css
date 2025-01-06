@@ -4,7 +4,7 @@
     /*font-size:1rem;*/
     border-bottom: solid 0.5px #005cbb;
     margin:0% !important;
-    padding:0% !important;
+    padding:4% !important;
     padding-left:0.5rem !important;
     /*background-color: #e0e2ec !important;*/
 }
@@ -21,7 +21,7 @@
     position: fixed;
     bottom: 6px;
     right: 16px;
-    zIndex: 1050;
+    z-index: 1050;
     transition: right 0.3s ease-in-out;
 }
 .commentdate{
@@ -38,7 +38,24 @@
     align-items: flex-start;
 }
 
-.demo-section + .demo-section {
-    margin-top: 16px;
-    color: red;
+  .demo-section + .demo-section {
+      margin-top: 16px;
+      color: red;
+  }
+
+.comment-container {
+  position: relative; /* Ensure proper positioning for the child elements */
+  transition: opacity 0.3s ease-in-out; /* Faster and smoother transition */
 }
+
+
+
+.comments-options {
+  transition: opacity 1s ease-in-out, transform 1s ease-in-out; /* Smooth transitions for visibility */
+}
+
+.comment-container:hover .comments-options {
+  display: block !important; /* Show the options on hover */
+  opacity: 1; /* Ensure the options are fully visible */
+}
+

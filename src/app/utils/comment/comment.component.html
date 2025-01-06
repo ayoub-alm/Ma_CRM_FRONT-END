@@ -2,7 +2,7 @@
 
     <button
             *ngIf="!isCommentOpen.getValue()"
-            class="btn btn-primary d-flex align-items-center mb-4 comments-button"
+            class="btn btn-primary d-flex align-items-center mb-4 comments-button shadow-sm"
             type="button"
             aria-controls="offcanvasRight"
             (click)="toggleComment()"
@@ -15,10 +15,10 @@
          [ngClass]="{ show: isCommentOpen.getValue() }"
          *ngIf="isCommentOpen.getValue()"
          tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title user-info" id="offcanvasRightLabel">
-                <mat-icon>chat_bubble</mat-icon> Commentaires
-            </h5>
+        <div class="offcanvas-header mat-elevation-z1">
+            <p class="offcanvas-title user-info h5 text-secondary " id="offcanvasRightLabel">
+                <mat-icon class="primary-blue-color mx-2">chat_bubble</mat-icon> Commentaires
+            </p>
             <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
                     (click)="closeComment()"
             ></button>
@@ -28,94 +28,32 @@
         <!-- Comments Replies here -->
         <div class="offcanvas-body flex-grow-1 " *ngIf="comments.getValue().length > 0; else noComments">
             <ul class="list-group"  *ngFor="let comment of comments | async;" >
-                <li  class="bg-light list-group-item mb-2"
-                     (mouseenter)="showUtil(comment.id)"
-                     (mouseleave)="hideUtil()">
-                    <div class="user-info">
-                        <mat-icon class="user-icon">account_circle</mat-icon>
-                        <strong>{{ comment.userName }}</strong><br />
-                    </div>
+              <li class="bg-light list-group-item mb-2 p-0 comment-container mat-elevation-z1">
+                <!-- User Info Section -->
+                <div class="user-info d-flex  p-0 justify-content-between align-items-center">
+                  <button mat-button class="bg-white  rounded-start-0 mat-elevation-z1">
+                    <mat-icon class="">account_circle</mat-icon>
+                    {{ comment.userName }}
+                  </button>
 
-                    <!-- TODO: Timestamp -->
-                    <!--<small class="commentdate">{{ comment.timestamp | date: 'short' }}</small>-->
-                    <div class="toast-body ">
-                        {{ comment.commentTxt }}
-                    </div>
+                  <small class="text-muted small mx-3">{{comment.createdAt | date:'dd-MM-yyyy hh:mm'}}</small>
 
-                    <div class="text-si" *ngIf="hoveredCommentIndex === comment.id">
+                  <!-- Options Section -->
+                  <div class="comments-options d-none small scale-09 p-0 m-0 text-end">
+                    <button mat-icon-button class="text-danger" (click)="deleteComment(comment.id)">
+                      <mat-icon class="text-danger">delete</mat-icon>
+                    </button>
+                  </div>
+                </div>
 
-                        <button *ngIf="canEditComment(comment)"
-                                mat-button class="text-secondary" (click)="toggleEdit(comment.id)">
-                            <mat-icon class="text-secondary">edit</mat-icon>
-                        </button>
-
-                        <button  mat-button class="text-danger "  (click)="deleteComment(comment.id)">
-                            <mat-icon class="text-danger">delete</mat-icon>
-                        </button>
+                <!-- Comment Text -->
+                <div class="toast-body my-2 mx-2">
+                  {{ comment.commentTxt }}
+                </div>
 
 
-                        <button mat-button class="font-s primary-blue-color" (click)="toggleReply(comment.id)">
-                            <mat-icon>reply</mat-icon>
-                        </button>
+              </li>
 
-                    </div>
-
-                    <div *ngIf="replyIndex === comment.id" class="d-flex align-items-around mb-3 p-1">
-                        <input
-                                [formGroup]="replyForm"
-                                (keydown.enter)="addReply(comment.id)"
-                                type="text"
-                                class="form-control mb-2"
-                                placeholder="Écris une réponse"
-                        />
-                        <button mat-icon-button class="text rounded-3 bg-light  add-btn" [color]="'primary'" type="button"
-                                (click)="addReply(comment.id)"
-                                [disabled]="!replyForm.get('reply')?.valid">
-                            <mat-icon>send</mat-icon>
-                        </button>
-                    </div>
-
-                    <!-- TODO Display replies -->
-    <!--                <ul *ngIf="comment.replies.length > 0" class="list-group ms-3 reply">-->
-    <!--                    <li *ngFor="let reply of comment.replies" class="list-group-item">-->
-
-    <!--                        <div class="user-info">-->
-    <!--                            <mat-icon class="user-icon">account_circle</mat-icon>-->
-    <!--                            <strong>{{ reply.userName }}</strong><br />-->
-    <!--                        </div>-->
-    <!--                        <small class="commentdate">{{ reply.timestamp | date: 'short' }}</small>-->
-    <!--                        <div class="toast-body">-->
-    <!--                            {{ reply.replyTxt }}-->
-    <!--                        </div>-->
-    <!--                        <div class="text-si" *ngIf="hoveredCommentIndex === i">-->
-
-    <!--                            <button  mat-icon-button class="text-secondary" >-->
-    <!--                                <mat-icon class="text-secondary">edit</mat-icon>-->
-    <!--                            </button>-->
-    <!--                            <button  mat-icon-button class="text-danger "  (click)="deleteComment(i)">-->
-    <!--                                <mat-icon class="text-danger">delete</mat-icon>-->
-    <!--                            </button>-->
-    <!--                        </div>-->
-    <!--                    </li>-->
-    <!--                </ul>-->
-
-                    <!-- Display Edit -->
-<!--                    <div *ngIf="EditIndex === comment.id" class="d-flex align-items-around mb-3 p-1">-->
-<!--                        <input-->
-<!--                                [formControl]="commentForm.get('comment')"-->
-<!--                                (keydown.enter)="editComment(comment.id)"-->
-<!--                                type="text"-->
-<!--                                class="form-control mb-2"-->
-<!--                                placeholder="Modifer"-->
-<!--                        />-->
-<!--                        <button mat-icon-button class="text rounded-3 bg-light  add-btn" [color]="'primary'" type="button"-->
-<!--                                (click)="editComment(comment.id)"-->
-<!--                                [disabled]="!commentForm[comment.id]?.controls['comment']?.valid" >-->
-<!--                            <mat-icon>send</mat-icon>-->
-<!--                        </button>-->
-<!--                    </div>-->
-
-                </li>
             </ul>
 
         </div>
@@ -124,14 +62,17 @@
             <p class="text-muted">Aucun commentaire pour l'instant.</p>
         </ng-template>
 
-        <div class="offcanvas-footer mt-auto">
-            <div class="d-flex align-items-around mb-3 p-1">
+        <div class="offcanvas-footer mt-auto mat-elevation-z2">
+            <div class="d-flex align-items-center align-baseline mb-3 p-1">
 
                 <form [formGroup]="commentForm" class="w-100">
-                    <input formControlName="comment"
-                           type="text" class="form-control w-100" placeholder="comment"
-                           (keydown.enter)="addComment()"
-                    />
+                  <input #commentInput
+                         formControlName="comment"
+                         type="text"
+                         class="form-control w-100"
+                         placeholder="Comment"
+                         (keydown.enter)="addComment()"
+                  />
                 </form>
                 <button  mat-icon-button class="text rounded-3 bg-light  add-btn" [color]="'primary'" type="button"
                         (click)="addComment()"

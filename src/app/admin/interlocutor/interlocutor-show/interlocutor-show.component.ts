@@ -16,6 +16,8 @@ import {AddUpdateInterlocutorComponent} from '../add-update-interlocutor/add-upd
 import {MatDialog} from '@angular/material/dialog';
 import {InteractionResponseDto} from '../../../../dtos/response/interaction.response.dto';
 import {InteractionService} from '../../../../services/Leads/interaction.service';
+import {EntityEnum} from '../../../../enums/entity.enum';
+import {CommentComponent} from '../../../utils/comment/comment.component';
 
 @Component({
   selector: 'app-interlocutor-show',
@@ -40,7 +42,8 @@ import {InteractionService} from '../../../../services/Leads/interaction.service
     MatCard,
     AsyncPipe,
     NgForOf,
-    DatePipe
+    DatePipe,
+    CommentComponent
   ],
   templateUrl: './interlocutor-show.component.html',
   styleUrl: './interlocutor-show.component.css'
@@ -117,4 +120,5 @@ export class InterlocutorShowComponent implements OnInit{
     ).subscribe();
   }
   protected readonly alert = alert;
+  protected readonly EntityEnum = EntityEnum;
 }

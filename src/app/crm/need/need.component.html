@@ -17,21 +17,36 @@
     </span>
     </p>
     <!-- Toggle Button Section -->
-    <div class="col-lg-6 col-12 d-flex justify-content-end">
-      <mat-button-toggle-group
-        class="custom-toggle-group  rounded-2"
-        [formControl]="crmType"
-        name="crmType"
-        aria-label="CRM Type"
-      >
-        <mat-button-toggle class=""  value="WMS">Entreposage</mat-button-toggle>
-        <mat-button-toggle class="" value="TMS">Transport</mat-button-toggle>
-        <mat-button-toggle  [disabled]="true" value="TMSI">Transport Internationnal</mat-button-toggle>
-      </mat-button-toggle-group>
+    <div class="col-lg-6 col-12 d-flex justify-content-end align-items-center ">
+
+
+
+      <div style="transform:scale(0.7); max-height:50px;" class="custom-select-container" >
+        <mat-form-field appearance="outline" class="custom-select small fw-bolder" style="font-size: 0.7rem;" >
+          <mat-label>Secteur</mat-label>
+          <mat-select [formControl]="crmType"  aria-label="CRM Type">
+            <mat-option value="WMS" style="font-size: 0.7rem;">
+              <mat-icon class="me-1 primary-blue-color">warehouse</mat-icon>
+              <span>Entreposage</span>
+            </mat-option>
+            <mat-option value="TMS" style="font-size: 0.7rem;">
+              <mat-icon class="me-1 primary-blue-color">local_shipping</mat-icon>
+              <span>Transport</span>
+            </mat-option>
+            <mat-option value="TMSI" [disabled]="true" style="font-size: 0.7rem;">
+              <mat-icon class="me-1 primary-blue-color">public</mat-icon>
+              <span>Transport International</span>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+
     </div>
     <!-- Search Bar -->
 
   </div>
-  <mat-divider class="my-1"></mat-divider>
+
  <router-outlet></router-outlet>
 </div>

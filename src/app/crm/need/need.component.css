@@ -34,3 +34,14 @@
   font-size: 5px; /* Adjust the font size of the labels */
 }
 
+.form-select-sm{
+  box-shadow: none;
+  border: 1px #005cbb solid !important;
+
+}
+
+.form-control{
+  box-shadow:none !important;
+}
+
+

@@ -1,27 +1,32 @@
-<div class="full-height-size px-lg-2 mb-2 h-100 ">
+<div class="full-height-size mb-5 px-lg-2 mb-2 h-100">
 
-  <div class="d-flex justify-content-between my-2 align-items-center row rounded-3 ">
-    <p class="fs-4 text-start mx-2 primary-blue-color m-auto col-lg-6 col-12">Ajouter un besoin</p>
-    <div class="col-lg-3 col-12 mx-2 my-auto d-flex justify-content-lg-end  justify-content-center align-items-center">
-      <button
-        mat-button  class="rounded-3 bg-primary-blue-color text-white  mat-elevation-z1 "  style="transform:scale(0.9)">
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between my-2 align-items-center row rounded-3">
+    <p class="fs-4 text-start mx-2 primary-blue-color m-auto col-lg-6  col-12">
+      <mat-icon class="me-2">add_circle</mat-icon> Ajouter un besoin
+    </p>
+    <div class="col-lg-5 col-12 mx-2 my-auto d-flex justify-content-lg-end justify-content-end align-items-center">
+      <button mat-button class="rounded-3 bg-primary-blue-color text-white mat-elevation-z1" style="transform:scale(0.9)">
         <mat-icon>save</mat-icon>
         <span>Sauvegarder</span>
       </button>
-      <button mat-icon-button class="rounded-3 bg-white my-auto mat-elevation-z2  "   style="transform:scale(0.9)" aria-label="Filter">
+      <button mat-icon-button class="rounded-3 bg-white my-auto mat-elevation-z2" style="transform:scale(0.9)" aria-label="Filter">
         <mat-icon><i class="bi bi-funnel"></i></mat-icon>
       </button>
-      <button mat-icon-button class="rounded-3  my-auto mat-elevation-z2 bg-light "   style="transform:scale(0.9)" aria-label="Filter">
+      <button mat-icon-button class="rounded-3 my-auto mat-elevation-z2 bg-white" style="transform:scale(0.9)" aria-label="More options">
         <mat-icon>more_vert</mat-icon>
       </button>
     </div>
   </div>
 
+  <!-- Form Section -->
+  <form [formGroup]="generalInfoFormGroup" class="rounded-2 pt-3 mat-elevation-z2 bg-white mx-1 row">
+    <p class="col-12 text-uppercase text-muted fw-bold">
+      <mat-icon class="me-2">person</mat-icon> Information du Client
+    </p>
 
-
-  <form [formGroup]="formGroup" class="rounded-3 pt-3  mat-elevation-z1 bg-light mx-1 row  ">
-    <div class="col-lg-4 ">
-      <!-- Date de réception -->
+    <!-- Date de réception -->
+    <div class="col-lg-4">
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Date de réception</mat-label>
         <input matInput [matDatepicker]="picker" formControlName="dateReception" required />
@@ -32,51 +37,46 @@
 
     <!-- Entreprise -->
     <div class="col-lg-4">
-      <div class="d-flex align-items-center mb-3">
-        <mat-form-field appearance="outline" class="flex-grow-1">
-          <mat-label>Entreprise</mat-label>
-          <input matInput formControlName="entreprise" required />
-        </mat-form-field>
-      </div>
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Entreprise</mat-label>
+        <input matInput formControlName="entreprise" required />
+      </mat-form-field>
     </div>
 
+    <!-- Interlocuteurs -->
     <div class="col-lg-4">
-      <!-- Interlocuteurs -->
-      <div class="d-flex align-items-center mb-3">
-        <mat-form-field appearance="outline" class="flex-grow-1">
-          <mat-label>Interlocuteurs</mat-label>
-          <input matInput formControlName="interlocuteurs" required />
-        </mat-form-field>
-      </div>
+      <mat-form-field appearance="outline" class="w-100 mb-3">
+        <mat-label>Interlocuteurs</mat-label>
+        <input matInput formControlName="interlocuteurs" required />
+      </mat-form-field>
     </div>
 
+    <!-- Type de produits -->
     <div class="col-lg-4">
-      <!-- Type de produits -->
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Type de produits</mat-label>
         <input matInput formControlName="typeProduits" required />
       </mat-form-field>
     </div>
 
+    <!-- Durée de stockage -->
     <div class="col-lg-4">
-      <!-- Durée de stockage -->
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Durée de stockage (Mois)</mat-label>
         <input matInput type="number" formControlName="dureeStockage" required />
       </mat-form-field>
     </div>
 
-
+    <!-- Nombre de SKU -->
     <div class="col-lg-4">
-      <!-- Nombre de SKU -->
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Nombre de SKU</mat-label>
         <input matInput type="number" formControlName="nombreSku" required />
       </mat-form-field>
     </div>
 
+    <!-- Raison de stockage -->
     <div class="col-lg-4">
-      <!-- Raison de stockage -->
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Raison de stockage</mat-label>
         <mat-select formControlName="raisonStockage" required>
@@ -86,8 +86,8 @@
       </mat-form-field>
     </div>
 
+    <!-- Livre -->
     <div class="col-lg-4">
-      <!-- Livre -->
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Livre</mat-label>
         <mat-select formControlName="livre" required>
@@ -97,8 +97,8 @@
       </mat-form-field>
     </div>
 
+    <!-- Taux de commandes par jour -->
     <div class="col-lg-4">
-      <!-- Taux de commandes par jour -->
       <mat-form-field appearance="outline" class="w-100 mb-3">
         <mat-label>Taux de commandes par jour</mat-label>
         <input matInput type="number" formControlName="tauxCommandes" required />
@@ -106,38 +106,201 @@
     </div>
   </form>
 
-
-<div class="w-100 mt-3 h6">
-
-<!--  <mat-accordion [class]="'m-0 p-0 bg-light'">-->
-    <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(true)" class="bg-light  rounded-2 mat-elevation-z2">
+  <!-- Expansion Panels -->
+  <div class="w-100 mt-3 mb-5 h6">
+    <!-- Élément à stocker -->
+    <mat-expansion-panel class="bg-white mb-2 rounded-2 mat-elevation-z2">
       <mat-expansion-panel-header>
-        <mat-panel-title> This is the expansion title </mat-panel-title>
-        <mat-panel-description> This is a summary of the content </mat-panel-description>
+        <mat-panel-title class="primary-blue-color">
+          <mat-icon class="me-2">inventory</mat-icon>  Conditionnemen
+        </mat-panel-title>
       </mat-expansion-panel-header>
-      <p>This is the primary content of the panel.</p>
-    </mat-expansion-panel >
-    <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)" class="bg-light my-3 rounded-2 mat-elevation-z2">
+      <div class="px-lg-3 px-md-2 mb-3">
+        <!-- Nested Form -->
+        <form [formGroup]="itemToStoreFormGroup" class="rounded-3 pt-4 pb-2 row">
+
+          <form
+            [formGroup]="itemToStoreFormGroup"
+            class="rounded-3 pt-4 pb-2  row ">
+
+            <!-- Conditionnement -->
+            <div class="col-lg-4 col-md-6 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Conditionnement *</mat-label>
+                <mat-select formControlName="conditionnement" required>
+                  <mat-option value="Palette Euro">Palette Euro</mat-option>
+                  <mat-option value="Cartons">Cartons</mat-option>
+                  <mat-option value="Autre">Autre</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Structure -->
+            <div class="col-lg-4 col-md-6 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Structure</mat-label>
+                <mat-select formControlName="structure">
+                  <mat-option value="Homogène">Homogène</mat-option>
+                  <mat-option value="Hétérogène">Hétérogène</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Température de stockage -->
+            <div class="col-lg-4 col-md-6 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Température de stockage *</mat-label>
+                <mat-select formControlName="temperatureStockage" required>
+                  <mat-option value="Ambiante">Ambiante</mat-option>
+                  <mat-option value="Réfrigéré">Réfrigéré</mat-option>
+                  <mat-option value="Congelé">Congelé</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <p class="col-12 text-uppercase text-muted ">
+              <mat-icon class="me-2">straighten</mat-icon> Dimensions
+            </p>
+
+            <!-- Largeur -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Largeur (cm)</mat-label>
+                <input matInput type="number" formControlName="largeur" />
+              </mat-form-field>
+            </div>
+
+            <!-- Longueur -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Longueur (cm)</mat-label>
+                <input matInput type="number" formControlName="longueur" />
+              </mat-form-field>
+            </div>
+
+            <!-- Hauteur -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Hauteur (cm)</mat-label>
+                <input matInput type="number" formControlName="hauteur" />
+              </mat-form-field>
+            </div>
+
+            <!-- Hauteur max -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Hauteur max (cm)</mat-label>
+                <input matInput type="number" formControlName="hauteurMax" />
+              </mat-form-field>
+            </div>
+
+            <p class="col-12 text-uppercase text-muted ">
+              <mat-icon class="me-2">informations</mat-icon> Informations supplémentaires
+            </p>
+
+            <!-- Poids -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Poids (kg)</mat-label>
+                <input matInput type="number" formControlName="poids" />
+              </mat-form-field>
+            </div>
+
+            <!-- Metre cube max -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Metre cube max</mat-label>
+                <input matInput type="number" formControlName="metreCubeMax" />
+              </mat-form-field>
+            </div>
+
+            <!-- Niveaux de gerbabilité -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Niveaux de gerbabilité *</mat-label>
+                <input matInput type="number" formControlName="niveauxGerbabilite" required />
+              </mat-form-field>
+            </div>
+
+            <!-- Volume de stock -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Volume de stock</mat-label>
+                <input matInput type="number" formControlName="volumeStock" />
+              </mat-form-field>
+            </div>
+
+            <!-- Nombre de UVC -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Nombre de UVC</mat-label>
+                <input matInput type="number" formControlName="nombreUvc" />
+              </mat-form-field>
+            </div>
+          </form>
+        </form>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Depotages -->
+    <mat-expansion-panel  class="bg-white mb-2 rounded-2 mat-elevation-z2" >
       <mat-expansion-panel-header>
-        <mat-panel-title> Self aware panel </mat-panel-title>
-        <mat-panel-description>
-          Currently I am {{panelOpenState() ? 'open' : 'closed'}}
-        </mat-panel-description>
+        <mat-panel-title class="primary-blue-color">
+          <mat-icon class="me-2">local_shipping</mat-icon> DEPOTAGES
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <form>
+        <div class="col-lg-4 col-md-6 col-12">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Depotages</mat-label>
+            <mat-select  multiple>
+              <mat-option value="Ambiante">Ambiante</mat-option>
+              <mat-option value="Réfrigéré">Réfrigéré</mat-option>
+              <mat-option value="Congelé">Congelé</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </form>
+    </mat-expansion-panel>
+
+    <!-- PRESTATIONS -->
+    <mat-expansion-panel class="bg-white mb-2 rounded-2 mat-elevation-z2">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="primary-blue-color">
+          <mat-icon class="me-2"><mat-icon>engineering</mat-icon></mat-icon> PRESTATIONS
+        </mat-panel-title>
       </mat-expansion-panel-header>
       <p>I'm visible because I am open</p>
     </mat-expansion-panel>
 
-    <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)" class="bg-light rounded-2 mat-elevation-z2">
+    <!-- EXIGENCES -->
+    <mat-expansion-panel class="bg-white mb-2 rounded-2 mat-elevation-z2">
       <mat-expansion-panel-header>
-        <mat-panel-title> Self aware panel </mat-panel-title>
-        <mat-panel-description>
-          Currently I am {{panelOpenState() ? 'open' : 'closed'}}
-        </mat-panel-description>
+        <mat-panel-title class="primary-blue-color">
+          <mat-icon class="me-2">miscellaneous_services</mat-icon> EXIGENCES
+        </mat-panel-title>
       </mat-expansion-panel-header>
       <p>I'm visible because I am open</p>
     </mat-expansion-panel>
-<!--  </mat-accordion>-->
 
-</div>
-</div>
+    <!-- FRAIS DE GESTION -->
+    <mat-expansion-panel class="bg-white mb-2 rounded-2 mat-elevation-z2">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="primary-blue-color">
+          <mat-icon class="me-2">attach_money</mat-icon> FRAIS DE GESTION
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>I'm visible because I am open</p>
+    </mat-expansion-panel>
 
+    <!-- ASSURANCE -->
+    <mat-expansion-panel class="bg-white mb-2 rounded-2 mat-elevation-z2">
+      <mat-expansion-panel-header>
+        <mat-panel-title class="primary-blue-color">
+          <mat-icon class="me-2">security</mat-icon> ASSURANCE
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p>I'm visible because I am open</p>
+    </mat-expansion-panel>
+  </div>
+</div>

@@ -7,7 +7,7 @@ export class CommentResponseDto {
     commentTxt: string;
     userId: number;
     userName: string;
-    timestamp: Date;
+    createdAt: Date;
     replies: ReplyResponseDto[];
 
     constructor(data: any) {
@@ -17,7 +17,7 @@ export class CommentResponseDto {
         this.commentTxt = data.commentTxt;
         this.userId = data.userId;
         this.userName = data.userName;
-        this.timestamp = data.timestamp;
+        this.createdAt = data.createdAt;
         this.replies = data.replies;
     }
 }
@@ -28,7 +28,7 @@ export class ReplyResponseDto {
     replyTxt: string;
     userId: number;
     userName: string;
-    timestamp: Date;
+  createdAt: Date;
 
     constructor(data: any) {
         this.id = data.id;
@@ -36,6 +36,6 @@ export class ReplyResponseDto {
         this.replyTxt = data.replyTxt;
         this.userId = data.userId;
         this.userName = data.userName;
-        this.timestamp = data.timestamp;
+        this.createdAt = data.createdAt;
     }
 }

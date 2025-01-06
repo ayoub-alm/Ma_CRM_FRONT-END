@@ -35,6 +35,8 @@ import {InplaceModule} from 'primeng/inplace';
 import {InputTextModule} from 'primeng/inputtext';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {MatChip} from '@angular/material/chips';
+import {CommentComponent} from '../../../utils/comment/comment.component';
+import {EntityEnum} from '../../../../enums/entity.enum';
 
 interface EventItem {
   status?: string;
@@ -51,7 +53,7 @@ interface EventItem {
     MatTabLabel, AsyncPipe, NgForOf, MatTabGroup, RouterLink, MatButton, MatSlideToggle, TimelineModule, MatIconButton,
     MatCardHeader, MatCard, MatLabel, MatCardActions, MatExpansionPanelDescription, MatCardContent, MatCardModule,
     NgxTimelineComponent, DatePipe, NgClass, JsonPipe, NgIf, MatList, MatListItem, InLineEditInputComponent, MatDivider,
-    MatFormField, MatOption, MatSelect, InplaceModule, InputTextModule, KeyValuePipe, ReactiveFormsModule, MatChip],
+    MatFormField, MatOption, MatSelect, InplaceModule, InputTextModule, KeyValuePipe, ReactiveFormsModule, MatChip, CommentComponent],
   templateUrl: './show-prospect.component.html',
   styleUrl: './show-prospect.component.css'
 })
@@ -229,4 +231,5 @@ export class ShowProspectComponent implements AfterViewInit, OnInit {
   }
 
   protected readonly ProspectStatus = ProspectStatus;
+  protected readonly EntityEnum = EntityEnum;
 }

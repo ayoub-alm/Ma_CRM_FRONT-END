@@ -92,3 +92,6 @@ mat-icon {
   min-height:max(100vh);
 }
 
+.scale-09{
+  transform:scale(0.9);
+}

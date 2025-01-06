@@ -3,7 +3,7 @@ import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
 import {Router, RouterLink, RouterOutlet} from "@angular/router";
-import {DatePipe, NgIf} from '@angular/common';
+import {DatePipe, KeyValuePipe, NgForOf, NgIf} from '@angular/common';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {MatFormField, MatInput, MatLabel} from '@angular/material/input';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
@@ -23,6 +23,8 @@ import {LocalStorageService} from '../../../services/local.storage.service';
 import {AuthService} from '../../../services/AuthService';
 import {Subscription} from 'rxjs';
 import {MatDivider} from '@angular/material/divider';
+import {ProspectStatus} from '../../../enums/prospect.status';
+import {MatOption, MatSelect} from '@angular/material/select';
 
 
 @Component({
@@ -62,7 +64,11 @@ import {MatDivider} from '@angular/material/divider';
     MatLabel,
     MatFormField,
     RouterOutlet,
-    MatDivider
+    MatDivider,
+    KeyValuePipe,
+    NgForOf,
+    MatSelect,
+    MatOption
   ],
   templateUrl: './need.component.html',
   styleUrl: './need.component.css'
@@ -93,4 +99,6 @@ export class NeedComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
+
+  protected readonly ProspectStatus = ProspectStatus;
 }

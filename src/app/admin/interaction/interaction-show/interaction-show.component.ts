@@ -9,6 +9,8 @@ import {ActivatedRoute, Router, RouterLink} from "@angular/router";
 import {BehaviorSubject, tap} from 'rxjs';
 import {InteractionResponseDto} from '../../../../dtos/response/interaction.response.dto';
 import {InteractionService} from '../../../../services/Leads/interaction.service';
+import {EntityEnum} from "../../../../enums/entity.enum";
+import {CommentComponent} from "../../../utils/comment/comment.component";
 
 @Component({
   selector: 'app-interaction-show',
@@ -27,7 +29,8 @@ import {InteractionService} from '../../../../services/Leads/interaction.service
         NgForOf,
         NgIf,
         NgxTimelineComponent,
-        RouterLink
+        RouterLink,
+        CommentComponent
     ],
   templateUrl: './interaction-show.component.html',
   styleUrl: './interaction-show.component.css'
@@ -47,4 +50,6 @@ export class InteractionShowComponent implements OnInit{
     }
 
   }
+
+    protected readonly EntityEnum = EntityEnum;
 }
