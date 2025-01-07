@@ -6,6 +6,8 @@ import {CreateCompanyRequest} from "../../dtos/request/CreateCompanyDto";
 import {environment} from '../../environments/environment';
 import {ProspectResponseDto} from '../../dtos/response/prospect.response.dto';
 import {CreateProspectDto} from '../../dtos/request/CreateProspectDto';
+import {InterestResponseDto} from "../../dtos/response/interestResponseDto";
+import {interestRequestDto} from "../../dtos/request/interestRequestDto";
 
 @Injectable({
   providedIn: 'root'
@@ -67,5 +69,29 @@ export class ProspectService {
 
     // Perform the PUT request
     return this.http.put<ProspectResponseDto>(url, null, { params });
+  }
+
+  /**
+   *
+   * @param prospectId
+   */
+  getInterestById(prospectId: number): Observable<InterestResponseDto[]> {
+      return this.http.get<InterestResponseDto[]>(`${this.baseUrl}/api/interest/${prospectId}`).pipe(
+          tap(interestResponseDto => {
+              new InterestResponseDto(InterestResponseDto);
+          })
+      )
+  }
+
+  /**
+   * Update the status of an interest.
+   * @param interest - The ID of the interest to update.
+   */
+  updateInterest(interest: interestRequestDto): Observable<InterestResponseDto> {
+      return this.http.put<InterestResponseDto>(
+          `${this.baseUrl}/api/prospects-interests/prospectId=${interest.prospectId}/interestId=${interest.interestId}` , interest).pipe(
+        tap(interestRequestDto => {
+          new InterestResponseDto(InterestResponseDto)})
+    )
   }
 }

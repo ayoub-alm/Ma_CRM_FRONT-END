@@ -96,15 +96,6 @@ export class CommentComponent implements OnInit, AfterViewInit {
     this.isCommentOpen.next(false) // Close the comments and show the button again
   }
 
-  showUtil(index: number): void {
-    this.hoveredCommentIndex = index;
-  }
-
-  hideUtil(): void {
-    this.hoveredCommentIndex = null;
-  }
-
-
 
   /**
    * This function allows to Add comment
@@ -128,36 +119,6 @@ export class CommentComponent implements OnInit, AfterViewInit {
     }
   }
 
-  /**
-   * This function allows to add a reply to a specific comment
-   */
-  addReply(commentId: number): void {
-    if (this.replyForm.get('reply')?.value?.trim()) {
-      const replyRequest: ReplyRequestDto = {
-        replyTxt: this.replyForm.get('reply')?.value?.trim(),
-        userId: this.authService.getCurrentUserId(),
-        commentId: commentId,
-      };
-
-      this.commentService.addReply(replyRequest).subscribe((response: CommentResponseDto) => {
-        // Find the comment being replied to and add the reply
-        const comment = this.comments.getValue().find(
-            (comment) => comment.id === commentId);
-        if (comment) {
-          this.replies.push(response);
-        }
-
-        // Reset the reply form
-        this.replyForm.reset();
-        this.replyIndex = null;
-      });
-    }
-  }
-
-  // Handle reply form visibility
-  toggleReply(index: number): void {
-    this.replyIndex = this.replyIndex === index ? null : index; // Toggle reply form visibility
-  }
 
   /**
    * This function allows to delete comment
@@ -170,39 +131,6 @@ export class CommentComponent implements OnInit, AfterViewInit {
         duration: 3000,
       });
     }
-  }
-
-  /**
-   * This function allows to Edit comment
-   */
-
-  EditIndex: number | null = null;
-
-  canEditComment(comment: CommentResponseDto): boolean {
-    return this.authService.getCurrentUserId() === comment.userId;
-  }
-
-  toggleEdit(commentId: number): void {
-    this.EditIndex = commentId;
-  }
-
-  editComment(commentId: number): void {
-    const updatedText = this.commentForm.get('comment')?.value.trim();
-    if (updatedText) {
-      // Call the service to update the comment
-      this.commentService.editComment(commentId, updatedText).subscribe(
-          (updatedComment: CommentResponseDto) => {
-            const updatedComments = this.comments.getValue().map(
-                (comment) =>
-                comment.id === commentId ? { ...comment, commentTxt: updatedText } : comment
-            );
-            this.comments.next(updatedComments); // Emit the updated comments array
-          },
-
-      );
-    }
-    this.EditIndex = null; // Close the edit mode
-    this.commentForm.reset(); // Reset the form after editing
   }
 
 }

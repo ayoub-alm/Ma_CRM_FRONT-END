@@ -234,8 +234,8 @@
       <!-- Informations légales Tab -->
       <mat-tab label="Informations légales">
         <ng-template mat-tab-label>
-          <i class="bi bi-gavel mx-2 primary-blue-color"></i>
-          Informations légales
+            <i class="bi bi-bank primary-blue-color mx-2"></i>
+            Informations légales
         </ng-template>
         <div class="d-flex mt-3 p-4">
           <div class="col-lg-6">
@@ -273,19 +273,40 @@
           Paramètre
         </ng-template>
         <div class="d-flex mt-3 p-4">
-          <div class="col-12">
+          <div class="col-lg-6">
             <p>
-          <span class="text-secondary">
-            <section class="example-section fs-6">
-              <i class="bi bi-toggle-on primary-blue-color"></i> Status :
-              <mat-slide-toggle [checked]="true" [color]="'primary'" [disabled]="false" class="custom-toggle" style="transform:scale(0.8) !important;">
-                Active
-              </mat-slide-toggle>
-            </section>
-          </span>
+              <span class="text-secondary">
+                <section class="example-section fs-6">
+                  <mat-slide-toggle [checked]="true" [color]="'primary'" [disabled]="false" class="custom-toggle" style="transform:scale(0.8) !important;">
+                  </mat-slide-toggle>
+                    Status
+                </section>
+              </span>
             </p>
           </div>
+
+            <div class="col-lg-6">
+                <p>Interest</p>
+                <div>
+                    <p *ngFor="let interest of interests | async" >
+                        <span class="text-secondary">
+                        <section class="example-section fs-6">
+                        <mat-slide-toggle
+                                [checked]="interest.status"
+                                [color]="'primary'"
+                                (change)="updateInterest($event.checked, interest.id)"
+                                class="custom-toggle"
+                                style="transform:scale(0.8) !important;">
+                        </mat-slide-toggle>
+                            {{ interest.nameInterest }}
+                        </section>
+                        </span>
+                    </p>
+                </div>
+            </div>
+
         </div>
+
       </mat-tab>
     </mat-tab-group>
 
