@@ -1,12 +1,12 @@
 <div class="container-fluid h-100">
-  <div class="row align-items-center vh-100" style="background:url('/covid-transport-routier-france-scaled.jpg');background-size: cover;">
+  <div class="row align-items-center vh-100 bg-body "  >
     <!-- Left Column: Login Form -->
     <div class=" col-12 m-auto  w-100 h-100 d-flex justify-content-center align-items-center">
-      <form [formGroup]="loginForm" class=" w-10 p-4 bg-white shadow rounded">
+      <form [formGroup]="loginForm" class=" w-10 p-4 bg-white mat-elevation-z2 rounded">
         <div class="text-center">
-          <img src="/ma-logo.png" alt="logo" width="300" class="mb-4 img-fluid">
+         <h1 class="display-3 primary-blue-color" >Spider <span class="small text-secondary" style="font-size:0.9rem; position:relative;bottom:30px;right: 7px;" >ERP</span></h1>
         </div>
-        <h6 class="mb-4 fw-normal text-center">Veuillez vous connecter</h6>
+        <h6 class="mb-4 text-secondary fw-normal text-center">Veuillez vous connecter</h6>
 
         <mat-form-field appearance="outline" class="w-100 mb-3">
           <mat-label>Email</mat-label>
@@ -30,9 +30,9 @@
           </mat-error>
         </mat-form-field>
 
-        <div class="text-center px-5">
+        <div class="text-center p2-5">
           <button mat-raised-button color="primary"
-                  class="w-100 py-2 text-secondary rounded-2 "
+                  class="w-100 py-2 bg-primary-blue-color text-white rounded-2 "
                   (click)="login()"
                   [disabled]="!loginForm.valid"
                   >

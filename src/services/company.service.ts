@@ -37,4 +37,6 @@ export class CompanyService {
   deleteCompanyById(companyId: number): Observable<void> {
       return this.http.delete<void>(`${this.baseUrl}/api/companies/${companyId}`)
   }
+
+
 }

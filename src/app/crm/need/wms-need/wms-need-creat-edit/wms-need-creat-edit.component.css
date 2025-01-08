@@ -6,3 +6,26 @@
 .example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
   margin-left: 8px;
 }
+.mat-mdc-row .mat-mdc-cell {
+  border-bottom: 1px solid transparent;
+  border-top: 1px solid transparent;
+  cursor: pointer;
+}
+table.mat-table {
+  width: 100%;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+  width: auto; /* Default behavior */
+  text-align: left; /* Align text left */
+}
+
+.full-width {
+  width: 100%; /* Ensures columns stretch to fill available space */
+}
+
+.custom-header-row th.mat-header-cell {
+  font-weight: bold;
+  text-transform: uppercase; /* Optional: style the header text */
+}

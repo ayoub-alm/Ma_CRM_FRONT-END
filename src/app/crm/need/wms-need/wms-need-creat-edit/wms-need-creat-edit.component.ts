@@ -5,7 +5,7 @@ import {
   Component,
   Inject,
   OnInit,
-  signal, ViewChild
+  signal, viewChild, ViewChild
 } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
@@ -30,11 +30,32 @@ import {
   MatExpansionPanelActionRow,
   MatExpansionPanelHeader
 } from '@angular/material/expansion';
+import {BehaviorSubject, catchError, map, of, tap} from 'rxjs';
+import {UnloadingTypeResponseDto} from '../../../../../dtos/response/crm/unloading.type.response.dto';
+import {UnloadingTypeService} from '../../../../../services/crm/wms/unloading.type.service';
+import {IndexComponent} from '../../../../index/index.component';
+import {LocalStorageService} from '../../../../../services/local.storage.service';
+import {CommonModule} from '@angular/common';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef, MatHeaderRow,
+  MatHeaderRowDef, MatRow, MatRowDef,
+  MatTable
+} from '@angular/material/table';
+import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
+import {StockedItemCreateDto} from '../../../../../dtos/request/crm/stockedItem.create.dto';
+import NewCommandModule from '@angular/cli/src/commands/new/cli';
+import {ProvisionService} from '../../../../../services/crm/wms/provision.service.dto';
+import {ProvisionResponseDto} from '../../../../../dtos/response/crm/provision.response.dto';
 
 @Component({
   selector: 'app-wms-need-creat-edit',
   standalone: true,
   imports: [
+    CommonModule,
     MatOption,
     MatLabel,
     MatFormField,
@@ -53,7 +74,7 @@ import {
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatDatepickerModule,
+    MatDatepickerModule, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatHeaderRow, MatRow, MatRowDef, MatMenu, MatMenuItem, MatMenuTrigger,
   ],
   templateUrl: './wms-need-creat-edit.component.html',
   styleUrl: './wms-need-creat-edit.component.css',
@@ -63,25 +84,58 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
   generalInfoFormGroup!: FormGroup;
   itemToStoreFormGroup!: FormGroup;
   unloadForm!: FormGroup;
+  provisionForm!: FormGroup;
   managementFeesForm!: FormGroup;
   insuranceForm!: FormGroup;
+
+
+  itemsToStore: BehaviorSubject<StockedItemCreateDto[]> =  new BehaviorSubject<StockedItemCreateDto[]>([])
+  itemsToStoredisplayedColumns: string[] = [
+    'conditionnement',
+    'structure',
+    'temperatureStockage',
+    'largeur',
+    'hauteur',
+    'actions'
+  ];
+  // unloading type infos
+  unloadingTypes: BehaviorSubject<UnloadingTypeResponseDto[]> =  new BehaviorSubject<UnloadingTypeResponseDto[]>([])
+  selectedUnloadingTypes:  BehaviorSubject<UnloadingTypeResponseDto[]> =  new BehaviorSubject<UnloadingTypeResponseDto[]>([])
+  unloadingDisplayedColumns: string[] = [ 'name', "price","unite", "actions"];
+  unloadingDataSource: BehaviorSubject<UnloadingTypeResponseDto[]> = new BehaviorSubject<UnloadingTypeResponseDto[]>([]);
+  // provisions infos
+  provisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
+  selectedProvisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
+  provisionsDisplayedColumns: string[] = [ 'name', "price","unite", "actions"];
   readonly panelOpenState = signal(false);
   @ViewChild(MatExpansionPanel) expansionPanel!: MatExpansionPanel;
-
-  constructor(private fb: FormBuilder,private cdr: ChangeDetectorRef) {}
+  accordion = viewChild.required(MatAccordion);
+  constructor(private fb: FormBuilder,private cdr: ChangeDetectorRef, private unloadingTypeService: UnloadingTypeService,
+              private localStorageService: LocalStorageService, private provisionService: ProvisionService) {}
 
   ngOnInit(): void {
     this.initializeGeneralInfoForm()
     this.initializeItemToStoreForm()
     this.initializeUnloadForm()
+    this.initializeProvisionForm()
     this.initializeManagementFeesForm()
     this.initializeInsuranceForm()
     this.generalInfoFormGroup.get('livre')?.setValue("Ouvert")
+
+    this.loadProvisions()
+    this.loadUnloadingTypes()
   }
+
+  /**
+   *
+   */
   ngAfterViewInit(): void {
     this.generalInfoFormGroup.get('livre')?.setValue("Ouvert")
   }
 
+  /**
+   *
+   */
   initializeGeneralInfoForm(): void{
      this.generalInfoFormGroup = this.fb.group({
        statut: ['', Validators.required],
@@ -114,10 +168,40 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
     });
   }
 
+  /**
+   *
+   */
   initializeUnloadForm():void {
     this.unloadForm = this.fb.group({
       unload: [[], Validators.required],
     })
+
+    this.unloadForm.get("unload")?.valueChanges.pipe(
+      map((data: any[]) => {
+        return this.unloadingTypes.getValue().filter(unloadType => data.includes(unloadType.id));
+      })
+    ).subscribe(filteredUnloadingTypes => {
+      this.selectedUnloadingTypes.next(filteredUnloadingTypes);
+      this.unloadingDataSource.next(filteredUnloadingTypes);
+    });
+  }
+
+  /**
+   *
+   */
+  initializeProvisionForm(){
+    this.provisionForm = this.fb.group({
+      provision: [[], Validators.required],
+    })
+
+    this.provisionForm.get("provision")?.valueChanges.pipe(
+      map((data: any[]) => {
+        return this.provisions.getValue().filter(provision => data.includes(provision.id));
+      })
+    ).subscribe(filteredProvisions => {
+      this.selectedProvisions.next(filteredProvisions);
+      // this.unloadingDataSource.next(filteredProvisions);
+    });
   }
 
   initializeManagementFeesForm():void {
@@ -130,5 +214,42 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
     this.insuranceForm = this.fb.group({
       insurance: [[],],
     })
+  }
+
+  addItemToItemToStore() {
+    if (this.itemToStoreFormGroup.valid) {
+      // Extract the form values
+      const item: StockedItemCreateDto = this.itemToStoreFormGroup.value;
+      this.itemsToStore.next([...this.itemsToStore.getValue(), item]);
+      // Pass the DTO to your desired service or processing logic
+      console.log('New Item to Store:', item);
+
+      // Call your service or processing logic here
+      // Example: this.itemToStoreService.create(item).subscribe(...);
+    } else {
+      console.error('Form is invalid. Please check the required fields.');
+    }
+  }
+
+
+  loadProvisions(): void {
+    this.provisionService.getAllProvisionsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
+      tap(data => {
+        this.provisions.next(data); // Perform the side effect of updating provisions
+      }),
+      catchError(err => {
+        console.error(err); // Log the error
+        return of([]); // Return an empty array in case of an error
+      })
+    ).subscribe();
+  }
+
+  loadUnloadingTypes(): void{
+    // get unloading types and fill the select box by pushing data in unloading variable
+    this.unloadingTypeService.getUnloadingTypeByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
+      tap(unloadingTypes => {
+        this.unloadingTypes.next(unloadingTypes)
+      })
+    ).subscribe()
   }
 }

@@ -1,15 +1,9 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterLink,
-  RouterLinkActive,
-  RouterLinkWithHref,
-  RouterOutlet
+  ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterOutlet
 } from '@angular/router';
-import { LocalStorageService } from '../../services/local.storage.service';
-import {NgForOf, NgIf} from '@angular/common';
+import {LocalStorageService} from '../../services/local.storage.service';
+import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
 import {MatCard} from '@angular/material/card';
 import {CdkTrapFocus} from '@angular/cdk/a11y';
 import {MatIconModule} from '@angular/material/icon';
@@ -19,12 +13,14 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatListModule} from '@angular/material/list';
-import {filter} from 'rxjs';
+import {BehaviorSubject, catchError, filter, of, tap} from 'rxjs';
 import {MatFormField} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-toggle';
 import {FormControl} from '@angular/forms';
+import {CompanyService} from '../../services/company.service';
+import {CompanyResponseDto} from '../../dtos/response/CompanyResponseDto';
 
 interface MenuItem {
   name: string;
@@ -36,55 +32,71 @@ interface MenuItem {
 const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
   prospection: {
     icon: 'public',
-    items: [
-      { name: 'Dashboard', icon: 'bar_chart', route: '/admin' },
-      { name: 'Prospects', icon: 'domain', route: '/admin/prospects' },
-      { name: 'Interlocutors', icon: 'contacts', route: '/admin/interlocutors' },
-      { name: 'Interactions', icon: 'forum', route: '/admin/interactions' },
-    ],
-  },
-  crm: {
+    items: [{name: 'Dashboard', icon: 'bar_chart', route: '/admin'}, {
+      name: 'Prospects',
+      icon: 'domain',
+      route: '/admin/prospects'
+    }, {name: 'Interlocutors', icon: 'contacts', route: '/admin/interlocutors'}, {
+      name: 'Interactions',
+      icon: 'forum',
+      route: '/admin/interactions'
+    },],
+  }, crm: {
     icon: 'business_center', // Updated icon for CRM
-    items: [
-      { name: 'Dashboard', icon: 'bar_chart', route: '/admin/crm' },
-      { name: 'Produits & Services', icon: 'inventory', route: '/crm/products' },
-      { name: 'Contrats', icon: 'assignment', route: '/crm/contracts'},
-      { name: 'Tarifs', icon: 'price_change', route: '/crm/pricing' },
-      { name: 'Besoins', icon: 'checklist', route: '/admin/crm/need' },
-      { name: 'Devis', icon: 'request_quote', route: '/crm/quotes'},
-      { name: 'Commandes', icon: 'shopping_cart', route: '/crm/orders'},
-      { name: 'Bons de livraison', icon: 'local_shipping', route: '/crm/delivery-notes' },
-      { name: 'Factures', icon: 'receipt_long', route: '/admin/crm/invoices'},
-      { name: 'Recouvrement', icon: 'account_balance_wallet', route: '/crm/collections' },
-      { name: 'Avoirs', icon: 'credit_score', route: '/crm/credits' },
-      { name: 'Clients', icon: 'contacts', route: '/crm/credits' },
-    ],
-  },
-  tms: {
+    items: [{name: 'Dashboard', icon: 'bar_chart', route: '/admin/crm'}, {
+      name: 'Produits & Services',
+      icon: 'inventory',
+      route: '/crm/products'
+    }, {name: 'Contrats', icon: 'assignment', route: '/crm/contracts'}, {
+      name: 'Tarifs',
+      icon: 'price_change',
+      route: '/crm/pricing'
+    }, {name: 'Besoins', icon: 'checklist', route: '/admin/crm/need'}, {
+      name: 'Devis',
+      icon: 'request_quote',
+      route: '/crm/quotes'
+    }, {name: 'Commandes', icon: 'shopping_cart', route: '/crm/orders'}, {
+      name: 'Bons de livraison',
+      icon: 'local_shipping',
+      route: '/crm/delivery-notes'
+    }, {name: 'Factures', icon: 'receipt_long', route: '/admin/crm/invoices'}, {
+      name: 'Recouvrement',
+      icon: 'account_balance_wallet',
+      route: '/crm/collections'
+    }, {name: 'Avoirs', icon: 'credit_score', route: '/crm/credits'}, {
+      name: 'Clients',
+      icon: 'contacts',
+      route: '/crm/credits'
+    },],
+  }, tms: {
     icon: 'local_shipping',
-    items: [
-      { name: 'Deliveries', icon: 'local_shipping', route: '/tms/deliveries' },
-      { name: 'Orders', icon: 'shopping_cart', route: '/tms/orders' },
-    ],
-  },
-  workspace: {
+    items: [{name: 'Deliveries', icon: 'local_shipping', route: '/tms/deliveries'}, {
+      name: 'Orders',
+      icon: 'shopping_cart',
+      route: '/tms/orders'
+    },],
+  }, workspace: {
     icon: 'workspace',
-    items: [
-      { name: ' Entreprises', icon: 'domain', route: '/super-admin/companies' },
-      { name: 'Project', icon: 'work_outline ', route: '/super-admin/projects' },
-      { name: 'Utilisateur', icon: 'person', route: '/super-admin/users' },
-      { name: 'Mes application', icon: 'apps', route: '/super-admin/users'},
-    ],
-  },
-  admin: {
+    items: [{name: ' Entreprises', icon: 'domain', route: '/super-admin/companies'}, {
+      name: 'Project',
+      icon: 'work_outline ',
+      route: '/super-admin/projects'
+    }, {name: 'Utilisateur', icon: 'person', route: '/super-admin/users'}, {
+      name: 'Mes application',
+      icon: 'apps',
+      route: '/super-admin/users'
+    },],
+  }, admin: {
     icon: 'admin_panel_settings',
-    items: [
-      { name: ' Entreprises', icon: 'domain', route: '/super-admin/companies' },
-      { name: 'filiale', icon: 'apartment', route: '/super-admin/users' },
-      { name: 'Project', icon: 'work_outline ', route: '/super-admin/projects' },
-      { name: 'Utilisateur', icon: 'person', route: '/super-admin/users' },
-      { name: 'Taxonomies', icon: 'category', route: '/super-admin/users', children: ["Pays", "Villes","Banques"] },
-    ],
+    items: [{name: ' Entreprises', icon: 'domain', route: '/super-admin/companies'}, {
+      name: 'filiale',
+      icon: 'apartment',
+      route: '/super-admin/users'
+    }, {name: 'Project', icon: 'work_outline ', route: '/super-admin/projects'}, {
+      name: 'Utilisateur',
+      icon: 'person',
+      route: '/super-admin/users'
+    }, {name: 'Taxonomies', icon: 'category', route: '/super-admin/users', children: ["Pays", "Villes", "Banques"]},],
   },
 };
 
@@ -97,38 +109,36 @@ interface FoodNode {
   children?: FoodNode[];
 }
 
-const TREE_DATA: FoodNode[] = [
-  {
-    name: 'Taxonomies',
-    children: [{name: 'Apple'}, {name: 'Banana'}, {name: 'Fruit loops'}],
-  }
-];
+const TREE_DATA: FoodNode[] = [{
+  name: 'Taxonomies', children: [{name: 'Apple'}, {name: 'Banana'}, {name: 'Fruit loops'}],
+}];
 
 
 @Component({
   standalone: true,
-  imports: [MatTreeModule, RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule,
-    MatListModule, MatDividerModule, RouterLink, RouterLinkWithHref, CdkTrapFocus, NgIf, MatCard, RouterLinkActive, NgForOf, MatFormField, MatSelect, MatOption, MatMenu, MatMenuItem, MatMenuTrigger, MatButtonToggle, MatButtonToggleGroup],
+  imports: [MatTreeModule, RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, MatDividerModule, RouterLink, RouterLinkWithHref, CdkTrapFocus, NgIf, MatCard, RouterLinkActive, NgForOf, MatFormField, MatSelect, MatOption, MatMenu, MatMenuItem, MatMenuTrigger, MatButtonToggle, MatButtonToggleGroup, AsyncPipe],
   selector: 'app-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.css'],
 })
-export class IndexComponent implements OnInit , AfterViewInit{
+export class IndexComponent implements OnInit, AfterViewInit {
   user: any;
+  userCompanies: BehaviorSubject<CompanyResponseDto[]> =  new BehaviorSubject<CompanyResponseDto[]>([]);
+  selectedCompany: BehaviorSubject<string> =  new BehaviorSubject<string>("");
   currentRoute: string = '';
   activeRouteParams: any = {};
   activeQueryParams: any = {};
   selectedApplication: string = 'prospection';
   menuItems: MenuItem[] = menuData[this.selectedApplication].items;
   @ViewChild('rightDrawer') rightDrawer!: MatDrawer;
-  constructor(
-    private localStorageService: LocalStorageService,
-    private router: Router,
-    private activeRoute: ActivatedRoute,
-  ) {}
-  a =1
-  b=2
+  a = 1
+  b = 2
   dataSource = TREE_DATA;
+  protected readonly menuData = menuData;
+
+  constructor(private localStorageService: LocalStorageService, private router: Router, private activeRoute: ActivatedRoute,
+              private companyService: CompanyService) {
+  }
 
   childrenAccessor = (node: FoodNode) => node.children ?? [];
 
@@ -148,6 +158,17 @@ export class IndexComponent implements OnInit , AfterViewInit{
       });
     // Initial setup
     this.updateSelectedApplication();
+
+    this.companyService.getAllCompanies().pipe(
+      tap(companies => {
+        this.userCompanies.next(companies)
+        this.fillCompany();
+      }),
+      catchError(err => {
+        console.error(err)
+        return of(null)
+      })
+    ).subscribe()
   }
 
   /**
@@ -171,6 +192,21 @@ export class IndexComponent implements OnInit , AfterViewInit{
       });
   }
 
+
+  fillCompany(): void{
+    if (this.localStorageService.getItem("selected_company_id")) {
+      const selectedCompanyId = parseInt(this.localStorageService.getItem("selected_company_id"));
+      const currentCompany = this.userCompanies.getValue().find(
+        company => company.id == selectedCompanyId
+      );
+
+      this.selectedCompany.next(currentCompany?.name || "test");
+    } else {
+      const firstCompany = this.userCompanies.getValue()[0];
+      this.selectedCompany.next(firstCompany?.name || "");
+    }
+  }
+
   updateSelectedApplication(): void {
     // Match the active route to an application
     if (this.currentRoute.includes('/admin/prospection')) {
@@ -183,11 +219,10 @@ export class IndexComponent implements OnInit , AfterViewInit{
       this.selectApplication('admin');
     } else if (this.currentRoute.includes('/workspace')) {
       this.selectApplication('admin');
-    }else {
+    } else {
       this.selectApplication('prospection'); // Default case
     }
   }
-
 
   selectApplication(app: string): void {
     this.selectedApplication = app;
@@ -201,7 +236,9 @@ export class IndexComponent implements OnInit , AfterViewInit{
     return this.currentRoute === route;
   }
 
-  protected readonly menuData = menuData;
 
-
+  selectCompany(company: CompanyResponseDto) {
+    this.localStorageService.setItem("selected_company_id", company.id);
+    this.fillCompany();
+  }
 }
