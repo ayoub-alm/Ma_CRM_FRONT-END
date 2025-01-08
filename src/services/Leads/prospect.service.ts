@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpRequest} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 import {CreateCompanyRequest} from "../../dtos/request/CreateCompanyDto";
 import {environment} from '../../environments/environment';
@@ -8,6 +8,7 @@ import {ProspectResponseDto} from '../../dtos/response/prospect.response.dto';
 import {CreateProspectDto} from '../../dtos/request/CreateProspectDto';
 import {InterestResponseDto} from "../../dtos/response/interestResponseDto";
 import {interestRequestDto} from "../../dtos/request/interestRequestDto";
+import {ProspectInterestResponseDto} from "../../dtos/response/prospectInterestResponseDto";
 
 @Injectable({
   providedIn: 'root'
@@ -73,12 +74,12 @@ export class ProspectService {
 
   /**
    *
-   * @param prospectId
+   * @param companyId
    */
-  getInterestById(prospectId: number): Observable<InterestResponseDto[]> {
-      return this.http.get<InterestResponseDto[]>(`${this.baseUrl}/api/interest/${prospectId}`).pipe(
-          tap(interestResponseDto => {
-              new InterestResponseDto(InterestResponseDto);
+  getInterestByCompanyId(companyId: number): Observable<InterestResponseDto[]> {
+      return this.http.get<InterestResponseDto[]>(`${this.baseUrl}/api/interests/company/${companyId}`).pipe(
+          tap(interestResponseDtos => {
+                interestResponseDtos.map(interestResponseDto => {new InterestResponseDto(InterestResponseDto)});
           })
       )
   }
@@ -87,11 +88,13 @@ export class ProspectService {
    * Update the status of an interest.
    * @param interest - The ID of the interest to update.
    */
-  updateInterest(interest: interestRequestDto): Observable<InterestResponseDto> {
-      return this.http.put<InterestResponseDto>(
-          `${this.baseUrl}/api/prospects-interests/prospectId=${interest.prospectId}/interestId=${interest.interestId}` , interest).pipe(
+  updateInterest(interest: interestRequestDto): Observable<ProspectInterestResponseDto> {
+      // const requestBody = new HttpRequestB()
+    alert(30)
+      return this.http.put<ProspectInterestResponseDto>(
+          `${this.baseUrl}/api/prospects-interests` , interest).pipe(
         tap(interestRequestDto => {
-          new InterestResponseDto(InterestResponseDto)})
+          new ProspectInterestResponseDto(ProspectInterestResponseDto)})
     )
   }
 }

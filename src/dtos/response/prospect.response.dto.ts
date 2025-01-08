@@ -10,6 +10,7 @@ import {TitleResponseDto} from "../init_data/response/title.response.dto";
 import {ProspectStatus} from '../../enums/prospect.status';
 import {TrackingLogResponseDto} from './tracking.log.response.dto';
 import {InterestResponseDto} from "./interestResponseDto";
+import {ProspectInterestResponseDto} from "./prospectInterestResponseDto";
 export class ProspectResponseDto {
   createdAt: string;
   updatedAt: string;
@@ -49,7 +50,7 @@ export class ProspectResponseDto {
   reprosentaveJobTitle: JobTitleResponseDto | null;
   certificationText: string | null;
   trackingLogs: TrackingLogResponseDto[];
-  interests: InterestResponseDto[];
+  interests: ProspectInterestResponseDto[];
 
   constructor(data: any) {
     this.createdAt = data?.createdAt || '';

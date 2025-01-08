@@ -13,7 +13,7 @@ import {environment} from '../../../../environments/environment';
 import {ProspectService} from '../../../../services/Leads/prospect.service';
 import {ProspectResponseDto} from '../../../../dtos/response/prospect.response.dto';
 import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-toggle';
 import {TimelineModule} from 'primeng/timeline';
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader, MatCardModule} from '@angular/material/card';
 import {NgxTimelineComponent, NgxTimelineEvent} from '@frxjs/ngx-timeline';
@@ -39,6 +39,8 @@ import {CommentRequestDto} from "../../../../dtos/request/CreateCommentDto";
 import {AuthService} from "../../../../services/AuthService";
 import {CreateProspectDto} from "../../../../dtos/request/CreateProspectDto";
 import {interestRequestDto} from "../../../../dtos/request/interestRequestDto";
+import {LocalStorageService} from "../../../../services/local.storage.service";
+import {ProspectInterestResponseDto} from "../../../../dtos/response/prospectInterestResponseDto";
 
 interface EventItem {
     status?: string;
@@ -57,9 +59,9 @@ interface EventItem {
     styleUrl: './show-prospect.component.css'
 })
 export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
-    @Input() prospectId!: number;
     subscriptions!: Subscription[];
     interests: BehaviorSubject<InterestResponseDto[]> = new BehaviorSubject<InterestResponseDto[]>([]);
+    // prospectinterests: BehaviorSubject<ProspectInterestResponseDto[]> = new BehaviorSubject<ProspectInterestResponseDto[]>([]);
     prospect: BehaviorSubject<ProspectResponseDto>;
     accordion = viewChild.required(MatAccordion);
     events: any[] = [];
@@ -72,7 +74,9 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
     protected readonly ProspectStatus = ProspectStatus;
     protected readonly EntityEnum = EntityEnum;
 
-    constructor(private fb: FormBuilder, private activatedRoute: ActivatedRoute, private prospectService: ProspectService, private snackBar: MatSnackBar, private dialog: MatDialog, private interlocutorsService: InterlocutorService, private authService: AuthService) {
+    constructor(private fb: FormBuilder, private activatedRoute: ActivatedRoute, private prospectService: ProspectService,
+                private snackBar: MatSnackBar, private dialog: MatDialog, private interlocutorsService: InterlocutorService,
+                private localStorageService: LocalStorageService) {
         const blankCompany: ProspectResponseDto = {} as ProspectResponseDto;
         this.prospect = new BehaviorSubject<ProspectResponseDto>(blankCompany);
 
@@ -143,7 +147,8 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
      * Load toggle states from the Interest
      */
     loadInterests() {
-        this.prospectService.getInterestById(this.prospectId).subscribe((interest: InterestResponseDto[]) => {
+        this.prospectService.getInterestByCompanyId(this.localStorageService.getItem("selected_company_id"))
+            .subscribe((interest: InterestResponseDto[]) => {
             this.interests.next(interest);
         });
     }
@@ -151,7 +156,7 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
     /**
      * Update Interest toggle state
      */
-    updateInterest(checked: boolean, interestId: number) {
+    updateInterest($event: MatSlideToggleChange, interestId: number) {
         const interests = this.interests.getValue();
         //
         const interestToUpdate = interests.find(
@@ -162,21 +167,24 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
             const interestRequest: interestRequestDto = new interestRequestDto(
               this.prospect.getValue().id,
               interestId,
-              checked
+              $event.checked
             );
-           this.subscriptions.push( this.prospectService.updateInterest(interestRequest).pipe(
-               tap(data => {}),
+            alert(3)
+           // this.subscriptions.push(
+               this.prospectService.updateInterest(interestRequest).pipe(
+               tap(data => {
+                   $event.checked = !$event.checked;
+                   this.snackBar.open('Intérêt mis à jour avec succès', 'Fermer', {
+                       duration: 3000,
+                   })
+               }),
                catchError(err=>{
                    // show err in snackBar
                    return of(null);
                })
-           )
-               .subscribe({
-                   next: (response) => {
-                       interestToUpdate.status = checked;
-                       this.interests.next({...interests})
-                   }
-               }))
+           ) .subscribe()
+           // )
+
       }
     }
 
@@ -199,7 +207,7 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     ngAfterViewInit() {
-        // Any additional logic after view initialization can go here
+        // this.interests.getValue().map(parseIntersectionDef)
     }
 
     getChipClass(status: string): string {
@@ -260,5 +268,11 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
         this.subscriptions.forEach(subscription => {
             subscription.unsubscribe();
         })
+    }
+
+    isChecked(id: number): boolean {
+        const prospectInterests = this.interests.getValue(); // Get the current interests
+        const interest = prospectInterests.find(interest => interest.id === id); // Find the interest by id
+        return interest ? interest.status : false; // Return the status if interest exists, otherwise false
     }
 }

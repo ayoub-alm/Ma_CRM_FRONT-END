@@ -288,17 +288,17 @@
             <div class="col-lg-6">
                 <p>Interest</p>
                 <div>
-                    <p *ngFor="let interest of interests | async" >
+                    <p *ngFor="let interest of interests.getValue()" >
                         <span class="text-secondary">
                         <section class="example-section fs-6">
                         <mat-slide-toggle
-                                [checked]="interest.status"
+                                [checked]="isChecked(interest.id)"
                                 [color]="'primary'"
-                                (change)="updateInterest($event.checked, interest.id)"
-                                class="custom-toggle"
-                                style="transform:scale(0.8) !important;">
+                                (change)="updateInterest($event, interest.id)"
+                                class="custom-toggle scale-08"
+                               >
                         </mat-slide-toggle>
-                            {{ interest.nameInterest }}
+                            {{ interest.name }}
                         </section>
                         </span>
                     </p>
