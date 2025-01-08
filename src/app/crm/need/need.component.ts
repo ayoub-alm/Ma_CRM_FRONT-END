@@ -22,7 +22,7 @@ import {FormControl, ReactiveFormsModule} from '@angular/forms';
 import {LocalStorageService} from '../../../services/local.storage.service';
 import {AuthService} from '../../../services/AuthService';
 import {Subscription} from 'rxjs';
-import {MatDivider} from '@angular/material/divider';
+import {MatDivider} from "@angular/material/divider";
 import {ProspectStatus} from '../../../enums/prospect.status';
 import {MatOption, MatSelect} from '@angular/material/select';
 
