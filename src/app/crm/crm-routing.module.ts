@@ -10,7 +10,8 @@ const routes: Routes = [
   {path:'invoices', component: InvoicesComponent},
   {path:'need', loadChildren: () =>
       import('./need/crm.need.module').then((m) => m.CrmNeedModule), },
-
+  {path:'pricing', loadChildren: () =>
+      import('./pricing/pricing.module').then((m) => m.PricingModule)},
 ];
 
 @NgModule({

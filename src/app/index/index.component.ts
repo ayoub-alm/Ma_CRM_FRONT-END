@@ -50,7 +50,7 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
     }, {name: 'Contrats', icon: 'assignment', route: '/crm/contracts'}, {
       name: 'Tarifs',
       icon: 'price_change',
-      route: '/crm/pricing'
+      route: '/admin/crm/pricing'
     }, {name: 'Besoins', icon: 'checklist', route: '/admin/crm/need'}, {
       name: 'Devis',
       icon: 'request_quote',
