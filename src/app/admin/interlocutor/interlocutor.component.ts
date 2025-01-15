@@ -22,9 +22,10 @@ import {Router, RouterLink} from '@angular/router';
 import {BehaviorSubject, catchError, EMPTY, filter, tap} from 'rxjs';
 import {InterlocutorService} from '../../../services/Leads/interlocutor.service';
 import {MatDialog} from '@angular/material/dialog';
-import {ProspectStatus} from '../../../enums/prospect.status';
+import {getAllStatusLabel, ProspectStatus} from '../../../enums/prospect.status';
 import {AddUpdateInterlocutorComponent} from './add-update-interlocutor/add-update-interlocutor.component';
 import {InterlocutorResDto} from '../../../dtos/response/interlocutor.dto';
+import {ActiveEnum, getAllStatusInteraction} from "../../../enums/active.enum";
 
 @Component({
   selector: 'app-interlocutor',
@@ -74,11 +75,15 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
   selectedRows: Set<number> = new Set();
   selectedFile: File | null = null;
   links: string[] = [];
-  activeLink: string | null = ProspectStatus.NEW;
+  // activeLink: string | null = ActiveEnum.NEW;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(private interlocutorService: InterlocutorService, private dialog: MatDialog, private router: Router) {
+    this.links = getAllStatusInteraction(); // Populate with ProspectStatus labels
+    // if (this.links.length > 0) {
+    //   this.activeLink = this.links[0];
+    // }
   }
 
   ngOnInit(): void {
@@ -256,28 +261,16 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
   isRowSelected(rowId: number): boolean {
     return this.selectedRows.has(rowId);
   }
-  getProspectStatusLabel(status: string): string {
-    return ProspectStatus[status as keyof typeof ProspectStatus] || "Unknown Status";
+  getAllStatusInteraction(status: string): string {
+    return ActiveEnum[status as keyof typeof ActiveEnum] || "Unknown Status";
   }
 
   getChipClass(status: string): string {
     switch (status) {
-      case "NEW":
-        return 'status-new'; // Apply class for "NEW"
-      case "QUALIFIED":
-        return 'status-qualified'; // Apply class for "QUALIFIED"
-      case "INTERESTED":
-        return 'status-interested'; // Apply class for "INTERESTED"
-      case "OPPORTUNITY":
-        return 'status-opportunity'; // Apply class for "OPPORTUNITY"
-      case "CONVERTED":
-        return 'status-converted'; // Apply class for "CONVERTED"
-      case "DISQUALIFIED":
-        return 'status-disqualified'; // Apply class for "DISQUALIFIED"
-      case "LOST":
-        return 'status-lost'; // Apply class for "LOST"
-      case "NRP":
-        return 'status-nrp'; // Apply class for "NRP"
+      case "ACTIVE":
+        return 'status-active'; // Apply class for "NEW"
+      case "INACTIVE":
+        return 'status-inactive'; // Apply class for "QUALIFIED"
       default:
         return 'status-default'; // Apply default class for unknown statuses
     }
@@ -285,14 +278,8 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
 
   // Mapping icons to ProspectStatus values
   statusIcons: Record<string, string> = {
-    [ProspectStatus.NEW]: 'fiber_new',
-    [ProspectStatus.QUALIFIED]: 'thumb_up',
-    [ProspectStatus.INTERESTED]: 'star',
-    [ProspectStatus.OPPORTUNITY]: 'lightbulb',
-    [ProspectStatus.CONVERTED]: 'done_all',
-    [ProspectStatus.DISQUALIFIED]: 'remove_circle',
-    [ProspectStatus.LOST]: 'cancel',
-    [ProspectStatus.NRP]: 'phone_missed'
+    [ActiveEnum.ACTIVE]: 'fiber_new',
+    [ActiveEnum.INACTIVE]: 'thumb_up',
   };
 
   getIcon(status: string): string {

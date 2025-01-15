@@ -20,16 +20,65 @@
 
 <mat-dialog-content class="container-fluid w-100">
   <form [formGroup]="interlocutorForm" class="row py-4">
-    <!-- Full Name -->
-    <div class="col-lg-6">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Nom complet</mat-label>
-        <input formControlName="fullName" matInput placeholder="John Doe" required>
-        <mat-error *ngIf="interlocutorForm.get('fullName')?.hasError('required')">
-          Le nom complet est obligatoire.
-        </mat-error>
-      </mat-form-field>
-    </div>
+
+
+      <!-- Prospect ID (Select Box) -->
+      <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Prospect </mat-label>
+              <mat-select formControlName="prospectId" required>
+                  <mat-option *ngFor="let prospect of prospects | async" [value]="prospect.id">
+                      {{ prospect.name }}
+                  </mat-option>
+              </mat-select>
+              <mat-error *ngIf="interlocutorForm.get('prospectId')?.hasError('required')">
+                  Le prospect est obligatoire.
+              </mat-error>
+          </mat-form-field>
+      </div>
+
+      <!-- Job Title (Select Box) -->
+      <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Titre du poste</mat-label>
+              <mat-select formControlName="jobTitle" >
+                  <mat-option *ngFor="let title of jobTitles | async" [value]="title.id">
+                      {{ title.name }}
+                  </mat-option>
+              </mat-select>
+              <mat-error *ngIf="interlocutorForm.get('jobTitle')?.hasError('required')">
+                  Le titre du poste est obligatoire.
+              </mat-error>
+          </mat-form-field>
+      </div>
+
+
+
+      <!-- department (Select Box) -->
+      <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Départment </mat-label>
+              <mat-select formControlName="departmentId" >
+                  <mat-option *ngFor="let department of departments | async" [value]="department.id">
+                      {{ department.name }}
+                  </mat-option>
+              </mat-select>
+              <!--        <mat-error *ngIf="interlocutorForm.get('departmentId')?.hasError('required')">-->
+              <!--          Le prospect est obligatoire.-->
+              <!--        </mat-error>-->
+          </mat-form-field>
+      </div>
+
+      <!-- Full Name -->
+      <div class="col-lg-6">
+          <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Nom complet</mat-label>
+              <input formControlName="fullName" matInput placeholder="John Doe" required>
+              <mat-error *ngIf="interlocutorForm.get('fullName')?.hasError('required')">
+                  Le nom complet est obligatoire.
+              </mat-error>
+          </mat-form-field>
+      </div>
 
     <!-- Email Address -->
     <div class="col-lg-6">
@@ -56,54 +105,6 @@
         <mat-error *ngIf="interlocutorForm.get('phoneNumber')?.hasError('pattern')">
           Numéro de téléphone invalide.
         </mat-error>
-      </mat-form-field>
-    </div>
-
-
-    <!-- Prospect ID (Select Box) -->
-    <div class="col-lg-6">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Prospect </mat-label>
-        <mat-select formControlName="prospectId" required>
-          <mat-option *ngFor="let prospect of prospects | async" [value]="prospect.id">
-            {{ prospect.name }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="interlocutorForm.get('prospectId')?.hasError('required')">
-          Le prospect est obligatoire.
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-    <!-- Job Title (Select Box) -->
-    <div class="col-lg-6">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Titre du poste</mat-label>
-        <mat-select formControlName="jobTitle" >
-          <mat-option *ngFor="let title of jobTitles | async" [value]="title.id">
-            {{ title.name }}
-          </mat-option>
-        </mat-select>
-        <mat-error *ngIf="interlocutorForm.get('jobTitle')?.hasError('required')">
-          Le titre du poste est obligatoire.
-        </mat-error>
-      </mat-form-field>
-    </div>
-
-
-
-    <!-- department (Select Box) -->
-    <div class="col-lg-6">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Départment </mat-label>
-        <mat-select formControlName="departmentId" >
-          <mat-option *ngFor="let department of departments | async" [value]="department.id">
-            {{ department.name }}
-          </mat-option>
-        </mat-select>
-        <!--        <mat-error *ngIf="interlocutorForm.get('departmentId')?.hasError('required')">-->
-        <!--          Le prospect est obligatoire.-->
-        <!--        </mat-error>-->
       </mat-form-field>
     </div>
 

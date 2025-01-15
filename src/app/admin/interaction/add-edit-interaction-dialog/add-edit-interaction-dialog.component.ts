@@ -82,7 +82,7 @@ export class AddEditInteractionDialogComponent implements OnInit {
   interlocutors: BehaviorSubject<InterlocutorResDto[]> =  new BehaviorSubject<InterlocutorResDto[]>([]);
   allInterlocutors: BehaviorSubject<InterlocutorResDto[]> =  new BehaviorSubject<InterlocutorResDto[]>([]);
   users: BehaviorSubject<UserDto[]> =  new BehaviorSubject<UserDto[]>([]);
-  dragHintText = 'Drag and drop a file here or click to select';
+  dragHintText = 'Déposez un fichier ici ou cliquez pour sélectionner';
   selectedFile: File | null = null;
   private destroy$ = new Subject<void>();
   constructor(
@@ -102,11 +102,11 @@ export class AddEditInteractionDialogComponent implements OnInit {
     this.interactionForm = this.fb.group({
       prospectId: [this.data?.prospectId || '', Validators.required],
       interlocutorId: [this.data?.interlocutorId || '', Validators.required],
-      report: [this.data?.report || '', Validators.required],
+      report: [this.data?.report || null],
       interactionSubject: [this.data?.interactionSubject || '', Validators.required],
       interactionType: [this.data?.interactionType || '', Validators.required],
       planningDate: [this.data?.planningDate || null], // Optional field
-      joinFilePath: [this.data?.joinFilePath || ''], // Optional field
+      joinFilePath: [this.data?.joinFilePath || null], // Optional field
       address: [this.data?.address || ''], // Optional field
       agentId: [this.data?.agentId || ''],
       affectedToId: [this.data?.affectedToId || ''], // Optional field
@@ -142,6 +142,18 @@ export class AddEditInteractionDialogComponent implements OnInit {
       const selectedInterlocutors: InterlocutorResDto[] = this.allInterlocutors.getValue().filter((interlocutor => interlocutor.prospect.id === value ))
       this.interlocutors.next(selectedInterlocutors)
     })).subscribe()
+
+    // Subscribe to interaction type changes
+    this.interactionForm.get('interactionType')?.valueChanges.pipe(
+        tap((selectedType: InteractionType) => {
+          // Reset the address field if the interaction type is not IN_PERSON
+          if (selectedType !== InteractionType.IN_PERSON) {
+            this.interactionForm.get('address')?.reset();
+          }
+        }),
+    ).subscribe();
+
+    this.interactionForm.get('report')?.value.pipe()
   }
 
   saveInteraction(): void {
@@ -225,4 +237,6 @@ export class AddEditInteractionDialogComponent implements OnInit {
     this.destroy$.next();
     this.destroy$.complete();
   }
+
+  protected readonly InteractionType = InteractionType;
 }

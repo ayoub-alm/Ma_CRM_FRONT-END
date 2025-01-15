@@ -18,7 +18,6 @@ import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {Router, RouterLink} from '@angular/router';
 import {KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {getAllStatusLabel, ProspectStatus} from '../../../enums/prospect.status';
-import {MatChip} from '@angular/material/chips';
 import {MatTabLink, MatTabNav, MatTabNavPanel} from '@angular/material/tabs';
 
 
@@ -39,7 +38,6 @@ import {MatTabLink, MatTabNav, MatTabNavPanel} from '@angular/material/tabs';
     MatMenuTrigger,
     MatMenuItem,
     NgIf,
-    MatChip,
     NgClass,
     MatTabLink,
     MatTabNavPanel,

@@ -22,20 +22,27 @@
 
 
   <mat-card class="mt-1 container bg-light shadow-sm p-3 rounded-2">
-    <mat-card-title class="d-flex justify-content-between" >
-      <p class="d-flex ">
+    <mat-card-title class="d-flex justify-content-between align-items-center" >
+      <p class="d-flex align-baseline">
         <mat-icon class="example-tab-icon mx-2 primary-blue-color">business</mat-icon>
         <span class="fs-5">Détails de l'interaction</span>
+          <button
+                  style="transform: scale(0.8)"
+                  [ngClass]="[getChipClass(interaction.getValue().report ?? null), 'btn btn-sm p-1 rounded-4 px-3']"
+          >
+              {{ getStatusLabel(interaction.getValue().report ?? null) }}
+          </button>
       </p>
-      <p>
-        <button mat-button >
-          {{ interaction.getValue().createdAt | date: "dd-mm-yyyy" }}
-          <mat-icon>date</mat-icon>
-        </button>
-      </p>
+        <p>
+            <button mat-button (click)="editProspect(interaction)">
+                Modifier
+                <mat-icon>edit</mat-icon>
+            </button>
+        </p>
     </mat-card-title>
     <mat-card-content>
-      <div class="px-3">
+        <div class="d-flex" >
+      <div class="px-3 col-lg-6">
         <p>
           <i class="bi bi-building me-2 primary-blue-color"></i>
           <span class="text-dark">Prospect:</span>
@@ -51,16 +58,13 @@
           <span class="text-dark">Sujet d'interaction: </span>
           <span class="text-secondary">{{ interaction.getValue().interactionSubject }}</span>
         </p>
-        <p *ngIf="interaction.getValue().report">
-          <i class="bi bi-file-earmark-text-fill me-2 primary-blue-color"></i>
-          <span class="text-dark">Rapport:</span>
-          <span class="text-secondary">{{ interaction.getValue().report }}</span>
-        </p>
         <p *ngIf="interaction.getValue().planningDate">
           <i class="bi bi-calendar-event-fill me-2 primary-blue-color"></i>
           <span class="text-dark">Date planifiée: </span>
           <span class="text-secondary">{{ interaction.getValue().planningDate | date:'shortDate' }}</span>
         </p>
+      </div>
+      <div class="px-3 col-lg-6">
         <p *ngIf="interaction.getValue().address">
           <i class="bi bi-geo-alt-fill me-2 primary-blue-color"></i>
           <span class="text-dark">Adresse: </span>
@@ -82,10 +86,91 @@
           <span class="text-secondary">{{ interaction.getValue().agentName }}</span>
         </p>
       </div>
+        </div>
     </mat-card-content>
 
-
   </mat-card>
+
+    <mat-card  class="mt-1 container bg-light shadow-sm p-3 rounded-2">
+        <mat-card-title class="d-flex justify-content-between" >
+            <p class="d-flex ">
+                <i class="bi bi-file-earmark-text-fill me-2 primary-blue-color"></i>
+                <span class="fs-5">Rapport</span>
+            </p>
+        </mat-card-title>
+        <mat-card-content>
+            <form [formGroup]="interactionForm">
+            <div class="px-3">
+                <!-- Report Section -->
+                <ng-container *ngIf="interaction.getValue().report; else noReport">
+                    <p>
+                        <span class="text-secondary">{{ interaction.getValue().report }}</span>
+                    </p>
+                </ng-container>
+                <ng-template #noReport>
+                    <p class="text-secondary">Aucun rapport disponible.</p>
+                </ng-template>
+                <ng-container *ngIf="interaction.getValue().joinFilePath">
+                    <p>
+                        <i class="bi bi-file-earmark-text-fill me-2 primary-blue-color"></i>
+                        <span class="text-dark">Fichier:</span>
+                        <span class="text-secondary">{{ interaction.getValue().joinFilePath }}</span>
+                    </p>
+                </ng-container>
+
+                <!-- Report Textarea -->
+                <mat-form-field appearance="outline" class="col-lg-12"
+                                *ngIf="interaction.getValue().report == null">
+                    <mat-label>Rapport</mat-label>
+                    <textarea matInput formControlName="report" placeholder="Entrer le rapport"></textarea>
+                </mat-form-field>
+
+                <!-- File Upload Section -->
+                <mat-form-field appearance="outline" class="col-lg-12" *ngIf="interaction.getValue().joinFilePath == null">
+                    <mat-label>Join File Path</mat-label>
+                    <input
+                            matInput
+                            placeholder="Selected file path"
+                            [value]="selectedFile?.name || ''"
+                            readonly
+                            formControlName="joinFilePath"
+                    />
+                    <div
+                            class="file-drop-zone"
+                            (dragover)="onDragOver($event)"
+                            (dragleave)="onDragLeave($event)"
+                            (drop)="onDrop($event)"
+                    >
+                        <p *ngIf="!selectedFile">{{ dragHintText }}</p>
+                        <p *ngIf="selectedFile">Fichier sélectionné : {{ selectedFile.name }}</p>
+                        <input
+                                type="file"
+                                hidden
+                                (change)="onFileSelected($event)"
+                                #fileInput
+                        />
+                        <button mat-button (click)="fileInput.click()">Sélectionner un fichier</button>
+                    </div>
+                </mat-form-field>
+
+                <!-- Buttons for Sending Report and File -->
+                <div class="d-flex justify-content-end gap-2 mt-3">
+                    <!-- Modify/Send Report Button -->
+                    <ng-container  *ngIf="interaction.getValue().report == null">
+                        <button mat-raised-button color="primary" (click)="sendReport()">
+                            <i class="bi bi-send me-2"></i> Ajouter Rapport
+                        </button>
+                    </ng-container>
+                    <!-- Send File -->
+                    <button mat-raised-button color="accent" (click)="sendFile()" [disabled]="!selectedFile"
+                            *ngIf="interaction.getValue().joinFilePath == null">
+                        <i class="bi bi-upload me-2"></i> Ajouter Fichier
+                    </button>
+                </div>
+            </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
 
 
 </div>

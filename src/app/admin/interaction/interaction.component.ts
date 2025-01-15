@@ -21,11 +21,12 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {MatIcon} from '@angular/material/icon';
-import {DatePipe} from '@angular/common';
+import {DatePipe, NgClass} from '@angular/common';
 import {MatInput} from '@angular/material/input';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {Router, RouterLink} from '@angular/router';
 import {AddEditInteractionDialogComponent} from './add-edit-interaction-dialog/add-edit-interaction-dialog.component';
+import {MatChip} from "@angular/material/chips";
 
 
 @Component({
@@ -49,14 +50,14 @@ import {AddEditInteractionDialogComponent} from './add-edit-interaction-dialog/a
     MatHeaderRow,
     MatRow,
     MatSort,
-    RouterLink, MatSortHeader, MatCellDef, MatHeaderRowDef, MatRowDef, MatNoDataRow
+    RouterLink, MatSortHeader, MatCellDef, MatHeaderRowDef, MatRowDef, MatNoDataRow, MatChip, NgClass
   ],
   templateUrl: './interaction.component.html',
   styleUrl: './interaction.component.css',
 })
 export class InteractionComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['select', 'prospectName', 'interlocutorName', 'interactionSubject', 'interactionType',
-    'planningDate', 'affectedTo', 'actions'];
+    'planningDate', 'status', 'affectedTo', 'actions'];
 
   dataSource: MatTableDataSource<InteractionResponseDto> = new MatTableDataSource();
   isAllSelected = false;
@@ -154,5 +155,13 @@ export class InteractionComponent implements OnInit, AfterViewInit {
 
   showDetails(row: InteractionResponseDto): void {
     this.router.navigateByUrl('/admin/interactions/' + row.id).then(r => {return;});
+  }
+
+  getChipClass(report: string | null): string {
+    return report !== null ? 'status-complete' : 'status-not-complete';
+  }
+
+  getStatusLabel(report: string | null): string {
+    return report !== null ? 'Complet' : 'Pas complet';
   }
 }
