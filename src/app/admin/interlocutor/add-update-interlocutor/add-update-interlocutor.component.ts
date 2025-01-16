@@ -167,15 +167,14 @@ export class AddUpdateInterlocutorComponent implements OnInit{
           this.interlocutorForm.get('active')?.value ? ActiveEnum.ACTIVE : ActiveEnum.INACTIVE // active based on the form value
         );
         this.interlocutorService.updateInterlocutor(this.interlocutorToUpdate.id, dto).pipe(
-          tap((updatedData: InterlocutorResDto) => {
-            this.snackBar.open(`Interlocutor updated ${updatedData.fullName}`, "Ok", {duration:3000})
-            this.dialogRef.close(updatedData);
-          }),
-          catchError((error) => {
-
-            this.snackBar.open(`Error ${error.message}`, "Ok", {duration:3000})
-            return throwError(error);
-          })
+            tap((updatedData: InterlocutorResDto) => {
+              this.snackBar.open(`Interlocutor updated ${updatedData.fullName}`, "Ok", { duration: 3000 });
+              this.dialogRef.close(updatedData); // Explicitly return the updated data
+            }),
+            catchError((error) => {
+              this.snackBar.open(`Error ${error.message}`, "Ok", { duration: 3000 });
+              return throwError(error);
+            })
         ).subscribe();
 
       } else {
@@ -192,19 +191,19 @@ export class AddUpdateInterlocutorComponent implements OnInit{
         );
 
         this.interlocutorService.createInterlocutor(dto).pipe(
-          tap((newData) => {
-
-            this.dialogRef.close(newData);
-          }),
-          catchError((error) => {
-            this.snackBar.open(`Error creating interlocutor: ${error}`, "Ok", {duration:3000})
-            console.error("Error creating interlocutor: ", error);
-            return throwError(error);
-          })
+            tap((newData) => {
+              this.snackBar.open(`Interlocutor created successfully`, "Ok", { duration: 3000 });
+              this.dialogRef.close(newData); // Explicitly return the new data
+            }),
+            catchError((error) => {
+              this.snackBar.open(`Error creating interlocutor: ${error}`, "Ok", { duration: 3000 });
+              console.error("Error creating interlocutor: ", error);
+              return throwError(error);
+            })
         ).subscribe();
       }
     } else {
-      this.snackBar.open(`Form is invalid`, "Ok", {duration:3000})
+      this.snackBar.open(`Form is invalid`, "Ok", {duration:3000});
     }
   }
 

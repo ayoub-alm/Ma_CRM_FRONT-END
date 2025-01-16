@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {
@@ -25,6 +25,8 @@ import {MatDialog} from '@angular/material/dialog';
 import {ProspectStatus} from '../../../enums/prospect.status';
 import {AddUpdateInterlocutorComponent} from './add-update-interlocutor/add-update-interlocutor.component';
 import {InterlocutorResDto} from '../../../dtos/response/interlocutor.dto';
+import {ConfirmationDialogComponent} from "../../utils/confirmation-dialog/confirmation-dialog.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-interlocutor',
@@ -78,7 +80,8 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  constructor(private interlocutorService: InterlocutorService, private dialog: MatDialog, private router: Router) {
+  constructor(private interlocutorService: InterlocutorService, private dialog: MatDialog,private snackBar: MatSnackBar,
+              private cdr: ChangeDetectorRef, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -129,24 +132,25 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
 
 
     dialogRef.afterClosed().pipe(
-      filter(response => !!response), // Proceed only if response is not null/undefined
-      tap(response => {
-        const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
+        filter(response => !!response), // Proceed only if response is not null/undefined
+        tap(response => {
+          const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
 
-        console.log("exists", existingItemIndex, response);
-        if (existingItemIndex !== -1) {
-          // Update existing item
-          const updatedData = [...this.dataSource.data];
-          updatedData[existingItemIndex] = response;
-          this.dataSource.data = updatedData; // Assign new array to trigger change detection
-        } else {
-          // Add new item
-          this.dataSource.data = [...this.dataSource.data, response]; // Create new array with added item
-        }
+          if (existingItemIndex !== -1) {
+            // Update existing item
+            const updatedData = [...this.dataSource.data];
+            updatedData[existingItemIndex] = response;
+            this.dataSource.data = updatedData; // Assign new array to trigger change detection
+          } else {
+            // Add new item
+            this.dataSource.data = [...this.dataSource.data, response]; // Create new array with added item
+          }
 
-        // Reset paginator to the first page
-        this.paginator.firstPage();
-      })
+          // Reset paginator to the first page
+          this.paginator.firstPage();
+          // Force change detection
+          this.cdr.detectChanges();
+        })
     ).subscribe();
   }
 
@@ -301,5 +305,28 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
 
   showInterlocutorDetails(row: InterlocutorResDto) {
     this.router.navigateByUrl('/admin/interlocutors/'+ row.id)
+  }
+
+  // Delete Use component comfirmation dialog
+  async deleteIntelocutor(row: any): Promise<void> {
+    const confirmed = await ConfirmationDialogComponent.open(this.dialog, {
+      title: 'Confirmer la suppression',
+      message: 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+      confirmText: 'Confirmer',
+      cancelText: 'Annuler',
+    });
+
+    if (confirmed) {
+      await this.interlocutorService.deleteInterlocutorById(row.id).toPromise(); // Call the API to delete
+      // Perform the action
+      const index = this.dataSource.data.findIndex(p => p.id === row.id);
+      if (index !== -1) {
+        this.dataSource.data.splice(index, 1);
+        this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    }
   }
 }

@@ -52,7 +52,7 @@ export class InterlocutorService {
     );
   }
 
-
-
-
+  deleteInterlocutorById(interlocutorId: number): Observable<InterlocutorResDto> {
+    return this.http.delete<InterlocutorResDto>(`${this.baseUrl}/api/interlocutors/soft-delete/${interlocutorId}`);
+  }
 }
