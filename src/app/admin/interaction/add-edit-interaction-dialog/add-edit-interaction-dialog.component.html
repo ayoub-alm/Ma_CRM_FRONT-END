@@ -27,7 +27,7 @@
         </mat-option>
       </mat-select>
       <mat-error *ngIf="interactionForm.get('prospectId')?.hasError('required')">
-        Prospect Subject is required.
+        Prospect Subject est obligatoire.
       </mat-error>
     </mat-form-field>
 
@@ -40,7 +40,7 @@
         </mat-option>
       </mat-select>
       <mat-error *ngIf="interactionForm.get('interlocutorId')?.hasError('required')">
-        Interlocutor is required.
+        Interlocutor est obligatoire.
       </mat-error>
     </mat-form-field>
 
@@ -55,7 +55,7 @@
         </mat-option>
       </mat-select>
       <mat-error *ngIf="interactionForm.get('interactionSubject')?.hasError('required')">
-        Interaction Subject is required.
+        Interaction Subject est obligatoire.
       </mat-error>
     </mat-form-field>
 
@@ -67,7 +67,7 @@
         </mat-option>
       </mat-select>
       <mat-error *ngIf="interactionForm.get('interactionType')?.hasError('required')">
-        Interaction Type is required.
+        Interaction Type est obligatoire.
       </mat-error>
     </mat-form-field>
 
@@ -84,7 +84,8 @@
 <!--      <input matInput formControlName="affectedToId" placeholder="Enter Affected To ID">-->
 <!--    </mat-form-field>-->
 
-    <mat-form-field appearance="outline" class="col-lg-6">
+    <mat-form-field *ngIf="interactionForm.get('interactionType')?.value === InteractionType.IN_PERSON"
+            appearance="outline" class="col-lg-6">
       <mat-label>Address</mat-label>
       <input matInput formControlName="address" placeholder="Enter Address">
     </mat-form-field>
@@ -103,7 +104,7 @@
         </mat-option>
       </mat-select>
       <mat-error *ngIf="interactionForm.get('affectedToId')?.hasError('required')">
-        Interaction Type is required.
+        Interaction Type est obligatoire.
       </mat-error>
     </mat-form-field>
 
@@ -140,8 +141,6 @@
         <button mat-button (click)="fileInput.click()">Select File</button>
       </div>
     </mat-form-field>
-
-
   </form>
 </div>
 <div mat-dialog-actions align="end">

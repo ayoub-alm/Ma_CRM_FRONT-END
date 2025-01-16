@@ -1,0 +1,30 @@
+/* Style for Complete status */
+.status-complete {
+    background-color: #d4edda; /* Soft green */
+    color: #155724; /* Dark green */
+}
+
+/* Style for Not Complete status */
+.status-not-complete {
+    background-color: #f8d7da; /* Soft red */
+    color: #721c24; /* Dark red */
+}
+
+.file-drop-zone {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    border-radius: 8px;
+    background-color: #d3d3d3;
+    transition: background-color 0.3s;
+}
+
+.file-drop-zone.drag-over {
+    background-color: #e6f7ff;
+    border-color: #90caf9;
+}
+
+.file-drop-zone p {
+    margin: 0;
+}
+
