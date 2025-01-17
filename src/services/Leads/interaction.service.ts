@@ -58,7 +58,7 @@ export class InteractionService {
    * @returns Observable of void.
    */
   softDeleteInteraction(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/interactions/soft-delete/${id}`);
   }
 
   /**

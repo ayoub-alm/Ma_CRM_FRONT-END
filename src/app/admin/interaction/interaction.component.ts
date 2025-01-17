@@ -27,6 +27,7 @@ import {MatButton, MatIconButton} from '@angular/material/button';
 import {Router, RouterLink} from '@angular/router';
 import {AddEditInteractionDialogComponent} from './add-edit-interaction-dialog/add-edit-interaction-dialog.component';
 import {MatChip} from "@angular/material/chips";
+import {ConfirmationDialogComponent} from "../../utils/confirmation-dialog/confirmation-dialog.component";
 
 
 @Component({
@@ -118,14 +119,14 @@ export class InteractionComponent implements OnInit, AfterViewInit {
     });
   }
 
-  deleteInteraction(row: InteractionResponseDto): void {
-    if (confirm('Are you sure you want to delete this interaction?')) {
-      this.interactionService.softDeleteInteraction(row.id).subscribe(() => {
-        this.snackBar.open('Interaction deleted successfully', 'Close', { duration: 3000 });
-        this.loadInteractions();
-      });
-    }
-  }
+  // deleteInteraction(row: InteractionResponseDto): void {
+  //   if (confirm('Are you sure you want to delete this interaction?')) {
+  //     this.interactionService.softDeleteInteraction(row.id).subscribe(() => {
+  //       this.snackBar.open('Interaction deleted successfully', 'Close', { duration: 3000 });
+  //       this.loadInteractions();
+  //     });
+  //   }
+  // }
 
   toggleRowSelection(rowId: number): void {
     if (this.selectedRows.has(rowId)) {
@@ -163,5 +164,28 @@ export class InteractionComponent implements OnInit, AfterViewInit {
 
   getStatusLabel(report: string | null): string {
     return report !== null ? 'Complet' : 'Pas complet';
+  }
+
+  // Delete Use component comfirmation dialog
+  async deleteInteraction(row: any): Promise<void> {
+    const confirmed = await ConfirmationDialogComponent.open(this.dialog, {
+      title: 'Confirmer la suppression',
+      message: 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+      confirmText: 'Confirmer',
+      cancelText: 'Annuler',
+    });
+
+    if (confirmed) {
+      await this.interactionService.softDeleteInteraction(row.id).toPromise(); // Call the API to delete
+      // Perform the action
+      const index = this.dataSource.data.findIndex(p => p.id === row.id);
+      if (index !== -1) {
+        this.dataSource.data.splice(index, 1);
+        this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    }
   }
 }

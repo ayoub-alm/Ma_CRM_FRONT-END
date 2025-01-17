@@ -142,14 +142,24 @@
                             (drop)="onDrop($event)"
                     >
                         <p *ngIf="!selectedFile">{{ dragHintText }}</p>
-                        <p *ngIf="selectedFile">Fichier sélectionné : {{ selectedFile.name }}</p>
+                        <p *ngIf="selectedFile">Selected File: {{ selectedFile.name }}</p>
                         <input
                                 type="file"
                                 hidden
                                 (change)="onFileSelected($event)"
                                 #fileInput
                         />
-                        <button mat-button (click)="fileInput.click()">Sélectionner un fichier</button>
+                        <button mat-button (click)="fileInput.click()">Select File</button>
+                        <!-- Add Remove File Button -->
+                        <button
+                                *ngIf="selectedFile"
+                                mat-icon-button
+                                color="warn"
+                                (click)="removeFile()"
+                                aria-label="Remove File"
+                        >
+                            <mat-icon>delete</mat-icon>
+                        </button>
                     </div>
                 </mat-form-field>
 
