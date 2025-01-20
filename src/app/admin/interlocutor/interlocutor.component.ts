@@ -26,6 +26,7 @@ import {getAllStatusLabel, ProspectStatus} from '../../../enums/prospect.status'
 import {AddUpdateInterlocutorComponent} from './add-update-interlocutor/add-update-interlocutor.component';
 import {InterlocutorResDto} from '../../../dtos/response/interlocutor.dto';
 import {ActiveEnum, getAllStatusInteraction} from "../../../enums/active.enum";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-interlocutor',
@@ -79,7 +80,7 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  constructor(private interlocutorService: InterlocutorService, private dialog: MatDialog, private router: Router) {
+  constructor(private interlocutorService: InterlocutorService, private snackBar: MatSnackBar, private dialog: MatDialog, private router: Router) {
     this.links = getAllStatusInteraction(); // Populate with ProspectStatus labels
     // if (this.links.length > 0) {
     //   this.activeLink = this.links[0];
@@ -289,4 +290,39 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
   showInterlocutorDetails(row: InterlocutorResDto) {
     this.router.navigateByUrl('/admin/interlocutors/'+ row.id)
   }
+
+    exportToExcel(): void {
+        // Prepare the selected prospects (if any)
+        const selectedProspects = this.selectedRows.size > 0
+            ? this.dataSource.data.filter((row) => this.selectedRows.has(row.id))
+            : undefined;
+
+        // Call the service to export prospects
+        this.interlocutorService.exportInterlocutor(selectedProspects).subscribe(
+            (response: Blob) => {
+                // Trigger file download
+                this.downloadInterlocutorFile(response, 'Interlocutor_file.xlsx');
+            },
+            (error) => {
+                console.error('Error exporting data:', error);
+                this.snackBar.open('Failed to export data', 'Close', {
+                    duration: 3000,
+                });
+            }
+        );
+    }
+
+    /**
+     * Trigger file download
+     */
+    private downloadInterlocutorFile(blob: Blob, fileName: string): void {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+    }
 }

@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment} from '../../environments/environment';
 import {Observable, tap} from 'rxjs';
 import {InterlocutorRequestDto} from '../../dtos/request/interlocutorRequestDto';
@@ -52,7 +52,17 @@ export class InterlocutorService {
     );
   }
 
+  exportInterlocutor(selectedInterlocutors?: any[]): Observable<Blob> {
+    let params = new HttpParams();
+    if (selectedInterlocutors && selectedInterlocutors.length > 0) {
+      // Convert the selected prospects to a JSON string
+      const interlocutorsJson = JSON.stringify(selectedInterlocutors);
+      params = params.set('interlocutorsJson', interlocutorsJson);
+    }
 
-
-
+    return this.http.get(`${this.baseUrl}/export`, {
+      params,
+      responseType: 'blob', // Expect a binary response (Excel file)
+    });
+  }
 }

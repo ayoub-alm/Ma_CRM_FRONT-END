@@ -344,4 +344,39 @@ export class ProspectComponent implements OnInit, AfterViewInit {
   }
 
   protected readonly ProspectStatus = ProspectStatus;
+
+  exportToExcel(): void {
+    // Prepare the selected prospects (if any)
+    const selectedProspects = this.selectedRows.size > 0
+        ? this.dataSource.data.filter((row) => this.selectedRows.has(row.id))
+        : undefined;
+
+    // Call the service to export prospects
+    this.prospectService.exportProspects(selectedProspects).subscribe(
+        (response: Blob) => {
+          // Trigger file download
+          this.downloadProspectFile(response, 'Prospects_file.xlsx');
+        },
+        (error) => {
+          console.error('Error exporting data:', error);
+          this.snackBar.open('Failed to export data', 'Close', {
+            duration: 3000,
+          });
+        }
+    );
+  }
+
+  /**
+   * Trigger file download
+   */
+  private downloadProspectFile(blob: Blob, fileName: string): void {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
 }

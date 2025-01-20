@@ -45,7 +45,7 @@
           mat-menu-item class="mat-primary">
           <mat-icon class="p-0 overflow-visible"><i class="bi bi-filetype-csv primary-blue-color"></i></mat-icon>  Import
         </button>
-        <button  mat-menu-item class="mat-primary">
+        <button (click)="exportToExcel()" mat-menu-item class="mat-primary">
           <mat-icon><i class="bi bi-cloud-arrow-down primary-blue-color"></i></mat-icon>  Export
         </button>
       </mat-menu>
