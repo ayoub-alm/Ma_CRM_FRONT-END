@@ -126,16 +126,15 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
     const dialogRef = this.dialog.open(AddUpdateInterlocutorComponent, {
       maxWidth: '900px',
       maxHeight: '100vh',
-      data: interlocutor, // Pass the interlocutor if provided
     });
-
-
 
     dialogRef.afterClosed().pipe(
         filter(response => !!response), // Proceed only if response is not null/undefined
         tap(response => {
-          const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
+          console.log('Dialog closed with response:', response); // Debugging statement
 
+          const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
+          console.log("message " ,existingItemIndex)
           if (existingItemIndex !== -1) {
             // Update existing item
             const updatedData = [...this.dataSource.data];
@@ -147,9 +146,16 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
           }
 
           // Reset paginator to the first page
-          this.paginator.firstPage();
+          if (this.paginator) {
+            this.paginator.firstPage();
+          }
           // Force change detection
           this.cdr.detectChanges();
+        }),
+        catchError(error => {
+          console.error('Error after dialog closed:', error); // Debugging statement
+          this.snackBar.open('Error updating interlocutor list', 'Close', { duration: 3000 });
+          return EMPTY;
         })
     ).subscribe();
   }

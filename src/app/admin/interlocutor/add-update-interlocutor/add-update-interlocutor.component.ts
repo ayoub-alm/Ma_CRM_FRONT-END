@@ -173,6 +173,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
             }),
             catchError((error) => {
               this.snackBar.open(`Error ${error.message}`, "Ok", { duration: 3000 });
+              console.error('Update Error:', error); // Debugging statement
               return throwError(error);
             })
         ).subscribe();
