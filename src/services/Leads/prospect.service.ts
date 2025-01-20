@@ -1,6 +1,6 @@
 import {Injectable} from "@angular/core";
 
-import {HttpClient, HttpRequest} from "@angular/common/http";
+import {HttpClient, HttpParams, HttpRequest} from "@angular/common/http";
 import {Observable, tap} from "rxjs";
 import {CreateCompanyRequest} from "../../dtos/request/CreateCompanyDto";
 import {environment} from '../../environments/environment';
@@ -96,5 +96,19 @@ export class ProspectService {
         tap(interestRequestDto => {
           new ProspectInterestResponseDto(ProspectInterestResponseDto)})
     )
+  }
+
+  exportProspects(selectedProspects?: any[]): Observable<Blob> {
+    let params = new HttpParams();
+    if (selectedProspects && selectedProspects.length > 0) {
+      // Convert the selected prospects to a JSON string
+      const prospectsJson = JSON.stringify(selectedProspects);
+      params = params.set('prospectsJson', prospectsJson);
+    }
+
+    return this.http.get(`${this.baseUrl}/export`, {
+      params,
+      responseType: 'blob', // Expect a binary response (Excel file)
+    });
   }
 }
