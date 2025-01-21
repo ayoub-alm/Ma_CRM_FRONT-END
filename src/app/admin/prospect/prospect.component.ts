@@ -99,6 +99,24 @@ export class ProspectComponent implements OnInit, AfterViewInit {
     }
   }
 
+  filterByStatus(status: string): void {
+    console.log('Selected status:', status); // Debugging: Check the selected status
+    if (status) {
+      const filteredData = this.prospects.value.filter(
+          prospect => prospect.prospectStatus === status
+      );
+      console.log('Filtered data:', filteredData); // Debugging: Check the filtered data
+      this.dataSource.data = filteredData;
+    } else {
+      this.dataSource.data = this.prospects.value; // Reset to full list if no status is selected
+    }
+
+    // Reset paginator to the first page
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
   /**
    * This function allows to filter data in table
    * @param event

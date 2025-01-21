@@ -52,7 +52,7 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Entreprise</th>
           <td mat-cell *matCellDef="let row">{{ row.prospectName }}</td>
         </ng-container>
-        <ng-container matColumnDef="interlocutorName">
+        <ng-container matColumnDef="interlocutorName" [sticky]="true">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Interlocuteur</th>
           <td mat-cell *matCellDef="let row">{{ row.interlocutorName }}</td>
         </ng-container>
