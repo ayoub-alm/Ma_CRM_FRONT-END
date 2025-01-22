@@ -39,7 +39,7 @@ export class ProspectService {
   }
 
   deleteProspectById(prospectId: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/api/prospects/${prospectId}`)
+    return this.http.delete<void>(`${this.baseUrl}/api/prospects/soft-delete/${prospectId}`)
   }
 
   /**

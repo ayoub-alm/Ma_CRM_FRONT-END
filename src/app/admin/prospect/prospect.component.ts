@@ -19,6 +19,7 @@ import {Router, RouterLink} from '@angular/router';
 import {KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {getAllStatusLabel, ProspectStatus} from '../../../enums/prospect.status';
 import {MatTabLink, MatTabNav, MatTabNavPanel} from '@angular/material/tabs';
+import {ConfirmationDialogComponent} from "../../utils/confirmation-dialog/confirmation-dialog.component";
 
 
 @Component({
@@ -166,27 +167,6 @@ export class ProspectComponent implements OnInit, AfterViewInit {
         }
       }
     });
-  }
-
-  /**
-   * This function allows to delete prospect
-   * @param row
-   */
-  deleteProspect(row: any): void {
-    // Ask for confirmation before deleting
-    const confirmation = confirm('Are you sure you want to delete this prospect?');
-    if (confirmation) {
-      // Remove the prospect from the dataSource
-      const index = this.dataSource.data.findIndex(p => p.id === row.id);
-      if (index !== -1) {
-        this.dataSource.data.splice(index, 1);  // Remove from dataSource array
-        this.snackBar.open('Prospect deleted successfully', 'Close', {
-          duration: 3000,
-          horizontalPosition: 'center',
-          verticalPosition: 'bottom',
-        });
-      }
-    }
   }
 
   /**
@@ -344,4 +324,31 @@ export class ProspectComponent implements OnInit, AfterViewInit {
   }
 
   protected readonly ProspectStatus = ProspectStatus;
+
+  /**
+   * This function allows to delete prospect
+   * @param row
+   */
+  async deleteProspect(row: any): Promise<void> {
+    const confirmed = await ConfirmationDialogComponent.open(this.dialog, {
+      title: 'Confirmer la suppression',
+      message: 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+      confirmText: 'Confirmer',
+      cancelText: 'Annuler',
+    });
+
+    if (confirmed) {
+      await this.prospectService.deleteProspectById(row.id).toPromise(); // Call the API to delete
+      // Perform the action
+      const index = this.dataSource.data.findIndex(p => p.id === row.id);
+      if (index !== -1) {
+        this.dataSource.data.splice(index, 1);  // Remove from dataSource array
+
+        this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      }
+    }
+  }
 }
