@@ -81,7 +81,7 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(private interlocutorService: InterlocutorService, private dialog: MatDialog,private snackBar: MatSnackBar,
-              private cdr: ChangeDetectorRef, private router: Router) {
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -149,8 +149,6 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
           if (this.paginator) {
             this.paginator.firstPage();
           }
-          // Force change detection
-          this.cdr.detectChanges();
         }),
         catchError(error => {
           console.error('Error after dialog closed:', error); // Debugging statement
@@ -314,25 +312,43 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
   }
 
   // Delete Use component comfirmation dialog
-  async deleteIntelocutor(row: any): Promise<void> {
-    const confirmed = await ConfirmationDialogComponent.open(this.dialog, {
+  deleteIntelocutor(row: any): void {
+    const dialogRef = ConfirmationDialogComponent.open(this.dialog, {
       title: 'Confirmer la suppression',
       message: 'Êtes-vous sûr de vouloir supprimer cet élément ?',
       confirmText: 'Confirmer',
       cancelText: 'Annuler',
+      confirmButtonColor: 'warn', // Set the confirm button color to red
     });
+    dialogRef.subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.interlocutorService.deleteInterlocutorById(row.id).pipe(tap({
+              next: () => {
+                // Remove the deleted item from the data source
+                const index = this.dataSource.data.findIndex(p => p.id === row.id);
+                if (index !== -1) {
+                  const updatedData = [...this.dataSource.data]; // Create a new array
+                  updatedData.splice(index, 1); // Remove the item
+                  this.dataSource.data = updatedData; // Assign the new array
+                }
 
-    if (confirmed) {
-      await this.interlocutorService.deleteInterlocutorById(row.id).toPromise(); // Call the API to delete
-      // Perform the action
-      const index = this.dataSource.data.findIndex(p => p.id === row.id);
-      if (index !== -1) {
-        this.dataSource.data.splice(index, 1);
-        this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
-          duration: 3000,
-          panelClass: ['error-snackbar']
-        });
+                // Show success message
+                this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
+                  duration: 3000,
+                  panelClass: ['success-snackbar'],
+                });
+              },
+              error: (error) => {
+                // Handle server-side errors
+                this.snackBar.open('Échec de la suppression. Veuillez réessayer.', 'Fermer', {
+                  duration: 3000,
+                  panelClass: ['error-snackbar'],
+                });
+                console.error('Error deleting interlocutor:', error);
+              },
+            })
+        ).subscribe();
       }
-    }
+    });
   }
 }
