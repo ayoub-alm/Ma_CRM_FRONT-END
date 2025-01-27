@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
 import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from "@angular/material/expansion";
 import {MatIcon} from "@angular/material/icon";
@@ -45,7 +45,8 @@ import {AddEditInteractionDialogComponent} from "../add-edit-interaction-dialog/
         MatInput,
         MatLabel,
         ReactiveFormsModule,
-        MatError
+        MatError,
+        MatIconButton
     ],
   templateUrl: './interaction-show.component.html',
   styleUrl: './interaction-show.component.css'
@@ -176,5 +177,10 @@ export class InteractionShowComponent implements OnInit{
                 this.interaction.next(result)
             }
         });
+    }
+
+    removeFile(): void {
+        this.selectedFile = null; // Clear the selected file
+        this.interactionForm.patchValue({ joinFilePath: null }); // Reset the form control
     }
 }

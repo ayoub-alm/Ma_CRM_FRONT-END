@@ -27,6 +27,8 @@ import {MatButton, MatIconButton} from '@angular/material/button';
 import {Router, RouterLink} from '@angular/router';
 import {AddEditInteractionDialogComponent} from './add-edit-interaction-dialog/add-edit-interaction-dialog.component';
 import {MatChip} from "@angular/material/chips";
+import {ConfirmationDialogComponent} from "../../utils/confirmation-dialog/confirmation-dialog.component";
+import {tap} from "rxjs";
 
 
 @Component({
@@ -118,14 +120,14 @@ export class InteractionComponent implements OnInit, AfterViewInit {
     });
   }
 
-  deleteInteraction(row: InteractionResponseDto): void {
-    if (confirm('Are you sure you want to delete this interaction?')) {
-      this.interactionService.softDeleteInteraction(row.id).subscribe(() => {
-        this.snackBar.open('Interaction deleted successfully', 'Close', { duration: 3000 });
-        this.loadInteractions();
-      });
-    }
-  }
+  // deleteInteraction(row: InteractionResponseDto): void {
+  //   if (confirm('Are you sure you want to delete this interaction?')) {
+  //     this.interactionService.softDeleteInteraction(row.id).subscribe(() => {
+  //       this.snackBar.open('Interaction deleted successfully', 'Close', { duration: 3000 });
+  //       this.loadInteractions();
+  //     });
+  //   }
+  // }
 
   toggleRowSelection(rowId: number): void {
     if (this.selectedRows.has(rowId)) {
@@ -163,5 +165,48 @@ export class InteractionComponent implements OnInit, AfterViewInit {
 
   getStatusLabel(report: string | null): string {
     return report !== null ? 'Complet' : 'Pas complet';
+  }
+
+  // Delete Use component comfirmation dialog
+  deleteInteraction(row: any): void {
+    const dialogRef = ConfirmationDialogComponent.open(this.dialog, {
+      title: 'Confirmer la suppression',
+      message: 'Êtes-vous sûr de vouloir supprimer cet Interaction ?',
+      confirmText: 'Confirmer',
+      cancelText: 'Annuler',
+      confirmButtonColor: 'warn', // Set the confirm button color to red
+    });
+
+    dialogRef.subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.interactionService.softDeleteInteraction(row.id).pipe(
+            tap({
+              next: () => {
+                // Remove the deleted item from the data source
+                const index = this.dataSource.data.findIndex(p => p.id === row.id);
+                if (index !== -1) {
+                  const updatedData = [...this.dataSource.data]; // Create a new array
+                  updatedData.splice(index, 1); // Remove the item
+                  this.dataSource.data = updatedData; // Assign the new array
+                }
+
+                // Show success message
+                this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
+                  duration: 3000,
+                  panelClass: ['success-snackbar'],
+                });
+              },
+              error: (error) => {
+                // Handle server-side errors
+                this.snackBar.open('Échec de la suppression. Veuillez réessayer.', 'Fermer', {
+                  duration: 3000,
+                  panelClass: ['error-snackbar'],
+                });
+                console.error('Error deleting interaction:', error);
+              },
+            })
+        ).subscribe();
+      }
+    });
   }
 }

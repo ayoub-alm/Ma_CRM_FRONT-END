@@ -16,3 +16,16 @@
   margin: 0;
 }
 
+.file-drop-zone {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.file-drop-zone button {
+  margin-left: auto; /* Align the button to the right */
+}

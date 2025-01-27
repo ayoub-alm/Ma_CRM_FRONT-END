@@ -100,9 +100,10 @@ export class AddEditInteractionDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.interactionForm = this.fb.group({
+      id: [this.data?.id || null], // Include the ID for updates
       prospectId: [this.data?.prospectId || '', Validators.required],
       interlocutorId: [this.data?.interlocutorId || '', Validators.required],
-      report: [this.data?.report || null],
+      report: [this.data?.report || ''],
       interactionSubject: [this.data?.interactionSubject || '', Validators.required],
       interactionType: [this.data?.interactionType || '', Validators.required],
       planningDate: [this.data?.planningDate || null], // Optional field
@@ -111,6 +112,7 @@ export class AddEditInteractionDialogComponent implements OnInit {
       agentId: [this.data?.agentId || ''],
       affectedToId: [this.data?.affectedToId || ''], // Optional field
     });
+
     // fetch prospect
     this.prospectService.getAllProspects().pipe(
       tap(data => {
@@ -236,6 +238,11 @@ export class AddEditInteractionDialogComponent implements OnInit {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  removeFile(): void {
+    this.selectedFile = null; // Clear the selected file
+    this.interactionForm.patchValue({ joinFilePath: null }); // Reset the form control
   }
 
   protected readonly InteractionType = InteractionType;
