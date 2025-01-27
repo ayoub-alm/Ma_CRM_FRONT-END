@@ -7,6 +7,7 @@ import {
   MatDialogRef, MatDialogTitle
 } from "@angular/material/dialog";
 import {MatButton} from "@angular/material/button";
+import {Observable} from "rxjs";
 
 // Interface defining the structure of the data passed to the confirmation dialog
 export interface ConfirmationDialogData {
@@ -14,6 +15,7 @@ export interface ConfirmationDialogData {
   message: string;
   confirmText: string;
   cancelText: string;
+  confirmButtonColor: string ; // Default color
 }
 
 @Component({
@@ -36,12 +38,12 @@ export class ConfirmationDialogComponent {
   ) {}
 
   // Static method to open the dialog
-  static open(dialog: MatDialog ,data: ConfirmationDialogData): Promise<boolean> {
+  static open(dialog: MatDialog ,data: ConfirmationDialogData): Observable<boolean> {
     const dialogRef = dialog.open(ConfirmationDialogComponent, {
       width: '350px',
       data,
     });
     // The promise resolves to a boolean indicating whether the user confirmed or canceled
-    return dialogRef.afterClosed().toPromise();
+    return dialogRef.afterClosed();
   }
 }
