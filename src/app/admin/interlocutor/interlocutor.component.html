@@ -120,9 +120,9 @@
         <ng-container matColumnDef="status">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut</th>
           <td mat-cell *matCellDef="let row">
-            <mat-chip  style="transform:scale(0.8)" [ngClass]="[getChipClass(row.status), 'text-white']">
-              {{ getProspectStatusLabel(row.status)}}
-            </mat-chip>
+            <button  style="transform:scale(0.8)" [ngClass]="[getChipClass(row.active), 'btn btn-sm p-1 rounded-4 px-3']">
+              {{ getAllStatusInteraction(row.active)}}
+            </button>
           </td>
         </ng-container>
 
