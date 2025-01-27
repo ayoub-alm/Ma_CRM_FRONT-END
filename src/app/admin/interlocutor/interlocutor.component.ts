@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {
@@ -25,7 +25,11 @@ import {MatDialog} from '@angular/material/dialog';
 import {getAllStatusLabel, ProspectStatus} from '../../../enums/prospect.status';
 import {AddUpdateInterlocutorComponent} from './add-update-interlocutor/add-update-interlocutor.component';
 import {InterlocutorResDto} from '../../../dtos/response/interlocutor.dto';
+import {ConfirmationDialogComponent} from "../../utils/confirmation-dialog/confirmation-dialog.component";
+import {MatSnackBar} from "@angular/material/snack-bar";
+
 import {ActiveEnum, getAllStatusInteraction} from "../../../enums/active.enum";
+
 
 @Component({
   selector: 'app-interlocutor',
@@ -79,8 +83,10 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  constructor(private interlocutorService: InterlocutorService, private dialog: MatDialog, private router: Router) {
-    this.links = getAllStatusInteraction(); // Populate with ProspectStatus labels
+
+  constructor(private interlocutorService: InterlocutorService, private dialog: MatDialog,private snackBar: MatSnackBar,
+              private router: Router) {
+        this.links = getAllStatusInteraction(); // Populate with ProspectStatus labels
     // if (this.links.length > 0) {
     //   this.activeLink = this.links[0];
     // }
@@ -128,30 +134,35 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
     const dialogRef = this.dialog.open(AddUpdateInterlocutorComponent, {
       maxWidth: '900px',
       maxHeight: '100vh',
-      data: interlocutor, // Pass the interlocutor if provided
     });
 
-
-
     dialogRef.afterClosed().pipe(
-      filter(response => !!response), // Proceed only if response is not null/undefined
-      tap(response => {
-        const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
+        filter(response => !!response), // Proceed only if response is not null/undefined
+        tap(response => {
+          console.log('Dialog closed with response:', response); // Debugging statement
 
-        console.log("exists", existingItemIndex, response);
-        if (existingItemIndex !== -1) {
-          // Update existing item
-          const updatedData = [...this.dataSource.data];
-          updatedData[existingItemIndex] = response;
-          this.dataSource.data = updatedData; // Assign new array to trigger change detection
-        } else {
-          // Add new item
-          this.dataSource.data = [...this.dataSource.data, response]; // Create new array with added item
-        }
+          const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
+          console.log("message " ,existingItemIndex)
+          if (existingItemIndex !== -1) {
+            // Update existing item
+            const updatedData = [...this.dataSource.data];
+            updatedData[existingItemIndex] = response;
+            this.dataSource.data = updatedData; // Assign new array to trigger change detection
+          } else {
+            // Add new item
+            this.dataSource.data = [...this.dataSource.data, response]; // Create new array with added item
+          }
 
-        // Reset paginator to the first page
-        this.paginator.firstPage();
-      })
+          // Reset paginator to the first page
+          if (this.paginator) {
+            this.paginator.firstPage();
+          }
+        }),
+        catchError(error => {
+          console.error('Error after dialog closed:', error); // Debugging statement
+          this.snackBar.open('Error updating interlocutor list', 'Close', { duration: 3000 });
+          return EMPTY;
+        })
     ).subscribe();
   }
 
@@ -288,5 +299,46 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
 
   showInterlocutorDetails(row: InterlocutorResDto) {
     this.router.navigateByUrl('/admin/interlocutors/'+ row.id)
+  }
+
+  // Delete Use component comfirmation dialog
+  deleteIntelocutor(row: any): void {
+    const dialogRef = ConfirmationDialogComponent.open(this.dialog, {
+      title: 'Confirmer la suppression',
+      message: 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+      confirmText: 'Confirmer',
+      cancelText: 'Annuler',
+      confirmButtonColor: 'warn', // Set the confirm button color to red
+    });
+    dialogRef.subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.interlocutorService.deleteInterlocutorById(row.id).pipe(tap({
+              next: () => {
+                // Remove the deleted item from the data source
+                const index = this.dataSource.data.findIndex(p => p.id === row.id);
+                if (index !== -1) {
+                  const updatedData = [...this.dataSource.data]; // Create a new array
+                  updatedData.splice(index, 1); // Remove the item
+                  this.dataSource.data = updatedData; // Assign the new array
+                }
+
+                // Show success message
+                this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
+                  duration: 3000,
+                  panelClass: ['success-snackbar'],
+                });
+              },
+              error: (error) => {
+                // Handle server-side errors
+                this.snackBar.open('Échec de la suppression. Veuillez réessayer.', 'Fermer', {
+                  duration: 3000,
+                  panelClass: ['error-snackbar'],
+                });
+                console.error('Error deleting interlocutor:', error);
+              },
+            })
+        ).subscribe();
+      }
+    });
   }
 }
