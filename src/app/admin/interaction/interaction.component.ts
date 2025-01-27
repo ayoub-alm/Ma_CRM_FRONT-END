@@ -28,6 +28,7 @@ import {Router, RouterLink} from '@angular/router';
 import {AddEditInteractionDialogComponent} from './add-edit-interaction-dialog/add-edit-interaction-dialog.component';
 import {MatChip} from "@angular/material/chips";
 import {ConfirmationDialogComponent} from "../../utils/confirmation-dialog/confirmation-dialog.component";
+import {tap} from "rxjs";
 
 
 @Component({
@@ -167,25 +168,45 @@ export class InteractionComponent implements OnInit, AfterViewInit {
   }
 
   // Delete Use component comfirmation dialog
-  async deleteInteraction(row: any): Promise<void> {
-    const confirmed = await ConfirmationDialogComponent.open(this.dialog, {
+  deleteInteraction(row: any): void {
+    const dialogRef = ConfirmationDialogComponent.open(this.dialog, {
       title: 'Confirmer la suppression',
-      message: 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+      message: 'Êtes-vous sûr de vouloir supprimer cet Interaction ?',
       confirmText: 'Confirmer',
       cancelText: 'Annuler',
+      confirmButtonColor: 'warn', // Set the confirm button color to red
     });
 
-    if (confirmed) {
-      await this.interactionService.softDeleteInteraction(row.id).toPromise(); // Call the API to delete
-      // Perform the action
-      const index = this.dataSource.data.findIndex(p => p.id === row.id);
-      if (index !== -1) {
-        this.dataSource.data.splice(index, 1);
-        this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
-          duration: 3000,
-          panelClass: ['error-snackbar']
-        });
+    dialogRef.subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.interactionService.softDeleteInteraction(row.id).pipe(
+            tap({
+              next: () => {
+                // Remove the deleted item from the data source
+                const index = this.dataSource.data.findIndex(p => p.id === row.id);
+                if (index !== -1) {
+                  const updatedData = [...this.dataSource.data]; // Create a new array
+                  updatedData.splice(index, 1); // Remove the item
+                  this.dataSource.data = updatedData; // Assign the new array
+                }
+
+                // Show success message
+                this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
+                  duration: 3000,
+                  panelClass: ['success-snackbar'],
+                });
+              },
+              error: (error) => {
+                // Handle server-side errors
+                this.snackBar.open('Échec de la suppression. Veuillez réessayer.', 'Fermer', {
+                  duration: 3000,
+                  panelClass: ['error-snackbar'],
+                });
+                console.error('Error deleting interaction:', error);
+              },
+            })
+        ).subscribe();
       }
-    }
+    });
   }
 }
