@@ -64,6 +64,7 @@ import {StructureService} from '../../../../../services/crm/wms/structure.servic
 import {TemperatureResponseDto} from '../../../../../dtos/response/crm/temperature.response.dto';
 import {TemperatureService} from '../../../../../services/crm/wms/temperature.service';
 import {StorageNeedCreateDto} from '../../../../../dtos/request/crm/storage.need.create.dto';
+import {Router} from '@angular/router';
 
 
 
@@ -138,7 +139,7 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
 
   readonly panelOpenState = signal(false);
   @ViewChild(MatExpansionPanel) expansionPanel!: MatExpansionPanel;
-  constructor(private fb: FormBuilder,private cdr: ChangeDetectorRef, private unloadingTypeService: UnloadingTypeService,
+  constructor(private fb: FormBuilder,private router: Router, private unloadingTypeService: UnloadingTypeService,
               private localStorageService: LocalStorageService, private provisionService: ProvisionService,
               private requirementService: RequirementService,private storageNeedService: StorageNeedService,
               private prospectService: ProspectService, private interlocutorService: InterlocutorService,
@@ -318,6 +319,7 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
         this.storageNeedService.createStorageNeed(storageNeedTOCreate).pipe(
          tap(data => {
            this.snackBar.open("Les besoins du client ont été bien créés. ✅","OK", {duration:3000})
+           this.router.navigateByUrl('/admin/crm/need/wms').then();
          }),
          catchError(err => {
            return of(null)

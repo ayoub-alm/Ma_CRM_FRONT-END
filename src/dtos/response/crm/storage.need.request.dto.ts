@@ -1,6 +1,8 @@
 import { LivreEnum } from '../../../enums/crm/livre.enum';
 import { NeedStatusEnum } from '../../../enums/crm/need.status.enum';
 import { StorageReasonEnum } from '../../../enums/crm/storage.reason.enum';
+import {StockedItemCreateDto} from '../../request/crm/stockedItem.create.dto';
+import {StockedItemResponseDto} from './stocked.itemresponse.dto';
 
 export class StorageNeedResponseDto {
   id!: number; // ID of the storage need
@@ -14,6 +16,7 @@ export class StorageNeedResponseDto {
   productType!: string; // Type of product being stored
   customer!: {id:number,name:string}; // Name of the associated customer
   companyName!: string; // Name of the associated company
+  stockedItems: StockedItemResponseDto[];
 
   constructor(data: any) {
     this.id = data.id;
@@ -28,5 +31,6 @@ export class StorageNeedResponseDto {
     this.companyName = data.customerName;
     this.customer = data.customer;
     this.companyName = data.companyName;
+    this.stockedItems = data.stockedItems;
   }
 }

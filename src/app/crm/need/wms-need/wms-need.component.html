@@ -31,7 +31,7 @@
   <div class="table-container  border-top-5 border-secondary w-100">
     <table mat-table [dataSource]="dataSource" matSort class="text-secondary">
       <!-- Columns: Select -->
-      <ng-container matColumnDef="select">
+      <ng-container matColumnDef="select" >
         <th mat-header-cell *matHeaderCellDef>
           <input type="checkbox" (change)="toggleSelectAll()" [checked]="isAllSelected"  />
         </th>
@@ -44,31 +44,43 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Référence</th>
         <td mat-cell *matCellDef="let row">{{ row.ref.slice(0,10) }}</td>
       </ng-container>
-      <ng-container matColumnDef="customer">
+      <ng-container matColumnDef="customer" sticky>
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Client</th>
-        <td mat-cell *matCellDef="let row">{{ row.customer.name }}</td>
+        <td mat-cell *matCellDef="let row" class="full-width-table-celle">{{ row.customer?.name }}</td>
       </ng-container>
       <ng-container matColumnDef="productType">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Type de produit</th>
-        <td mat-cell *matCellDef="let row">{{ row.productType }}</td>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header  class="full-width-table-celle">Type de produit</th>
+        <td mat-cell *matCellDef="let row"  class="full-width-table-celle">{{ row.productType }}</td>
       </ng-container>
+
+      <ng-container matColumnDef="stockedItem">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header class="full-width-table-celle">Element a stocker</th>
+        <td mat-cell *matCellDef="let row" class="full-width-table-celle">
+          <small>
+            <ng-container *ngFor="let item of row.stockedItems; let i = index" class="d-flex justify-content-start">
+              <small><button class="btn btn btn-sm scale-09 p-1 px-1  rounded-4 bg-info-subtle">{{ item.supportName + " "+item.structureName+" "+ item.temperatureName }} </button></small>
+<!--             <button class="btn btn-sm"> {{ item.supportName + ""+item.structureName+" "+ item.temperatureName }} </button><br>-->
+            </ng-container>
+          </small>
+        </td>
+      </ng-container>
+
       <ng-container matColumnDef="status">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut</th>
         <td mat-cell *matCellDef="let row">
-          <small><button class="scale-08 btn btn btn-sm p-1 px-2 rounded-4 bg-info-subtle">{{ row.status }}</button></small>
+          <small><button class="scale-08 btn btn btn-sm p-1 px-2 rounded-4 bg-info-subtle">{{getNeedStatus(row.status) }}</button></small>
         </td>
-
       </ng-container>
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
-        <td mat-cell *matCellDef="let row">{{ row.expirationDate | date:"dd-MM-yyyy hh:mm"  }}</td>
+      <ng-container matColumnDef="date" >
+        <th mat-header-cell *matHeaderCellDef mat-sort-header >Date</th>
+        <td mat-cell *matCellDef="let row"  class="full-width-table-celle">{{ row.expirationDate | date:"dd-MM-yyyy hh:mm"  }}</td>
       </ng-container>
 
       <ng-container matColumnDef="storageReason">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Raison de stockage</th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header  class="full-width-table-celle">Raison de stockage</th>
         <td mat-cell *matCellDef="let row">{{ row.storageReason  }}</td>
       </ng-container>
-      <ng-container matColumnDef="actions">
+      <ng-container matColumnDef="actions" stickyEnd>
         <th mat-header-cell *matHeaderCellDef></th>
         <td mat-cell *matCellDef="let row">
           <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">

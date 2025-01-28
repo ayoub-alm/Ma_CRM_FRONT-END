@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DatePipe} from '@angular/common';
+import {DatePipe, NgForOf} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {
   MatCell,
@@ -31,6 +31,7 @@ import {InputTextModule} from 'primeng/inputtext';
 import {NeedComponent} from '../need.component';
 import {StorageNeedResponseDto} from '../../../../dtos/response/crm/storage.need.request.dto';
 import {StorageNeedService} from '../../../../services/crm/wms/storage.need.service';
+import {LivreEnum} from '../../../../enums/crm/livre.enum';
 
 @Component({
   selector: 'app-wms-need',
@@ -59,7 +60,8 @@ import {StorageNeedService} from '../../../../services/crm/wms/storage.need.serv
     MatHeaderCellDef,
     MatMenuTrigger,
     InputTextModule,
-    NeedComponent
+    NeedComponent,
+    NgForOf
   ],
   templateUrl: './wms-need.component.html',
   styleUrl: './wms-need.component.css'
@@ -67,7 +69,7 @@ import {StorageNeedService} from '../../../../services/crm/wms/storage.need.serv
 export class WmsNeedComponent implements OnInit, AfterViewInit{
 
   displayedColumns: string[] = ['select', 'ref', 'customer','status', 'productType',
-    'date','storageReason', 'actions'];
+    'date','storageReason','stockedItem', 'actions'];
 
   dataSource: MatTableDataSource<StorageNeedResponseDto> = new MatTableDataSource();
   isAllSelected = false;
@@ -147,4 +149,13 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
     return this.selectedRows.has(rowId);
   }
 
+
+  getNeedStatus(status: string): string {
+   switch (status){
+     case 'CREATION':
+       return "Crée"
+     default:
+     return "N/A"
+   }
+  }
 }
