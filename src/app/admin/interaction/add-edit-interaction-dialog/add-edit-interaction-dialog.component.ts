@@ -101,7 +101,7 @@ export class AddEditInteractionDialogComponent implements OnInit {
   ngOnInit(): void {
     this.interactionForm = this.fb.group({
       id: [this.data?.id || null], // Include the ID for updates
-      prospectId: [this.data?.prospectId || '', Validators.required],
+      customerId: [this.data?.customerId || '', Validators.required],
       interlocutorId: [this.data?.interlocutorId || '', Validators.required],
       report: [this.data?.report || ''],
       interactionSubject: [this.data?.interactionSubject || '', Validators.required],
@@ -118,7 +118,7 @@ export class AddEditInteractionDialogComponent implements OnInit {
       tap(data => {
         this.prospects.next(data);
         if (this.data){
-          this.interactionForm.get('prospectId')?.setValue(this.data?.prospectId)
+          this.interactionForm.get('prospectId')?.setValue(this.data?.customerId)
         }
       }),
     takeUntil(this.destroy$)
@@ -141,7 +141,7 @@ export class AddEditInteractionDialogComponent implements OnInit {
     ).subscribe()
     // subscribe to company changes and select interlocutors based on selected company
     this.interactionForm.get('prospectId')?.valueChanges.pipe(tap(value => {
-      const selectedInterlocutors: InterlocutorResDto[] = this.allInterlocutors.getValue().filter((interlocutor => interlocutor.prospect.id === value ))
+      const selectedInterlocutors: InterlocutorResDto[] = this.allInterlocutors.getValue().filter((interlocutor => interlocutor.customer.id === value ))
       this.interlocutors.next(selectedInterlocutors)
     })).subscribe()
 

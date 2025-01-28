@@ -26,7 +26,7 @@ import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} fr
 import {InterlocutorRequestDto} from '../../../../dtos/request/interlocutorRequestDto';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {InterlocutorService} from '../../../../services/Leads/interlocutor.service';
-import {BehaviorSubject, catchError, tap, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, of, tap, throwError} from 'rxjs';
 import {PhoneDto} from '../../../../dtos/response/phone.dto';
 import {EmailDto} from '../../../../dtos/response/email.dto';
 import {ActiveEnum} from '../../../../enums/active.enum';
@@ -111,6 +111,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
   }
 
   ngOnInit() {
+
     // fet all job tiles and fill prospect to display it in job titles field
       this.jobTileService.getAllJobTitles().pipe(tap(data => {
         this.jobTitles.next(data);
@@ -124,7 +125,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
       this.prospects.next(data);
       // Patch value after prospects are loaded
       if (this.interlocutorToUpdate) {
-        this.interlocutorForm.get('prospectId')?.setValue(this.interlocutorToUpdate.prospect.id);
+        this.interlocutorForm.get('prospectId')?.setValue(this.interlocutorToUpdate.customer.id);
       }
     })).subscribe()
 
@@ -142,7 +143,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
         active: this.interlocutorToUpdate.active.toLowerCase() === 'active',
         phoneNumber: this.interlocutorToUpdate.phoneNumber?.number,
         emailAddress: this.interlocutorToUpdate.emailAddress?.address,
-        prospectId: this.interlocutorToUpdate.prospect.id,
+        prospectId: this.interlocutorToUpdate.customer.id,
         jobTitle: this.interlocutorToUpdate.jobTitle ? this.interlocutorToUpdate.jobTitle.id : null,
         departmentId: this.interlocutorToUpdate.department ? this.interlocutorToUpdate.department.id : null
       });
@@ -174,7 +175,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
             catchError((error) => {
               this.snackBar.open(`Error ${error.message} ⛔`, "Ok", { duration: 3000 });
               console.error('Update Error:', error); // Debugging statement
-              return throwError(error);
+              return of(null)
             })
         ).subscribe();
 
@@ -216,7 +217,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
         active: this.interlocutorToUpdate.active.toLowerCase() === 'active',
         phoneNumber: this.interlocutorToUpdate.phoneNumber?.number,
         emailAddress: this.interlocutorToUpdate.emailAddress?.address,
-        prospectId: this.interlocutorToUpdate.prospect.id, // Matches the value in prospect options
+        prospectId: this.interlocutorToUpdate.customer.id, // Matches the value in prospect options
         jobTitle: this.interlocutorToUpdate.jobTitle ? this.interlocutorToUpdate.jobTitle.id : null,
         departmentId: this.interlocutorToUpdate.department ? this.interlocutorToUpdate.department.id : null
       });

@@ -82,7 +82,6 @@ export class ProspectComponent implements OnInit, AfterViewInit {
           // Customize filter logic for specific columns
           return data.name.toLowerCase().includes(filter) ||
             data.email.toLowerCase().includes(filter) ||
-            data.industry.name.toLowerCase().includes(filter) ||
             data.phone.toLowerCase().includes(filter);
         };
       },
@@ -332,9 +331,10 @@ export class ProspectComponent implements OnInit, AfterViewInit {
   deleteProspect(row: any): void {
     const dialogRef = ConfirmationDialogComponent.open(this.dialog, {
       title: 'Confirmer la suppression',
-      message: 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+      message: 'Êtes-vous sûr de vouloir supprimer cet prospect ?',
       confirmText: 'Confirmer',
       cancelText: 'Annuler',
+      confirmButtonColor: 'warn'
     });
 
     dialogRef.subscribe(async (confirmed: boolean) => {

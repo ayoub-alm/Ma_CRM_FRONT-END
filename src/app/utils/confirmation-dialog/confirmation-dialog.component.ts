@@ -15,7 +15,7 @@ export interface ConfirmationDialogData {
   message: string;
   confirmText: string;
   cancelText: string;
-  confirmButtonColor: string ; // Default color
+  confirmButtonColor: string; // Default color
 }
 
 @Component({
@@ -40,7 +40,7 @@ export class ConfirmationDialogComponent {
   // Static method to open the dialog
   static open(dialog: MatDialog ,data: ConfirmationDialogData): Observable<boolean> {
     const dialogRef = dialog.open(ConfirmationDialogComponent, {
-      width: '350px',
+      width: '450px',
       data,
     });
     // The promise resolves to a boolean indicating whether the user confirmed or canceled

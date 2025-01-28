@@ -104,10 +104,11 @@ export class InterlocutorShowComponent implements OnInit{
   }
 
   openUpdateInterlocutorDialog(interlocutor?: InterlocutorResDto): void {
+    console.log(this.interlocutor.getValue())
     const dialogRef = this.dialog.open(AddUpdateInterlocutorComponent, {
       maxWidth: '900px',
       maxHeight: '100vh',
-      data: this.interlocutor.getValue(), // Pass the interlocutor if provided
+      data: this.interlocutor.getValue(),
     });
 
 

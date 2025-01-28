@@ -169,7 +169,6 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
               interestId,
               $event.checked
             );
-            alert(3)
            // this.subscriptions.push(
                this.prospectService.updateInterest(interestRequest).pipe(
                tap(data => {

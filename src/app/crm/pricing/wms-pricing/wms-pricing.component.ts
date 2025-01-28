@@ -29,6 +29,7 @@ import {FormControl} from "@angular/forms";
 export interface ExampleTab {
   label: string;
   content: string;
+  icon:string;
 }
 
 @Component({
@@ -82,11 +83,11 @@ export class WmsPricingComponent implements OnInit, AfterViewInit{
     this.asyncTabs = new Observable((observer: Observer<ExampleTab[]>) => {
       setTimeout(() => {
         observer.next([
-          {label: 'Depotage', content: 'Content 1'},
-          {label: 'Requirement', content: 'Content 2'},
-          {label: 'Provision', content: 'Content 3'},
-          {label: 'Management fees', content: 'Content 4'},
-          {label: 'Insurance', content: 'Content 5'},
+          { label: 'Depotage', content: 'Content 1', icon: 'local_shipping' },
+          { label: 'Requirement', content: 'Content 2', icon: 'list_alt' },
+          { label: 'Provision', content: 'Content 3', icon: 'receipt' },
+          { label: 'Management fees', content: 'Content 4', icon: 'money' },
+          { label: 'Insurance', content: 'Content 5', icon: 'security' }
         ]);
       }, 1000);
     });

@@ -12,7 +12,7 @@ export class InterlocutorResDto{
   emailAddress:EmailDto;
   phoneNumber:PhoneDto;
   active: ActiveEnum;
-  prospect:ProspectResponseDto;
+  customer:ProspectResponseDto;
   department:DepartmentModel;
   jobTitle: JobTitleResponseDto;
 
@@ -23,7 +23,7 @@ export class InterlocutorResDto{
     this.emailAddress = data.emailAddress;
     this.phoneNumber = data.phoneNumber;
     this.active = data.active;
-    this.prospect = data.prospect;
+    this.customer = data.custumer;
     this.department = data.department;
     this.jobTitle = data.jobTitle;
   }

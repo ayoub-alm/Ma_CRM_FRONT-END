@@ -47,27 +47,26 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
       name: 'Produits & Services',
       icon: 'inventory',
       route: '/crm/products'
-    }, {name: 'Contrats', icon: 'assignment', route: '/crm/contracts'}, {
-      name: 'Tarifs',
-      icon: 'price_change',
-      route: '/admin/crm/pricing'
-    }, {name: 'Besoins', icon: 'checklist', route: '/admin/crm/need'}, {
-      name: 'Devis',
-      icon: 'request_quote',
-      route: '/crm/quotes'
-    }, {name: 'Commandes', icon: 'shopping_cart', route: '/crm/orders'}, {
-      name: 'Bons de livraison',
-      icon: 'local_shipping',
-      route: '/crm/delivery-notes'
-    }, {name: 'Factures', icon: 'receipt_long', route: '/admin/crm/invoices'}, {
-      name: 'Recouvrement',
-      icon: 'account_balance_wallet',
-      route: '/crm/collections'
-    }, {name: 'Avoirs', icon: 'credit_score', route: '/crm/credits'}, {
+    }, {
       name: 'Clients',
       icon: 'contacts',
       route: '/crm/credits'
-    },],
+    }, {
+      name: 'Tarifs',
+      icon: 'price_change',
+      route: '/admin/crm/pricing'
+    }, {name: 'Besoins', icon: 'checklist', route: '/admin/crm/need/wms'}, {
+      name: 'Offre',
+      icon: 'request_quote',
+      route: '/crm/quotes'
+    },{name: 'Contrats', icon: 'assignment', route: '/crm/contracts'}
+    , {name: 'Factures', icon: 'receipt_long', route: '/admin/crm/invoices'}, {
+      name: 'Recouvrement',
+      icon: 'account_balance_wallet',
+      route: '/crm/collections'
+    },
+      {name: 'Avoirs', icon: 'credit_score', route: '/crm/credits'},
+    ],
   }, tms: {
     icon: 'local_shipping',
     items: [{name: 'Deliveries', icon: 'local_shipping', route: '/tms/deliveries'}, {
@@ -186,9 +185,6 @@ export class IndexComponent implements OnInit, AfterViewInit {
         this.activeRouteParams = this.activeRoute.snapshot.firstChild?.params || {};
         this.activeQueryParams = this.activeRoute.snapshot.queryParams;
 
-        console.log('Active Route:', this.currentRoute);
-        console.log('Route Parameters:', this.activeRouteParams);
-        console.log('Query Parameters:', this.activeQueryParams);
       });
   }
 

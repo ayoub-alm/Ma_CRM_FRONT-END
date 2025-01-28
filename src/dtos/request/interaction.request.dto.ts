@@ -1,5 +1,5 @@
 export interface InteractionRequestDto {
-  prospectId: number;
+  customerId: number;
   interlocutorId?: number;
   report?: string;
   interactionSubject: string; // Enum string value (InteractionSubject)

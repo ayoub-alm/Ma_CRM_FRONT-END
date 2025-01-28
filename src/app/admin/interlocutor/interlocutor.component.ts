@@ -131,9 +131,11 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
    * This function allows to open dialog to add new interlocutor
    */
   openAddInterlocutor(interlocutor?: InterlocutorResDto): void {
+    console.log(interlocutor);
     const dialogRef = this.dialog.open(AddUpdateInterlocutorComponent, {
       maxWidth: '900px',
       maxHeight: '100vh',
+      data: this.interlocutors.getValue().find(interlocutor => interlocutor.id === interlocutor.id),
     });
 
     dialogRef.afterClosed().pipe(
@@ -305,7 +307,7 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
   deleteIntelocutor(row: any): void {
     const dialogRef = ConfirmationDialogComponent.open(this.dialog, {
       title: 'Confirmer la suppression',
-      message: 'Êtes-vous sûr de vouloir supprimer cet élément ?',
+      message: 'Êtes-vous sûr de vouloir supprimer cet Interlocuteur ?',
       confirmText: 'Confirmer',
       cancelText: 'Annuler',
       confirmButtonColor: 'warn', // Set the confirm button color to red

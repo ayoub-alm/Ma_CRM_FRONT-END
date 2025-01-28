@@ -1,6 +1,6 @@
 export class InteractionResponseDto {
   id: number;
-  prospectId: number;
+  customerId: number;
   prospectName: string;
   interlocutorId?: number;
   interlocutorName?: string;
@@ -19,7 +19,7 @@ export class InteractionResponseDto {
 
   constructor(data: any) {
     this.id = data.id;
-    this.prospectId = data.prospectId;
+    this.customerId = data.customerId;
     this.prospectName = data.prospectName;
     this.interlocutorId = data.interlocutorId;
     this.interlocutorName = data.interlocutorName;

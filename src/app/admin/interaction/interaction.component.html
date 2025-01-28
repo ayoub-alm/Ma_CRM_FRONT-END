@@ -49,20 +49,20 @@
         </ng-container>
         <!-- Columns: Fields -->
         <ng-container matColumnDef="prospectName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Entreprise</th>
-          <td mat-cell *matCellDef="let row">{{ row.prospectName }}</td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >Entreprise</th>
+          <td mat-cell *matCellDef="let row" class="full-width-table-celle">{{ row.prospectName }}</td>
         </ng-container>
         <ng-container matColumnDef="interlocutorName">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Interlocuteur</th>
-          <td mat-cell *matCellDef="let row">{{ row.interlocutorName }}</td>
+          <td mat-cell *matCellDef="let row" class="full-width-table-celle" >{{ row.interlocutorName }}</td>
         </ng-container>
         <ng-container matColumnDef="interactionSubject">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Sujet</th>
-          <td mat-cell *matCellDef="let row">{{ row.interactionSubject }}</td>
+          <td mat-cell *matCellDef="let row" class="full-width-table-celle">{{ row.interactionSubject }}</td>
         </ng-container>
         <ng-container matColumnDef="interactionType">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-          <td mat-cell *matCellDef="let row">{{ row.interactionType }}</td>
+          <td mat-cell *matCellDef="let row" class="full-width-table-celle">{{ row.interactionType }}</td>
         </ng-container>
         <ng-container matColumnDef="affectedTo">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Affecté à</th>

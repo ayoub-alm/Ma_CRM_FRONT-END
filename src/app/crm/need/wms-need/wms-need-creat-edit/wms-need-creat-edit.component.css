@@ -29,3 +29,7 @@ td.mat-cell {
   font-weight: bold;
   text-transform: uppercase; /* Optional: style the header text */
 }
+/*show icon to remove provision from item to store */
+.provision-tag:hover .provision-tag-remove{
+  display: inline !important;
+}

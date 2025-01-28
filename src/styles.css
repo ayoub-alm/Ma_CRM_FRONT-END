@@ -24,6 +24,9 @@ mat-icon {
   height: 10px!important;
 }
 
+.full-width-table-celle{
+  white-space: nowrap;
+}
 
 
 .mat-mdc-row:hover .mat-mdc-cell {

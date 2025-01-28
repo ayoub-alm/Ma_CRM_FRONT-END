@@ -9,7 +9,7 @@ import {environment} from '../../environments/environment';
   providedIn: 'root'
 })
 export class InteractionService {
-  private readonly baseUrl = environment.baseUrl +'/api/interaction'; // Adjust base URL as needed
+  private readonly baseUrl = environment.baseUrl +'/api/interactions'; // Adjust base URL as needed
 
   constructor(private http: HttpClient) {}
 
@@ -49,7 +49,7 @@ export class InteractionService {
    * @returns Observable of InteractionResponseDto.
    */
   createOrUpdateInteraction(interaction: InteractionRequestDto): Observable<InteractionResponseDto> {
-    return this.http.post<InteractionResponseDto>(`${this.baseUrl}/create`, interaction);
+    return this.http.post<InteractionResponseDto>(`${this.baseUrl}`, interaction);
   }
 
   /**
@@ -58,7 +58,7 @@ export class InteractionService {
    * @returns Observable of void.
    */
   softDeleteInteraction(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/interactions/soft-delete/${id}`);
+    return this.http.delete<void>(`${this.baseUrl}/soft-delete/${id}`);
   }
 
   /**

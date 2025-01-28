@@ -7,21 +7,13 @@ import {
   OnInit,
   signal, viewChild, ViewChild
 } from '@angular/core';
-import {
-  MAT_DIALOG_DATA,
-  MatDialogActions,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle
-} from '@angular/material/dialog';
-import {InteractionResponseDto} from '../../../../../dtos/response/interaction.response.dto';
 import {MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
 import {MatInput, MatInputModule} from '@angular/material/input';
 import {MatButton, MatButtonModule, MatIconButton} from '@angular/material/button';
 import {MatOption, provideNativeDateAdapter} from '@angular/material/core';
 import {MatGridList, MatGridTile} from '@angular/material/grid-list';
 import {MatSelect} from '@angular/material/select';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatIcon, MatIconModule} from '@angular/material/icon';
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {
@@ -50,6 +42,30 @@ import {StockedItemCreateDto} from '../../../../../dtos/request/crm/stockedItem.
 import NewCommandModule from '@angular/cli/src/commands/new/cli';
 import {ProvisionService} from '../../../../../services/crm/wms/provision.service.dto';
 import {ProvisionResponseDto} from '../../../../../dtos/response/crm/provision.response.dto';
+import {RequirementResponseDto} from '../../../../../dtos/response/crm/requirement.response.dto';
+import {RequirementService} from '../../../../../services/crm/wms/requirement.service';
+import {StorageManagementFeesResponseDto} from '../../../../../dtos/response/crm/storage.management.fees.response.dto';
+import {StorageManagementFeesService} from '../../../../../services/crm/wms/storage.management.fees.service';
+import {StorageNeedService} from '../../../../../services/crm/wms/storage.need.service';
+import {StorageReasonEnum} from '../../../../../enums/crm/storage.reason.enum';
+import {LivreEnum} from '../../../../../enums/crm/livre.enum';
+import {MatCard} from '@angular/material/card';
+import {MatDivider} from '@angular/material/divider';
+import {MatChip} from '@angular/material/chips';
+import {ProspectResponseDto} from '../../../../../dtos/response/prospect.response.dto';
+import {ProspectService} from '../../../../../services/Leads/prospect.service';
+import {InterlocutorResDto} from '../../../../../dtos/response/interlocutor.dto';
+import {InterlocutorService} from '../../../../../services/Leads/interlocutor.service';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {SupportResponseDto} from '../../../../../dtos/response/crm/support.response.dto';
+import {SupportService} from '../../../../../services/crm/wms/support.service';
+import {StructureResponseDto} from '../../../../../dtos/response/crm/structure.response.dto';
+import {StructureService} from '../../../../../services/crm/wms/structure.service';
+import {TemperatureResponseDto} from '../../../../../dtos/response/crm/temperature.response.dto';
+import {TemperatureService} from '../../../../../services/crm/wms/temperature.service';
+import {StorageNeedCreateDto} from '../../../../../dtos/request/crm/storage.need.create.dto';
+
+
 
 @Component({
   selector: 'app-wms-need-creat-edit',
@@ -74,21 +90,23 @@ import {ProvisionResponseDto} from '../../../../../dtos/response/crm/provision.r
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatDatepickerModule, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatHeaderRow, MatRow, MatRowDef, MatMenu, MatMenuItem, MatMenuTrigger,
+    MatDatepickerModule, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatHeaderRow, MatRow, MatRowDef, MatMenu, MatMenuItem, MatMenuTrigger, MatCard, MatDivider, FormsModule, MatChip,
   ],
   templateUrl: './wms-need-creat-edit.component.html',
   styleUrl: './wms-need-creat-edit.component.css',
   providers: [provideNativeDateAdapter()],
 })
 export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
+  customers: BehaviorSubject<ProspectResponseDto[]> = new BehaviorSubject<ProspectResponseDto[]>([]);
+  interlocutors: BehaviorSubject<InterlocutorResDto[]> = new BehaviorSubject<InterlocutorResDto[]>([]);
+  filteredInterlocutors: BehaviorSubject<InterlocutorResDto[]> = new BehaviorSubject<InterlocutorResDto[]>([]);
   generalInfoFormGroup!: FormGroup;
   itemToStoreFormGroup!: FormGroup;
   unloadForm!: FormGroup;
-  provisionForm!: FormGroup;
-  managementFeesForm!: FormGroup;
-  insuranceForm!: FormGroup;
+  requirementForm!: FormGroup;
 
-
+  storageReasons: { key: string; value: string }[] = [];
+  livreStatuses: { key: string; value: string }[] = [];
   itemsToStore: BehaviorSubject<StockedItemCreateDto[]> =  new BehaviorSubject<StockedItemCreateDto[]>([])
   itemsToStoredisplayedColumns: string[] = [
     'conditionnement',
@@ -96,84 +114,117 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
     'temperatureStockage',
     'largeur',
     'hauteur',
-    'actions'
+    'provisions',
+    'actions',
   ];
   // unloading type infos
   unloadingTypes: BehaviorSubject<UnloadingTypeResponseDto[]> =  new BehaviorSubject<UnloadingTypeResponseDto[]>([])
   selectedUnloadingTypes:  BehaviorSubject<UnloadingTypeResponseDto[]> =  new BehaviorSubject<UnloadingTypeResponseDto[]>([])
-  unloadingDisplayedColumns: string[] = [ 'name', "price","unite", "actions"];
+  unloadingDisplayedColumns: string[] = [ 'name',"unite", "actions"];
   unloadingDataSource: BehaviorSubject<UnloadingTypeResponseDto[]> = new BehaviorSubject<UnloadingTypeResponseDto[]>([]);
   // provisions infos
   provisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
   selectedProvisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
-  provisionsDisplayedColumns: string[] = [ 'name', "price","unite", "actions"];
+  provisionsDisplayedColumns: string[] = [ 'name',"unite", "actions"];
+  // requirements infos
+  requirements: BehaviorSubject<RequirementResponseDto[]> =  new BehaviorSubject<RequirementResponseDto[]>([])
+  selectedRequirements: BehaviorSubject<RequirementResponseDto[]> =  new BehaviorSubject<RequirementResponseDto[]>([])
+  requirementsColumns: string[] = [ 'name', "unite", "actions"];
+
+  supports: BehaviorSubject<SupportResponseDto[]> = new BehaviorSubject<SupportResponseDto[]>([]);
+  structures: BehaviorSubject<StructureResponseDto[]> = new BehaviorSubject<StructureResponseDto[]>([]);
+  temperatures: BehaviorSubject<TemperatureResponseDto[]> = new BehaviorSubject<TemperatureResponseDto[]>([]);
+
+
   readonly panelOpenState = signal(false);
   @ViewChild(MatExpansionPanel) expansionPanel!: MatExpansionPanel;
-  accordion = viewChild.required(MatAccordion);
   constructor(private fb: FormBuilder,private cdr: ChangeDetectorRef, private unloadingTypeService: UnloadingTypeService,
-              private localStorageService: LocalStorageService, private provisionService: ProvisionService) {}
+              private localStorageService: LocalStorageService, private provisionService: ProvisionService,
+              private requirementService: RequirementService,private storageNeedService: StorageNeedService,
+              private prospectService: ProspectService, private interlocutorService: InterlocutorService,
+              private snackBar: MatSnackBar,private supportService: SupportService, private structureService: StructureService,
+              private temperatureServices: TemperatureService) {}
 
   ngOnInit(): void {
     this.initializeGeneralInfoForm()
     this.initializeItemToStoreForm()
     this.initializeUnloadForm()
-    this.initializeProvisionForm()
-    this.initializeManagementFeesForm()
-    this.initializeInsuranceForm()
+    this.initializeRequirementForm()
     this.generalInfoFormGroup.get('livre')?.setValue("Ouvert")
 
     this.loadProvisions()
     this.loadUnloadingTypes()
-  }
+    this.loadRequirements()
+    this.loadStorageReasons();
+    this.loadLivreStatuses();
 
+    this.loadProspects();
+    this.loadInterlocutors();
+    this.subscribeToCustomFieldChanges();
+    this.loadSupport();
+    this.loadStructures();
+    this.loadTemperatures();
+  }
   /**
    *
    */
   ngAfterViewInit(): void {
     this.generalInfoFormGroup.get('livre')?.setValue("Ouvert")
   }
-
   /**
    *
    */
   initializeGeneralInfoForm(): void{
      this.generalInfoFormGroup = this.fb.group({
-       statut: ['', Validators.required],
+       // statut: ['', Validators.required],
        dateReception: [ new Date(), Validators.required],
-       entreprise: ['', Validators.required],
-       interlocuteurs: ['', Validators.required],
+       costumer: ['', Validators.required],
+       interlocuteurs: [''],
        typeProduits: ['', Validators.required],
        dureeStockage: [12, [Validators.required, Validators.min(1)]],
        nombreSku: ['', Validators.required],
        raisonStockage: ['', Validators.required],
        livre: ['', Validators.required],
-       tauxCommandes: ['', [Validators.required, Validators.min(0)]],
+       tauxCommandes: ['', [Validators.min(0)]],
      });
   }
 
   initializeItemToStoreForm(): void {
     this.itemToStoreFormGroup = this.fb.group({
-      conditionnement: ['', Validators.required],
-      structure: [''],
-      temperatureStockage: ['', Validators.required],
-      largeur: ['', [Validators.min(0)]],
-      longueur: ['', [Validators.min(0)]],
-      hauteur: ['', [Validators.min(0)]],
-      hauteurMax: ['', [Validators.min(0)]],
-      poids: ['', [Validators.min(0)]],
+      supportId: ['', Validators.required],
+      structureId: [''],
+      temperatureId: ['', Validators.required],
+      larger: ['', [Validators.min(0)]],
+      length: ['', [Validators.min(0)]],
+      height: ['', [Validators.min(0)]],
+      weight: ['', [Validators.min(0)]],
       metreCubeMax: ['', [Validators.min(0)]],
-      niveauxGerbabilite: [0, [Validators.required, Validators.min(0)]],
+      StackabilityLevels: ["", [Validators.min(0)]],
       volumeStock: ['', [Validators.min(0)]],
-      nombreUvc: ['', [Validators.min(0)]],
+      numberOfUvc: ['', [Validators.min(0)]],
+      numberOfUc: ['', [Validators.min(0)]],
+      provisions: [[], Validators.required],
     });
-  }
 
+    this.itemToStoreFormGroup.get("provisions")?.valueChanges.pipe(
+      tap((selectedProvisionIds: number[]) => {
+        // Filter provisions based on selected IDs
+        const  filteredProvisions = this.provisions.getValue()
+          .filter(provision => selectedProvisionIds.includes(provision.id));
+        this.selectedProvisions.next(filteredProvisions);
+      }),
+      catchError(err => {
+        console.error('Error processing provisions value changes:', err);
+        return of([]); // Return an empty array on error
+      })
+    ).subscribe();
+  }
   /**
    *
    */
   initializeUnloadForm():void {
     this.unloadForm = this.fb.group({
-      unload: [[], Validators.required],
+      unload: [[]],
     })
 
     this.unloadForm.get("unload")?.valueChanges.pipe(
@@ -189,50 +240,42 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
   /**
    *
    */
-  initializeProvisionForm(){
-    this.provisionForm = this.fb.group({
-      provision: [[], Validators.required],
-    })
-
-    this.provisionForm.get("provision")?.valueChanges.pipe(
-      map((data: any[]) => {
-        return this.provisions.getValue().filter(provision => data.includes(provision.id));
-      })
-    ).subscribe(filteredProvisions => {
-      this.selectedProvisions.next(filteredProvisions);
-      // this.unloadingDataSource.next(filteredProvisions);
+  initializeRequirementForm() {
+    this.requirementForm = this.fb.group({
+      requirement: [[]], // Default as an array
     });
+
+    this.requirementForm.get('requirement')?.valueChanges.pipe(tap((data: any) => {
+      const filteredRequirement: RequirementResponseDto[] = this.requirements.getValue()
+        .filter(requirement => data.includes(requirement.id));
+      this.selectedRequirements.next(filteredRequirement);
+    })).subscribe();
   }
 
-  initializeManagementFeesForm():void {
-    this.managementFeesForm = this.fb.group({
-      fees: [[], ]
-    })
-  }
-
-  initializeInsuranceForm(): void{
-    this.insuranceForm = this.fb.group({
-      insurance: [[],],
-    })
-  }
-
+  /**
+   *
+   */
   addItemToItemToStore() {
     if (this.itemToStoreFormGroup.valid) {
       // Extract the form values
       const item: StockedItemCreateDto = this.itemToStoreFormGroup.value;
+      item.provisions = this.selectedProvisions.getValue().map(provision => new ProvisionResponseDto(provision));
       this.itemsToStore.next([...this.itemsToStore.getValue(), item]);
       // Pass the DTO to your desired service or processing logic
       console.log('New Item to Store:', item);
-
-      // Call your service or processing logic here
-      // Example: this.itemToStoreService.create(item).subscribe(...);
+      // Reset provisions and clear selectedProvisions
+      this.itemToStoreFormGroup.patchValue({ provisions: [] });
+      this.selectedProvisions.next([]);
     } else {
-      console.error('Form is invalid. Please check the required fields.');
+      this.itemToStoreFormGroup.markAllAsTouched();
+      this.snackBar.open("Le formulaire n'est pas valide. Veuillez vérifier les champs obligatoires.", "Ok",{duration:3000})
     }
   }
 
-
-  loadProvisions(): void {
+  /**
+   *
+   */
+  loadProvisions(): void{
     this.provisionService.getAllProvisionsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
       tap(data => {
         this.provisions.next(data); // Perform the side effect of updating provisions
@@ -244,6 +287,9 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
     ).subscribe();
   }
 
+  /**
+   *
+   */
   loadUnloadingTypes(): void{
     // get unloading types and fill the select box by pushing data in unloading variable
     this.unloadingTypeService.getUnloadingTypeByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
@@ -251,5 +297,219 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
         this.unloadingTypes.next(unloadingTypes)
       })
     ).subscribe()
+  }
+
+  /**
+   *
+   */
+  loadRequirements(){
+    this.requirementService.getRequirementsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
+      tap(data => {
+      this.requirements.next(data);
+    })).subscribe()
+  }
+
+  /**
+   *
+   */
+  createStorageNeed(){
+    const storageNeedTOCreate = this.createNewNeedRequestDto();
+    if (storageNeedTOCreate){
+        this.storageNeedService.createStorageNeed(storageNeedTOCreate).pipe(
+         tap(data => {
+           this.snackBar.open("Les besoins du client ont été bien créés. ✅","OK", {duration:3000})
+         }),
+         catchError(err => {
+           return of(null)
+         })
+        ).subscribe()
+    }
+  }
+
+  /**
+   *
+   */
+  createNewNeedRequestDto(): StorageNeedCreateDto | void {
+    this.generalInfoFormGroup.markAllAsTouched();
+    this.itemToStoreFormGroup.markAllAsTouched();
+    this.unloadForm.markAllAsTouched();
+    this.requirementForm.markAllAsTouched();
+
+    if (!this.generalInfoFormGroup.valid || !this.itemToStoreFormGroup.valid) {
+      this.snackBar.open("Les formulaires ne sont pas valide. Veuillez vérifier les champs obligatoires.⛔", "OK", {duration:3000})
+      return;
+    }else{
+      // Extract data from the form and BehaviorSubjects
+      const generalInfo = this.generalInfoFormGroup.value;
+      const stockedItems = this.itemsToStore.getValue();
+      const unloadingTypes = this.selectedUnloadingTypes.getValue().map(item => item.id);
+      const requirements = this.selectedRequirements.getValue().map(item => item.id);
+      // Create StorageNeedCreateDto
+      const newNeedRequestDto = new StorageNeedCreateDto(
+        this.generateUUID(),
+        generalInfo.raisonStockage,
+        generalInfo.statut,
+        generalInfo.livre,
+        new Date(),
+        generalInfo.dureeStockage,
+        generalInfo.nombreSku,
+        generalInfo.typeProduits,
+        generalInfo.costumer,
+        this.localStorageService.getItem("selected_company_id"),
+        stockedItems,
+        unloadingTypes,
+        requirements
+      );
+
+      console.log('New Need Request DTO:', newNeedRequestDto);
+      return newNeedRequestDto;
+    }
+
+
+  }
+
+  /**
+   *
+   * @private
+   */
+  private generateUUID(): string {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  }
+
+  /**
+   *
+   */
+  loadStorageReasons(): void {
+    this.storageReasons = Object.keys(StorageReasonEnum).map((key) => ({
+      key,
+      value: StorageReasonEnum[key as keyof typeof StorageReasonEnum],
+    }));
+  }
+
+  /**
+   *
+   */
+  loadLivreStatuses(): void {
+    this.livreStatuses = Object.entries(LivreEnum).map(([key, value]) => ({
+      key,
+      value,
+    }));
+  }
+
+  /**
+   * Removes a specific provision from an item's provisions list.
+   * @param element - The `StockedItemCreateDto` item from which the provision needs to be removed.
+   * @param prov - The `ProvisionResponseDto` provision to remove.
+   */
+  removeProvision(element: StockedItemCreateDto, prov: ProvisionResponseDto): void {
+    // Find the specific item in the BehaviorSubject's list
+    const item = this.itemsToStore.getValue().find((item) => item === element);
+    if (item) {
+      // Update the provisions list by excluding the one that matches the given provision's ID
+      item.provisions = item.provisions.filter((p) => p.id !== prov.id);
+      // Emit the updated list of items to ensure changes are reflected wherever this BehaviorSubject is used
+      this.itemsToStore.next([...this.itemsToStore.getValue()]);
+    }
+  }
+
+  /**
+   * Removes an item entirely from the `itemsToStore` list.
+   * @param element - The `StockedItemCreateDto` item to remove from the BehaviorSubject.
+   */
+  removeItemToStore(element: StockedItemCreateDto): void {
+    // Get the current list of items and filter out the element to remove
+    const updatedItems = this.itemsToStore.getValue().filter((itemToStore) => itemToStore !== element);
+    // Emit the updated list of items to ensure changes are reflected wherever this BehaviorSubject is used
+    this.itemsToStore.next(updatedItems);
+  }
+
+  /**
+   * this function allows to load costumers-prospects
+   */
+  loadProspects(): void{
+    this.prospectService.getAllProspects().pipe(
+      tap(data => this.customers.next(data)),
+      catchError(err => {
+        console.error(err)
+        return of(null)
+      })
+    ).subscribe()
+  }
+
+  /**
+   * this function allows to get all interlocutors
+   */
+  loadInterlocutors():void{
+    this.interlocutorService.getAllInterlocutors().pipe(
+      tap(data => {
+        this.interlocutors.next(data);
+        this.filteredInterlocutors.next(data)
+      }),
+      catchError(err => {
+        console.error(err);
+        return of(null);
+      })
+    ).subscribe()
+  }
+
+  /**
+   * this function allows to load support
+   */
+  loadSupport(): void{
+    this.supportService.getAllSupportsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
+      tap((response: SupportResponseDto[])=>{
+        this.supports.next(response);
+      }),
+      catchError((err) => {
+        console.error(err);
+        return of(null);
+      })
+    ).subscribe()
+  }
+
+  /**
+   * this function allows to load structures by company ID
+   */
+  loadStructures(): void{
+    this.structureService.getAllStructuresByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
+      tap((response: StructureResponseDto[])=>{
+        this.structures.next(response);
+      }),
+      catchError((err) => {
+        console.error(err);
+        return of(null);
+      })
+    ).subscribe()
+  }
+
+
+  /**
+   * this function allows to load structures by company ID
+   */
+  loadTemperatures(): void{
+    this.temperatureServices.getAllTemperaturesByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
+      tap((response: TemperatureResponseDto[])=>{
+        this.temperatures.next(response);
+      }),
+      catchError((err) => {
+        console.error(err);
+        return of(null);
+      })
+    ).subscribe()
+  }
+
+  /**
+   * this function allows to subscribe to costumer field and filter interlocutors based on selected Costumer
+   */
+  private subscribeToCustomFieldChanges() {
+     this.generalInfoFormGroup.get('entreprise')?.valueChanges.subscribe((value) => {
+       this.filteredInterlocutors.next(
+         this.interlocutors.getValue().filter(interlocutor => interlocutor.customer.id === value)
+       )
+     })
   }
 }

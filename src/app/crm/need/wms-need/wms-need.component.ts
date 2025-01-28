@@ -29,6 +29,8 @@ import {
 import {WmsNeedCreatEditComponent} from './wms-need-creat-edit/wms-need-creat-edit.component';
 import {InputTextModule} from 'primeng/inputtext';
 import {NeedComponent} from '../need.component';
+import {StorageNeedResponseDto} from '../../../../dtos/response/crm/storage.need.request.dto';
+import {StorageNeedService} from '../../../../services/crm/wms/storage.need.service';
 
 @Component({
   selector: 'app-wms-need',
@@ -64,10 +66,10 @@ import {NeedComponent} from '../need.component';
 })
 export class WmsNeedComponent implements OnInit, AfterViewInit{
 
-  displayedColumns: string[] = ['select', 'prospectName', 'interlocutorName', 'interactionSubject', 'interactionType',
-    'planningDate', 'affectedTo', 'actions'];
+  displayedColumns: string[] = ['select', 'ref', 'customer','status', 'productType',
+    'date','storageReason', 'actions'];
 
-  dataSource: MatTableDataSource<InteractionResponseDto> = new MatTableDataSource();
+  dataSource: MatTableDataSource<StorageNeedResponseDto> = new MatTableDataSource();
   isAllSelected = false;
   selectedRows: Set<number> = new Set();
 
@@ -75,7 +77,7 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
   @ViewChild(MatSort) sort!: MatSort;
 
   crmType = new FormControl('');
-  constructor(private interactionService: InteractionService,private localStorageService: LocalStorageService, private dialog: MatDialog, private snackBar: MatSnackBar,
+  constructor(private storageNeedService: StorageNeedService,private localStorageService: LocalStorageService, private dialog: MatDialog, private snackBar: MatSnackBar,
               private router: Router) {}
 
   ngOnInit(): void {
@@ -99,7 +101,8 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
         this.router.navigateByUrl('/admin/crm/need/show').then(r => {return;});
         break;
     }
-    this.interactionService.getAllInteractions().subscribe({
+    const selectedCompanyId = parseInt(this.localStorageService.getItem("selected_company_id"));
+    this.storageNeedService.getAllStorageNeedsByCompanyId(selectedCompanyId).subscribe({
       next: (data) => {
         this.dataSource.data = data;
       },
@@ -116,29 +119,6 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
   createEditWmsNeed(): void {
     this.router.navigateByUrl('/admin/crm/need/wms/create').then(value => {return;});
 
-  }
-
-
-  editInteraction(row: InteractionResponseDto): void {
-    const dialogRef = this.dialog.open(AddEditInteractionDialogComponent, {
-      maxWidth: '900px',
-      data: row,
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        this.loadNeedBasedOnSelectedType();
-      }
-    });
-  }
-
-  deleteInteraction(row: InteractionResponseDto): void {
-    if (confirm('Are you sure you want to delete this interaction?')) {
-      this.interactionService.softDeleteInteraction(row.id).subscribe(() => {
-        this.snackBar.open('Interaction deleted successfully', 'Close', { duration: 3000 });
-        this.loadNeedBasedOnSelectedType();
-      });
-    }
   }
 
   toggleRowSelection(rowId: number): void {
@@ -167,22 +147,4 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
     return this.selectedRows.has(rowId);
   }
 
-  showDetails(row: InteractionResponseDto): void {
-    alert(localStorage.getItem('current_crm'))
-    switch (localStorage.getItem('current_crm')) {
-      case CrmTypeEnum.WMS:
-        this.router.navigateByUrl('/admin/crm/need/wms/show').then(r => {return;});
-        break;
-      case CrmTypeEnum.TMS:
-        this.router.navigateByUrl('/admin/crm/need/tms/show').then(r => {return;});
-        break;
-      case CrmTypeEnum.TMSI:
-        this.router.navigateByUrl('/admin/crm/need/show').then(r => {return;});
-        break;
-      default:
-        this.snackBar.open("Error", "OK", {
-          duration:2000
-        })
-    }
-  }
 }

@@ -1,9 +1,9 @@
-<div class="bg-light rounded-3 mat-elevation-z2  w-100">
+<div class=" rounded-3 mat-elevation-z2  w-100">
     <div class="row d-flex my-2 justify-content-around">
-        <div class="col-lg-8 col-12 d-flex justify-content-start mt-sm-2">
+        <div class="col-lg-8 col-12 d-flex justify-content-start mt-sm-2 ">
             <input
                     matInput
-                    class=" rounded-2 mat-elevation-z2  bg-white search-input"
+                    class=" rounded-2 mat-elevation-z2  bg-light search-input"
                     (keyup)="applyFilter($event)"
                     placeholder="Recherch"
                     autofocus
@@ -15,15 +15,15 @@
         <!-- Action Buttons -->
         <div class="col-lg-3 mx-2 my-auto col-12 d-flex justify-content-lg-end  justify-content-center align-items-center">
             <button
-                    mat-button color="primary" class="rounded-3 bg-white  mat-elevation-z2 "  style="transform:scale(0.9)"
+                    mat-button color="primary" class="rounded-3   mat-elevation-z2 bg-light "  style="transform:scale(0.9)"
                     (click)="openAddInterlocutor()">
                 <mat-icon>add</mat-icon>
                 <span>Ajouter</span>
             </button>
-            <button mat-icon-button class="rounded-3 bg-white my-auto mat-elevation-z2  "   style="transform:scale(0.9)" aria-label="Filter">
+            <button mat-icon-button class="rounded-3  my-auto mat-elevation-z2 bg-light  "   style="transform:scale(0.9)" aria-label="Filter">
                 <mat-icon><i class="bi bi-funnel"></i></mat-icon>
             </button>
-            <button mat-icon-button class="rounded-3 bg-white my-auto mat-elevation-z2  "   style="transform:scale(0.9)" aria-label="Filter">
+            <button mat-icon-button class="rounded-3  my-auto mat-elevation-z2 bg-light  "   style="transform:scale(0.9)" aria-label="Filter">
                 <mat-icon>more_vert</mat-icon>
             </button>
         </div>

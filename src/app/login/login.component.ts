@@ -60,7 +60,7 @@ export class LoginComponent  {
         .pipe(
           tap((response: TokenResponse) => {
             // Save token and user data
-            this.localStorageService.setUser(response.userResponseDto);
+            this.localStorageService.setUser(response.user);
             localStorage.setItem('authToken', response.token);
             // Navigate to the admin dashboard
             window.location.href = "/admin"
@@ -93,5 +93,5 @@ export class LoginComponent  {
  * Represents the structure of a TokenResponse returned by the API
  */
 export class TokenResponse {
-  constructor(public token: string, public userResponseDto: UserModel) {}
+  constructor(public token: string, public user: UserModel) {}
 }
