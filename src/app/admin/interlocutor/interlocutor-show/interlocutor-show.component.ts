@@ -18,6 +18,7 @@ import {InteractionResponseDto} from '../../../../dtos/response/interaction.resp
 import {InteractionService} from '../../../../services/Leads/interaction.service';
 import {EntityEnum} from '../../../../enums/entity.enum';
 import {CommentComponent} from '../../../utils/comment/comment.component';
+import {ActiveEnum} from "../../../../enums/active.enum";
 
 @Component({
   selector: 'app-interlocutor-show',
@@ -122,4 +123,19 @@ export class InterlocutorShowComponent implements OnInit{
   }
   protected readonly alert = alert;
   protected readonly EntityEnum = EntityEnum;
+
+  getAllStatusInteraction(status: string): string {
+    return ActiveEnum[status as keyof typeof ActiveEnum] || "Unknown Status";
+  }
+
+  getChipClass(status: string): string {
+    switch (status) {
+      case "ACTIVE":
+        return 'status-active'; // Apply class for "NEW"
+      case "INACTIVE":
+        return 'status-inactive'; // Apply class for "QUALIFIED"
+      default:
+        return 'status-default'; // Apply default class for unknown statuses
+    }
+  }
 }

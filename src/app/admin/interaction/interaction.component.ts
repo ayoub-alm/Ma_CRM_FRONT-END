@@ -160,11 +160,11 @@ export class InteractionComponent implements OnInit, AfterViewInit {
   }
 
   getChipClass(report: string | null): string {
-    return report !== null ? 'status-complete' : 'status-not-complete';
+    return report !== null  && report !== '' ? 'status-complete' : 'status-not-complete';
   }
 
   getStatusLabel(report: string | null): string {
-    return report !== null ? 'Complet' : 'Pas complet';
+    return report !== null  && report !== '' ? 'Complet' : 'Pas complet';
   }
 
   // Delete Use component comfirmation dialog

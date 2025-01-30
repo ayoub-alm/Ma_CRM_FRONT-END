@@ -12,10 +12,11 @@ import {TrackingLogResponseDto} from './tracking.log.response.dto';
 import {InterestResponseDto} from "./interestResponseDto";
 import {ProspectInterestResponseDto} from "./prospectInterestResponseDto";
 export class ProspectResponseDto {
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
   deletedAt: string | null;
   createdBy: string | null;
+  updatedBy: string | null;
   id: number;
   logo: string | null;
   name: string;
@@ -57,6 +58,7 @@ export class ProspectResponseDto {
     this.updatedAt = data?.updatedAt || '';
     this.deletedAt = data?.deletedAt || null;
     this.createdBy = data?.createdBy || null;
+    this.updatedBy = data?.updatedBy || null;
     this.id = data?.id || 0;
     this.logo = data?.logo || '';
     this.name = data?.name || '';

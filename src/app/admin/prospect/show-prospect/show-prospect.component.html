@@ -4,7 +4,7 @@
           <a routerLink="/admin">
              <button mat-button>
                <mat-icon class=" primary-blue-color">home</mat-icon>
-                home
+                Accueil
              </button>
           </a> >
           <a routerLink="/admin/prospects">
@@ -14,7 +14,7 @@
              </button>
           </a> >
           <button mat-button>
-               <mat-icon class=" primary-blue-color">details</mat-icon>
+               <mat-icon class=" primary-blue-color">info</mat-icon>
               Détails
           </button>
       </span>
@@ -42,25 +42,53 @@
       <mat-card-content>
         <div class="justify-content-around">
           <div class="d-flex justify-content-around row">
-            <!-- Logo Section -->
-            <div class="col-lg-3 col-12 mt-4">
-              <p class="text-center">
-                <img
-                  *ngIf="!prospect.getValue().logo"
-                  class="img-fluid rounded-2 shadow-sm"
-                  src="https://placehold.co/400"
-                />
-                <img
-                  *ngIf="prospect.getValue().logo"
-                  [src]="environment.baseUrl + '/api/images/' + prospect.getValue().logo"
-                  alt="Logo"
-                  class="img-fluid  rounded-2 "
-                  width="400"
-                />
-              </p>
-            </div>
 
-            <!-- Company Information Section -->
+              <!-- Logo Section -->
+              <div class="col-lg-3 col-12 mt-4">
+                  <div class="position-relative logo-container"
+                       (mouseenter)="showModifierHint = true"
+                       (mouseleave)="showModifierHint = false"
+                       (click)="!uploadingLogo && fileInput.click()"
+                       role="button"
+                       tabindex="0"
+                       [attr.aria-disabled]="uploadingLogo ? 'true' : null">
+
+                      <!-- Hidden file input -->
+                      <input #fileInput
+                             type="file"
+                             hidden
+                             accept="image/*"
+                             (change)="handleLogoUpload($event)">
+
+                      <!-- Logo Preview -->
+                      <div class="position-relative">
+                          <img *ngIf="!uploadingLogo"
+                               [src]="logoPreview || getDefaultLogo()"
+                               alt="Logo"
+                               class="img-fluid rounded-2 shadow-sm cursor-pointer w-100 h-auto"
+                               [class.logo-hover]="showModifierHint">
+
+                          <!-- Hover Hint (Centered) -->
+                          <div *ngIf="showModifierHint && !uploadingLogo"
+                               class="position-absolute top-50 start-50 translate-middle bg-dark bg-opacity-50 text-white py-1 px-3 rounded font text-logo">
+                              Cliquez pour modifier le logo
+                          </div>
+
+                          <!-- Upload Overlay -->
+                          <div *ngIf="uploadingLogo" class="upload-overlay">
+                              <div class="d-flex justify-content-center align-items-center w-100 h-100">
+                                  <div class="spinner-border text-light" role="status">
+                                      <span class="visually-hidden">Mise à jour du logo...</span>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+
+
+              <!-- Company Information Section -->
             <div class="col-lg-8 row d-flex justify-content-around">
               <div class="col-lg-6 col-12">
                 <!-- Company Name -->
@@ -137,6 +165,23 @@
             </span>
                   <span class="mx-2 my-3">{{ prospect.getValue().industry?.name }}</span>
                 </p>
+
+                  <!-- City -->
+                  <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-geo-fill"></i> Ville :
+            </span>
+                      <span class="mx-2 my-3">{{ prospect.getValue().city?.name }}</span>
+                  </p>
+
+                  <!-- Country -->
+                  <p>
+            <span class="text-secondary">
+              <i class="primary-blue-color bi bi-flag-fill"></i> Pays :
+            </span>
+                      <span class="mx-2 my-3">{{ prospect.getValue().country?.name }}</span>
+                  </p>
+
               </div>
 
               <div class="col-lg-6 col-12">
@@ -156,21 +201,29 @@
                   <span class="mx-2 my-3">{{ prospect.getValue().companySize?.name }}</span>
                 </p>
 
-                <!-- City -->
-                <p>
-            <span class="text-secondary">
-              <i class="primary-blue-color bi bi-geo-fill"></i> Ville :
-            </span>
-                  <span class="mx-2 my-3">{{ prospect.getValue().city?.name }}</span>
-                </p>
 
-                <!-- Country -->
-                <p>
-            <span class="text-secondary">
-              <i class="primary-blue-color bi bi-flag-fill"></i> Pays :
-            </span>
-                  <span class="mx-2 my-3">{{ prospect.getValue().country?.name }}</span>
-                </p>
+                  <!-- Created At By - Updated At By -->
+                  <p *ngIf="prospect.getValue().createdAt">
+                      <i class="bi bi-calendar-event-fill primary-blue-color"></i>
+                      <span class="text-secondary"> Créé le : </span>
+                      <span class="mx-2 my-3">{{ prospect.getValue().createdAt | date:'shortDate' }}</span>
+                  </p>
+                  <p *ngIf="prospect.getValue().createdBy">
+                      <i class="bi bi-person-lines-fill primary-blue-color"></i>
+                      <span class="text-secondary"> Créé par : </span>
+                      <span class="mx-2 my-3">{{ prospect.getValue().createdBy }}</span>
+                  </p>
+                  <p *ngIf="prospect.getValue().updatedAt">
+                      <i class="bi bi-calendar-event-fill primary-blue-color"></i>
+                      <span class="text-secondary"> Mis à jour le : </span>
+                      <span class="mx-2 my-3">{{ prospect.getValue().updatedAt | date:'shortDate' }}</span>
+                  </p>
+                  <p *ngIf="prospect.getValue().updatedBy">
+                      <i class="bi bi-person-lines-fill primary-blue-color"></i>
+                      <span class="text-secondary"> Mis à jour par : </span>
+                      <span class="mx-2 my-3">{{ prospect.getValue().updatedBy }}</span>
+                  </p>
+
               </div>
 
               <!-- Business Description -->

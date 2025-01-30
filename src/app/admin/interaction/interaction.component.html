@@ -5,7 +5,7 @@
         <a routerLink="/admin">
           <button mat-button>
             <mat-icon class="primary-blue-color">home</mat-icon>
-            Home
+            Accueil
           </button>
         </a> >
         <button mat-button>
@@ -52,7 +52,7 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header >Entreprise</th>
           <td mat-cell *matCellDef="let row" class="full-width-table-celle">{{ row.prospectName }}</td>
         </ng-container>
-        <ng-container matColumnDef="interlocutorName">
+        <ng-container matColumnDef="interlocutorName" [sticky]="true">
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Interlocuteur</th>
           <td mat-cell *matCellDef="let row" class="full-width-table-celle" >{{ row.interlocutorName }}</td>
         </ng-container>
