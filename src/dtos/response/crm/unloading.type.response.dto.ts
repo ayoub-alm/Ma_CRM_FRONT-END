@@ -1,3 +1,5 @@
+import {DiscountTypeEnum} from '../../../enums/discount.type.enum';
+
 export class UnloadingTypeResponseDto {
   id: number;                     // Long in Java maps to number in TypeScript
   ref: string;                    // UUID in Java maps to string in TypeScript
@@ -7,7 +9,9 @@ export class UnloadingTypeResponseDto {
   status: boolean;                // Boolean in Java maps to boolean in TypeScript
   companyId: number;              // Long in Java maps to number in TypeScript
   companyName: string;
-
+  discountType:DiscountTypeEnum;
+  discountValue:number;
+  salesPrice:number;
   constructor(data: any) {
     this.id = data.id;
     this.name = data.name;
@@ -17,5 +21,8 @@ export class UnloadingTypeResponseDto {
     this.status = data.status;
     this.companyId = data.companyId;
     this.companyName = data.companyName;
+    this.salesPrice = data.salesPrice;
+    this.discountValue = data.discountValue;
+    this.discountType = data.discountType;
   }
 }

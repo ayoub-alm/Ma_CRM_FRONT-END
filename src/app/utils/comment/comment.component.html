@@ -26,7 +26,7 @@
 
 
         <!-- Comments Replies here -->
-        <div class="offcanvas-body flex-grow-1 " *ngIf="comments.getValue().length > 0; else noComments">
+        <div class="offcanvas-body flex-grow-1 " *ngIf="comments.getValue().length > 0">
             <ul class="list-group"  *ngFor="let comment of comments | async;" >
               <li class="bg-light list-group-item mb-2 p-0 comment-container mat-elevation-z1">
                 <!-- User Info Section -->
@@ -59,14 +59,14 @@
         </div>
 
         <!-- Aucun commentaire -->
-        <ng-template #noComments>
+        <div *ngIf="!(comments.getValue().length > 0)" #noComments>
             <div class="text-center p-4">
                 <img src="/emptycomment.png" class="img-fluid" alt="Aucun commentaire">
                 <p class="text-muted mb-0 fs-5">
                     Aucun commentaire pour l'instant.
                 </p>
             </div>
-        </ng-template>
+        </div>
 
         <!-- (formulaire de commentaire) -->
         <div class="offcanvas-footer mt-auto mat-elevation-z2">

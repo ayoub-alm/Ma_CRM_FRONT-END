@@ -37,17 +37,28 @@ mat-icon {
 .primary-blue-color{
   color: #005cbb !important;
 }
+.primary-blue-color-light{
+  color: cornflowerblue !important;
+}
 .bg-primary-blue-color{
   background: #005cbb !important;
 }
-
-
+.bg-spider-light{
+  background: rgba(128, 174, 243, 0.3) !important;
+}
+.bg-spider{
+  background: rgb(234, 244, 255) !important;
+}
 .custom-table th.mat-header-cell, .custom-table td.mat-cell {
   height: 15px; /* Set your desired height */
   line-height: 2px; /* Center text vertically */
   padding: 0px; /* Adjust padding if needed */
 }
 
+
+.brow-color{
+color:rgb(209 177 146)
+}
 .table-container {
   max-height:80vh; /* Set a max height for the table container */
   overflow: auto;
@@ -102,3 +113,4 @@ mat-icon {
 .scale-08{
   transform:scale(0.8);
 }
+

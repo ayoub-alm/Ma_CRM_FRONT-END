@@ -1,0 +1,542 @@
+<div class="full-height-size mb-5 px-2 rounded-3  mb-2 ">
+
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-baseline row rounded-3 my-2">
+    <div class="col-lg-6 col-12 text-start mx-2">
+      <button class="fs-6" mat-button disabled>
+        <mat-icon class="me-2 text-dark">add_circle</mat-icon> Ajouter un besoin
+      </button>
+    </div>
+    <div class="col-lg-5 col-12 mx-2 my-auto d-flex justify-content-lg-end align-items-center">
+      <button (click)="createStorageNeed()" mat-button class="rounded-3 bg-primary-blue-color text-white mat-elevation-z1" style="transform:scale(0.9)">
+        <mat-icon>save</mat-icon> Sauvegarder
+      </button>
+      <button mat-icon-button class="rounded-3 bg-white my-auto mat-elevation-z4" style="transform:scale(0.9)" aria-label="Filter">
+        <mat-icon><i class="bi bi-funnel"></i></mat-icon>
+      </button>
+      <button mat-icon-button class="rounded-3 bg-white my-auto mat-elevation-z4" style="transform:scale(0.9)" aria-label="More options">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <section class="">
+    <!-- Form Section -->
+    <form [formGroup]="generalInfoFormGroup" class="rounded-0 p-lg-3 mat-elevation-z2 bg-white mx-1 row ">
+      <p class="col-12 primary-blue-color fs-6 d-flex">
+        <mat-icon class="me-2">person</mat-icon> Information du Client
+      </p>
+      <!-- Date de réception -->
+      <div class="col-lg-3">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Date de réception</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dateReception" required />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <!-- Entreprise -->
+      <div class="col-lg-3">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Client</mat-label>
+          <mat-select formControlName="costumer" required>
+            <mat-option *ngFor="let customer of customers.getValue()" [value]="customer.id">
+              {{ customer.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Interlocuteurs -->
+      <div class="col-lg-3">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Interlocuteurs</mat-label>
+          <mat-select formControlName="interlocuteurs" >
+            <mat-option *ngFor="let interlocutor of filteredInterlocutors.getValue()" [value]="interlocutor.id">
+              {{ interlocutor.fullName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Type de produits -->
+      <div class="col-lg-3">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Type de produits</mat-label>
+          <input matInput formControlName="typeProduits" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Durée de stockage -->
+      <div class="col-lg-3">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Durée de stockage (Mois)</mat-label>
+          <input matInput type="number" formControlName="dureeStockage" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Nombre de SKU -->
+      <div class="col-lg-3">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Nombre de SKU</mat-label>
+          <input matInput type="number" formControlName="nombreSku"/>
+        </mat-form-field>
+      </div>
+
+      <!-- Raison de stockage -->
+      <div class="col-lg-3">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Raison de stockage</mat-label>
+          <mat-select formControlName="raisonStockage" required>
+            <mat-option *ngFor="let reason of storageReasons" [value]="reason.key">
+              {{ reason.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Livre -->
+      <div class="col-lg-3">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Livre</mat-label>
+          <mat-select formControlName="livre" required>
+            <mat-option *ngFor="let livre of livreStatuses" [value]="livre.key">
+              {{ livre.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Taux de commandes par jour -->
+      <div class="col-lg-3">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Taux de commandes par jour</mat-label>
+          <input matInput type="number" formControlName="tauxCommandes"  />
+        </mat-form-field>
+      </div>
+    </form>
+  </section>
+
+
+
+  <section>
+    <div class="fs-5 small mt-2  ">
+      <!-- Élément à stocker -->
+      <mat-card class="bg-light mb-2 p-lg-3 rounded-0 mat-elevation-z2 small">
+        <div class="mb-3 row ">
+          <!-- Nested Form -->
+          <form
+            [formGroup]="itemToStoreFormGroup"
+            class="rounded-3 col-12 row ">
+            <!-- Conditionnement -->
+            <p class="col-12 primary-blue-color fs-6 d-flex ">
+              <mat-icon class="me-2">inventory</mat-icon> Conditionnement
+            </p>
+            <div class="col-lg-3 col-md-6 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Support </mat-label>
+                <mat-select formControlName="supportId" required>
+                  <mat-option *ngFor="let support of supports.getValue()" [value]="support.id">{{support.name}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Structure -->
+            <div class="col-lg-3 col-md-6 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Structure</mat-label>
+                <mat-select formControlName="structureId">
+                  <mat-option *ngFor="let structure of structures.getValue()" [value]="structure.id">{{ structure.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <!-- Température de stockage -->
+            <div class="col-lg-3 col-md-6 col-12">
+              <mat-form-field appearance="outline" class="w-100  ">
+                <mat-label>Température de stockage</mat-label>
+                <mat-select formControlName="temperatureId"  required>
+                  <mat-option *ngFor="let temperature of temperatures.getValue()" [value]="temperature.id">{{ temperature.name }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <!-- Température de stockage -->
+            <div  *ngIf="itemToStoreFormGroup.get('storageTemperature')?.touched && itemToStoreFormGroup.get('storageTemperature')?.value !== 'Ambiante'"
+                  class="col-lg-3 col-md-6 col-12" >
+              <mat-form-field appearance="outline" class="w-100  ">
+                <mat-label>Température C°</mat-label>
+                <input matInput >
+              </mat-form-field>
+            </div>
+
+            <p class="col-12 primary-blue-color fs-6 d-flex">
+              <mat-icon class="me-2">straighten</mat-icon> Dimensions
+            </p>
+
+            <!-- Largeur -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Largeur (cm)</mat-label>
+                <input matInput type="number" formControlName="larger" />
+              </mat-form-field>
+            </div>
+
+            <!-- Longueur -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Longueur (cm)</mat-label>
+                <input matInput type="number" formControlName="length" />
+              </mat-form-field>
+            </div>
+
+            <!-- Hauteur -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Hauteur (cm)</mat-label>
+                <input matInput type="number" formControlName="height" />
+              </mat-form-field>
+            </div>
+
+
+
+          <div class="row col-lg-12 col-12 align-items-start">
+            <p class="col-12 primary-blue-color fs-6 d-flex">
+              <mat-icon class="me-2">informations</mat-icon> Informations supplémentaires
+            </p>
+
+            <!-- Poids -->
+            <div class="col-lg-3 col-md-6 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Poids (kg)</mat-label>
+                <input matInput type="number" formControlName="weight" />
+              </mat-form-field>
+            </div>
+
+            <!-- Metre cube max -->
+            <div class="col-lg-3 col-md-6 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Metre cube max</mat-label>
+                <input matInput type="number" formControlName="metreCubeMax" />
+              </mat-form-field>
+            </div>
+
+            <!-- Niveaux de gerbabilité -->
+            <div class="col-lg-3 col-md-6 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Niveaux de gerbabilité </mat-label>
+                <input matInput type="number" formControlName="StackabilityLevels"  />
+              </mat-form-field>
+            </div>
+
+            <!-- Volume de stock -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Volume de stock</mat-label>
+                <input matInput type="number" formControlName="volumeStock" />
+              </mat-form-field>
+            </div>
+
+            <!-- Nombre de UVC -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Nombre de UVC</mat-label>
+                <input matInput type="number" formControlName="numberOfUvc" />
+              </mat-form-field>
+            </div>
+
+            <!-- Nombre de UC -->
+            <div class="col-lg-3 col-md-4 col-12">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Nombre de UC</mat-label>
+                <input matInput type="number" formControlName="numberOfUc" />
+              </mat-form-field>
+            </div>
+
+          </div>
+
+          <div class="col-lg-12 col-md-12 col-12 row">
+            <p class="col-12 primary-blue-color  ">
+              <mat-icon class="me-2">assignment</mat-icon> Préstations
+            </p>
+             <div class="col-lg-6">
+               <mat-form-field appearance="outline" class="w-100">
+                 <mat-label>Prestation</mat-label>
+                 <mat-select formControlName="provisions" multiple>
+                   <mat-option  *ngFor="let provision of provisions | async" [value]="provision.id">
+                     {{ provision.name }}
+                   </mat-option>
+                 </mat-select>
+               </mat-form-field>
+             </div>
+
+            <div class="col-lg-3 text-end m-auto col-md-4 col-12">
+              <button mat-button (click)="addItemToItemToStore()"
+                      [color]="'primary'"
+                      class="text-white bg-primary-blue-color rounded-2"
+              >
+                <mat-icon>add</mat-icon>Ajouter
+              </button>
+            </div>
+            <div class="col-lg-8 col-12" >
+              <table mat-table [dataSource]="selectedProvisions.getValue()" class="mat-elevation-z1 col-lg-6 col-12">
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                  <th mat-header-cell *matHeaderCellDef > Désignation </th>
+                  <td mat-cell *matCellDef="let element" > {{ element.name }} </td>
+                </ng-container>
+
+                <!-- Unit Column -->
+                <ng-container matColumnDef="unite">
+                  <th mat-header-cell *matHeaderCellDef > Unité </th>
+                  <td mat-cell *matCellDef="let element" > {{ element.unitOfMeasurement }} </td>
+                </ng-container>
+
+                <!-- Actions Column -->
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef ></th>
+                  <td mat-cell *matCellDef="let row" >
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item>
+                        <mat-icon>edit</mat-icon>Edit
+                      </button>
+                      <button mat-menu-item>
+                        <mat-icon>delete</mat-icon>Delete
+                      </button>
+                    </mat-menu>
+                  </td>
+                </ng-container>
+
+                <!-- Header Row -->
+                <tr mat-header-row *matHeaderRowDef="provisionsDisplayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"></tr>
+
+                <!-- Data Row -->
+                <tr mat-row *matRowDef="let row; columns: provisionsDisplayedColumns;" class="bg-white text-secondary"></tr>
+              </table>
+
+            </div>
+          </div>
+
+          </form>
+        </div>
+
+        <div class="table-container" *ngIf="itemsToStore.getValue().length">
+          <table mat-table [dataSource]="itemsToStore.getValue()" class="table-container mat-elevation-z1 w-100" >
+
+            <!-- Conditionnement Column -->
+            <ng-container matColumnDef="conditionnement">
+              <th mat-header-cell *matHeaderCellDef >Conditionnement</th>
+              <td mat-cell *matCellDef="let element" > {{ element.conditionnement }} </td>
+            </ng-container>
+
+            <!-- Structure Column -->
+            <ng-container matColumnDef="structure">
+              <th mat-header-cell *matHeaderCellDef >Structure</th>e
+              <td mat-cell *matCellDef="let element" > {{ element.structure || '-' }} </td>
+            </ng-container>
+
+            <!-- Temperature Storage Column -->
+            <ng-container matColumnDef="temperatureStockage">
+              <th mat-header-cell *matHeaderCellDef class="small small">Température</th>
+              <td mat-cell *matCellDef="let element" > {{ element.storageTemperature }} </td>
+            </ng-container>
+
+            <!-- Largeur Column -->
+            <ng-container matColumnDef="largeur">
+              <th mat-header-cell *matHeaderCellDef class="small full-width-table-celle">Largeur (cm)</th>
+              <td mat-cell *matCellDef="let element" > {{ element.larger || '-' }} </td>
+            </ng-container>
+
+            <!-- Hauteur Column -->
+            <ng-container matColumnDef="hauteur" >
+              <th mat-header-cell *matHeaderCellDef class="small full-width-table-celle">Hauteur (cm)</th>
+              <td mat-cell *matCellDef="let element" > {{ element.height || '-' }} </td>
+            </ng-container>
+
+            <!-- Provisions Column -->
+            <ng-container matColumnDef="provisions">
+              <th mat-header-cell *matHeaderCellDef class="small">Préstations</th>
+              <td mat-cell *matCellDef="let element" >
+<!--                  <mat-chip class="small p-0" *ngFor="let prov of element.provisions" > {{ prov.name }}</mat-chip>-->
+                <div class="d-flex justify-content-start align-items-center">
+                  <button type="button" *ngFor="let prov of element.provisions"
+                          class="btn fs-30 btn-outline-secondary btn-sm rounded-3 scale-09 provision-tag"
+                          style="white-space: nowrap;">
+                    {{ prov.name }}
+                    <i class="bi bi-x small provision-tag-remove d-none" (click)="removeProvision(element, prov)"></i>
+                  </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef ></th>
+              <td mat-cell *matCellDef="let row" class="border border-left border-dark">
+                <button (click)="removeItemToStore(row)"
+                  mat-icon-button  aria-label="Actions ">
+                  <mat-icon class="text-danger scale-08">delete</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+
+            <!-- Header Row -->
+            <tr mat-header-row *matHeaderRowDef="itemsToStoredisplayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"></tr>
+
+            <!-- Data Row -->
+            <tr mat-row *matRowDef="let row; columns: itemsToStoredisplayedColumns;" class="bg-white text-secondary"></tr>
+          </table>
+        </div>
+      </mat-card>
+    </div>
+  </section>
+
+
+  <!-- Additional Sections -->
+  <div class="row d-flex justify-content-around">
+    <mat-card class="bg-white px-lg-3 mb-2 rounded-0 mat-elevation-z2 col-12">
+      <p class="primary-blue-color fs-6 d-flex">
+        <mat-icon class="me-2">local_shipping</mat-icon> Dépotage
+      </p>
+      <div class="row">
+        <!-- Formulaire -->
+        <div class="col-lg-6 col-md-12 col-12">
+          <form [formGroup]="unloadForm">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Depotages</mat-label>
+              <mat-select formControlName="unload" multiple>
+                <mat-option *ngFor="let unloadingType of unloadingTypes | async" [value]="unloadingType.id">
+                  {{ unloadingType.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form>
+        </div>
+
+        <!-- Tableau -->
+        <div class="col-lg-6 col-md-12 col-12">
+          <table mat-table [dataSource]="unloadingDataSource.getValue()" class="mat-elevation-z1 w-100">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef >Désignation</th>
+              <td mat-cell *matCellDef="let element" >{{ element.name }}</td>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container matColumnDef="price">
+              <th mat-header-cell *matHeaderCellDef >Price</th>
+              <td mat-cell *matCellDef="let element" >{{ element.initPrice | currency }}</td>
+            </ng-container>
+
+            <!-- Unit Column -->
+            <ng-container matColumnDef="unite">
+              <th mat-header-cell *matHeaderCellDef >Unité</th>
+              <td mat-cell *matCellDef="let element" >{{ element.unitOfMeasurement }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions" stickyEnd>
+              <th mat-header-cell *matHeaderCellDef ></th>
+              <td mat-cell *matCellDef="let row" >
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>
+                    <mat-icon>edit</mat-icon>Edit
+                  </button>
+                  <button mat-menu-item>
+                    <mat-icon>delete</mat-icon>Delete
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <!-- Header Row -->
+            <tr mat-header-row *matHeaderRowDef="unloadingDisplayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"></tr>
+
+            <!-- Data Row -->
+            <tr mat-row *matRowDef="let row; columns: unloadingDisplayedColumns;" class="bg-white text-secondary"></tr>
+          </table>
+        </div>
+      </div>
+    </mat-card>
+    <mat-card class="bg-white px-lg-3 mb-2 rounded-0 mat-elevation-z2 col-12">
+      <p class="primary-blue-color fs-6 d-flex">
+        <mat-icon class="me-2">rule</mat-icon> Exigences
+      </p>
+      <div class="row">
+        <!-- Formulaire -->
+        <div class="col-lg-6 col-md-12 col-12">
+          <form [formGroup]="requirementForm">
+            <mat-form-field appearance="outline" class="w-100">
+              <mat-label>Exigences</mat-label>
+              <mat-select formControlName="requirement" multiple>
+                <mat-option *ngFor="let requirement of requirements | async" [value]="requirement.id">
+                  {{ requirement.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </form>
+        </div>
+
+        <!-- Tableau -->
+        <div class="col-lg-6 col-md-12 col-12">
+          <table mat-table [dataSource]="selectedRequirements.getValue()" class="mat-elevation-z1 w-100">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef >Désignation</th>
+              <td mat-cell *matCellDef="let element" >{{ element.name }}</td>
+            </ng-container>
+
+            <!-- Price Column -->
+            <ng-container matColumnDef="price">
+              <th mat-header-cell *matHeaderCellDef >Price</th>
+              <td mat-cell *matCellDef="let element" >{{ element.initPrice | currency }}</td>
+            </ng-container>
+
+            <!-- Unit Column -->
+            <ng-container matColumnDef="unite">
+              <th mat-header-cell *matHeaderCellDef >Unité</th>
+              <td mat-cell *matCellDef="let element" >{{ element.unitOfMeasurement }}</td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef ></th>
+              <td mat-cell *matCellDef="let row" >
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
+                  <mat-icon>close</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item>
+                    <mat-icon>edit</mat-icon>Edit
+                  </button>
+                  <button mat-menu-item>
+                    <mat-icon>delete</mat-icon>Delete
+                  </button>
+                </mat-menu>
+              </td>
+            </ng-container>
+
+            <!-- Header Row -->
+            <tr mat-header-row *matHeaderRowDef="requirementsColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"></tr>
+
+            <!-- Data Row -->
+            <tr mat-row *matRowDef="let row; columns: requirementsColumns;" class="bg-white text-secondary"></tr>
+          </table>
+        </div>
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+
+
+
+
+
+

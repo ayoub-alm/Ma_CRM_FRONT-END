@@ -1,3 +1,6 @@
+import { StockedItemCreateDto } from "../../request/crm/stockedItem.create.dto";
+import {ProvisionResponseDto} from './provision.response.dto';
+
 export class StockedItemResponseDto {
   id: number; // The ID of the stocked item
   ref: string; // UUID of the stocked item
@@ -12,7 +15,7 @@ export class StockedItemResponseDto {
   price: number | null; // Price of the stocked item
   storageOffer: StorageOffer | null; // Associated storage offer
   storageNeed: StorageNeed | null; // Associated storage need
-  provisionResponseDto: ProvisionResponseDto | null; // Provision response details
+  provisionResponseDto: ProvisionResponseDto[] | null; // Provision response details
 
   constructor(data:any) {
     this.id = data.id;
@@ -68,13 +71,39 @@ export class StorageNeed {
   }
 }
 
-export class ProvisionResponseDto {
-  id: number;
-  provisionType: string;
-  provisionQuantity: number;
-  constructor(data: any) {
-    this.id = data.id;
-    this.provisionType = data.provisionType;
-    this.provisionQuantity = data.provisionQuantity;
-  }
+// export class ProvisionResponseDto {
+//   public  id: number;
+//   public name: string;
+//   public unitOfMeasurement:String;
+//   initPrice: number;
+//   remise:string;
+//   remiseValue:number;
+//   finalPrice:number;
+//   constructor(data: any) {
+//     this.id = data.id;
+//     this.name = data.name;
+//     this.unitOfMeasurement = data.unitOfMeasurement;
+//     this.initPrice = data.initPrice;
+//     this.finalPrice = data.finalPrice;
+//     this.remiseValue = data.remiseValue;
+//     this.remise = data.remise;
+//   }
+// }
+
+
+export function mapStockedItemResponseToCreate(response: StockedItemResponseDto): StockedItemCreateDto {
+  return new StockedItemCreateDto({
+    supportId: response.storageOffer?.id || 0,  // Assuming storageOffer ID represents supportId
+    structureId: response.structureName ? parseInt(response.structureName) : 0, // Convert if needed
+    temperatureId: response.temperatureName || "",
+    larger: response.dimension?.width || 0,
+    length: response.dimension?.length || 0,
+    height: response.dimension?.height || 0,
+    weight: response.isFragile ? 1 : 0, // Example conversion, adjust accordingly
+    stackedLevel: response.stackedLevelName ? parseInt(response.stackedLevelName) : 0,
+    volumeStock: response.dimension ? response.dimension.length * response.dimension.width * response.dimension.height : 0,
+    numberUvc: response.uvc || 0,
+    numberUc: response.numberOfPackages || 0,
+    provisions: response.provisionResponseDto || [],
+  });
 }

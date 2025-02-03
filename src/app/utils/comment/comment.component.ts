@@ -4,7 +4,7 @@ import {MatButton, MatFabButton, MatIconButton} from "@angular/material/button";
 import {PaginatorModule} from "primeng/paginator";
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgClass, NgIf, NgFor, DatePipe, AsyncPipe} from "@angular/common";
-import {BehaviorSubject} from "rxjs";
+import {BehaviorSubject, catchError, of, tap} from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatBadge} from '@angular/material/badge';
@@ -110,12 +110,17 @@ export class CommentComponent implements OnInit, AfterViewInit {
         entityId: this.entityId,
 
       };
-      this.commentService.addComment(commentRequest)
-          .subscribe((response: CommentResponseDto) => {
-            this.comments.next([... this.comments.getValue(), response])
-            // Update UI with the new comment
-            this.commentForm.reset();
-          });
+      this.commentService.addComment(commentRequest).pipe(
+        tap((response: CommentResponseDto) => {
+          this.comments.next([... this.comments.getValue(), response])
+          this.snackBar.open("Commentaire creé", "Fermé",{duration:3000, panelClass:"text-danger"})
+          this.commentForm.reset();
+        }),
+        catchError(err => {
+          this.snackBar.open("Error", "Fermé",{duration:3000, panelClass:"text-danger"})
+          return of(null)
+        })
+      ).subscribe();
     }
   }
 
@@ -126,10 +131,17 @@ export class CommentComponent implements OnInit, AfterViewInit {
   deleteComment(index: number): void {
     const confirmation = confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');
     if (confirmation) {
-      this.comments.getValue().splice(index, 1); // Remove the comment from the array
-      this.snackBar.open('Commentaire supprimé avec succès', 'Fermer', {
-        duration: 3000,
-      });
+      this.commentService.deleteComment(index).subscribe({
+        next:()=>{
+          this.snackBar.open('Commentaire supprimé avec succès', 'Fermer', {
+            duration: 3000,
+          });
+          this.comments.next(
+            this.comments.getValue().filter(comment => comment.id  !== index)
+          )
+      }
+      })
+
     }
   }
 

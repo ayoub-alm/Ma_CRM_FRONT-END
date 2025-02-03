@@ -90,8 +90,6 @@ export class ProspectService {
    * @param interest - The ID of the interest to update.
    */
   updateInterest(interest: interestRequestDto): Observable<ProspectInterestResponseDto> {
-      // const requestBody = new HttpRequestB()
-    alert(30)
       return this.http.put<ProspectInterestResponseDto>(
           `${this.baseUrl}/api/prospects-interests` , interest).pipe(
         tap(interestRequestDto => {

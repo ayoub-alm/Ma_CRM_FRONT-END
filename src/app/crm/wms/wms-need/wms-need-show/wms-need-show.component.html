@@ -1,0 +1,255 @@
+<div class="container-fluid bg-body row ">
+  <!-- Page Header -->
+  <!-- Actions -->
+  <div class="d-flex justify-content-between row" >
+    <div class="col-8">
+      <button (click)="router.navigate(['/admin/crm/wms/needs'])" color="primary"  mat-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button mat-button (click)="router.navigate(['/admin/crm/wms'])"  >
+        <mat-icon class=" primary-blue-color">house</mat-icon>
+        Accueil
+      </button>
+      /
+      <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
+        <mat-icon class=" primary-blue-color">checklist</mat-icon>
+        Besoins
+      </button>
+      /
+      <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
+        <mat-icon class=" primary-blue-color">details</mat-icon>
+        Détailes
+      </button>
+    </div>
+    <div class="col-2">
+      <button [matMenuTriggerFor]="menu"  class="bg-primary-blue-color scale-09 rounded-2 text-white" aria-label="Actions" mat-button>
+        Actions <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" class="bg-spider">
+        <button mat-menu-item >
+          <mat-icon>edit</mat-icon>
+          Edit
+        </button>
+        <button mat-menu-item (click)="createOfferFromNeed()">
+          <mat-icon>add</mat-icon>
+          Créé un offre
+        </button>
+        <button mat-menu-item (click)="createOfferFromNeed()">
+          <mat-icon>add</mat-icon>
+          Générer un PDF
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <hr>
+  <!--  </mat-card>-->
+
+  <!-- Main Storage Information -->
+  <mat-card class="mb-2 bg-white details-card col-lg-8 rounded-0 mat-elevation-z3">
+    <mat-card-content>
+      <p class="fs-6 align-items-center d-flex primary-blue-color">
+        <mat-icon class="scale-08">info</mat-icon>
+        Informations Générales
+      </p>
+      <div class="d-flex justify-content-between row">
+        <p class="col-lg-9 size"><span class="text-secondary"> Référence:</span> {{ storageNeed.getValue().ref }}</p>
+        <p class="col-lg-3"><span class="text-secondary">Status:</span>
+          <button class="scale-08 btn btn btn-sm p-1 primary-blue-color px-2 rounded-2 bg-info-subtle" mat-flat-button  >
+            {{ getNeedStatus(storageNeed.getValue().status).toUpperCase() }}
+          </button>
+        </p>
+      </div>
+      <hr class="m-0 p-0">
+      <div class="d-flex justify-content-between row">
+        <p class="col-lg-6"><span class="text-secondary">Raison du Stockage:</span>
+          <button class="scale-08 btn btn btn-sm p-0 px-2 rounded-2 text-warning bg-warning-subtle"  mat-flat-button>
+            {{ getLabelFromStorageReasonEnum(storageNeed.getValue().storageReason) }}
+          </button>
+        </p>
+        <p class="col-lg-6"><span class="text-secondary">Livre:</span>
+          <button class="scale-08 btn btn btn-sm p-0 px-2 rounded-2 text-secondary bg-secondary-subtle" mat-flat-button >
+            {{ storageNeed.getValue().liverStatus }}
+          </button>
+        </p>
+      </div>
+      <hr class="m-0 p-0">
+      <div class="d-flex justify-content-between row">
+        <p class="col-lg-6"><span class="text-secondary">Date de réception:</span> {{ storageNeed.getValue().expirationDate | date:'dd-MM-yyyy' }}
+        </p>
+        <p class="col-lg-6"><span class="text-secondary">Durée:</span> {{ storageNeed.getValue().duration }} jours</p>
+      </div>
+      <hr class="m-0 p-0">
+      <p class="col-lg-6"><span class="text-secondary">Nombre de SKU:</span> {{ storageNeed.getValue().numberOfSku }}</p>
+      <p><span class="text-secondary">Type de Produit:</span> {{ storageNeed.getValue().productType }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Customer Information -->
+  <mat-card class="mb-2 bg-white details-card col-lg-4 rounded-0 mat-elevation-z3">
+    <mat-card-content>
+      <p class="fs-6 align-items-center d-flex primary-blue-color">
+        <mat-icon class="scale-08">business</mat-icon>
+        Informations du Client
+      </p>
+      <p><span class="text-secondary">Client:</span> {{ storageNeed.getValue().customer?.name }}</p>
+      <p><span class="text-secondary">Entreprise:</span> {{ storageNeed.getValue().companyName }}</p>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Stocked Items -->
+  <mat-card class="mb-2 bg-white details-card col-12 rounded-0 mat-elevation-z3 ">
+    <mat-card-content>
+      <p class="fs-6 align-items-center d-flex primary-blue-color">
+        <mat-icon class="scale-08">inventory</mat-icon>
+        Articles Stockés
+      </p>
+      <div class="mat-elevation-z0">
+        <table class="table   rounded-2 mat-elevation-z1 overflow-hidden">
+          <!-- Table Header -->
+          <thead class="table-light  fw-light">
+          <tr class="">
+            <!--            <th>Référence</th>-->
+            <th class="  fw-light">Support</th>
+            <th class=" fw-light">Structure</th>
+            <th class=" fw-light">Température</th>
+            <th class=" fw-light">Dimensions L*L*H</th>
+            <th class=" fw-light">Fragile</th>
+            <th class=" fw-light">gerbabilié</th>
+            <th class=" fw-light">Uc</th>
+            <th class=" fw-light">Uvc</th>
+
+            <th class="bg-white fw-light"></th>
+          </tr>
+          </thead>
+
+          <!-- Table Body -->
+          <tbody *ngFor="let item of storageNeed.getValue().stockedItems">
+          <tr>
+            <!--            <td>{{ item.ref }}</td>-->
+            <td class="text-secondary">{{ item.supportName }}</td>
+            <td class="text-secondary">{{ item.structureName }}</td>
+            <td class="text-secondary">{{ item.temperatureName }}</td>
+            <td class="text-secondary">
+              {{ item.dimension?.length }}*{{ item.dimension?.width }}* {{ item.dimension?.height }}
+            </td>
+            <td class="">
+              <i *ngIf="item.isFragile" class="bi bi-exclamation-triangle text-danger"></i>
+              <i *ngIf="!item.isFragile" class="bi bi-check-circle text-success"></i>
+            </td>
+            <td class="text-secondary">{{ item.stackedLevelName }}</td>
+            <td class="text-secondary">{{ item.uvc }}</td>
+            <td class="text-secondary">{{ item.uvc }}</td>
+            <td (click)="expandedElement = expandedElement === item ? null : item" class="text-secondary">
+              <!--              <button class="btn btn-outline-primary btn-sm" >-->
+              {{ item.provisionResponseDto?.length }} Préstations <i [ngClass]="expandedElement === item ? 'bi-chevron-up' : 'bi-chevron-down'"
+                                                                     class="bi"></i>
+              <!--              </button>-->
+            </td>
+          </tr>
+          <tr *ngIf="expandedElement && item == expandedElement">
+            <td colspan="6">
+              <div class="card-body">
+
+                <ul *ngIf="expandedElement.provisionResponseDto?.length > 0" class="list-group">
+                  <li class="list-group-item bg-secondary-subtle">
+                    <div class="w-100 d-flex row fw-light ">
+                      <span class="col-4 border-start border-secondary-subtle border-2">Préstastion</span>
+                      <span class="col-4 border-start border-secondary-subtle border-2">Unité</span>
+                    </div>
+                  </li>
+                  <li *ngFor="let prv of expandedElement.provisionResponseDto" class="list-group-item">
+                    <div class="w-100 d-flex row text-secondary">
+                      <span class="col-4 border-start border-secondary-subtle border-2">{{ prv.name }}</span>
+                      <span
+                        class="col-4 border-start border-secondary-subtle border-2">{{ prv.unitOfMeasurement }}</span>
+                    </div>
+                  </li>
+                </ul>
+                <p *ngIf="!expandedElement.provisionResponseDto?.length" class="text-muted">
+                  <em>Aucune provision associée</em>
+                </p>
+              </div>
+            </td>
+          </tr>
+
+          <!-- Expanded Row for Provisions -->
+
+          </tbody>
+        </table>
+
+      </div>
+
+
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Unloading Types -->
+  <mat-card class="mb-2 bg-white  col-lg-6 rounded-0 mat-elevation-z3">
+    <mat-card-content>
+      <p class="fs-6 align-items-center d-flex primary-blue-color">
+        <mat-icon class="scale-08">local_shipping</mat-icon>
+        Types de Déchargement
+      </p>
+      <!--      <mat-list>-->
+      <!--        <mat-list-item *ngFor="let type of storageNeed.getValue().unloadingTypes">-->
+      <!--          <mat-icon>assignment</mat-icon>-->
+      <!--          <span class="text-secondary">{{ type.name }} - {{ type.initPrice }} {{ type.unitOfMeasurement }}</span>-->
+      <!--        </mat-list-item>-->
+      <!--      </mat-list>-->
+
+      <table class="table table-bordered table-hover rounded-2 mat-elevation-z1 overflow-hidden">
+        <thead class="table-light">
+        <tr class="fw-light">
+          <th class="fw-light "><i class="bi bi-card-checklist"></i> Type</th>
+<!--          <th class="fw-light "><i class="bi bi-cash-stack"></i> Prix Initial</th>-->
+          <th class="fw-light "><i class="bi bi-rulers"></i> Unité</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let type of storageNeed.getValue().unloadingTypes" class="small">
+          <td class="text-secondary">{{ type.name }}</td>
+<!--          <td class="text-secondary">{{ type.initPrice }}</td>-->
+          <td class="text-secondary">{{ type.unitOfMeasurement }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Requirements -->
+  <mat-card class="mb-2 bg-white col-lg-6 rounded-0 mat-elevation-z3">
+    <mat-card-content>
+      <p class="fs-6 align-items-center d-flex primary-blue-color">
+        <mat-icon class="scale-08">rule</mat-icon>
+        Exigences
+      </p>
+      <!--      <mat-list>-->
+      <!--        <mat-list-item *ngFor="let req of storageNeed.getValue().requirements">-->
+      <!--          <mat-icon>check_circle</mat-icon>-->
+      <!--          <span class="text-secondary">{{ req.name }} - {{ req.initPrice }} {{ req.unitOfMeasurement }}</span>-->
+      <!--        </mat-list-item>-->
+      <!--      </mat-list>-->
+      <table class="table table-bordered table-hover rounded-2 mat-elevation-z1 overflow-hidden">
+        <thead class="table-light ">
+        <tr>
+            <th class="fw-light "><i class="bi bi-check-circle"></i> Exigence</th>
+<!--            <th class="fw-light "><i class="bi bi-cash-stack"></i> Prix Initial</th>-->
+            <th class="fw-light "><i class="bi bi-rulers"></i> Unité</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let req of storageNeed.getValue().requirements" class="small text-secondary">
+          <td class=" text-secondary">{{ req.name }}</td>
+<!--          <td class=" text-secondary">{{ req.initPrice }}</td>-->
+          <td class=" text-secondary"> {{ req.unitOfMeasurement }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-card-content>
+  </mat-card>
+
+
+</div>
+
+
+<app-comment  [entity]="EntityEnum.STORAGENEED" [entityId]="storageNeed.getValue().id" ></app-comment>

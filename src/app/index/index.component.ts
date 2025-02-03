@@ -44,21 +44,17 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
   }, crm: {
     icon: 'business_center', // Updated icon for CRM
     items: [{name: 'Dashboard', icon: 'bar_chart', route: '/admin/crm'}, {
-      name: 'Produits & Services',
-      icon: 'inventory',
-      route: '/crm/products'
-    }, {
       name: 'Clients',
       icon: 'contacts',
-      route: '/crm/credits'
+      route: '/admin/crm/wms/customers'
     }, {
       name: 'Tarifs',
       icon: 'price_change',
-      route: '/admin/crm/pricing'
-    }, {name: 'Besoins', icon: 'checklist', route: '/admin/crm/need/wms'}, {
+      route: '/admin/crm/wms/pricing'
+    }, {name: 'Besoins', icon: 'checklist', route: '/admin/crm/wms/needs'}, {
       name: 'Offre',
       icon: 'request_quote',
-      route: '/crm/quotes'
+      route: '/admin/crm/wms/offers'
     },{name: 'Contrats', icon: 'assignment', route: '/crm/contracts'}
     , {name: 'Factures', icon: 'receipt_long', route: '/admin/crm/invoices'}, {
       name: 'Recouvrement',
@@ -196,7 +192,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
         company => company.id == selectedCompanyId
       );
 
-      this.selectedCompany.next(currentCompany?.name || "test");
+      this.selectedCompany.next(currentCompany?.name || "No Company Selected");
     } else {
       const firstCompany = this.userCompanies.getValue()[0];
       this.selectedCompany.next(firstCompany?.name || "");
@@ -236,5 +232,6 @@ export class IndexComponent implements OnInit, AfterViewInit {
   selectCompany(company: CompanyResponseDto) {
     this.localStorageService.setItem("selected_company_id", company.id);
     this.fillCompany();
+    window.location.reload();
   }
 }

@@ -2,27 +2,26 @@
   <!-- Left Drawer -->
   <mat-drawer
     #leftDrawer
-    class="example-sidenav custom-drawer-width bg-light"
+    class="example-sidenav rounded-0 custom-drawer-width bg-spider"
     mode="side"
     position="start"
     [opened]="true"
   >
     <div class="container-fluid side-nav">
-      <mat-toolbar>
+      <mat-toolbar class="rounded-3 mat-elevation-z2">
         <button mat-icon-button (click)="rightDrawer.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
-        <p class="primary-blue-color" style="" >Spider <span class="small text-secondary" style="font-size:0.5rem; position:relative;bottom:10px;right: 2px;" >ERP</span></p>
+        <p class="primary-blue-color m-auto" style="" >Spider <span class="small text-secondary" style="font-size:0.5rem; position:relative;bottom:10px;right: 2px;" >ERP</span></p>
         <button mat-icon-button (click)="leftDrawer.toggle()">
           <mat-icon>close</mat-icon>
         </button>
       </mat-toolbar>
-      <mat-divider></mat-divider>
 
       <!-- Dynamic Left Menu -->
       <mat-list>
         <a *ngFor="let item of menuItems"
-           [routerLink]="item.route"  routerLinkActive="active"  class="text-decoration-none">
+           [routerLink]="item.route"  routerLinkActive="active-link"  [routerLinkActiveOptions]="{exact:true}" class="text-decoration-none">
           <mat-list-item class="d-flex justify-content-start align-items-center">
             <button
               mat-button
@@ -31,7 +30,7 @@
               style="width: 100%;"
             >
               {{ item.name }}
-              <mat-icon>{{ item.icon }}</mat-icon>
+              <mat-icon class="text-secondary">{{ item.icon }}</mat-icon>
             </button>
           </mat-list-item>
           <mat-list *ngIf="item.children && item.children.length > 0" class="mx-2">
@@ -97,8 +96,8 @@
   </mat-drawer>
 
   <!-- Main Content -->
-  <div class="example-sidenav-content bg-light p-0 m-0">
-    <mat-toolbar class="bg-light sticky-top">
+  <div class="example-sidenav-content bg-spider p-0 m-0">
+    <mat-toolbar class="bg-spider sticky-top">
       <button mat-icon-button (click)="leftDrawer.toggle()">
         <mat-icon>menu</mat-icon>
       </button>
@@ -113,7 +112,7 @@
 
 
       <span class="example-spacer"></span>
-      <button mat-button class="mat-dark bg-light  rounded-3 mx-1 bg-white border border-1 border-secondary-subtle shadow-sm"
+      <button mat-button class="mat-dark bg-spider  rounded-3 mx-1 bg-white border border-1 border-secondary-subtle shadow-sm"
               [color]="'primary'"
               [matMenuTriggerFor]="menu_action"
               style="transform:scale(0.9)"
@@ -121,7 +120,7 @@
         <mat-icon>domain</mat-icon>
         <span class="d-none d-md-block">{{selectedCompany.getValue()}}</span>
       </button>
-      <mat-menu #menu_action="matMenu" xPosition="before" class="bg-light">
+      <mat-menu #menu_action="matMenu" xPosition="before" class="bg-spider">
         <ng-container *ngFor="let company of userCompanies | async">
           <button (click)="selectCompany(company)"
             mat-menu-item class="mat-primary">
@@ -145,7 +144,7 @@
       </button>
     </mat-toolbar>
 
-    <div class="content-container container-fluid vh-100">
+    <div class="content-container container-fluid ">
       <router-outlet></router-outlet>
     </div>
   </div>

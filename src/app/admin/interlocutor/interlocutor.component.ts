@@ -135,7 +135,7 @@ export class InterlocutorComponent implements  OnInit, AfterViewInit{
     const dialogRef = this.dialog.open(AddUpdateInterlocutorComponent, {
       maxWidth: '900px',
       maxHeight: '100vh',
-      data: this.interlocutors.getValue().find(interlocutor => interlocutor.id === interlocutor.id),
+      data: interlocutor ? interlocutor :null
     });
 
     dialogRef.afterClosed().pipe(

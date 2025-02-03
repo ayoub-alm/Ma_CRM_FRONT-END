@@ -10,7 +10,7 @@
 
 .custom-drawer-width {
   width: 300px;
-  font-size:0.8rem;
+  font-size:0.9rem;
 }
 
 .example-sidenav-content {
@@ -36,8 +36,8 @@ mat-list-item:hover button {
 }
 
 
-.active {
-  background-color: #e0f7fa;
+.active-link {
+  background-color: red;
   font-weight: bold;
 
 }

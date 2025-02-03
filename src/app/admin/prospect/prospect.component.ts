@@ -83,7 +83,8 @@ export class ProspectComponent implements OnInit, AfterViewInit {
           // Customize filter logic for specific columns
           return data.name.toLowerCase().includes(filter) ||
             data.email.toLowerCase().includes(filter) ||
-            data.phone.toLowerCase().includes(filter);
+            data.phone.toLowerCase().includes(filter) ||
+            data.industry.name.toLowerCase().includes(filter) ;
         };
       },
       error: (err) => {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import {StorageNeedResponseDto} from '../../../dtos/response/crm/storage.need.request.dto';
+import {Observable, tap} from 'rxjs';
+import {StorageNeedResponseDto} from '../../../dtos/response/crm/storage.need.response.dto';
 import {StorageNeedCreateDto} from '../../../dtos/request/crm/storage.need.create.dto';
 import {environment} from '../../../environments/environment';
 
@@ -29,7 +29,8 @@ export class StorageNeedService {
    * @returns Observable of StorageNeedResponseDto.
    */
   getStorageNeedById(id: number): Observable<StorageNeedResponseDto> {
-    return this.http.get<StorageNeedResponseDto>(`${this.baseUrl}/${id}`);
+    return this.http.get<StorageNeedResponseDto>(`${this.baseUrl}/${id}`).pipe(
+      tap(data => {new StorageNeedResponseDto(data)}));
   }
 
   /**

@@ -1,8 +1,10 @@
   import { Routes } from '@angular/router';
   import {LoginComponent} from './login/login.component';
   import {NotFoundComponent} from './not-found/not-found.component';
+  import {HomeComponent} from './front-end/home/home.component';
 
   export const routes: Routes = [
+    { path: 'home', component: HomeComponent },
     {
       path: 'admin',
       loadChildren: () =>

@@ -2,6 +2,8 @@ import {StorageReasonEnum} from '../../../enums/crm/storage.reason.enum';
 import {NeedStatusEnum} from '../../../enums/crm/need.status.enum';
 import {LivreEnum} from '../../../enums/crm/livre.enum';
 import {StockedItemCreateDto} from './stockedItem.create.dto';
+import {UnloadingTypeResponseDto} from '../../response/crm/unloading.type.response.dto';
+import {RequirementResponseDto} from '../../response/crm/requirement.response.dto';
 
 export class StorageNeedCreateDto {
   ref: string; // UUID reference for the storage need
@@ -15,8 +17,8 @@ export class StorageNeedCreateDto {
   customerId: number; // Customer ID
   companyId: number; // Company ID
   stockedItemsRequestDto: StockedItemCreateDto[]; // List of stocked items
-  unloadingTypes: number[]; // List of unloading type IDs
-  requirements: number[]; // List of requirement IDs
+  unloadingTypes: UnloadingTypeResponseDto[]; // List of unloading type IDs
+  requirements: RequirementResponseDto[]; // List of requirement IDs
 
   constructor(
     ref: string,
@@ -30,8 +32,8 @@ export class StorageNeedCreateDto {
     customerId: number,
     companyId: number,
     stockedItemsRequestDto: StockedItemCreateDto[] = [],
-    unloadingTypes: number[] = [],
-    requirements: number[] = [],
+    unloadingTypes: UnloadingTypeResponseDto[] = [],
+    requirements: RequirementResponseDto[] = [],
   ) {
     this.ref = ref;
     this.storageReason = storageReason;

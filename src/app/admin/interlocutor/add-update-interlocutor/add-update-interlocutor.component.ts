@@ -137,7 +137,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
       }
     })).subscribe()
 
-    if (this.interlocutorToUpdate) {
+    if (this.interlocutorToUpdate.id ) {
       this.interlocutorForm.patchValue({
         fullName: this.interlocutorToUpdate.fullName,
         active: this.interlocutorToUpdate.active.toLowerCase() === 'active',

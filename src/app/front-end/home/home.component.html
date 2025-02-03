@@ -1,0 +1,179 @@
+<mat-drawer-container class="example-container vh-100">
+
+  <!-- Left Drawer -->
+  <mat-drawer #leftDrawer class="example-sidenav rounded-0 custom-drawer-width bg-light" mode="over" position="start" [opened]="false">
+    <div class="container-fluid side-nav">
+      <mat-toolbar>
+        <button mat-icon-button (click)="rightDrawer.toggle()">
+          <mat-icon>menu</mat-icon>
+        </button>
+        <p class="mat-primary-color primary-blue-color">Spider <span class="small text-secondary">ERP</span></p>
+        <button mat-icon-button (click)="leftDrawer.toggle()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-toolbar>
+      <mat-divider></mat-divider>
+
+      <!-- Dynamic Left Menu -->
+      <mat-list>
+        <a *ngFor="let item of menuItems" [routerLink]="item.route" routerLinkActive="active" class="text-decoration-none">
+          <mat-list-item class="d-flex justify-content-start align-items-center">
+            <button mat-button class="text-start d-flex justify-content-start text-secondary rounded-1 w-100">
+              {{ item.name }}
+              <mat-icon>{{ item.icon }}</mat-icon>
+            </button>
+          </mat-list-item>
+        </a>
+      </mat-list>
+    </div>
+  </mat-drawer>
+
+  <!-- Top Toolbar -->
+  <mat-toolbar color="primary" class="sticky-top text-white">
+    <button class="primary-blue-color-light" mat-icon-button (click)="leftDrawer.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+    <button mat-button class="bg-white text-primary primary-blue-color rounded-3 mx-1">
+      🕸️Spider <span class="small text-secondary">ERP</span>
+    </button>
+    <span class="example-spacer"></span>
+    <mat-menu #menu_action="matMenu" xPosition="before" class="bg-light">
+      <ng-container *ngFor="let company of userCompanies | async">
+        <button (click)="selectCompany(company)" mat-menu-item class="text-primary">
+          <mat-icon>domain</mat-icon>
+          {{ company.name }}
+        </button>
+      </ng-container>
+    </mat-menu>
+    <button mat-icon-button class="primary-blue-color-light">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <a routerLink="/login">
+      <button mat-icon-button class="primary-blue-color-light">
+        <mat-icon>logout</mat-icon>
+      </button>
+    </a>
+    <button mat-icon-button class="primary-blue-color-light" (click)="rightDrawer.toggle()">
+      <mat-icon>apps</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!-- Hero Section -->
+  <div class="container-fluid bg-primary text-white text-center py-5 hero-section">
+    <img class="fade-in" src="/spider-web-blue.svg" width="200" alt="Spider Web" style="z-index:1; position:relative;">
+    <h1 class="display-4 text-white fade-in" style="z-index:100; position:relative;">Spider ERP</h1>
+    <p class="lead">L'avenir de la logistique et de la gestion d'entreprise</p>
+    <button mat-flat-button  class="btn-lg bg-white primary-blue-color-light mt-3 pulse">Commencer</button>
+  </div>
+
+  <!-- Features Section -->
+  <div class="container my-5">
+    <h2 class="text-center primary-blue-color mat-primary-color">Pourquoi Choisir Spider ERP ?</h2>
+    <div class="row mt-4">
+      <div class="col-md-4 mb-3" *ngFor="let feature of features">
+        <mat-card class="h-100 bg-spider-light">
+          <h1 class="text-center">
+            <i class="{{ feature.icon }}  text-center display-4"></i>
+          </h1>
+          <mat-card-title class="primary-blue-color text-center">{{ feature.title }}</mat-card-title>
+          <mat-card-content>
+            <p class="text-muted text-center">{{ feature.description }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials Section -->
+  <div class="container-fluid bg-light py-5">
+    <h2 class="text-center primary-blue-color mat-primary-color">Ce Que Nos Clients Disent</h2>
+    <div class="row justify-content-center mt-4">
+      <div class="col-md-4" *ngFor="let testimonial of testimonials">
+        <mat-card class="border-0 shadow-sm p-3">
+          <mat-card-content>
+            <p class="fst-italic">"{{ testimonial.feedback }}"</p>
+            <p class="primary-blue-color mb-0">{{ testimonial.name }}</p>
+            <small class="text-muted">{{ testimonial.company }}</small>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+
+  <!-- About Spider ERP Section -->
+  <div class="container my-5">
+    <h2 class="text-center primary-blue-color mat-primary-color">À Propos de Spider ERP</h2>
+    <p class="text-center lead">
+      Inspiré par l'**araignée cobalt bleu**, Spider ERP symbolise l'interconnexion et l'efficacité. Notre ERP vous aide à tisser un réseau parfait entre vos opérations logistiques, de transport, et de gestion d'entrepôt.
+    </p>
+    <div class="row text-center mt-4">
+      <div class="col-md-6">
+        <h5 class="primary-blue-color mat-primary-color">Caractéristiques Clés</h5>
+        <ul class="list-unstyled">
+          <li><i class="bi bi-check-circle mat-primary-color"></i> Gestion Intégrée</li>
+          <li><i class="bi bi-check-circle mat-primary-color"></i> Optimisation Logistique</li>
+          <li><i class="bi bi-check-circle mat-primary-color"></i> Solutions Scalables</li>
+        </ul>
+      </div>
+      <div class="col-md-6">
+        <img src="/blue-real-spider.jpg" height="554"  width="554" class="img-thumbnail rounded shadow" alt="Cobalt Blue Spider" />
+      </div>
+    </div>
+  </div>
+
+  <!-- Contact Section -->
+  <div class="container text-center my-5">
+    <h2 class="primary-blue-color mat-primary-color">Commencez Avec Spider ERP</h2>
+    <p class="lead">Transformez dès aujourd'hui vos opérations logistiques, de transport et d'entrepôt.</p>
+    <button mat-raised-button color="primary" class="btn-lg">Demander une Démo</button>
+  </div>
+  <footer class="p-3 bg-spider-light">
+    <div class="row">
+      <div class="col-12 col-md text-center">
+            <p class="">
+              <button mat-button class="bg-white mat-elevation-z3  m-auto  text-primary primary-blue-color rounded-3 mx-1">
+                🕸️Spider <span class="small text-secondary">ERP</span>
+              </button>
+            </p>
+<!--        <img class="mb-2" src="../assets/brand/bootstrap-logo.svg" alt="" width="24" height="19">-->
+        <small class="d-block mb-3 text-body-secondary">
+          Cteated with ❤️ By <br>
+          <span class="primary-blue-color">
+          &copy;3ABC business center</span>
+          <br>2024–2025</small>
+      </div>
+      <div class="col-6 col-md">
+        <h6 class="primary-blue-color fw-light">Features</h6>
+        <ul class="list-unstyled text-small">
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Cool stuff</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Random feature</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team feature</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Stuff for developers</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another one</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Last time</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h6 class="primary-blue-color fw-light">Resources</h6>
+        <ul class="list-unstyled text-small">
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Resource name</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Another resource</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Final resource</a></li>
+        </ul>
+      </div>
+      <div class="col-6 col-md">
+        <h6 class="primary-blue-color fw-light">About</h6>
+        <ul class="list-unstyled text-small">
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Team</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Locations</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Privacy</a></li>
+          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Terms</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</mat-drawer-container>
+
+
+
