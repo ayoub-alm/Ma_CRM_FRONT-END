@@ -193,6 +193,9 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
     const contactInfo = this.contactInfoFormGroup.value;
     const businessDescription = this.businessDescriptionFormGroup.value;
 
+    // Keep the existing logo if the prospect already has an id
+    const logo = this.prospect.id ? this.prospect.logo : companyDetails.logo;
+
     // Create a new CreateCompanyRequest object
     const prospectId = this.prospect.id ? this.prospect.id : "";
     const newProspect: CreateProspectDto = new CreateProspectDto(prospectId,companyDetails.logo,

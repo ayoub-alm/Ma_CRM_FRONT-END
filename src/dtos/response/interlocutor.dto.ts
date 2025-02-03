@@ -15,7 +15,10 @@ export class InterlocutorResDto{
   customer:ProspectResponseDto;
   department:DepartmentModel;
   jobTitle: JobTitleResponseDto;
-
+  createdAt: Date;
+  createdBy: string;
+  updatedAt: Date;
+  updatedBy: string;
 
   constructor(data: any ) {
     this.id = data.id ? data.id : '';
@@ -26,5 +29,9 @@ export class InterlocutorResDto{
     this.customer = data.custumer;
     this.department = data.department;
     this.jobTitle = data.jobTitle;
+    this.createdAt = data.createdAt;
+    this.createdBy = data.createdBy;
+    this.updatedAt = data.updatedAt;
+    this.updatedBy = data.updatedBy;
   }
 }

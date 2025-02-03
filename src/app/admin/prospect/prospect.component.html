@@ -5,7 +5,7 @@
           <a routerLink="/admin">
              <button mat-button>
                <mat-icon class=" primary-blue-color">home</mat-icon>
-                home
+                Accueil
              </button>
           </a> >
             <button mat-button>
@@ -87,22 +87,22 @@
   <!-- End import data from File section  -->
 
  <div class="bg-light rounded-3 mat-elevation-z2 w-100">
-   <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="bg-white mat-elevation-z1 fs-6 my-2 rounded-3 small ">
-     <ng-container *ngFor="let link of ProspectStatus | keyvalue" class="fs-1 small">
-       <a mat-tab-link
-          (click)="activeLink = link.value"
-          [active]="activeLink === link.value">
-         <small>
-           <button [class]="activeLink == link.value ?'primary-blue-color btn btn-sm d-flex   rounded-3 rounded-0':
-        'text-secondary d-flex btn btn-sm rounded-0  rounded-3'">
-             <mat-icon>{{ getIcon(link.value) }}</mat-icon> <!-- Display icon -->
-             <span class="mx-2"> {{ link.value }}</span>
-           </button>
-         </small>
-       </a>
-     </ng-container>
-   </nav>
-   <div class="table-container border-top-5  border-secondary w-100">
+     <nav mat-tab-nav-bar [tabPanel]="tabPanel" class="bg-white mat-elevation-z1 fs-6 my-2 rounded-3 small">
+         <ng-container *ngFor="let link of ProspectStatus | keyvalue" class="fs-1 small">
+             <a mat-tab-link (click)="onTabClick(link.value)" [active]="activeLink === link.value">
+                 <small>
+                     <button [class]="activeLink == link.value ?'primary-blue-color btn btn-sm d-flex rounded-3 rounded-0':
+        'text-secondary d-flex btn btn-sm rounded-0 rounded-3'">
+                         <mat-icon>{{ getIcon(link.value) }}</mat-icon> <!-- Display icon -->
+                         <span class="mx-2">{{ link.value }}</span>
+                     </button>
+                 </small>
+             </a>
+         </ng-container>
+     </nav>
+
+
+     <div class="table-container border-top-5  border-secondary w-100">
 
      <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
      <table mat-table [dataSource]="dataSource" matSort class="table-container text-secondary" style="font-size:0.5rem !important;">

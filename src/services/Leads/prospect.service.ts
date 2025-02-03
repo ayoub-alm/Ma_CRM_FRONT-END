@@ -9,6 +9,7 @@ import {CreateProspectDto} from '../../dtos/request/CreateProspectDto';
 import {InterestResponseDto} from "../../dtos/response/interestResponseDto";
 import {interestRequestDto} from "../../dtos/request/interestRequestDto";
 import {ProspectInterestResponseDto} from "../../dtos/response/prospectInterestResponseDto";
+import {ProspectFilterRequestDto} from "../../dtos/request/prospectFilterRequestDto";
 
 @Injectable({
   providedIn: 'root'
@@ -96,5 +97,24 @@ export class ProspectService {
         tap(interestRequestDto => {
           new ProspectInterestResponseDto(ProspectInterestResponseDto)})
     )
+  }
+
+  /**
+   *
+   * @param prospectId
+   * @param formData
+   */
+  updateProspectLogo(prospectId: number, formData: FormData): Observable<ProspectResponseDto> {
+    const url = `${this.baseUrl}/api/prospects/logo`;
+
+    return this.http.put<ProspectResponseDto>(url, formData, { params: { prospectId: prospectId.toString() } });
+  }
+
+  getProspectByFilter(prospectFilterRequestDto: ProspectFilterRequestDto) {
+    let params = new HttpParams();
+    if (prospectFilterRequestDto.status) {
+      params = params.set('status', prospectFilterRequestDto.status);
+    }
+    return this.http.get<ProspectResponseDto[]>(`${this.baseUrl}/api/prospects/filter`, { params });
   }
 }

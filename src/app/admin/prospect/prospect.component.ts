@@ -20,6 +20,7 @@ import {KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {getAllStatusLabel, ProspectStatus} from '../../../enums/prospect.status';
 import {MatTabLink, MatTabNav, MatTabNavPanel} from '@angular/material/tabs';
 import {ConfirmationDialogComponent} from "../../utils/confirmation-dialog/confirmation-dialog.component";
+import {ProspectFilterRequestDto} from "../../../dtos/request/prospectFilterRequestDto";
 
 
 @Component({
@@ -369,4 +370,23 @@ export class ProspectComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
+  onTabClick(status: string): void {
+    this.activeLink = status;  // Update the active link (tab)
+
+    // Create a filter request DTO with the selected status
+    const filterDto = new ProspectFilterRequestDto(status, null);  // Modify 'null' with companyId if needed
+
+    // Call the service method to get prospects by filter
+    this.prospectService.getProspectByFilter(filterDto).subscribe({
+      next: (prospects: ProspectResponseDto[]) => {
+        this.prospects.next(prospects);  // Update the BehaviorSubject with the filtered prospects
+        this.dataSource.data = prospects;  // Update the table data
+      },
+      error: (err) => {
+        console.error('Error fetching prospects:', err);  // Handle errors
+      }
+    });
+  }
+
 }

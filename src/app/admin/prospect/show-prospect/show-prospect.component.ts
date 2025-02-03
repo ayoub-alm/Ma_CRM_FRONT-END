@@ -68,8 +68,9 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
     interlocutors: BehaviorSubject<InterlocutorResDto[]> = new BehaviorSubject<InterlocutorResDto[]>([])
     statusForm: FormGroup;
     isEditStatus: boolean = false;
-    // Add new properties for toggle states
-    entreposageEnabled: boolean = false;
+
+    prospectForm!: FormGroup;
+
     protected readonly environment = environment;
     protected readonly ProspectStatus = ProspectStatus;
     protected readonly EntityEnum = EntityEnum;
@@ -87,7 +88,9 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
         // }, {
         //   timestamp: new Date('2024-04-01T09:00:00'), title: 'April Fool\'s Day', description: '', id: 3
         // }];
-
+        this.prospectForm = this.fb.group({
+            report: [''],
+        });
 
         this.statusForm = fb.group({
             status: ['']
@@ -273,5 +276,60 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
         const prospectInterests = this.interests.getValue(); // Get the current interests
         const interest = prospectInterests.find(interest => interest.id === id); // Find the interest by id
         return interest ? interest.status : false; // Return the status if interest exists, otherwise false
+    }
+
+    // Component
+    showModifierHint = false;
+    uploadingLogo = false;
+    logoPreview: string | ArrayBuffer | null = null;
+
+    getDefaultLogo(): string {
+        return this.prospect.getValue().logo
+            ? `${this.environment.baseUrl}/api/images/${this.prospect.getValue().logo}`
+            : 'https://placehold.co/400';
+    }
+
+    handleLogoUpload(event: any) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        if (!file.type.startsWith('image/')) {
+            this.snackBar.open('Seuls les fichiers image sont autorisés', 'Fermer', { duration: 3000 });
+            return;
+        }
+
+        // Show preview
+        const reader = new FileReader();
+        reader.onload = () => this.logoPreview = reader.result;
+        reader.readAsDataURL(file);
+
+        // Trigger the upload & update
+        this.uploadLogo(file);
+    }
+
+    private uploadLogo(file: File) {
+        this.uploadingLogo = true;
+        const formData = new FormData();
+        formData.append('logo', file);
+
+        this.prospectService.updateProspectLogo(this.prospect.getValue().id, formData).pipe(
+            tap((updatedProspect) => {
+                // Update the local prospect state with the new logo
+                this.prospect.next(updatedProspect);
+
+                // Notify the user
+                this.snackBar.open('Logo mis à jour automatiquement ✅', 'Fermer', { duration: 3000 });
+
+                // Reset upload state
+                this.uploadingLogo = false;
+                this.showModifierHint = false;
+            }),
+            catchError((err) => {
+                console.error('Échec de la mise à jour du logo', err);
+                this.snackBar.open('Échec de la mise à jour du logo ⛔', 'Fermer', { duration: 3000 });
+                this.uploadingLogo = false;
+                return EMPTY;
+            })
+        ).subscribe();
     }
 }

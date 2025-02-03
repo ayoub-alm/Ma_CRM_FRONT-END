@@ -14,3 +14,9 @@
   border-bottom: solid 2px #005cbb;
   background-color: #e0e2ec !important;
 }
+
+.small-btn {
+  font-size: 12px !important;
+  padding: 4px 8px !important;
+}
+

@@ -31,7 +31,7 @@
             <input formControlName="companyName" matInput placeholder="prospect Exemple" required>
           </mat-form-field>
         </div>
-        <div class="col-6 text-center px-5">
+        <div class="col-6 text-center px-5" *ngIf="!prospect?.id">
           <div (dragleave)="onDragLeave($event)"
                (dragover)="onDragOver($event)"
                (drop)="onLogoDrop($event)"
@@ -40,7 +40,7 @@
             <div *ngIf="!prospect?.logo">
               <p class="display-6 m-0 p-0"><i class="bi bi-image primary-blue-color"></i></p>
               <input #logoInput (change)="onLogoUpload($event)" hidden type="file"/>
-              <button (click)="logoInput.click()" class="mx-2 shadow-sm" mat-button>Sélectionnez le logo</button>
+              <button (click)="logoInput.click()" class="mx-2 shadow-sm small-btn" mat-button>Sélectionnez le logo</button>
               <br>
             </div>
             <!-- if logo exist  -->

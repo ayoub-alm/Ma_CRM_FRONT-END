@@ -4,7 +4,7 @@
           <a routerLink="/admin">
              <button mat-button>
                <mat-icon class=" primary-blue-color">home</mat-icon>
-                home
+                Accueil
              </button>
           </a> >
           <a routerLink="/admin/interlocutors">
@@ -14,7 +14,7 @@
              </button>
           </a> >
           <button mat-button>
-               <mat-icon class=" primary-blue-color">details</mat-icon>
+               <mat-icon class=" primary-blue-color">info</mat-icon>
               Détails
           </button>
       </span>
@@ -36,6 +36,14 @@
       </mat-card-title>
       <mat-card-content>
         <div class="row">
+            <p>
+            <p class="col-lg-6">
+            <span class="text-secondary">
+            <i class="bi bi-building mx-2 primary-blue-color"></i>Statut :</span>
+                <button  style="transform:scale(0.8)" [ngClass]="[getChipClass(interlocutor.getValue().active), 'btn btn-sm p-1 rounded-4 px-3']">
+                    {{ getAllStatusInteraction(interlocutor.getValue().active)}}
+                </button>
+            </p>
           <p class="col-lg-6">
       <span class="text-secondary">
         <i class="primary-blue-color  mx-2 bi  bi-person-fill"></i>Nom complet :
@@ -77,6 +85,28 @@
       </span>
             <span class="mx-2 my-3">{{ interlocutor.getValue().phoneNumber.number }}</span>
           </p>
+
+            <!-- Created At By - Updated At By -->
+            <p class="col-lg-6" *ngIf="interlocutor.getValue().createdAt">
+                <i class="bi bi-calendar-event-fill mx-2 bi primary-blue-color"></i>
+                <span class="text-secondary">Créé le : </span>
+                <span class="mx-2 my-3">{{ interlocutor.getValue().createdAt | date:'shortDate' }}</span>
+            </p>
+            <p class="col-lg-6" *ngIf="interlocutor.getValue().createdBy">
+                <i class="bi bi-person-lines-fill mx-2 bi primary-blue-color"></i>
+                <span class="text-secondary">Créé par : </span>
+                <span class="mx-2 my-3">{{ interlocutor.getValue().createdBy }}</span>
+            </p>
+            <p class="col-lg-6" *ngIf="interlocutor.getValue().updatedAt">
+                <i class="bi bi-calendar-event-fill mx-2 bi primary-blue-color"></i>
+                <span class="text-secondary">Mis à jour le : </span>
+                <span class="mx-2 my-3">{{ interlocutor.getValue().updatedAt | date:'shortDate' }}</span>
+            </p>
+            <p class="col-lg-6" *ngIf="interlocutor.getValue().updatedBy">
+                <i class="bi bi-person-lines-fill mx-2 bi primary-blue-color"></i>
+                <span class="text-secondary">Mis à jour par : </span>
+                <span class="mx-2 my-3">{{ interlocutor.getValue().updatedBy }}</span>
+            </p>
         </div>
       </mat-card-content>
 

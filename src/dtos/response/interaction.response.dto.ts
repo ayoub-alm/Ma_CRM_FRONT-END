@@ -16,6 +16,9 @@ export class InteractionResponseDto {
   affectedToId?: number;
   affectedToName?: string;
   createdAt: Date;
+  createdBy: string;
+  updatedAt: Date;
+  updatedBy: string;
 
   constructor(data: any) {
     this.id = data.id;
@@ -35,5 +38,8 @@ export class InteractionResponseDto {
     this.affectedToId = data.affectedToId;
     this.affectedToName = data.affectedToName;
     this.createdAt = data.createdAt;
+    this.createdBy = data.createdBy;
+    this.updatedAt = data.updatedAt;
+    this.updatedBy = data.updatedBy;
   }
 }
