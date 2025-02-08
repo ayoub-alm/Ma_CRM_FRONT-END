@@ -1,1 +1,275 @@
-<p>companies works!</p>
+<div class="container-fluid bg-body row rounded-top-4">
+<!-- Page Header -->
+    <!-- Actions -->
+    <div class="d-flex justify-content-between" >
+        <div class="col-8">
+            <button color="primary"  mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <button mat-button >
+                <mat-icon class=" primary-blue-color">house</mat-icon>
+                Accueil
+            </button>
+            /
+            <button mat-button >
+                <mat-icon class=" primary-blue-color">checklist</mat-icon>
+                Entreprise
+            </button>
+        </div>
+        <div class="col-1 mx-3">
+            <button [matMenuTriggerFor]="menu" class="bg-primary-blue-color scale-09 rounded-2 text-white" aria-label="Actions" mat-button>
+                Actions <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" class="bg-spider">
+                <button mat-menu-item (click)="editCompany(company)" >
+                    <mat-icon>edit</mat-icon>
+                    Edit
+                </button>
+                <button mat-menu-item (click)="openAddCompanyDialog()">
+                    <mat-icon>add</mat-icon>
+                    Générer un PDF
+                </button>
+            </mat-menu>
+        </div>
+    </div>
+    <hr>
+    <!--  </mat-card>-->
+
+    <!-- Logo Section -->
+    <mat-card-title class="d-flex justify-content-between align-items-center mt-2" >
+        <p class="d-flex align-baseline">
+            <mat-icon  class="example-tab-icon mx-2 primary-blue-color">info</mat-icon>
+            <span class="fs-5">Détails de l'entreprise</span>
+        </p>
+    </mat-card-title>
+
+    <div class="col-lg-3 col-12 mt-2">
+        <div class="position-relative logo-container mx-2 my-3"
+             (mouseenter)="showModifierHint = true"
+             (mouseleave)="showModifierHint = false"
+             (click)="!uploadingLogo && fileInput.click()"
+             role="button"
+             tabindex="0"
+             [attr.aria-disabled]="uploadingLogo ? 'true' : null">
+
+            <!-- Hidden file input -->
+            <input #fileInput
+                   type="file"
+                   hidden
+                   accept="image/*"
+                   (change)="handleLogoUpload($event)">
+
+            <!-- Logo Preview -->
+            <div class="position-relative">
+                <img *ngIf="!uploadingLogo"
+                     [src]="logoPreview || getDefaultLogo()"
+                     alt="Logo"
+                     class="img-fluid rounded-2 shadow-sm cursor-pointer w-100 h-auto"
+                     [class.logo-hover]="showModifierHint">
+
+                <!-- Hover Hint (Centered) -->
+                <div *ngIf="showModifierHint && !uploadingLogo"
+                     class="position-absolute text-center top-50 start-50 translate-middle bg-dark-ma bg-opacity-50 text-white p-1 rounded font text-logo">
+                    Cliquez pour modifier le logo
+                </div>
+
+                <!-- Upload Overlay -->
+                <div *ngIf="uploadingLogo" class="upload-overlay">
+                    <div class="d-flex justify-content-center align-items-center w-100 h-100">
+                        <div class="spinner-border text-light" role="status">
+                            <span class="visually-hidden">Mise à jour du logo...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Storage Information -->
+    <mat-card class="mb-2 bg-white details-card col-lg-8 rounded-0 mat-elevation-z3 mx-5">
+        <mat-card-content>
+            <div class="d-flex justify-content-between row">
+                <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-building"></i> Nom de l'entreprise :
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().name }}</span>
+                </p>
+            </div>
+            <hr class="m-0 p-0">
+            <div class="d-flex justify-content-between row">
+                <!-- Sigle -->
+                <p class="col-lg-6">
+                <span class="text-secondary">
+                <i class="primary-blue-color bi bi-briefcase-fill"></i> Sigle :
+                </span>
+                    <span class="mx-2 my-3">{{ company.getValue().sigle }}</span>
+                </p>
+                <!-- Country -->
+                <p class="col-lg-6"><span class="text-secondary">
+                    <i class="primary-blue-color bi bi-flag-fill"></i> Pays :
+                    </span>
+                    <span class="mx-2 my-3">{{ company.getValue().country?.name }}</span>
+                </p>
+            </div>
+            <hr class="m-0 p-0">
+            <div class="d-flex justify-content-between row">
+                <!-- Capital -->
+                <p class="col-lg-6"><span class="text-secondary">
+                    <i class="primary-blue-color bi bi-currency-exchange"></i> Capital :
+                    </span>
+                    <span class="mx-2 my-3">{{ company.getValue().capital }} MAD</span>
+                </p>
+                <!-- City -->
+                <p class="col-lg-6"><span class="text-secondary">
+                    <i class="primary-blue-color bi bi-geo-fill"></i> Ville :
+                    </span>
+                    <span class="mx-2 my-3">{{ company.getValue().city?.name }}</span>
+                </p>
+            </div>
+            <hr class="m-0 p-0">
+            <div class="d-flex justify-content-between row">
+                <!-- Head Office -->
+                <p class="col-lg-6"><span class="text-secondary">
+                    <i class="primary-blue-color bi bi-geo-alt-fill"></i> Siège social :
+                    </span>
+                    <span class="mx-2 my-3">{{ company.getValue().headOffice }}</span>
+                </p>
+                <!-- Year of Creation -->
+                <p class="col-lg-6"><span class="text-secondary">
+                    <i class="primary-blue-color bi bi-calendar-check-fill"></i> Année de création :
+                    </span>
+                    <span class="mx-2 my-3">{{ company.getValue().yearOfCreation }}</span>
+                </p>
+            </div>
+            <hr class="m-0 p-0">
+            <div class="d-flex justify-content-between row">
+                <!-- Ownership Structure -->
+                <p><span class="text-secondary">
+                    <i class="primary-blue-color bi bi-diagram-2-fill"></i> Structure propriété :
+                    </span>
+                    <span class="mx-2 my-3">{{ company.getValue().proprietaryStructure?.name }}</span>
+                </p>
+            </div>
+            <hr class="m-0 p-0">
+            <div class="d-flex justify-content-between row">
+                <!-- Industry -->
+                <p><span class="text-secondary">
+                    <i class="primary-blue-color bi bi-hammer"></i> Industrie :
+                    </span>
+                    <span class="mx-2 my-3">{{ company.getValue().industry?.name }}</span>
+                </p>
+            </div>
+            <hr class="m-0 p-0">
+            <div class="d-flex justify-content-between row">
+                <!-- Company Size -->
+                <p><span class="text-secondary">
+                    <i class="primary-blue-color bi bi-people-fill"></i> Taille de l'entreprise :
+                    </span>
+                    <span class="mx-2 my-3">{{ company.getValue().companySize?.name }}</span>
+                </p>
+            </div>
+        </mat-card-content>
+    </mat-card>
+
+    <!-- More Information -->
+    <mat-divider class="my-2"></mat-divider>
+    <mat-tab-group class="rounded-3 bg-white border-1 border-secondary border" mat-align-tabs="start" mat-stretch-tabs="true">
+        <!-- Informations de contact Tab -->
+        <mat-tab label="Informations de contact">
+            <ng-template mat-tab-label>
+                <i class="bi bi-person-lines-fill mx-2 primary-blue-color"></i>
+                Informations de contact
+            </ng-template>
+            <div class="d-flex mt-3 p-4">
+                <div class="col-lg-6">
+                    <p >
+                        <span class="text-secondary"><i class="bi bi-envelope-fill primary-blue-color"></i> Email :</span>
+                        <span class="mx-2">{{ company.getValue().email }}</span>
+                    </p>
+                    <p>
+                        <span class="text-secondary"><i class="bi bi-telephone-fill primary-blue-color"></i> Téléphone :</span>
+                        <span class="mx-2">{{ company.getValue().phone }}</span>
+                    </p>
+                    <p>
+                        <span class="text-secondary"><i class="bi bi-printer-fill primary-blue-color"></i> Fax :</span>
+                        <span class="mx-2">{{ company.getValue().fax }}</span>
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <p>
+                        <span class="text-secondary"><i class="bi bi-chat-dots-fill primary-blue-color"></i> WhatsApp :</span>
+                        <span class="mx-2">{{ company.getValue().whatsapp }}</span>
+                    </p>
+                    <p>
+                        <span class="text-secondary"><i class="bi bi-globe primary-blue-color"></i> Site Web :</span>
+                        <span class="mx-2">{{ company.getValue().website }}</span>
+                    </p>
+                    <p>
+                        <span class="text-secondary"><i class="bi bi-linkedin primary-blue-color"></i> LinkedIn :</span>
+                        <span class="mx-2">{{ company.getValue().linkedin }}</span>
+                    </p>
+                </div>
+            </div>
+        </mat-tab>
+
+        <!-- Informations légales Tab -->
+        <mat-tab label="Informations légales">
+            <ng-template mat-tab-label>
+                <i class="bi bi-bank primary-blue-color mx-2"></i>
+                Informations légales
+            </ng-template>
+            <div class="d-flex mt-3 p-4">
+                <div class="col-lg-6">
+                    <p><span class="text-secondary"><i class="bi bi-card-checklist primary-blue-color"></i> Certificat :</span>
+                        <span class="mx-2">{{ company.getValue().certificationText }}</span>
+                    </p>
+                    <p><span class="text-secondary"><i class="bi bi-person-check-fill primary-blue-color"></i> Représentant légal :</span>
+                        <span class="mx-2">{{ company.getValue().legalRepresentative }}</span>
+                    </p>
+                    <p><span class="text-secondary"><i class="bi bi-award-fill primary-blue-color"></i> Titre du représentant légal :</span>
+                        <span class="mx-2">{{ company.getValue().title?.title }}</span>
+                    </p>
+                    <p><span class="text-secondary"><i class="bi bi-briefcase-fill primary-blue-color"></i> Function du représentant légal :</span>
+                        <span class="mx-2">{{ company.getValue().reprosentaveJobTitle?.name }}</span>
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <p><span class="text-secondary"><i class="bi bi-file-earmark-code-fill primary-blue-color"></i> ICE :</span>
+                        <span class="mx-2">{{ company.getValue().ice }}</span>
+                    </p>
+                    <p><span class="text-secondary"><i class="bi bi-briefcase-fill primary-blue-color"></i> RC :</span>
+                        <span class="mx-2">{{ company.getValue().rc }}</span>
+                    </p>
+                    <p><span class="text-secondary"><i class="bi bi-cash-stack primary-blue-color"></i> IFM :</span>
+                        <span class="mx-2">{{ company.getValue().ifm }}</span>
+                    </p>
+                </div>
+            </div>
+        </mat-tab>
+
+        <!-- Paramètre Tab -->
+        <mat-tab label="Paramètre">
+            <ng-template mat-tab-label>
+                <i class="bi bi-gear-fill mx-2 primary-blue-color"></i>
+                Paramètre
+            </ng-template>
+            <div class="d-flex mt-3 p-4">
+                <div class="col-lg-6">
+                    <p>
+              <span class="text-secondary">
+                <section class="example-section fs-6">
+                  <mat-slide-toggle [checked]="true" [color]="'primary'" [disabled]="false" class="custom-toggle" style="transform:scale(0.8) !important;">
+                  </mat-slide-toggle>
+                    Status
+                </section>
+              </span>
+                    </p>
+                </div>
+
+            </div>
+
+        </mat-tab>
+    </mat-tab-group>
+
+</div>
