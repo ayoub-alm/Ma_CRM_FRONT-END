@@ -116,6 +116,25 @@
           <input matInput type="number" formControlName="tauxCommandes"  />
         </mat-form-field>
       </div>
+     <!-- Payment methode-->
+      <form [formGroup]="paymentTypeForm">
+      <div class="col-lg-4">
+           <mat-form-field appearance="fill" class="w-100 mb-3">
+             <mat-label>Modalités de paiement</mat-label>
+             <mat-select formControlName="paymentTypeId" required>
+               <mat-option *ngFor="let type of paymentMethods.getValue()" [value]="type.id">
+                 {{ type.name }}
+               </mat-option>
+             </mat-select>
+           </mat-form-field>
+      </div>
+      <div class="col-lg-4">
+        <mat-form-field appearance="fill" class="w-100 mb-3">
+          <mat-label>Délais de Paiement (jours)</mat-label>
+          <input matInput type="number" formControlName="paymentDeadline"/>
+        </mat-form-field>
+      </div>
+      </form>
     </form>
   </section>
 
@@ -434,8 +453,8 @@
               {{ item.dimension?.length }}*{{ item.dimension?.width }}* {{ item.dimension?.height }}
             </td>
             <td class="">
-              <i *ngIf="item.isFragile" class="bi bi-exclamation-triangle text-danger"></i>
-              <i *ngIf="!item.isFragile" class="bi bi-check-circle text-success"></i>
+              <p *ngIf="item.isFragile" class="text-danger small"><i class="bi bi-exclamation-triangle text-danger"></i> Oui</p>
+              <p *ngIf="!item.isFragile" class="text-success dmall"><i class="bi bi-check-circle text-success"></i>Non</p>
             </td>
             <td class="text-secondary">{{ item.stackedLevelName }}</td>
             <td class="text-secondary">{{ item.uvc }}</td>
@@ -685,16 +704,16 @@
               <th mat-header-cell *matHeaderCellDef >Valeur de remise</th>
               <td mat-cell *matCellDef="let element" >
                 <input disabled
-                       *ngIf="element.discount == DiscountTypeEnum.NOTAPPLICABLE || element.discount == '' || element.discount == null"
+                       *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null"
                        class="form-control custom-input form-control-sm" placeholder="0.00" value="0.0" type="text">
                 <input
                   (change)="addDiscountValueForRequirement(element, $event)"
-                  *ngIf="element.discount !== DiscountTypeEnum.NOTAPPLICABLE && element.discount === DiscountTypeEnum.VALUE"
+                  *ngIf="element.discount !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.VALUE"
                   class="form-control custom-input  form-control-sm" placeholder="0.00" type="number">
 
               <select
                 (change)="addDiscountRateForRequirement(element, $event)"
-                *ngIf="element.discount !== DiscountTypeEnum.NOTAPPLICABLE && element.discount === DiscountTypeEnum.RATE"
+                *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.RATE"
                 class="form-select form-select-sm custom-input ">
                 <option  [value]="3">3%</option>
                 <option  [value]="5">5%</option>
@@ -707,7 +726,7 @@
             <ng-container matColumnDef="finalPrice">
               <th mat-header-cell *matHeaderCellDef >Prix de vente</th>
               <td mat-cell *matCellDef="let element" >
-                <input [value]="element.finalPrice" class="form-control custom-input  form-control-sm" type="text" placeholder="0.00">
+                <input [value]="element.salesPrice" class="form-control custom-input  form-control-sm" type="text" placeholder="0.00">
               </td>
             </ng-container>
 

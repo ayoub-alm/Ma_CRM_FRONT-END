@@ -1,40 +1,42 @@
 <div class="container-fluid bg-body row ">
   <!-- Page Header -->
   <!-- Actions -->
-  <div class="d-flex justify-content-between row" >
+  <div class="d-flex justify-content-between row">
     <div class="col-8">
-      <button (click)="router.navigate(['/admin/crm/wms/offers'])" color="primary"  mat-button>
+      <button (click)="router.navigate(['/admin/crm/wms/offers'])" color="primary" mat-button>
         <mat-icon>arrow_back</mat-icon>
       </button>
-      <button mat-button (click)="router.navigate(['/admin/crm/wms'])"  >
+      <button (click)="router.navigate(['/admin/crm/wms'])" mat-button>
         <mat-icon class=" primary-blue-color">house</mat-icon>
         Accueil
       </button>
       /
-      <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
+      <button (click)="router.navigate(['/admin/crm/wms/offers'])" mat-button>
         <mat-icon class=" primary-blue-color">checklist</mat-icon>
-        Offre
+        Offres
       </button>
       /
-      <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
+      <button (click)="router.navigate(['/admin/crm/wms/needs'])" mat-button>
         <mat-icon class=" primary-blue-color">details</mat-icon>
         Détailes
       </button>
     </div>
     <div class="col-2">
-      <button [matMenuTriggerFor]="menu"  class="bg-primary-blue-color scale-09 rounded-2 text-white" aria-label="Actions" mat-button>
-        Actions <mat-icon>more_vert</mat-icon>
+      <button [matMenuTriggerFor]="menu" aria-label="Actions"
+              class="bg-primary-blue-color scale-09 rounded-2 text-white" mat-button>
+        Actions
+        <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu" class="bg-spider">
-        <button mat-menu-item >
+        <button mat-menu-item>
           <mat-icon>edit</mat-icon>
           Edit
         </button>
-        <button mat-menu-item (click)="createOfferFromNeed()">
+        <button (click)="createOfferFromNeed()" mat-menu-item>
           <mat-icon>add</mat-icon>
           Créé un Contrat
         </button>
-        <button mat-menu-item >Download PDF</button>
+        <button mat-menu-item>Download PDF</button>
 
       </mat-menu>
     </div>
@@ -52,7 +54,7 @@
       <div class="d-flex justify-content-between row">
         <p class="col-lg-9 size"><span class="text-secondary"> Référence:</span> {{ storageOffer.getValue().ref }}</p>
         <p class="col-lg-3"><span class="text-secondary">Status:</span>
-          <button class="scale-08 btn btn btn-sm p-1 primary-blue-color px-2 rounded-2 bg-info-subtle" mat-flat-button  >
+          <button class="scale-08 btn btn btn-sm p-1 primary-blue-color px-2 rounded-2 bg-info-subtle" mat-flat-button>
             {{ getNeedStatus(storageOffer.getValue().status).toUpperCase() }}
           </button>
         </p>
@@ -60,24 +62,26 @@
       <hr class="m-0 p-0">
       <div class="d-flex justify-content-between row">
         <p class="col-lg-6"><span class="text-secondary">Raison du Stockage:</span>
-          <button class="scale-08 btn btn btn-sm p-0 px-2 rounded-2 text-warning bg-warning-subtle"  mat-flat-button>
+          <button class="scale-08 btn btn btn-sm p-0 px-2 rounded-2 text-warning bg-warning-subtle" mat-flat-button>
             {{ getLabelFromStorageReasonEnum(storageOffer.getValue().storageReason) }}
           </button>
         </p>
         <p class="col-lg-6"><span class="text-secondary">Livre:</span>
-          <button class="scale-08 btn btn btn-sm p-0 px-2 rounded-2 text-secondary bg-secondary-subtle" mat-flat-button >
+          <button class="scale-08 btn btn btn-sm p-0 px-2 rounded-2 text-secondary bg-secondary-subtle" mat-flat-button>
             {{ storageOffer.getValue().liverStatus }}
           </button>
         </p>
       </div>
       <hr class="m-0 p-0">
       <div class="d-flex justify-content-between row">
-        <p class="col-lg-6"><span class="text-secondary">Date de réception:</span> {{ storageOffer.getValue().expirationDate | date:'dd-MM-yyyy' }}
+        <p class="col-lg-6"><span
+          class="text-secondary">Date de réception:</span> {{ storageOffer.getValue().expirationDate | date:'dd-MM-yyyy' }}
         </p>
         <p class="col-lg-6"><span class="text-secondary">Durée:</span> {{ storageOffer.getValue().duration }} jours</p>
       </div>
       <hr class="m-0 p-0">
-      <p class="col-lg-6"><span class="text-secondary">Nombre de SKU:</span> {{ storageOffer.getValue().numberOfSku }}</p>
+      <p class="col-lg-6"><span class="text-secondary">Nombre de SKU:</span> {{ storageOffer.getValue().numberOfSku }}
+      </p>
       <p><span class="text-secondary">Type de Produit:</span> {{ storageOffer.getValue().productType }}</p>
     </mat-card-content>
   </mat-card>
@@ -90,98 +94,106 @@
         Informations du Client
       </p>
       <p><span class="text-secondary">Client:</span> {{ storageOffer.getValue().customer?.name }}</p>
-      <p><span class="text-secondary">Entreprise:</span> {{ storageOffer.getValue().companyName }}</p>
+      <p><span class="text-secondary">Interlocuteur:</span> {{ storageOffer.getValue().interlocutor.fullName }}</p>
+    </mat-card-content>
+    <mat-card-content class="mt-2">
+      <p class="fs-6 align-items-center d-flex primary-blue-color">
+        <mat-icon class="scale-08">attach_money</mat-icon>
+        Modalité de Paiement
+      </p>
+      <p><span class="text-secondary">Type:</span> {{ storageOffer.getValue().paymentType?.name }}</p>
+      <p><span class="text-secondary">Durée:</span> {{ storageOffer.getValue().paymentDeadline }}</p>
     </mat-card-content>
   </mat-card>
 
   <!-- Stocked Items -->
-<!--  <mat-card class="mb-2 bg-white details-card col-12 rounded-0 mat-elevation-z3 ">-->
-<!--    <mat-card-content>-->
-<!--      <p class="fs-6 align-items-center d-flex primary-blue-color">-->
-<!--        <mat-icon class="scale-08">inventory</mat-icon>-->
-<!--        Articles Stockés-->
-<!--      </p>-->
-<!--      <div class="mat-elevation-z0">-->
-<!--        <table class="table   rounded-2 mat-elevation-z1 overflow-hidden">-->
-<!--          &lt;!&ndash; Table Header &ndash;&gt;-->
-<!--          <thead class="table-light  fw-light">-->
-<!--          <tr class="">-->
-<!--            &lt;!&ndash;            <th>Référence</th>&ndash;&gt;-->
-<!--            <th class="  fw-light">Support</th>-->
-<!--            <th class=" fw-light">Structure</th>-->
-<!--            <th class=" fw-light">Température</th>-->
-<!--            <th class=" fw-light">Dimensions L*L*H</th>-->
-<!--            <th class=" fw-light">Fragile</th>-->
-<!--            <th class=" fw-light">gerbabilié</th>-->
-<!--            <th class=" fw-light">Uc</th>-->
-<!--            <th class=" fw-light">Uvc</th>-->
+  <!--  <mat-card class="mb-2 bg-white details-card col-12 rounded-0 mat-elevation-z3 ">-->
+  <!--    <mat-card-content>-->
+  <!--      <p class="fs-6 align-items-center d-flex primary-blue-color">-->
+  <!--        <mat-icon class="scale-08">inventory</mat-icon>-->
+  <!--        Articles Stockés-->
+  <!--      </p>-->
+  <!--      <div class="mat-elevation-z0">-->
+  <!--        <table class="table   rounded-2 mat-elevation-z1 overflow-hidden">-->
+  <!--          &lt;!&ndash; Table Header &ndash;&gt;-->
+  <!--          <thead class="table-light  fw-light">-->
+  <!--          <tr class="">-->
+  <!--            &lt;!&ndash;            <th>Référence</th>&ndash;&gt;-->
+  <!--            <th class="  fw-light">Support</th>-->
+  <!--            <th class=" fw-light">Structure</th>-->
+  <!--            <th class=" fw-light">Température</th>-->
+  <!--            <th class=" fw-light">Dimensions L*L*H</th>-->
+  <!--            <th class=" fw-light">Fragile</th>-->
+  <!--            <th class=" fw-light">gerbabilié</th>-->
+  <!--            <th class=" fw-light">Uc</th>-->
+  <!--            <th class=" fw-light">Uvc</th>-->
 
-<!--            <th class="bg-white fw-light"></th>-->
-<!--          </tr>-->
-<!--          </thead>-->
+  <!--            <th class="bg-white fw-light"></th>-->
+  <!--          </tr>-->
+  <!--          </thead>-->
 
-<!--          &lt;!&ndash; Table Body &ndash;&gt;-->
-<!--          <tbody *ngFor="let item of storageOffer.getValue().stockedItems">-->
-<!--          <tr>-->
-<!--            &lt;!&ndash;            <td>{{ item.ref }}</td>&ndash;&gt;-->
-<!--            <td class="text-secondary">{{ item.supportName }}</td>-->
-<!--            <td class="text-secondary">{{ item.structureName }}</td>-->
-<!--            <td class="text-secondary">{{ item.temperatureName }}</td>-->
-<!--            <td class="text-secondary">-->
-<!--              {{ item.dimension?.length }}*{{ item.dimension?.width }}* {{ item.dimension?.height }}-->
-<!--            </td>-->
-<!--            <td class="">-->
-<!--              <i *ngIf="item.isFragile" class="bi bi-exclamation-triangle text-danger"></i>-->
-<!--              <i *ngIf="!item.isFragile" class="bi bi-check-circle text-success"></i>-->
-<!--            </td>-->
-<!--            <td class="text-secondary">{{ item.stackedLevelName }}</td>-->
-<!--            <td class="text-secondary">{{ item.uvc }}</td>-->
-<!--            <td class="text-secondary">{{ item.uvc }}</td>-->
-<!--            <td (click)="expandedElement = expandedElement === item ? null : item" class="text-secondary">-->
-<!--              &lt;!&ndash;              <button class="btn btn-outline-primary btn-sm" >&ndash;&gt;-->
-<!--              {{ item.provisionResponseDto?.length }} Préstations <i [ngClass]="expandedElement === item ? 'bi-chevron-up' : 'bi-chevron-down'"-->
-<!--                                                                     class="bi"></i>-->
-<!--              &lt;!&ndash;              </button>&ndash;&gt;-->
-<!--            </td>-->
-<!--          </tr>-->
-<!--          <tr *ngIf="expandedElement && item == expandedElement">-->
-<!--            <td colspan="6">-->
-<!--              <div class="card-body">-->
+  <!--          &lt;!&ndash; Table Body &ndash;&gt;-->
+  <!--          <tbody *ngFor="let item of storageOffer.getValue().stockedItems">-->
+  <!--          <tr>-->
+  <!--            &lt;!&ndash;            <td>{{ item.ref }}</td>&ndash;&gt;-->
+  <!--            <td class="text-secondary">{{ item.supportName }}</td>-->
+  <!--            <td class="text-secondary">{{ item.structureName }}</td>-->
+  <!--            <td class="text-secondary">{{ item.temperatureName }}</td>-->
+  <!--            <td class="text-secondary">-->
+  <!--              {{ item.dimension?.length }}*{{ item.dimension?.width }}* {{ item.dimension?.height }}-->
+  <!--            </td>-->
+  <!--            <td class="">-->
+  <!--              <i *ngIf="item.isFragile" class="bi bi-exclamation-triangle text-danger"></i>-->
+  <!--              <i *ngIf="!item.isFragile" class="bi bi-check-circle text-success"></i>-->
+  <!--            </td>-->
+  <!--            <td class="text-secondary">{{ item.stackedLevelName }}</td>-->
+  <!--            <td class="text-secondary">{{ item.uvc }}</td>-->
+  <!--            <td class="text-secondary">{{ item.uvc }}</td>-->
+  <!--            <td (click)="expandedElement = expandedElement === item ? null : item" class="text-secondary">-->
+  <!--              &lt;!&ndash;              <button class="btn btn-outline-primary btn-sm" >&ndash;&gt;-->
+  <!--              {{ item.provisionResponseDto?.length }} Préstations <i [ngClass]="expandedElement === item ? 'bi-chevron-up' : 'bi-chevron-down'"-->
+  <!--                                                                     class="bi"></i>-->
+  <!--              &lt;!&ndash;              </button>&ndash;&gt;-->
+  <!--            </td>-->
+  <!--          </tr>-->
+  <!--          <tr *ngIf="expandedElement && item == expandedElement">-->
+  <!--            <td colspan="6">-->
+  <!--              <div class="card-body">-->
 
-<!--                <ul *ngIf="expandedElement.provisionResponseDto?.length > 0" class="list-group">-->
-<!--                  <li class="list-group-item bg-secondary-subtle">-->
-<!--                    <div class="w-100 d-flex row fw-light ">-->
-<!--                      <span class="col-4 border-start border-secondary-subtle border-2">Préstastion</span>-->
-<!--                      <span class="col-4 border-start border-secondary-subtle border-2">Unité</span>-->
-<!--                    </div>-->
-<!--                  </li>-->
-<!--                  <li *ngFor="let prv of expandedElement.provisionResponseDto" class="list-group-item">-->
-<!--                    <div class="w-100 d-flex row text-secondary">-->
-<!--                      <span class="col-4 border-start border-secondary-subtle border-2">{{ prv.name }}</span>-->
-<!--                      <span-->
-<!--                        class="col-4 border-start border-secondary-subtle border-2">{{ prv.unitOfMeasurement }}</span>-->
-<!--                    </div>-->
-<!--                  </li>-->
-<!--                </ul>-->
-<!--                <p *ngIf="!expandedElement.provisionResponseDto?.length" class="text-muted">-->
-<!--                  <em>Aucune provision associée</em>-->
-<!--                </p>-->
-<!--              </div>-->
-<!--            </td>-->
-<!--          </tr>-->
+  <!--                <ul *ngIf="expandedElement.provisionResponseDto?.length > 0" class="list-group">-->
+  <!--                  <li class="list-group-item bg-secondary-subtle">-->
+  <!--                    <div class="w-100 d-flex row fw-light ">-->
+  <!--                      <span class="col-4 border-start border-secondary-subtle border-2">Préstastion</span>-->
+  <!--                      <span class="col-4 border-start border-secondary-subtle border-2">Unité</span>-->
+  <!--                    </div>-->
+  <!--                  </li>-->
+  <!--                  <li *ngFor="let prv of expandedElement.provisionResponseDto" class="list-group-item">-->
+  <!--                    <div class="w-100 d-flex row text-secondary">-->
+  <!--                      <span class="col-4 border-start border-secondary-subtle border-2">{{ prv.name }}</span>-->
+  <!--                      <span-->
+  <!--                        class="col-4 border-start border-secondary-subtle border-2">{{ prv.unitOfMeasurement }}</span>-->
+  <!--                    </div>-->
+  <!--                  </li>-->
+  <!--                </ul>-->
+  <!--                <p *ngIf="!expandedElement.provisionResponseDto?.length" class="text-muted">-->
+  <!--                  <em>Aucune provision associée</em>-->
+  <!--                </p>-->
+  <!--              </div>-->
+  <!--            </td>-->
+  <!--          </tr>-->
 
-<!--          &lt;!&ndash; Expanded Row for Provisions &ndash;&gt;-->
+  <!--          &lt;!&ndash; Expanded Row for Provisions &ndash;&gt;-->
 
-<!--          </tbody>-->
-<!--        </table>-->
+  <!--          </tbody>-->
+  <!--        </table>-->
 
-<!--      </div>-->
+  <!--      </div>-->
 
 
-<!--    </mat-card-content>-->
-<!--  </mat-card>-->
+  <!--    </mat-card-content>-->
+  <!--  </mat-card>-->
   <mat-card class="mb-2 bg-white mt-2 details-card col-12 rounded-0 mat-elevation-z3 ">
-    <mat-card-content>
+    <div class="w-100">
       <p class="fs-6 align-items-center d-flex primary-blue-color">
         <mat-icon class="scale-08">inventory</mat-icon>
         Articles a Stockés
@@ -237,12 +249,12 @@
                 <table *ngIf="item?.provisionResponseDto?.length " class="table small border-secondary">
                   <thead class=" fw-light">
                   <tr>
-                    <th scope="col" class="bg-spider fw-light">Préstations</th>
-                    <th scope="col" class="bg-spider fw-light">Unité</th>
-                    <th scope="col" class="bg-spider fw-light">Prix de base</th>
-                    <th scope="col" class="bg-spider fw-light">Remise</th>
-                    <th scope="col" class="bg-spider fw-light">Valeur de remise</th>
-                    <th scope="col" class="bg-spider fw-light">Prix de vente</th>
+                    <th class="bg-spider fw-light" scope="col">Préstations</th>
+                    <th class="bg-spider fw-light" scope="col">Unité</th>
+                    <th class="bg-spider fw-light" scope="col">Prix de base</th>
+                    <th class="bg-spider fw-light" scope="col">Remise</th>
+                    <th class="bg-spider fw-light" scope="col">Valeur de remise</th>
+                    <th class="bg-spider fw-light" scope="col">Prix de vente</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -251,35 +263,39 @@
                     <td>{{ prv.unitOfMeasurement }}</td> <!-- Uncommented & Fixed -->
                     <td>{{ prv.initPrice | currency }}</td>
                     <td>
-                      <select class="form-select form-select-sm custom-input ">
+                      <select [disabled]="disabledEditing" class="form-select form-select-sm custom-input ">
                         <option [selected]="prv.discountType == DiscountTypeEnum.NOTAPPLICABLE"
-                                [value]="DiscountTypeEnum.NOTAPPLICABLE">N/a</option>
+                                [value]="DiscountTypeEnum.NOTAPPLICABLE">N/a
+                        </option>
                         <option [selected]="prv.discountType == DiscountTypeEnum.RATE"
-                                [value]="DiscountTypeEnum.RATE">%</option>
+                                [value]="DiscountTypeEnum.RATE">%
+                        </option>
                         <option [selected]="prv.discountType == DiscountTypeEnum.VALUE"
-                          [value]="DiscountTypeEnum.VALUE">Valeur en DH</option>
+                                [value]="DiscountTypeEnum.VALUE">Valeur en DH
+                        </option>
                       </select>
                     </td>
                     <td>
 
-                      <input disabled
-                             *ngIf="prv.discountType == DiscountTypeEnum.NOTAPPLICABLE "
-                             class="form-control custom-input form-control-sm" placeholder="0.00" value="0.0" type="text">
+                      <input *ngIf="prv.discountType == DiscountTypeEnum.NOTAPPLICABLE "
+                             [disabled]="disabledEditing"
+                             class="form-control custom-input form-control-sm" placeholder="0.00" type="text"
+                             value="0.0">
                       <input
-                          [value]="prv.discountValue"
-                        *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.VALUE"
-                        class="form-control custom-input form-control-sm" placeholder="0.00" type="number" >
+                        *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.VALUE" [disabled]="disabledEditing"
+                        [value]="prv.discountValue"
+                        class="form-control custom-input form-control-sm" placeholder="0.00" type="number">
                       <select
-
                         *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.RATE"
+                        [disabled]="disabledEditing"
                         class="form-select form-select-sm custom-input ">
-                        <option  [value]="3">3%</option>
-                        <option  [value]="5">5%</option>
-                        <option  [value]="10">10%</option>
-                        <option  [value]="15">10%</option>
+                        <option [value]="3">3%</option>
+                        <option [value]="5">5%</option>
+                        <option [value]="10">10%</option>
+                        <option [value]="15">10%</option>
                       </select>
                     </td>
-                    <td>{{  prv.salesPrice | currency }}</td>
+                    <td>{{ prv.salesPrice | currency }}</td>
                   </tr>
                   </tbody>
                 </table>
@@ -300,296 +316,312 @@
       </div>
 
 
-    </mat-card-content>
+    </div>
   </mat-card>
-<!--  &lt;!&ndash; Unloading Types &ndash;&gt;-->
-<!--  <mat-card class="mb-2 bg-white  col-lg-6 rounded-0 mat-elevation-z3">-->
-<!--    <mat-card-content>-->
-<!--      <p class="fs-6 align-items-center d-flex primary-blue-color">-->
-<!--        <mat-icon class="scale-08">local_shipping</mat-icon>-->
-<!--        Types de Déchargement-->
-<!--      </p>-->
-<!--      &lt;!&ndash;      <mat-list>&ndash;&gt;-->
-<!--      &lt;!&ndash;        <mat-list-item *ngFor="let type of storageNeed.getValue().unloadingTypes">&ndash;&gt;-->
-<!--      &lt;!&ndash;          <mat-icon>assignment</mat-icon>&ndash;&gt;-->
-<!--      &lt;!&ndash;          <span class="text-secondary">{{ type.name }} - {{ type.initPrice }} {{ type.unitOfMeasurement }}</span>&ndash;&gt;-->
-<!--      &lt;!&ndash;        </mat-list-item>&ndash;&gt;-->
-<!--      &lt;!&ndash;      </mat-list>&ndash;&gt;-->
+  <!--  &lt;!&ndash; Unloading Types &ndash;&gt;-->
+  <!--  <mat-card class="mb-2 bg-white  col-lg-6 rounded-0 mat-elevation-z3">-->
+  <!--    <mat-card-content>-->
+  <!--      <p class="fs-6 align-items-center d-flex primary-blue-color">-->
+  <!--        <mat-icon class="scale-08">local_shipping</mat-icon>-->
+  <!--        Types de Déchargement-->
+  <!--      </p>-->
+  <!--      &lt;!&ndash;      <mat-list>&ndash;&gt;-->
+  <!--      &lt;!&ndash;        <mat-list-item *ngFor="let type of storageNeed.getValue().unloadingTypes">&ndash;&gt;-->
+  <!--      &lt;!&ndash;          <mat-icon>assignment</mat-icon>&ndash;&gt;-->
+  <!--      &lt;!&ndash;          <span class="text-secondary">{{ type.name }} - {{ type.initPrice }} {{ type.unitOfMeasurement }}</span>&ndash;&gt;-->
+  <!--      &lt;!&ndash;        </mat-list-item>&ndash;&gt;-->
+  <!--      &lt;!&ndash;      </mat-list>&ndash;&gt;-->
 
-<!--      <table class="table table-bordered table-hover rounded-2 mat-elevation-z1 overflow-hidden">-->
-<!--        <thead class="table-light">-->
-<!--        <tr class="fw-light">-->
-<!--          <th class="fw-light "><i class="bi bi-card-checklist"></i> Type</th>-->
-<!--          &lt;!&ndash;          <th class="fw-light "><i class="bi bi-cash-stack"></i> Prix Initial</th>&ndash;&gt;-->
-<!--          <th class="fw-light "><i class="bi bi-rulers"></i> Unité</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr *ngFor="let type of storageOffer.getValue().unloadingTypes" class="small">-->
-<!--          <td class="text-secondary">{{ type.name }}</td>-->
-<!--          &lt;!&ndash;          <td class="text-secondary">{{ type.initPrice }}</td>&ndash;&gt;-->
-<!--          <td class="text-secondary">{{ type.unitOfMeasurement }}</td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
-<!--    </mat-card-content>-->
-<!--  </mat-card>-->
+  <!--      <table class="table table-bordered table-hover rounded-2 mat-elevation-z1 overflow-hidden">-->
+  <!--        <thead class="table-light">-->
+  <!--        <tr class="fw-light">-->
+  <!--          <th class="fw-light "><i class="bi bi-card-checklist"></i> Type</th>-->
+  <!--          &lt;!&ndash;          <th class="fw-light "><i class="bi bi-cash-stack"></i> Prix Initial</th>&ndash;&gt;-->
+  <!--          <th class="fw-light "><i class="bi bi-rulers"></i> Unité</th>-->
+  <!--        </tr>-->
+  <!--        </thead>-->
+  <!--        <tbody>-->
+  <!--        <tr *ngFor="let type of storageOffer.getValue().unloadingTypes" class="small">-->
+  <!--          <td class="text-secondary">{{ type.name }}</td>-->
+  <!--          &lt;!&ndash;          <td class="text-secondary">{{ type.initPrice }}</td>&ndash;&gt;-->
+  <!--          <td class="text-secondary">{{ type.unitOfMeasurement }}</td>-->
+  <!--        </tr>-->
+  <!--        </tbody>-->
+  <!--      </table>-->
+  <!--    </mat-card-content>-->
+  <!--  </mat-card>-->
 
-<!--  &lt;!&ndash; Requirements &ndash;&gt;-->
-<!--  <mat-card class="mb-2 bg-white col-lg-6 rounded-0 mat-elevation-z3">-->
-<!--    <mat-card-content>-->
-<!--      <p class="fs-6 align-items-center d-flex primary-blue-color">-->
-<!--        <mat-icon class="scale-08">rule</mat-icon>-->
-<!--        Exigences-->
-<!--      </p>-->
-<!--      &lt;!&ndash;      <mat-list>&ndash;&gt;-->
-<!--      &lt;!&ndash;        <mat-list-item *ngFor="let req of storageNeed.getValue().requirements">&ndash;&gt;-->
-<!--      &lt;!&ndash;          <mat-icon>check_circle</mat-icon>&ndash;&gt;-->
-<!--      &lt;!&ndash;          <span class="text-secondary">{{ req.name }} - {{ req.initPrice }} {{ req.unitOfMeasurement }}</span>&ndash;&gt;-->
-<!--      &lt;!&ndash;        </mat-list-item>&ndash;&gt;-->
-<!--      &lt;!&ndash;      </mat-list>&ndash;&gt;-->
-<!--      <table class="table table-bordered table-hover rounded-2 mat-elevation-z1 overflow-hidden">-->
-<!--        <thead class="table-light ">-->
-<!--        <tr>-->
-<!--          <th class="fw-light "><i class="bi bi-check-circle"></i> Exigence</th>-->
-<!--          &lt;!&ndash;            <th class="fw-light "><i class="bi bi-cash-stack"></i> Prix Initial</th>&ndash;&gt;-->
-<!--          <th class="fw-light "><i class="bi bi-rulers"></i> Unité</th>-->
-<!--        </tr>-->
-<!--        </thead>-->
-<!--        <tbody>-->
-<!--        <tr *ngFor="let req of storageOffer.getValue().requirements" class="small text-secondary">-->
-<!--          <td class=" text-secondary">{{ req.name }}</td>-->
-<!--          &lt;!&ndash;          <td class=" text-secondary">{{ req.initPrice }}</td>&ndash;&gt;-->
-<!--          <td class=" text-secondary"> {{ req.unitOfMeasurement }}</td>-->
-<!--        </tr>-->
-<!--        </tbody>-->
-<!--      </table>-->
-<!--    </mat-card-content>-->
-<!--  </mat-card>-->
+  <!--  &lt;!&ndash; Requirements &ndash;&gt;-->
+  <!--  <mat-card class="mb-2 bg-white col-lg-6 rounded-0 mat-elevation-z3">-->
+  <!--    <mat-card-content>-->
+  <!--      <p class="fs-6 align-items-center d-flex primary-blue-color">-->
+  <!--        <mat-icon class="scale-08">rule</mat-icon>-->
+  <!--        Exigences-->
+  <!--      </p>-->
+  <!--      &lt;!&ndash;      <mat-list>&ndash;&gt;-->
+  <!--      &lt;!&ndash;        <mat-list-item *ngFor="let req of storageNeed.getValue().requirements">&ndash;&gt;-->
+  <!--      &lt;!&ndash;          <mat-icon>check_circle</mat-icon>&ndash;&gt;-->
+  <!--      &lt;!&ndash;          <span class="text-secondary">{{ req.name }} - {{ req.initPrice }} {{ req.unitOfMeasurement }}</span>&ndash;&gt;-->
+  <!--      &lt;!&ndash;        </mat-list-item>&ndash;&gt;-->
+  <!--      &lt;!&ndash;      </mat-list>&ndash;&gt;-->
+  <!--      <table class="table table-bordered table-hover rounded-2 mat-elevation-z1 overflow-hidden">-->
+  <!--        <thead class="table-light ">-->
+  <!--        <tr>-->
+  <!--          <th class="fw-light "><i class="bi bi-check-circle"></i> Exigence</th>-->
+  <!--          &lt;!&ndash;            <th class="fw-light "><i class="bi bi-cash-stack"></i> Prix Initial</th>&ndash;&gt;-->
+  <!--          <th class="fw-light "><i class="bi bi-rulers"></i> Unité</th>-->
+  <!--        </tr>-->
+  <!--        </thead>-->
+  <!--        <tbody>-->
+  <!--        <tr *ngFor="let req of storageOffer.getValue().requirements" class="small text-secondary">-->
+  <!--          <td class=" text-secondary">{{ req.name }}</td>-->
+  <!--          &lt;!&ndash;          <td class=" text-secondary">{{ req.initPrice }}</td>&ndash;&gt;-->
+  <!--          <td class=" text-secondary"> {{ req.unitOfMeasurement }}</td>-->
+  <!--        </tr>-->
+  <!--        </tbody>-->
+  <!--      </table>-->
+  <!--    </mat-card-content>-->
+  <!--  </mat-card>-->
 
   <div class="row d-flex justify-content-around px-lg-3">
     <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-0 mat-elevation-z2 col-12">
       <p class="primary-blue-color fs-6 d-flex">
-        <mat-icon class="me-2">local_shipping</mat-icon> Dépotage
+        <mat-icon class="me-2">local_shipping</mat-icon>
+        Dépotage
       </p>
       <div class="row">
         <!-- Formulaire -->
-<!--        <div class="col-lg-12 col-md-12 col-12 d-none">-->
-<!--          <form [formGroup]="unloadForm">-->
-<!--            <mat-form-field appearance="fill" class="w-100">-->
-<!--              <mat-label>Depotages</mat-label>-->
-<!--              <mat-select formControlName="unload" multiple>-->
-<!--                <mat-option *ngFor="let unloadingType of unloadingTypes | async" [value]="unloadingType.id">-->
-<!--                  {{ unloadingType.name }}-->
-<!--                </mat-option>-->
-<!--              </mat-select>-->
-<!--            </mat-form-field>-->
-<!--          </form>-->
-<!--        </div>-->
+        <!--        <div class="col-lg-12 col-md-12 col-12 d-none">-->
+        <!--          <form [formGroup]="unloadForm">-->
+        <!--            <mat-form-field appearance="fill" class="w-100">-->
+        <!--              <mat-label>Depotages</mat-label>-->
+        <!--              <mat-select formControlName="unload" multiple>-->
+        <!--                <mat-option *ngFor="let unloadingType of unloadingTypes | async" [value]="unloadingType.id">-->
+        <!--                  {{ unloadingType.name }}-->
+        <!--                </mat-option>-->
+        <!--              </mat-select>-->
+        <!--            </mat-form-field>-->
+        <!--          </form>-->
+        <!--        </div>-->
 
         <!-- Tableau -->
         <div class="col-lg-12 col-md-12 col-12">
-          <table mat-table [dataSource]="storageOffer.getValue().unloadingTypes" class="mat-elevation-z1 w-100">
+          <table [dataSource]="storageOffer.getValue().unloadingTypes" class="mat-elevation-z1 w-100" mat-table>
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef >Désignation</th>
-              <td mat-cell *matCellDef="let element" >{{ element.name }}</td>
+              <th *matHeaderCellDef mat-header-cell>Désignation</th>
+              <td *matCellDef="let element" mat-cell>{{ element.name }}</td>
             </ng-container>
 
             <!-- Price Column -->
             <ng-container matColumnDef="price">
-              <th mat-header-cell *matHeaderCellDef >Prix</th>
-              <td mat-cell *matCellDef="let element" >{{ element.initPrice | currency }}</td>
+              <th *matHeaderCellDef mat-header-cell>Prix</th>
+              <td *matCellDef="let element" mat-cell>{{ element.initPrice | currency }}</td>
             </ng-container>
 
             <!-- Unit Column -->
             <ng-container matColumnDef="unite">
-              <th mat-header-cell *matHeaderCellDef >Unité</th>
-              <td mat-cell *matCellDef="let element" >{{ element.unitOfMeasurement }}</td>
+              <th *matHeaderCellDef mat-header-cell>Unité</th>
+              <td *matCellDef="let element" mat-cell>{{ element.unitOfMeasurement }}</td>
             </ng-container>
 
             <!-- Remise Column -->
             <ng-container matColumnDef="remise">
-              <th mat-header-cell *matHeaderCellDef >Remise</th>
-              <td mat-cell *matCellDef="let element" >
-                <select class="form-select form-select-sm custom-input ">
+              <th *matHeaderCellDef mat-header-cell>Remise</th>
+              <td *matCellDef="let element" mat-cell>
+                <select [disabled]="disabledEditing" class="form-select form-select-sm custom-input ">
                   <option [selected]="element.discountType == DiscountTypeEnum.NOTAPPLICABLE"
-                          [value]="DiscountTypeEnum.NOTAPPLICABLE">N/a</option>
+                          [value]="DiscountTypeEnum.NOTAPPLICABLE">N/a
+                  </option>
                   <option [selected]="element.discountType == DiscountTypeEnum.RATE"
-                          [value]="DiscountTypeEnum.RATE">%</option>
+                          [value]="DiscountTypeEnum.RATE">%
+                  </option>
                   <option [selected]="element.discountType == DiscountTypeEnum.VALUE"
-                          [value]="DiscountTypeEnum.VALUE">Valeur en DH</option>
+                          [value]="DiscountTypeEnum.VALUE">Valeur en DH
+                  </option>
                 </select>
               </td>
             </ng-container>
             <!-- Remise value Column -->
             <ng-container matColumnDef="remiseValue">
-              <th mat-header-cell *matHeaderCellDef >Valeur de remise</th>
-              <td mat-cell *matCellDef="let element" >
-                <input disabled
-                       *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null"
-                       class="form-control custom-input form-control-sm" placeholder="0.00" value="0.0" type="text">
-                <input
-                   [value]="element.discountValue"
-                  *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.VALUE"
-                  class="form-control custom-input  form-control-sm" placeholder="0.00" type="number">
+              <th *matHeaderCellDef mat-header-cell>Valeur de remise</th>
+              <td *matCellDef="let element" mat-cell>
+                <input *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null"
+                       [disabled]="disabledEditing"
+                       class="form-control custom-input form-control-sm" placeholder="0.00" type="text" value="0.0">
+                <input *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.VALUE"
+                       [disabled]="disabledEditing"
+                       [value]="element.discountValue"
+                       class="form-control custom-input  form-control-sm" placeholder="0.00" type="number">
 
                 <select
-
                   *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.RATE"
+                  [disabled]="disabledEditing"
                   class="form-select form-select-sm custom-input ">
-                  <option  [value]="3">3%</option>
-                  <option  [value]="5">5%</option>
-                  <option  [value]="10">10%</option>
-                  <option  [value]="15">10%</option>
+                  <option [value]="3">3%</option>
+                  <option [value]="5">5%</option>
+                  <option [value]="10">10%</option>
+                  <option [value]="15">10%</option>
                 </select>
               </td>
             </ng-container>
             <!-- final price -->
             <ng-container matColumnDef="finalPrice">
-              <th mat-header-cell *matHeaderCellDef >Prix de vente</th>
-              <td mat-cell *matCellDef="let element" >
-                <input [value]="element.salesPrice" class="form-control form-control-sm" type="text" placeholder="0.00">
+              <th *matHeaderCellDef mat-header-cell>Prix de vente</th>
+              <td *matCellDef="let element" mat-cell>
+                <input [disabled]="disabledEditing" [value]="element.salesPrice" class="form-control form-control-sm"
+                       placeholder="0.00" type="text">
               </td>
             </ng-container>
             <!-- Actions Column -->
             <ng-container matColumnDef="actions" stickyEnd>
-              <th mat-header-cell *matHeaderCellDef ></th>
-              <td mat-cell *matCellDef="let row" >
-                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
+              <th *matHeaderCellDef mat-header-cell></th>
+              <td *matCellDef="let row" mat-cell>
+                <button [matMenuTriggerFor]="menu" aria-label="Actions" mat-icon-button>
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item>
-                    <mat-icon>edit</mat-icon>Edit
+                    <mat-icon>edit</mat-icon>
+                    Edit
                   </button>
                   <button mat-menu-item>
-                    <mat-icon>delete</mat-icon>Delete
+                    <mat-icon>delete</mat-icon>
+                    Delete
                   </button>
                 </mat-menu>
               </td>
             </ng-container>
 
             <!-- Header Row -->
-            <tr mat-header-row *matHeaderRowDef="unloadingDisplayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"></tr>
+            <tr *matHeaderRowDef="unloadingDisplayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"
+                mat-header-row></tr>
 
             <!-- Data Row -->
-            <tr mat-row *matRowDef="let row; columns: unloadingDisplayedColumns;" class="bg-white text-secondary"></tr>
+            <tr *matRowDef="let row; columns: unloadingDisplayedColumns;" class="bg-white text-secondary" mat-row></tr>
           </table>
         </div>
       </div>
     </mat-card>
     <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-0 mat-elevation-z2 col-12">
       <p class="primary-blue-color fs-6 d-flex">
-        <mat-icon class="me-2">rule</mat-icon> Exigences
+        <mat-icon class="me-2">rule</mat-icon>
+        Exigences
       </p>
       <div class="row">
-<!--        &lt;!&ndash; Formulaire &ndash;&gt;-->
-<!--        <div class="col-md-12 col-12 d-none">-->
-<!--          <form [formGroup]="requirementForm">-->
-<!--            <mat-form-field appearance="fill" class="w-100">-->
-<!--              <mat-label>Exigences</mat-label>-->
-<!--              <mat-select formControlName="requirement" multiple>-->
-<!--                <mat-option *ngFor="let requirement of requirements | async" [value]="requirement.id">-->
-<!--                  {{ requirement.name }}-->
-<!--                </mat-option>-->
-<!--              </mat-select>-->
-<!--            </mat-form-field>-->
-<!--          </form>-->
-<!--        </div>-->
+        <!--        &lt;!&ndash; Formulaire &ndash;&gt;-->
+        <!--        <div class="col-md-12 col-12 d-none">-->
+        <!--          <form [formGroup]="requirementForm">-->
+        <!--            <mat-form-field appearance="fill" class="w-100">-->
+        <!--              <mat-label>Exigences</mat-label>-->
+        <!--              <mat-select formControlName="requirement" multiple>-->
+        <!--                <mat-option *ngFor="let requirement of requirements | async" [value]="requirement.id">-->
+        <!--                  {{ requirement.name }}-->
+        <!--                </mat-option>-->
+        <!--              </mat-select>-->
+        <!--            </mat-form-field>-->
+        <!--          </form>-->
+        <!--        </div>-->
 
         <!-- Tableau -->
         <div class="col-lg-12 col-md-12 col-12">
-          <table mat-table [dataSource]="storageOffer.getValue().requirements" class="mat-elevation-z1 w-100">
+          <table [dataSource]="storageOffer.getValue().requirements" class="mat-elevation-z1 w-100" mat-table>
             <!-- Name Column -->
             <ng-container matColumnDef="name">
-              <th mat-header-cell *matHeaderCellDef >Désignation</th>
-              <td mat-cell *matCellDef="let element" >{{ element.name }}</td>
+              <th *matHeaderCellDef mat-header-cell>Désignation</th>
+              <td *matCellDef="let element" mat-cell>{{ element.name }}</td>
             </ng-container>
 
             <!-- Price Column -->
             <ng-container matColumnDef="price">
-              <th mat-header-cell *matHeaderCellDef >Prix</th>
-              <td mat-cell *matCellDef="let element" >{{ element.initPrice | currency }}</td>
+              <th *matHeaderCellDef mat-header-cell>Prix</th>
+              <td *matCellDef="let element" mat-cell>{{ element.initPrice | currency }}</td>
             </ng-container>
 
             <!-- Unit Column -->
             <ng-container matColumnDef="unite">
-              <th mat-header-cell *matHeaderCellDef >Unité</th>
-              <td mat-cell *matCellDef="let element" >{{ element.unitOfMeasurement }}</td>
+              <th *matHeaderCellDef mat-header-cell>Unité</th>
+              <td *matCellDef="let element" mat-cell>{{ element.unitOfMeasurement }}</td>
             </ng-container>
 
             <!-- Remise Column -->
             <ng-container matColumnDef="remise">
-              <th mat-header-cell *matHeaderCellDef >Remise</th>
+              <th *matHeaderCellDef mat-header-cell>Remise</th>
 
 
-              <td mat-cell *matCellDef="let element" >
-                <select class="form-select form-select-sm custom-input ">
+              <td *matCellDef="let element" mat-cell>
+                <select [disabled]="disabledEditing" class="form-select form-select-sm custom-input">
                   <option [selected]="element.discountType == DiscountTypeEnum.NOTAPPLICABLE"
-                          [value]="DiscountTypeEnum.NOTAPPLICABLE">N/a</option>
+                          [value]="DiscountTypeEnum.NOTAPPLICABLE">N/a
+                  </option>
                   <option [selected]="element.discountType == DiscountTypeEnum.RATE"
-                          [value]="DiscountTypeEnum.RATE">%</option>
+                          [value]="DiscountTypeEnum.RATE">%
+                  </option>
                   <option [selected]="element.discountType == DiscountTypeEnum.VALUE"
-                          [value]="DiscountTypeEnum.VALUE">Valeur en DH</option>
+                          [value]="DiscountTypeEnum.VALUE">Valeur en DH
+                  </option>
                 </select>
               </td>
-                <!--              </td>-->
+              <!--              </td>-->
             </ng-container>
             <!-- Remise value Column -->
             <ng-container matColumnDef="remiseValue">
-              <th mat-header-cell *matHeaderCellDef >Valeur de remise</th>
-              <td mat-cell *matCellDef="let element" >
-                <input disabled
-                       *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null"
-                       class="form-control custom-input form-control-sm" placeholder="0.00" value="0.0" type="text">
+              <th *matHeaderCellDef mat-header-cell>Valeur de remise</th>
+              <td *matCellDef="let element" mat-cell>
+                <input *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null"
+                       [disabled]="disabledEditing"
+                       class="form-control custom-input form-control-sm" placeholder="0.00" type="text" value="0.0">
                 <input
-
                   *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.VALUE"
+                  [disabled]="disabledEditing"
                   class="form-control custom-input  form-control-sm" placeholder="0.00" type="number">
 
                 <select
-
-                  *ngIf="element.discount !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.RATE"
+                  *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.RATE"
+                  [disabled]="disabledEditing"
                   class="form-select form-select-sm custom-input ">
-                  <option  [value]="3">3%</option>
-                  <option  [value]="5">5%</option>
-                  <option  [value]="10">10%</option>
-                  <option  [value]="15">10%</option>
+                  <option [value]="3">3%</option>
+                  <option [value]="5">5%</option>
+                  <option [value]="10">10%</option>
+                  <option [value]="15">10%</option>
                 </select>
               </td>
             </ng-container>
             <!-- final price -->
             <ng-container matColumnDef="finalPrice">
-              <th mat-header-cell *matHeaderCellDef >Prix de vente</th>
-              <td mat-cell *matCellDef="let element" >
-                <input [value]="element.finalPrice" class="form-control custom-input  form-control-sm" type="text" placeholder="0.00">
+              <th *matHeaderCellDef mat-header-cell>Prix de vente</th>
+              <td *matCellDef="let element" mat-cell>
+                <input [disabled]="disabledEditing" [value]="element.salesPrice"
+                       class="form-control custom-input  form-control-sm" placeholder="0.00" type="text">
               </td>
             </ng-container>
 
             <!-- Actions Column -->
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef ></th>
-              <td mat-cell *matCellDef="let row" >
-                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
+              <th *matHeaderCellDef mat-header-cell></th>
+              <td *matCellDef="let row" mat-cell>
+                <button [matMenuTriggerFor]="menu" aria-label="Actions" mat-icon-button>
                   <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
                   <button mat-menu-item>
-                    <mat-icon>edit</mat-icon>Edit
+                    <mat-icon>edit</mat-icon>
+                    Edit
                   </button>
                   <button mat-menu-item>
-                    <mat-icon>delete</mat-icon>Delete
+                    <mat-icon>delete</mat-icon>
+                    Delete
                   </button>
                 </mat-menu>
               </td>
             </ng-container>
 
             <!-- Header Row -->
-            <tr mat-header-row *matHeaderRowDef="unloadingDisplayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"></tr>
+            <tr *matHeaderRowDef="unloadingDisplayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"
+                mat-header-row></tr>
 
             <!-- Data Row -->
-            <tr mat-row *matRowDef="let row; columns: unloadingDisplayedColumns;" class="bg-white text-secondary"></tr>
+            <tr *matRowDef="let row; columns: unloadingDisplayedColumns;" class="bg-white text-secondary" mat-row></tr>
           </table>
         </div>
       </div>
@@ -598,4 +630,4 @@
 </div>
 
 
-<app-comment  [entity]="EntityEnum.STORAGENEED" [entityId]="storageOffer.getValue().id" ></app-comment>
+<app-comment [entityId]="storageOffer.getValue().id" [entity]="EntityEnum.STORAGENEED"></app-comment>

@@ -103,7 +103,7 @@ export class ProspectService {
    * @param formData
    */
   updateProspectLogo(prospectId: number, formData: FormData): Observable<ProspectResponseDto> {
-    const url = `${this.baseUrl}/api/prospects/logo`;
+    const url = `${this.baseUrl}/api/prospects/update-logo`;
 
     return this.http.put<ProspectResponseDto>(url, formData, { params: { prospectId: prospectId.toString() } });
   }

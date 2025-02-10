@@ -92,7 +92,7 @@
         Informations du Client
       </p>
       <p><span class="text-secondary">Client:</span> {{ storageNeed.getValue().customer?.name }}</p>
-      <p><span class="text-secondary">Entreprise:</span> {{ storageNeed.getValue().companyName }}</p>
+      <p><span class="text-secondary">Interlocutur:</span> {{ storageNeed.getValue().interlocutor.fullName }}</p>
     </mat-card-content>
   </mat-card>
 
@@ -103,16 +103,17 @@
         <mat-icon class="scale-08">inventory</mat-icon>
         Articles Stockés
       </p>
-      <div class="mat-elevation-z0">
-        <table class="table   rounded-2 mat-elevation-z1 overflow-hidden">
+      <div class="mat-elevation-z0 table-container">
+        <table class="table   rounded-2 mat-elevation-z1 overflow-hidden ">
           <!-- Table Header -->
           <thead class="table-light  fw-light">
           <tr class="">
             <!--            <th>Référence</th>-->
-            <th class="  fw-light">Support</th>
+            <th class=" fw-light">Support</th>
             <th class=" fw-light">Structure</th>
             <th class=" fw-light">Température</th>
-            <th class=" fw-light">Dimensions L*L*H</th>
+            <th class=" fw-light">L*L*H</th>
+            <th class=" fw-light">Volume</th>
             <th class=" fw-light">Fragile</th>
             <th class=" fw-light">gerbabilié</th>
             <th class=" fw-light">Uc</th>
@@ -132,9 +133,16 @@
             <td class="text-secondary">
               {{ item.dimension?.length }}*{{ item.dimension?.width }}* {{ item.dimension?.height }}
             </td>
+            <td>
+              {{ item.volume }}
+            </td>
             <td class="">
-              <i *ngIf="item.isFragile" class="bi bi-exclamation-triangle text-danger"></i>
-              <i *ngIf="!item.isFragile" class="bi bi-check-circle text-success"></i>
+              <p *ngIf="item.isFragile" class="text-danger small">
+                <i  class="bi bi-exclamation-triangle "></i> Oui
+              </p>
+              <p *ngIf="!item.isFragile" class="text-success small">
+                <i  class="bi bi-check-circle "></i> Non
+              </p>
             </td>
             <td class="text-secondary">{{ item.stackedLevelName }}</td>
             <td class="text-secondary">{{ item.uvc }}</td>

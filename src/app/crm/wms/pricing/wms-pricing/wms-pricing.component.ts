@@ -19,7 +19,7 @@ import {MatMenu, MatMenuItem} from "@angular/material/menu";
 import {MatPaginator} from "@angular/material/paginator";
 import {MatSort, MatSortHeader} from "@angular/material/sort";
 import {MatTab, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
-import {filter, Observable, Observer, tap} from "rxjs";
+import {BehaviorSubject, catchError, filter, Observable, Observer, of, tap} from "rxjs";
 import {MatDialog} from "@angular/material/dialog";
 
 import {FormControl} from "@angular/forms";
@@ -28,11 +28,19 @@ import {InteractionService} from '../../../../../services/Leads/interaction.serv
 import {CrmTypeEnum} from '../../../../../enums/crm/crm.type.enum';
 import {InterlocutorResDto} from '../../../../../dtos/response/interlocutor.dto';
 import {AddWmsPricingComponent} from '../add-wms-pricing/add-wms-pricing.component';
+import {ProvisionService} from '../../../../../services/crm/wms/provision.service.dto';
+import {RequirementService} from '../../../../../services/crm/wms/requirement.service';
+import {UnloadingTypeService} from '../../../../../services/crm/wms/unloading.type.service';
+import {UnloadingTypeResponseDto} from '../../../../../dtos/response/crm/unloading.type.response.dto';
+import {ProvisionResponseDto} from '../../../../../dtos/response/crm/provision.response.dto';
+import {RequirementResponseDto} from '../../../../../dtos/response/crm/requirement.response.dto';
+import {LocalStorageService} from '../../../../../services/local.storage.service';
 
 export interface ExampleTab {
   label: string;
   content: string;
   icon:string;
+  data:any
 }
 
 @Component({
@@ -69,9 +77,19 @@ export interface ExampleTab {
   styleUrl: './wms-pricing.component.css'
 })
 export class WmsPricingComponent implements OnInit, AfterViewInit{
-
-  displayedColumns: string[] = ['select', 'prospectName', 'interlocutorName', 'interactionSubject', 'interactionType',
-    'planningDate', 'affectedTo', 'actions'];
+  unloadingTypes: BehaviorSubject<UnloadingTypeResponseDto[]> =  new BehaviorSubject<UnloadingTypeResponseDto[]>([])
+  selectedUnloadingTypes:  BehaviorSubject<UnloadingTypeResponseDto[]> =  new BehaviorSubject<UnloadingTypeResponseDto[]>([])
+  unloadingDisplayedColumns: string[] = [ 'name',"unite","price", "actions"];
+  unloadingDataSource: BehaviorSubject<UnloadingTypeResponseDto[]> = new BehaviorSubject<UnloadingTypeResponseDto[]>([]);
+  // provisions infos
+  provisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
+  selectedProvisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
+  provisionsDisplayedColumns: string[] =[ 'name',"unite","price", "actions"];
+  // requirements infos
+  requirements: BehaviorSubject<RequirementResponseDto[]> =  new BehaviorSubject<RequirementResponseDto[]>([])
+  selectedRequirements: BehaviorSubject<RequirementResponseDto[]> =  new BehaviorSubject<RequirementResponseDto[]>([])
+  requirementsColumns: string[] = [ 'name', "unite", "actions"];
+  displayedColumns: string[] = [ 'name',"unite","price", "actions"];
 
   dataSource: MatTableDataSource<InteractionResponseDto> = new MatTableDataSource();
   asyncTabs: Observable<ExampleTab[]>;
@@ -83,13 +101,15 @@ export class WmsPricingComponent implements OnInit, AfterViewInit{
   crmType = new FormControl('');
 
 
-  constructor(private interactionService: InteractionService, private snackBar: MatSnackBar, private router: Router, private dialog: MatDialog){
+  constructor(private interactionService: InteractionService, private snackBar: MatSnackBar, protected router: Router,
+              private dialog: MatDialog, private provisionService: ProvisionService, private localStorageService: LocalStorageService,
+              private requirementService: RequirementService, private unloadingTypeService: UnloadingTypeService){
     this.asyncTabs = new Observable((observer: Observer<ExampleTab[]>) => {
       setTimeout(() => {
         observer.next([
-          { label: 'Dépotage', content: 'Content 1', icon: 'local_shipping' },
-          { label: 'Exigences', content: 'Content 2', icon: 'list_alt' },
-          { label: 'Préstations', content: 'Content 3', icon: 'receipt' },
+          { label: 'Dépotage', content: 'Content 1', icon: 'local_shipping', data: this.unloadingTypes},
+          { label: 'Exigences', content: 'Content 2', icon: 'list_alt' ,data:this.requirements},
+          { label: 'Préstations', content: 'Content 3', icon: 'receipt',data:this.provisions },
           // { label: 'Management fees', content: 'Content 4', icon: 'money' },
           // { label: 'Insurance', content: 'Content 5', icon: 'security' }
         ]);
@@ -99,11 +119,50 @@ export class WmsPricingComponent implements OnInit, AfterViewInit{
 
   ngOnInit(){
     this.loadNeedBasedOnSelectedType();
+    this.loadProvisions()
+    this.loadUnloadingTypes()
+    this.loadRequirements()
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator ;
     this.dataSource.sort = this.sort;
+  }
+
+  /**
+   *
+   */
+  loadProvisions(): void{
+    this.provisionService.getAllProvisionsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
+      tap(data => {
+        this.provisions.next(data); // Perform the side effect of updating provisions
+      }),
+      catchError(err => {
+        console.error(err); // Log the error
+        return of([]); // Return an empty array in case of an error
+      })
+    ).subscribe();
+  }
+
+  /**
+   *
+   */
+  loadUnloadingTypes(): void{
+    // get unloading types and fill the select box by pushing data in unloading variable
+    this.unloadingTypeService.getUnloadingTypeByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
+      tap(unloadingTypes => {
+        this.unloadingTypes.next(unloadingTypes)
+      })
+    ).subscribe()
+  }
+  /**
+   *
+   */
+  loadRequirements(){
+    this.requirementService.getRequirementsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
+      tap(data => {
+        this.requirements.next(data);
+      })).subscribe()
   }
 
   loadNeedBasedOnSelectedType(): void {

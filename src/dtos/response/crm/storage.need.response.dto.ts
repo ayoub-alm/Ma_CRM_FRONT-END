@@ -5,6 +5,7 @@ import {StockedItemCreateDto} from '../../request/crm/stockedItem.create.dto';
 import {StockedItemResponseDto} from './stocked.itemresponse.dto';
 import {UnloadingTypeResponseDto} from './unloading.type.response.dto';
 import {RequirementResponseDto} from './requirement.response.dto';
+import {InterlocutorResDto} from '../interlocutor.dto';
 
 export class StorageNeedResponseDto {
   id!: number; // ID of the storage need
@@ -21,6 +22,7 @@ export class StorageNeedResponseDto {
   stockedItems: StockedItemResponseDto[];
   unloadingTypes: UnloadingTypeResponseDto[];
   requirements: RequirementResponseDto[];
+  interlocutor:InterlocutorResDto;
 
   constructor(data: any) {
     this.id = data.id;
@@ -38,5 +40,6 @@ export class StorageNeedResponseDto {
     this.stockedItems = data.stockedItems;
     this.unloadingTypes = data.unloadingTypes;
     this.requirements = data.requirements;
+    this.interlocutor = data.interlocutor
   }
 }

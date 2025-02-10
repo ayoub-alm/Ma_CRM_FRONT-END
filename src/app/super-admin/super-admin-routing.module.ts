@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {InvoicesComponent} from '../crm/invoices/invoices.component';
 import {UsersComponent} from './users/users.component';
 import {CompaniesComponent} from './companies/companies.component';
 import {SuperAdminIndexComponent} from './super-admin-index/super-admin-index.component';

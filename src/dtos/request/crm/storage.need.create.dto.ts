@@ -16,6 +16,7 @@ export class StorageNeedCreateDto {
   productType: string; // Type of product
   customerId: number; // Customer ID
   companyId: number; // Company ID
+  interlocutorId:number;
   stockedItemsRequestDto: StockedItemCreateDto[]; // List of stocked items
   unloadingTypes: UnloadingTypeResponseDto[]; // List of unloading type IDs
   requirements: RequirementResponseDto[]; // List of requirement IDs
@@ -34,6 +35,7 @@ export class StorageNeedCreateDto {
     stockedItemsRequestDto: StockedItemCreateDto[] = [],
     unloadingTypes: UnloadingTypeResponseDto[] = [],
     requirements: RequirementResponseDto[] = [],
+    interlocutorId:number
   ) {
     this.ref = ref;
     this.storageReason = storageReason;
@@ -48,6 +50,7 @@ export class StorageNeedCreateDto {
     this.stockedItemsRequestDto = stockedItemsRequestDto;
     this.unloadingTypes = unloadingTypes;
     this.requirements = requirements;
+    this.interlocutorId = interlocutorId
   }
 }
 

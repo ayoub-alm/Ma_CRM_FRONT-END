@@ -54,11 +54,7 @@
                        [attr.aria-disabled]="uploadingLogo ? 'true' : null">
 
                       <!-- Hidden file input -->
-                      <input #fileInput
-                             type="file"
-                             hidden
-                             accept="image/*"
-                             (change)="handleLogoUpload($event)">
+                      <input #fileInput type="file" hidden accept="image/*" (change)="handleLogoUpload($event)">
 
                       <!-- Logo Preview -->
                       <div class="position-relative">

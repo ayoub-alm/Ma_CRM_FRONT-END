@@ -243,18 +243,19 @@ protected readonly menuData = menuData;
     this.fillCompany();
   }
 
-features = [
-    { title: 'Transport Management (TMS)', description: 'Optimize fleet, reduce costs, and track shipments in real-time.', icon: 'bi bi-truck' },
-    { title: 'Warehouse Management', description: 'Smart inventory, seamless fulfillment, and automated stock tracking.', icon: 'bi bi-box-seam' },
-    { title: 'Procurement & Achats', description: 'Streamline supplier relationships and procurement processes.', icon: 'bi bi-cart-check' },
-    { title: 'Human Capital Management', description: 'Manage payroll, attendance, and HR operations effortlessly.', icon: 'bi bi-people' },
-    { title: 'CRM & Sales', description: 'Boost sales, manage leads, and automate customer relationships.', icon: 'bi bi-graph-up' },
-    { title: 'Data Analytics', description: 'Powerful insights with AI-driven business intelligence.', icon: 'bi bi-bar-chart' },
+  features = [
+    { title: 'CRM & Ventes', description: 'Augmentez vos ventes, gérez vos prospects et automatisez les relations clients.', icon: 'bi bi-graph-up' },
+    { title: 'Gestion du Transport (TMS)', description: 'Optimisez votre flotte, réduisez les coûts et suivez les expéditions en temps réel.', icon: 'bi bi-truck' },
+    { title: 'Approvisionnement & Achats', description: 'Optimisez les relations avec les fournisseurs et simplifiez le processus d’achat.', icon: 'bi bi-cart-check' },
+    { title: 'Gestion du Capital Humain', description: 'Gérez facilement la paie, la présence et les opérations RH.', icon: 'bi bi-people' },
+    { title: 'Gestion d’Entrepôt', description: 'Inventaire intelligent, exécution fluide et suivi automatisé des stocks.', icon: 'bi bi-box-seam' },
+    { title: 'Analyse de Données', description: 'Des insights puissants grâce à une intelligence d’affaires basée sur l’IA.', icon: 'bi bi-bar-chart' },
   ];
 
+
   testimonials = [
-    { name: 'John Doe', company: 'LogiTrans', feedback: 'Spider ERP revolutionized our logistics operations!' },
-    { name: 'Sarah Lee', company: 'WarePro', feedback: 'Best warehouse management solution we ever used!' },
-    { name: 'Sarah Lee', company: 'WarePro', feedback: 'Best warehouse management solution we ever used!' },
+    { name: 'John Doe', company: 'LogiTrans', feedback: 'Spider ERP a révolutionné nos opérations logistiques !' },
+    { name: 'Sarah Lee', company: 'WarePro', feedback: 'La meilleure solution de gestion d’entrepôt que nous ayons jamais utilisée !' },
+    { name: 'Sarah Lee', company: 'WarePro', feedback: 'La meilleure solution de gestion d’entrepôt que nous ayons jamais utilisée !' },
   ];
 }

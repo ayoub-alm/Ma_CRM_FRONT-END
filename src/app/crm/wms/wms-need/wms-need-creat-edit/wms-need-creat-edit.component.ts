@@ -3,7 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Inject,
+  Inject, OnDestroy,
   OnInit,
   signal, viewChild, ViewChild
 } from '@angular/core';
@@ -22,7 +22,7 @@ import {
   MatExpansionPanelActionRow,
   MatExpansionPanelHeader
 } from '@angular/material/expansion';
-import {BehaviorSubject, catchError, map, of, tap} from 'rxjs';
+import {BehaviorSubject, catchError, combineLatest, filter, map, of, Subject, takeUntil, tap} from 'rxjs';
 import {UnloadingTypeResponseDto} from '../../../../../dtos/response/crm/unloading.type.response.dto';
 import {UnloadingTypeService} from '../../../../../services/crm/wms/unloading.type.service';
 import {IndexComponent} from '../../../../index/index.component';
@@ -65,6 +65,8 @@ import {TemperatureResponseDto} from '../../../../../dtos/response/crm/temperatu
 import {TemperatureService} from '../../../../../services/crm/wms/temperature.service';
 import {StorageNeedCreateDto} from '../../../../../dtos/request/crm/storage.need.create.dto';
 import {Router} from '@angular/router';
+import {CuboidComponent} from './cuboid/cuboid.component';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
 
 
 
@@ -90,14 +92,14 @@ import {Router} from '@angular/router';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
-    MatDatepickerModule, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatHeaderRow, MatRow, MatRowDef, MatMenu, MatMenuItem, MatMenuTrigger, MatCard, MatDivider, FormsModule, MatChip,
+    MatButtonModule, CuboidComponent,
+    MatDatepickerModule, MatTable, MatColumnDef, MatHeaderCell, MatCell, MatCellDef, MatHeaderCellDef, MatHeaderRowDef, MatHeaderRow, MatRow, MatRowDef, MatMenu, MatMenuItem, MatMenuTrigger, MatCard, MatDivider, FormsModule, MatChip, MatSlideToggle,
   ],
   templateUrl: './wms-need-creat-edit.component.html',
   styleUrl: './wms-need-creat-edit.component.css',
   providers: [provideNativeDateAdapter()],
 })
-export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
+export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit, OnDestroy {
   customers: BehaviorSubject<ProspectResponseDto[]> = new BehaviorSubject<ProspectResponseDto[]>([]);
   interlocutors: BehaviorSubject<InterlocutorResDto[]> = new BehaviorSubject<InterlocutorResDto[]>([]);
   filteredInterlocutors: BehaviorSubject<InterlocutorResDto[]> = new BehaviorSubject<InterlocutorResDto[]>([]);
@@ -136,8 +138,12 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
   structures: BehaviorSubject<StructureResponseDto[]> = new BehaviorSubject<StructureResponseDto[]>([]);
   temperatures: BehaviorSubject<TemperatureResponseDto[]> = new BehaviorSubject<TemperatureResponseDto[]>([]);
 
+  cuboidLength = '150px';
+  cuboidWidth = '100px';
+  cuboidHeight = '80px';
+  @ViewChild(CuboidComponent) cuboid!:CuboidComponent;
 
-  readonly panelOpenState = signal(false);
+  private destroy$ = new Subject<void>();
   @ViewChild(MatExpansionPanel) expansionPanel!: MatExpansionPanel;
   constructor(private fb: FormBuilder,private router: Router, private unloadingTypeService: UnloadingTypeService,
               private localStorageService: LocalStorageService, private provisionService: ProvisionService,
@@ -165,12 +171,25 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
     this.loadSupport();
     this.loadStructures();
     this.loadTemperatures();
+
+    // Listen to changes in customer field to filter interlocutor field
+    this.filterInterlocutorsBySelectedCustomer();
+    this.fileDimensionsBySelectedSupport()
   }
   /**
    *
    */
   ngAfterViewInit(): void {
     this.generalInfoFormGroup.get('livre')?.setValue("Ouvert")
+    this.cuboid.setCSSVariable('--cuboid-length', '200px');
+    this.cuboid.setCSSVariable('--cuboid-width', '150px');
+    this.cuboid.setCSSVariable('--cuboid-height', '100px');
+
+  }
+  changeCuboidSize() {
+    this.cuboid.setCSSVariable('--cuboid-length', '250px');
+    this.cuboid.setCSSVariable('--cuboid-width', '120px');
+    this.cuboid.setCSSVariable('--cuboid-height', '140px');
   }
   /**
    *
@@ -180,7 +199,7 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
        // statut: ['', Validators.required],
        dateReception: [ new Date(), Validators.required],
        costumer: ['', Validators.required],
-       interlocuteurs: [''],
+       interlocutorId: [''],
        typeProduits: ['', Validators.required],
        dureeStockage: [12, [Validators.required, Validators.min(1)]],
        nombreSku: ['', Validators.required],
@@ -195,13 +214,13 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
       supportId: ['', Validators.required],
       structureId: [''],
       temperatureId: ['', Validators.required],
-      larger: ['', [Validators.min(0)]],
+      width: ['', [Validators.min(0)]],
       length: ['', [Validators.min(0)]],
       height: ['', [Validators.min(0)]],
       weight: ['', [Validators.min(0)]],
-      metreCubeMax: ['', [Validators.min(0)]],
+      isFragile: [''],
       StackabilityLevels: ["", [Validators.min(0)]],
-      volumeStock: ['', [Validators.min(0)]],
+      volume: ['', [Validators.min(0)]],
       numberOfUvc: ['', [Validators.min(0)]],
       numberOfUc: ['', [Validators.min(0)]],
       provisions: [[], Validators.required],
@@ -219,6 +238,56 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
         return of([]); // Return an empty array on error
       })
     ).subscribe();
+  }
+
+
+  fileDimensionsBySelectedSupport():void{
+    this.itemToStoreFormGroup.get('supportId')?.valueChanges
+      .pipe(
+        filter(Boolean), // Ensures supportId is not null/undefined
+        tap(supportId => {
+          const selectedSupport = this.supports.value.find(support => support.id === supportId);
+          if (selectedSupport) {
+            const { width, length, height } = selectedSupport.dimension;
+            this.itemToStoreFormGroup.patchValue({
+              width: width,
+              length: length,
+              height: height,
+              volume: ((width / 100) * (length / 100) * (height / 100)).toFixed(3) // Ensuring precision
+            });
+            this.changeCuboidSize();
+          }
+        }),
+        takeUntil(this.destroy$) // Ensures cleanup on component destroy
+      ).subscribe();
+
+    combineLatest([
+      this.itemToStoreFormGroup.get('width')!.valueChanges,
+      this.itemToStoreFormGroup.get('length')!.valueChanges,
+      this.itemToStoreFormGroup.get('height')!.valueChanges
+    ])
+      .pipe(
+        tap(([width, length, height]) => {
+          if (width && length && height) {
+            this.itemToStoreFormGroup.patchValue({
+              volume: ((width / 100) * (length / 100) * (height / 100)).toFixed(3)
+            }, { emitEvent: false }); // Avoid infinite loop
+            this.changeCuboidSize();
+          }
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
+  }
+
+  /**
+   * this function allows to filter interlocutors based on selected customer
+   */
+  filterInterlocutorsBySelectedCustomer():void{
+    this.generalInfoFormGroup.get('costumer')?.valueChanges.pipe(tap((customerId) => {
+      this.filteredInterlocutors.next(
+        this.interlocutors.getValue().filter(interlocutor => interlocutor.customer.id === customerId)
+      );})).subscribe()
   }
   /**
    *
@@ -360,7 +429,8 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
         this.localStorageService.getItem("selected_company_id"),
         stockedItems,
         unloadingTypes,
-        requirements
+        requirements,
+        this.generalInfoFormGroup.get('interlocutorId')?.value
       );
 
       console.log('New Need Request DTO:', newNeedRequestDto);
@@ -513,5 +583,49 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit {
          this.interlocutors.getValue().filter(interlocutor => interlocutor.customer.id === value)
        )
      })
+  }
+
+  /**
+   *
+   * @param temperatureId
+   */
+  getTemperatureById(temperatureId:number): string{
+   const tempName =  this.temperatures.getValue()
+     .find(temp => temp.id === temperatureId)?.name
+    if (tempName === undefined) {
+      return "N/A"
+    }
+    return tempName;
+  }
+
+  /**
+   *
+   * @param structureId
+   */
+  getStructureById(structureId:number): string{
+    const structureName =  this.structures.getValue()
+      .find(structure => structure.id === structureId)?.name
+    if (structureName === undefined) {
+      return "N/A"
+    }
+    return structureName;
+  }
+
+  /**
+   *
+   * @param supportId
+   */
+  getSupportById(supportId:number): string{
+    const supportName =  this.supports.getValue()
+      .find(support => support.id === supportId)?.name
+    if (supportName === undefined) {
+      return "N/A"
+    }
+    return supportName;
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

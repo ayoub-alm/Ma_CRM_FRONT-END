@@ -19,7 +19,6 @@
       </button>
     </div>
   </div>
-
   <section class="">
     <!-- Form Section -->
     <form [formGroup]="generalInfoFormGroup" class="rounded-0 p-lg-3 mat-elevation-z2 bg-white mx-1 row ">
@@ -48,11 +47,11 @@
         </mat-form-field>
       </div>
 
-      <!-- Interlocuteurs -->
+      <!-- Interlocuture -->
       <div class="col-lg-3">
         <mat-form-field appearance="outline" class="w-100 mb-3">
           <mat-label>Interlocuteurs</mat-label>
-          <mat-select formControlName="interlocuteurs" >
+          <mat-select formControlName="interlocutorId" >
             <mat-option *ngFor="let interlocutor of filteredInterlocutors.getValue()" [value]="interlocutor.id">
               {{ interlocutor.fullName }}
             </mat-option>
@@ -121,13 +120,14 @@
 
   <section>
     <div class="fs-5 small mt-2  ">
+
       <!-- Élément à stocker -->
       <mat-card class="bg-light mb-2 p-lg-3 rounded-0 mat-elevation-z2 small">
-        <div class="mb-3 row ">
+        <div class="mb-3 row">
           <!-- Nested Form -->
           <form
             [formGroup]="itemToStoreFormGroup"
-            class="rounded-3 col-12 row ">
+            class="rounded-3 col-8 row ">
             <!-- Conditionnement -->
             <p class="col-12 primary-blue-color fs-6 d-flex ">
               <mat-icon class="me-2">inventory</mat-icon> Conditionnement
@@ -177,7 +177,7 @@
             <div class="col-lg-3 col-md-4 col-12">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Largeur (cm)</mat-label>
-                <input matInput type="number" formControlName="larger" />
+                <input matInput type="number" formControlName="width" />
               </mat-form-field>
             </div>
 
@@ -213,12 +213,12 @@
             </div>
 
             <!-- Metre cube max -->
-            <div class="col-lg-3 col-md-6 col-12">
-              <mat-form-field appearance="outline" class="w-100">
-                <mat-label>Metre cube max</mat-label>
-                <input matInput type="number" formControlName="metreCubeMax" />
-              </mat-form-field>
-            </div>
+<!--            <div class="col-lg-3 col-md-6 col-12">-->
+<!--              <mat-form-field appearance="outline" class="w-100">-->
+<!--                <mat-label>Metre cube max</mat-label>-->
+<!--                <input matInput type="number" formControlName="metreCubeMax" />-->
+<!--              </mat-form-field>-->
+<!--            </div>-->
 
             <!-- Niveaux de gerbabilité -->
             <div class="col-lg-3 col-md-6 col-12">
@@ -232,7 +232,7 @@
             <div class="col-lg-3 col-md-4 col-12">
               <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Volume de stock</mat-label>
-                <input matInput type="number" formControlName="volumeStock" />
+                <input matInput type="number" formControlName="volume" />
               </mat-form-field>
             </div>
 
@@ -250,6 +250,19 @@
                 <mat-label>Nombre de UC</mat-label>
                 <input matInput type="number" formControlName="numberOfUc" />
               </mat-form-field>
+            </div>
+
+            <div class="col-lg-3 px-5 pt-3">
+              <mat-slide-toggle
+                formControlName="isFragile"
+                class="example-margin scale-09"
+                color="primary"
+                [checked]="false"
+              >
+                <mat-label> Fragile</mat-label>
+<!--                {{ interlocutorForm.get('active')?.value ? 'Active' : 'Inactive' }}-->
+
+              </mat-slide-toggle>
             </div>
 
           </div>
@@ -277,7 +290,7 @@
                 <mat-icon>add</mat-icon>Ajouter
               </button>
             </div>
-            <div class="col-lg-8 col-12" >
+            <div class="col-lg-12 col-12" >
               <table mat-table [dataSource]="selectedProvisions.getValue()" class="mat-elevation-z1 col-lg-6 col-12">
 
                 <!-- Name Column -->
@@ -321,6 +334,12 @@
           </div>
 
           </form>
+          <app-cuboid
+            class="col-lg-4 bg-white rounded-2 p-5 mat-elevation-z2 d-flex justify-content-center h-100"
+            [length]="cuboidLength"
+            [width]="cuboidWidth"
+            [height]="cuboidHeight">
+          </app-cuboid>
         </div>
 
         <div class="table-container" *ngIf="itemsToStore.getValue().length">
@@ -329,25 +348,25 @@
             <!-- Conditionnement Column -->
             <ng-container matColumnDef="conditionnement">
               <th mat-header-cell *matHeaderCellDef >Conditionnement</th>
-              <td mat-cell *matCellDef="let element" > {{ element.conditionnement }} </td>
+              <td mat-cell *matCellDef="let element" > {{ getSupportById(element.supportId)  }} </td>
             </ng-container>
 
             <!-- Structure Column -->
             <ng-container matColumnDef="structure">
               <th mat-header-cell *matHeaderCellDef >Structure</th>e
-              <td mat-cell *matCellDef="let element" > {{ element.structure || '-' }} </td>
+              <td mat-cell *matCellDef="let element" > {{ getStructureById(element.structureId)  }} </td>
             </ng-container>
 
             <!-- Temperature Storage Column -->
             <ng-container matColumnDef="temperatureStockage">
               <th mat-header-cell *matHeaderCellDef class="small small">Température</th>
-              <td mat-cell *matCellDef="let element" > {{ element.storageTemperature }} </td>
+              <td mat-cell *matCellDef="let element" > {{ getTemperatureById(element.temperatureId)}} </td>
             </ng-container>
 
             <!-- Largeur Column -->
             <ng-container matColumnDef="largeur">
               <th mat-header-cell *matHeaderCellDef class="small full-width-table-celle">Largeur (cm)</th>
-              <td mat-cell *matCellDef="let element" > {{ element.larger || '-' }} </td>
+              <td mat-cell *matCellDef="let element" > {{ element.width || '-' }} </td>
             </ng-container>
 
             <!-- Hauteur Column -->

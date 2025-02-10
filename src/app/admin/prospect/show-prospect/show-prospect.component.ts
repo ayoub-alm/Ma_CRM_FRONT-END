@@ -297,12 +297,10 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
             this.snackBar.open('Seuls les fichiers image sont autorisés', 'Fermer', { duration: 3000 });
             return;
         }
-
         // Show preview
         const reader = new FileReader();
         reader.onload = () => this.logoPreview = reader.result;
         reader.readAsDataURL(file);
-
         // Trigger the upload & update
         this.uploadLogo(file);
     }

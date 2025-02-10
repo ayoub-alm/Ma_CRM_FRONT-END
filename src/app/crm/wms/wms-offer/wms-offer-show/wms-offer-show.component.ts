@@ -67,6 +67,7 @@ import {MatSelect} from '@angular/material/select';
 export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
   storageOffer:BehaviorSubject<StorageOfferResponseDto> = new BehaviorSubject<StorageOfferResponseDto>({} as StorageOfferResponseDto);
   expandedElement: any | null = null;
+  disabledEditing: boolean = true;
   unloadingDisplayedColumns: string[] =  [ 'name', "unite","price", "remise", "remiseValue", "finalPrice", "actions",];
   constructor(private storageOfferService: StorageOfferService, public router: Router,private activeRouter: ActivatedRoute,
               private snackBar: MatSnackBar) {
@@ -112,4 +113,5 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
   protected readonly EntityEnum = EntityEnum;
   protected readonly getLabelFromStorageReasonEnum = getLabelFromStorageReasonEnum;
   protected readonly DiscountTypeEnum = DiscountTypeEnum;
+
 }

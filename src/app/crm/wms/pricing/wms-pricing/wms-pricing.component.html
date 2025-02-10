@@ -1,5 +1,21 @@
 <div class=" rounded-3 mat-elevation-z2  w-100">
-
+  <div class="d-flex justify-content-between row" >
+    <div class="col-8">
+      <button (click)="router.navigate(['/admin/crm/wms/pricing'])" color="primary"  mat-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button mat-button (click)="router.navigate(['/admin/crm/wms'])"  >
+        <mat-icon class=" primary-blue-color">house</mat-icon>
+        Accueil
+      </button>
+      /
+      <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
+        <mat-icon class=" primary-blue-color">checklist</mat-icon>
+        Tarifs
+      </button>
+    </div>
+  </div>
+  <hr class="m-0">
 
     @if ((asyncTabs | async) === null) {
         Loading tabs...
@@ -44,7 +60,7 @@
                       </button>
                     </div>
                   </div>
-                    <table mat-table [dataSource]="dataSource" matSort class="text-secondary">
+                    <table mat-table [dataSource]="tab.data" matSort class="text-secondary">
                         <!-- Columns: Select -->
                         <ng-container matColumnDef="select">
                             <th mat-header-cell *matHeaderCellDef>
@@ -55,30 +71,18 @@
                             </td>
                         </ng-container>
                         <!-- Columns: Fields -->
-                        <ng-container matColumnDef="prospectName">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Entreprise</th>
-                            <td mat-cell *matCellDef="let row">{{ row.prospectName }}</td>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Désignation</th>
+                            <td mat-cell *matCellDef="let row">{{ row.name }}</td>
                         </ng-container>
-                        <ng-container matColumnDef="interlocutorName">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Interlocuteur</th>
-                            <td mat-cell *matCellDef="let row">{{ row.interlocutorName }}</td>
+                        <ng-container matColumnDef="unite">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Unité</th>
+                            <td mat-cell *matCellDef="let row">{{ row.unitOfMeasurement }}</td>
                         </ng-container>
-                        <ng-container matColumnDef="interactionSubject">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Sujet</th>
-                            <td mat-cell *matCellDef="let row">{{ row.interactionSubject }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="interactionType">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
-                            <td mat-cell *matCellDef="let row">{{ row.interactionType }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="affectedTo">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Affecté à</th>
-                            <td mat-cell *matCellDef="let row">{{ row.affectedToName  }}</td>
-                        </ng-container>
-                        <ng-container matColumnDef="planningDate">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header>date de Planification</th>
-                            <td mat-cell *matCellDef="let row">{{ row.planningDate | date }}</td>
-                        </ng-container>
+                      <ng-container matColumnDef="price">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Prix</th>
+                        <td mat-cell *matCellDef="let row">{{ row.initPrice }}</td>
+                      </ng-container>
                         <ng-container matColumnDef="actions">
                             <th mat-header-cell *matHeaderCellDef></th>
                             <td mat-cell *matCellDef="let row">

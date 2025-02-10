@@ -20,7 +20,9 @@ export class StorageOfferCreateDto {
   unloadingTypes: UnloadingTypeResponseDto[]; // List of unloading type IDs
   requirements: RequirementResponseDto[]; // List of requirement IDs
   storageNeedId:number;
-
+  paymentTypeId:number;
+  paymentDeadLine:number;
+  interlocutorId;
   constructor(
     ref: string,
     storageReason: StorageReasonEnum,
@@ -35,7 +37,10 @@ export class StorageOfferCreateDto {
     stockedItemsRequestDto: StockedItemCreateDto[] = [],
     unloadingTypes: UnloadingTypeResponseDto[] = [],
     requirements: RequirementResponseDto[] = [],
-    storageNeedId:number
+    storageNeedId:number,
+    paymentTypeId:number,
+    paymentDeadLine:number,
+    interlocutorId:number
   ) {
     this.ref = ref;
     this.storageReason = storageReason;
@@ -51,6 +56,9 @@ export class StorageOfferCreateDto {
     this.unloadingTypes = unloadingTypes;
     this.requirements = requirements;
     this.storageNeedId = storageNeedId
+    this.paymentTypeId = paymentTypeId
+    this.interlocutorId = interlocutorId
+    this.paymentDeadLine = paymentDeadLine;
   }
 }
 

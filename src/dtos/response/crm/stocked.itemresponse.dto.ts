@@ -16,6 +16,7 @@ export class StockedItemResponseDto {
   storageOffer: StorageOffer | null; // Associated storage offer
   storageNeed: StorageNeed | null; // Associated storage need
   provisionResponseDto: ProvisionResponseDto[] | null; // Provision response details
+  volume:number;
 
   constructor(data:any) {
     this.id = data.id;
@@ -32,6 +33,7 @@ export class StockedItemResponseDto {
     this.storageOffer = data.storageOffer;
     this.storageNeed = data.storageNeed;
     this.provisionResponseDto = data.provisionResponseDto;
+    this.volume = data.valume;
   }
 }
 

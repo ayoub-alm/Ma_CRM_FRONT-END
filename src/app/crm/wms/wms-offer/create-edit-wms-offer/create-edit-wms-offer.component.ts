@@ -57,6 +57,8 @@ import {StorageOfferModel} from '../../../../../models/storage.offer.model';
 import {elements} from 'chart.js';
 import {StorageOfferCreateDto} from '../../../../../dtos/request/crm/storage.offer.create.dto';
 import {StorageOfferService} from '../../../../../services/crm/wms/storage.offer.service';
+import {PaymentMethodResponseDto} from '../../../../../dtos/init_data/response/paymentMethodResponseDto';
+import {PaymentMethodService} from '../../../../../services/data/payemet.method.service';
 
 @Component({
   selector: 'app-create-edit-wms-offer',
@@ -108,8 +110,9 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
   generalInfoFormGroup!: FormGroup;
   itemToStoreFormGroup!: FormGroup;
   unloadForm!: FormGroup;
+  paymentTypeForm!: FormGroup;
   requirementForm!: FormGroup;
-
+  paymentMethods: BehaviorSubject<PaymentMethodResponseDto[]> = new BehaviorSubject<PaymentMethodResponseDto[]>([]);
   storageNeed: BehaviorSubject<StorageNeedResponseDto> = new BehaviorSubject({} as StorageNeedResponseDto)
 
   storageReasons: { key: string; value: string }[] = [];
@@ -150,13 +153,14 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
     private requirementService: RequirementService,private storageNeedService: StorageNeedService,private storageOfferService: StorageOfferService,
     private prospectService: ProspectService, private interlocutorService: InterlocutorService,
     private snackBar: MatSnackBar,private supportService: SupportService, private structureService: StructureService,
-    private temperatureServices: TemperatureService, private route: ActivatedRoute) {}
+    private temperatureServices: TemperatureService, private route: ActivatedRoute, private paymentsMethodsService: PaymentMethodService) {}
 
   ngOnInit(): void {
     this.initializeGeneralInfoForm()
     this.initializeItemToStoreForm()
     this.initializeUnloadForm()
     this.initializeRequirementForm()
+    this.initializePaymentsTypeFrom()
     this.generalInfoFormGroup.get('livre')?.setValue("Ouvert")
 
     this.loadProvisions()
@@ -171,6 +175,7 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
     this.loadSupport();
     this.loadStructures();
     this.loadTemperatures();
+    this.loadPaymentMethods();
 
 
   }
@@ -203,6 +208,19 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
       livre: ['', Validators.required],
       tauxCommandes: ['', [Validators.min(0)]],
     });
+  }
+
+  loadPaymentMethods(){
+    this.paymentsMethodsService.getAllPaymentMethods().pipe(tap((data)=> {
+      this.paymentMethods.next(data)
+    })).subscribe()
+  }
+
+  initializePaymentsTypeFrom(){
+    this.paymentTypeForm = this.fb.group({
+      paymentDeadline:["", Validators.required],
+      paymentTypeId:["",  Validators.required],
+    })
   }
 
   initializeItemToStoreForm(): void {
@@ -272,7 +290,6 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
    *
    */
   fillDataFromInputsWithdataFromNeed(storageNeed: StorageNeedResponseDto){
-    console.log(storageNeed);
     this.generalInfoFormGroup.get('costumer')?.setValue(storageNeed.customer.id);
     this.generalInfoFormGroup.get('costumer')?.disable();
     this.generalInfoFormGroup.get('dateReception')?.disable();
@@ -380,6 +397,7 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
    */
   createStorageOffer(){
     const storageOfferTOCreate = this.createNewOfferRequestDto();
+    console.log(storageOfferTOCreate);
     if (storageOfferTOCreate){
       this.storageOfferService.createStorageOffer(storageOfferTOCreate).pipe(
         tap(data => {
@@ -397,15 +415,11 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
    *
    */
   createNewOfferRequestDto(): StorageOfferCreateDto  {
-    // this.generalInfoFormGroup.markAllAsTouched();
+    this.generalInfoFormGroup.markAllAsTouched();
     // this.itemToStoreFormGroup.markAllAsTouched();
     // this.unloadForm.markAllAsTouched();
     // this.requirementForm.markAllAsTouched();
-    //
-    // if (!this.generalInfoFormGroup.valid || !this.itemToStoreFormGroup.valid) {
-    // this.snackBar.open("Les formulaires ne sont pas valide. Veuillez vérifier les champs obligatoires.⛔", "OK", {duration:3000})
-    // return;
-  // }else{
+
     // Extract data from the form and BehaviorSubjects
     const generalInfo = this.generalInfoFormGroup.value;
     const stockedItems = this.itemsToStore.getValue();
@@ -426,7 +440,10 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
       stockedItems.map(item =>  mapStockedItemResponseToCreate(item)),
       unloadingTypes,
       requirements,
-      this.storageNeed.getValue().id
+      this.storageNeed.getValue().id,
+      this.paymentTypeForm.get('paymentTypeId')?.value,
+      this.paymentTypeForm.get('paymentDeadline')?.value,
+      this.storageNeed.getValue().interlocutor.id
     );
 }
 
@@ -643,7 +660,7 @@ private subscribeToCustomFieldChanges() {
 
     if (requirement) {
       if (DiscountTypeEnum[selectedValue]) {
-        requirement.discount = DiscountTypeEnum[selectedValue];
+        requirement.discountType = DiscountTypeEnum[selectedValue];
       } else {
         console.error(`Invalid discount type: ${selectedValue}`);
       }

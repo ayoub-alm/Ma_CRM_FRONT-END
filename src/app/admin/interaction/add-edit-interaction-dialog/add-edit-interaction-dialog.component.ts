@@ -118,7 +118,7 @@ export class AddEditInteractionDialogComponent implements OnInit {
       tap(data => {
         this.prospects.next(data);
         if (this.data){
-          this.interactionForm.get('prospectId')?.setValue(this.data?.customerId)
+          this.interactionForm.get('customerId')?.setValue(this.data?.customerId)
         }
       }),
     takeUntil(this.destroy$)
@@ -140,7 +140,7 @@ export class AddEditInteractionDialogComponent implements OnInit {
       })
     ).subscribe()
     // subscribe to company changes and select interlocutors based on selected company
-    this.interactionForm.get('prospectId')?.valueChanges.pipe(tap(value => {
+    this.interactionForm.get('customerId')?.valueChanges.pipe(tap(value => {
       const selectedInterlocutors: InterlocutorResDto[] = this.allInterlocutors.getValue().filter((interlocutor => interlocutor.customer.id === value ))
       this.interlocutors.next(selectedInterlocutors)
     })).subscribe()
