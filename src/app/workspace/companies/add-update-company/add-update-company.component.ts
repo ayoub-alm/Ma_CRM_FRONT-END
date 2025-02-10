@@ -128,7 +128,7 @@ export class AddUpdateCompanyComponent implements OnInit, AfterViewInit {
             patent: [this.company?.patent],
             cnss: [this.company?.cnss],
             certificationText: [this.company?.certificationText],
-            legalRepresentative: [this.company?.legalRepresentative  ],
+            legalRepresentative: [this.company?.legalRepresentative],
             legalRepresentativeTitle: [this.company?.reprosentaveJobTitle?.id],
             legalRepresentativeJobTitle: [this.company?.reprosentaveJobTitle?.id],
             court: [this.company?.court?.name],
@@ -149,7 +149,8 @@ export class AddUpdateCompanyComponent implements OnInit, AfterViewInit {
         this.titleService.getAllTitles().subscribe(titles => this.titles.next(titles));
         this.companySizesService.getAllCompaniesSizes().subscribe(sizes => this.companySizes.next(sizes));
         this.jobTitleService.getAllJobTitles().subscribe(jobTitles => this.jobTitles.next(jobTitles));
-        this.proprietaryStructureService.getAllProprietaryStructure().subscribe(proprietaryStructures => this.proprietaryStructures.next(proprietaryStructures));
+        this.proprietaryStructureService.getAllProprietaryStructure().subscribe(proprietaryStructures =>
+            this.proprietaryStructures.next(proprietaryStructures));
         this.cityService.getAllCities().subscribe(cities => this.cities.next(cities));
         this.countryService.getAllCountries().subscribe(countries => this.countries.next(countries));
         this.industryService.getAllIndustries().subscribe(industries => this.industries.next(industries));
@@ -191,51 +192,59 @@ export class AddUpdateCompanyComponent implements OnInit, AfterViewInit {
             this.company.title = this.titles.getValue().find(title => title.id === value)!);
     }
 
-    createUpdateCompany() {
+    createOrUpdateCompany() {
+        if (!this.companyDetailsFormGroup.valid || !this.legalInfoFormGroup.valid || !this.contactInfoFormGroup.valid ||
+            !this.businessDescriptionFormGroup.valid) {
+            this.snackBar.open("Veuillez remplir tous les champs obligatoires ⚠️", "Ok", { duration: 3000 });
+            return;
+        }
+
         // Collect data form groups
         const companyDetails = this.companyDetailsFormGroup.value;
         const legalInfo = this.legalInfoFormGroup.value;
         const contactInfo = this.contactInfoFormGroup.value;
         const businessDescription = this.businessDescriptionFormGroup.value;
 
+        const newCompany: CompanyModel = new CompanyModel({
+            id: this.company.id?this.company.id:null,
+            createdAt: new Date(),
+            updatedAt: null,
+            deletedAt: null,
+            createdBy: "",
+            logo: null,
+            name: companyDetails.companyName,
+            sigle: companyDetails.sigle,
+            capital: companyDetails.capital,
+            headOffice: companyDetails.headOffice,
+            legalRepresentative: legalInfo.legalRepresentative,
+            yearOfCreation: companyDetails.yearOfCreation,
+            dateOfRegistration: new Date().toISOString(), // Utilisation d'une date spécifique si nécessaire
+            email: contactInfo.email,
+            phone: contactInfo.phone,
+            fax: contactInfo.fax,
+            whatsapp: contactInfo.whatsapp,
+            website: contactInfo.website,
+            linkedin: contactInfo.linkedin,
+            ice: legalInfo.ice,
+            rc: legalInfo.rc,
+            ifm: legalInfo.ifm,
+            patent: legalInfo.patent,
+            cnss: legalInfo.cnss,
+            businessDescription: businessDescription.businessDescription,
+            legalStatus: this.company.legalStatus,
+            city: this.company.city,
+            court: this.company.court,
+            companySize: this.company.companySize,
+            industry: this.company.industry,
+            country: this.company.country,
+            proprietaryStructure: this.company.proprietaryStructure,
+            title: this.company.title,
+            reprosentaveJobTitle: this.company.reprosentaveJobTitle,
+            certificationText: legalInfo.certificationText,
+        });
+
+        // Determine whether to update or create
         if(this.company?.id){
-            const newCompany: CompanyModel = new CompanyModel({
-                id: this.company.id,
-                createdAt: new Date(),
-                updatedAt: null,
-                deletedAt: null,
-                createdBy: "",
-                logo: companyDetails.logo ?? null,
-                name: companyDetails.companyName ?? "",
-                sigle: companyDetails.sigle ?? "",
-                capital: companyDetails.capital ?? null,
-                headOffice: companyDetails.headOffice ?? "",
-                legalRepresentative: legalInfo.legalRepresentative ?? "",
-                yearOfCreation: companyDetails.yearOfCreation ?? null,
-                dateOfRegistration: new Date().toISOString(), // Utilisation d'une date spécifique si nécessaire
-                email: contactInfo.email ?? "",
-                phone: contactInfo.phone ?? "",
-                fax: contactInfo.fax ?? "",
-                whatsapp: contactInfo.whatsapp ?? "",
-                website: contactInfo.website ?? "",
-                linkedin: contactInfo.linkedin ?? "",
-                ice: legalInfo.ice ?? "",
-                rc: legalInfo.rc ?? "",
-                ifm: legalInfo.ifm ?? "",
-                patent: legalInfo.patent ?? "",
-                cnss: legalInfo.cnss ?? "",
-                businessDescription: businessDescription.businessDescription ?? "",
-                legalStatus: this.company.legalStatus ?? null,
-                city: this.company.city ?? null,
-                court: this.company.court ?? null,
-                companySize: this.company.companySize ?? null,
-                industry: this.company.industry ?? null,
-                country: this.company.country ?? null,
-                proprietaryStructure: this.company.proprietaryStructure ?? null,
-                title: this.company.title ?? null,
-                reprosentaveJobTitle: this.company.reprosentaveJobTitle ?? null,
-                certificationText: legalInfo.certificationText ?? ""
-            });
             // Call the service to update the company
             this.companyService.updateCompany(this.company.id ,newCompany).pipe(
                 tap((updatedData) => {
@@ -248,46 +257,7 @@ export class AddUpdateCompanyComponent implements OnInit, AfterViewInit {
                     return of(null)
                 })
             ).subscribe();
-
         }   else {
-            // Create a new CompanyModel object
-            const newCompany: CompanyModel = new CompanyModel({
-                id: null, // id is null for creation
-                createdAt: new Date(),
-                updatedAt: null,
-                deletedAt: null,
-                createdBy: "",
-                logo: companyDetails.logo ?? null,
-                name: companyDetails.companyName ?? "",
-                sigle: companyDetails.sigle ?? "",
-                capital: companyDetails.capital ?? null,
-                headOffice: companyDetails.headOffice ?? "",
-                legalRepresentative: legalInfo.legalRepresentative ?? "",
-                yearOfCreation: companyDetails.yearOfCreation ?? null,
-                dateOfRegistration: new Date().toISOString(), // Utilisation d'une date spécifique si nécessaire
-                email: contactInfo.email ?? "",
-                phone: contactInfo.phone ?? "",
-                fax: contactInfo.fax ?? "",
-                whatsapp: contactInfo.whatsapp ?? "",
-                website: contactInfo.website ?? "",
-                linkedin: contactInfo.linkedin ?? "",
-                ice: legalInfo.ice ?? "",
-                rc: legalInfo.rc ?? "",
-                ifm: legalInfo.ifm ?? "",
-                patent: legalInfo.patent ?? "",
-                cnss: legalInfo.cnss ?? "",
-                businessDescription: businessDescription.businessDescription ?? "",
-                legalStatus: this.company.legalStatus ?? null,
-                city: this.company.city ?? null,
-                court: this.company.court ?? null,
-                companySize: this.company.companySize ?? null,
-                industry: this.company.industry ?? null,
-                country: this.company.country ?? null,
-                proprietaryStructure: this.company.proprietaryStructure ?? null,
-                title: this.company.title ?? null,
-                reprosentaveJobTitle: this.company.reprosentaveJobTitle ?? null,
-                certificationText: legalInfo.certificationText ?? ""
-            });
             // Call the service to create the company
             this.companyService.createCompany(newCompany).pipe(
                 tap((newData) => {

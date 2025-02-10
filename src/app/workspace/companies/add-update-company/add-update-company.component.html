@@ -24,7 +24,7 @@
         <!-- Step 1: Company Details -->
         <mat-step [stepControl]="companyDetailsFormGroup" errorMessage="Les champs obligatoires doivent être remplis.">
             <form [formGroup]="companyDetailsFormGroup" class="row">
-                <ng-template matStepLabel>Détails de prospect</ng-template>
+                <ng-template matStepLabel>Détails de entreprise</ng-template>
                 <div class="col-6">
                     <mat-form-field appearance="outline" class="w-100">
                         <mat-label>Nom de Entreprise</mat-label>
@@ -409,7 +409,7 @@
             mat-button>
         suivant
     </button>
-    <button (click)="createUpdateCompany()" [disabled]="!isEnabledToCreateCompany()"
+    <button (click)="createOrUpdateCompany()" [disabled]="!isEnabledToCreateCompany()"
             class="btn mat-primary" mat-raised-button>
         <span *ngIf="!company?.id"> Créer </span>
         <span *ngIf="company?.id"> Mettre à jour </span>

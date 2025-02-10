@@ -49,8 +49,6 @@ export class CompaniesComponent implements OnInit{
     }
 
     ngOnInit() {
-        console.log("Route Params:", this.activatedRoute.snapshot.paramMap.get('id')); // Vérifie si l'ID est bien reçu
-
         const companyId = Number(localStorage.getItem('selected_company_id'));
         if (!companyId) {
             console.error("Invalid company ID!");
@@ -62,26 +60,13 @@ export class CompaniesComponent implements OnInit{
             console.log("Company loaded:", this.company);
         });
     }
-    openAddCompanyDialog(): void {
-        const dialogRef = this.dialog.open(AddUpdateCompanyComponent, {
-            maxWidth: '900px',
-            maxHeight:'100vh'
-        });
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result) {
-                // Handle the result, update the prospect if necessary
-                this.company.next(result)
-            }
-        });
-
-    }
     /**
-     * This function allows to edit prospect
+     * This function allows to edit
      * @param row
      */
     editCompany(row: any): void {
-        // Open dialog for editing the prospect
+        // Open dialog for editing
         const dialogRef = this.dialog.open(AddUpdateCompanyComponent, {
             maxWidth: '900px', data: this.company.getValue() // Pass the prospect data to the dialog for editing
         });
@@ -99,12 +84,11 @@ export class CompaniesComponent implements OnInit{
     uploadingLogo = false;
     logoPreview: string | ArrayBuffer | null = null;
 
+    // Logo company
     getDefaultLogo(): string {
         const company = this.company.getValue();
         return company?.id ? `${this.environment.baseUrl}/api/images/${company.logo}` : 'https://placehold.co/400';
     }
-
-
     handleLogoUpload(event: any) {
         const file = event.target.files[0];
         if (!file) return;
@@ -120,7 +104,6 @@ export class CompaniesComponent implements OnInit{
         // Trigger the upload & update
         this.uploadLogo(file);
     }
-
     private uploadLogo(file: File) {
         this.uploadingLogo = true;
         const formData = new FormData();
