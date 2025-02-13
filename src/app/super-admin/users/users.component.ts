@@ -1,26 +1,130 @@
-import { Component } from '@angular/core';
-import {CommentComponent} from "../../utils/comment/comment.component";
-import {EntityEnum} from "../../../enums/entity.enum";
-import {CommentResponseDto} from "../../../dtos/response/CommentResponseDto";
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 
 import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import {DatePipe, NgForOf} from "@angular/common";
+import {MatButton, MatIconButton} from "@angular/material/button";
+import {
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell, MatHeaderCellDef,
+    MatHeaderRow,
+    MatHeaderRowDef, MatNoDataRow,
+    MatRow, MatRowDef, MatTable, MatTableDataSource
+} from "@angular/material/table";
+import {MatIcon} from "@angular/material/icon";
+import {MatInput} from "@angular/material/input";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {MatPaginator} from "@angular/material/paginator";
+import {MatSort, MatSortHeader} from "@angular/material/sort";
+import {Router, RouterLink} from "@angular/router";
+import {UserModel} from "../../models/super-admin/user.model";
+import {UserService} from "../../services/super-admin/user.service";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-users',
   standalone: true,
     imports: [
-        CommentComponent,
-        MatDialogModule
+        MatDialogModule,
+        DatePipe,
+        MatButton,
+        MatCell,
+        MatCellDef,
+        MatColumnDef,
+        MatHeaderCell,
+        MatHeaderRow,
+        MatHeaderRowDef,
+        MatIcon,
+        MatIconButton,
+        MatInput,
+        MatMenu,
+        MatMenuItem,
+        MatPaginator,
+        MatRow,
+        MatRowDef,
+        MatSort,
+        MatSortHeader,
+        MatTable,
+        NgForOf,
+        RouterLink,
+        MatHeaderCellDef,
+        MatMenuTrigger,
+        MatNoDataRow
     ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
-export class UsersComponent{
+export class UsersComponent implements OnInit, AfterViewInit{
 
-    protected readonly EntityEnum = EntityEnum;
-    comments: CommentResponseDto[] = [];
+    displayedColumns: string[] = ['select', 'matricule', 'image', 'name', 'role', 'email', 'phone'];
+    dataSource: MatTableDataSource<UserModel> = new MatTableDataSource();
+    users: BehaviorSubject<UserModel[]> = new BehaviorSubject<UserModel[]>([]);
+    isAllSelected = false;
+    selectedRows: Set<number> = new Set();
 
-    constructor(private dialog: MatDialog) {}
+    @ViewChild(MatPaginator) paginator!: MatPaginator;
+    @ViewChild(MatSort) sort!: MatSort;
 
+    constructor(private dialog: MatDialog, private userService: UserService, protected router: Router) {}
 
+    ngOnInit() {
+        // Fetch and populate Users data
+        this.userService.getAllUsers().subscribe({
+            next: (data: UserModel[]) => {
+                this.users.next(data);
+                this.dataSource.data = data;
+                this.dataSource.filterPredicate = (data: any, filter): boolean=>{
+                    return data.name.toLowerCase().includes(filter) ||
+                        data.email.toLowerCase().includes(filter) ||
+                        data.phone.toLowerCase().includes(filter) ||
+                        data.role.toLowerCase().includes(filter)
+                }
+            }
+        })
+    }
+
+    ngAfterViewInit() {
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+    }
+
+    createEditUser(): void {
+        this.router.navigateByUrl('/admin/super-admin/users/create').then(value => {return;});
+
+    }
+
+    applyFilter(event: Event): void {
+        this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    }
+
+    toggleRowSelection(rowId: number): void {
+        if (this.selectedRows.has(rowId)) {
+            this.selectedRows.delete(rowId);
+        } else {
+            this.selectedRows.add(rowId);
+        }
+        this.checkIfAllSelected();
+    }
+
+    toggleSelectAll(): void {
+        if (this.isAllSelected) {
+            this.selectedRows.clear();
+        } else {
+            this.dataSource.data.forEach((row) => this.selectedRows.add(row.id));
+        }
+        this.isAllSelected = !this.isAllSelected;
+    }
+
+    checkIfAllSelected(): void {
+        this.isAllSelected = this.dataSource.data.every((row) => this.selectedRows.has(row.id));
+    }
+
+    isRowSelected(rowId: number): boolean {
+        return this.selectedRows.has(rowId);
+    }
+
+    showProspectDetails(row: UserModel) {
+        this.router.navigateByUrl(`super-admin/users/${row.id}`)
+    }
 }
