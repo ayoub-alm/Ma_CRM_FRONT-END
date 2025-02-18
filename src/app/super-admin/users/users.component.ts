@@ -57,7 +57,7 @@ import {BehaviorSubject} from "rxjs";
 })
 export class UsersComponent implements OnInit, AfterViewInit{
 
-    displayedColumns: string[] = ['select', 'matricule', 'image', 'name', 'role', 'email', 'phone'];
+    displayedColumns: string[] = ['select', 'matricule', 'image', 'name', 'lastName', 'role', 'email', 'phone'];
     dataSource: MatTableDataSource<UserModel> = new MatTableDataSource();
     users: BehaviorSubject<UserModel[]> = new BehaviorSubject<UserModel[]>([]);
     isAllSelected = false;
@@ -76,6 +76,7 @@ export class UsersComponent implements OnInit, AfterViewInit{
                 this.dataSource.data = data;
                 this.dataSource.filterPredicate = (data: any, filter): boolean=>{
                     return data.name.toLowerCase().includes(filter) ||
+                        data.lastName.toLowerCase().includes(filter) ||
                         data.email.toLowerCase().includes(filter) ||
                         data.phone.toLowerCase().includes(filter) ||
                         data.role.toLowerCase().includes(filter)
@@ -91,7 +92,6 @@ export class UsersComponent implements OnInit, AfterViewInit{
 
     createEditUser(): void {
         this.router.navigateByUrl('/admin/super-admin/users/create').then(value => {return;});
-
     }
 
     applyFilter(event: Event): void {

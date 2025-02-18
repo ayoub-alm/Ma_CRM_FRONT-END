@@ -5,6 +5,8 @@ export class UserModel {
     id!: number;
     image!: string;
     name!: string;
+    lastName!: string;
+    departementId!: number;
     matricule!: string;
     email!: string;
     password!: string;
@@ -19,6 +21,8 @@ export class UserModel {
         this.image = data.image;
         this.matricule = data.matricule;
         this.name = data.name;
+        this.lastName = data.lastName;
+        this.departementId = data.departementId;
         this.email = data.email;
         this.password = data.password;
         this.aboutMe = data.aboutMe;

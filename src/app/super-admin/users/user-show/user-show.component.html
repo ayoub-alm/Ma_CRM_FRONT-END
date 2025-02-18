@@ -1,0 +1,169 @@
+<div class="container-fluid bg-body row rounded-top-4">
+    <!-- Page Header -->
+    <!-- Actions -->
+    <div class="d-flex justify-content-between" >
+        <div class="col-8">
+            <button color="primary"  mat-button>
+                <mat-icon>arrow_back</mat-icon>
+            </button>
+            <button mat-button >
+                <mat-icon class=" primary-blue-color">house</mat-icon>
+                Accueil
+            </button>
+            /
+            <button mat-button >
+                <mat-icon class=" primary-blue-color">checklist</mat-icon>
+                Utilisateur
+            </button>
+        </div>
+        <div class="col-1 mx-3">
+            <button [matMenuTriggerFor]="menu" class="bg-primary-blue-color scale-09 rounded-2 text-white" aria-label="Actions" mat-button>
+                Actions <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" class="bg-spider">
+                <button mat-menu-item  (click)="createEditUser()">
+                    <mat-icon>edit</mat-icon>
+                    Edit
+                </button>
+            </mat-menu>
+        </div>
+    </div>
+    <hr>
+    <!--  </mat-card>-->
+
+    <mat-card class="p-3 bg-white details-card rounded-3 shadow-sm">
+        <mat-card-title class="d-flex align-items-center">
+            <mat-icon class="me-2 primary-blue-color">person</mat-icon>
+            <span class="fs-5">Détails de l'utilisateur</span>
+        </mat-card-title>
+
+        <div class="row align-items-center">
+            <!-- Profile Picture -->
+            <div class="col-lg-3 text-center">
+                <img src="https://placehold.co/150" alt="User" class="rounded-circle img-fluid">
+            </div>
+
+            <div class="col-lg-8">
+
+            <mat-card-content>
+                <div class="d-flex justify-content-between row">
+                    <!-- Matricule -->
+                    <p>
+                      <span class="text-secondary">
+                        <mat-icon class=" primary-blue-color">info</mat-icon> Immatricule :
+                      </span>
+                        <span class="mx-2 my-3">{{ user.getValue().matricule }}</span>
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between row">
+                    <!-- Name -->
+                    <p class="col-lg-6">
+                    <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-briefcase-fill"></i> Nom :
+                    </span>
+                        <span class="mx-2 my-3">{{ user.getValue().name }}</span>
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between row">
+                <!-- Country -->
+                    <p class="col-lg-6"><span class="text-secondary">
+                        <i class="primary-blue-color bi bi-exclamation-circle"></i> Rôle :
+                        </span>
+                        <span class="mx-2 my-3"></span>
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between row">
+                    <!-- Email -->
+                    <p class="col-lg-6"><span class="text-secondary">
+                        <i class="bi bi-envelope-fill primary-blue-color"></i> Email :
+                        </span>
+                        <span class="mx-2 my-3">{{ user.getValue().email }}</span>
+                    </p>
+                </div>
+                <div class="d-flex justify-content-between row">
+                    <!-- City -->
+                    <p class="col-lg-6"><span class="text-secondary">
+                        <i class="bi bi-telephone-fill primary-blue-color"></i> Téléphone :
+                        </span>
+                        <span class="mx-2 my-3">{{ user.getValue().phone }}</span>
+                    </p>
+                </div>
+            </mat-card-content>
+            </div>
+        </div>
+    </mat-card>
+
+    <mat-divider class="my-2"></mat-divider>
+
+    <mat-tab-group class="rounded-3 bg-light border-1 border-secondary border" mat-align-tabs="start" mat-stretch-tabs="true">
+        <!-- Informations de contact Tab -->
+        <mat-tab label="Informations de contact">
+            <ng-template mat-tab-label>
+                <i class="bi bi-person-lines-fill mx-2 primary-blue-color"></i>
+                Informations de contact
+            </ng-template>
+            <div class="d-flex mt-3 p-4">
+                <div class="col-lg-6">
+                    <p >
+                        <span class="text-secondary"><i class="bi bi-envelope-fill primary-blue-color"></i> Email :</span>
+                        <span class="mx-2"></span>
+                    </p>
+                    <p>
+                        <span class="text-secondary"><i class="bi bi-telephone-fill primary-blue-color"></i> Téléphone :</span>
+                        <span class="mx-2"></span>
+                    </p>
+                </div>
+                <div class="col-lg-6">
+                    <p>
+                        <span class="text-secondary"><i class="bi bi-chat-dots-fill primary-blue-color"></i> WhatsApp :</span>
+                        <span class="mx-2"></span>
+                    </p>
+                    <p>
+                        <span class="text-secondary"><i class="bi bi-linkedin primary-blue-color"></i> LinkedIn :</span>
+                        <span class="mx-2"></span>
+                    </p>
+                </div>
+            </div>
+        </mat-tab>
+
+        <!-- Paramètre Tab -->
+        <mat-tab label="Paramètre">
+            <ng-template mat-tab-label>
+                <i class="bi bi-gear-fill mx-2 primary-blue-color"></i>
+                Paramètre
+            </ng-template>
+            <div class="d-flex mt-3 p-4">
+                <div class="col-lg-6">
+                    <p>
+                      <span class="text-secondary">
+                        <section class="example-section fs-6">
+                          <mat-slide-toggle [checked]="true" [color]="'primary'" [disabled]="false" class="custom-toggle" style="transform:scale(0.8) !important;">
+                          </mat-slide-toggle>
+                            Status
+                        </section>
+                      </span>
+                    </p>
+                </div>
+                <!-- Rights  -->
+                <div class="col-lg-6">
+                    <i class="primary-blue-color bi bi-exclamation-circle"></i><p>Les Droits</p>
+                    <div>
+                        <p>
+                            <span class="mx-2 my-3"></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </mat-tab>
+    </mat-tab-group>
+
+    <div class="col-lg-6 row  d-flex flex-column justify-content-end shadow-sm bg-white rounded-3 p-4">
+        <!-- Header Section -->
+        <div class="d-flex align-items-end mb-3">
+            <mat-icon class="example-tab-icon mx-2 primary-blue-color fs-4">list_alt</mat-icon>
+            <span class="fs-5 text-dark">Suivi des activités</span>
+        </div>
+    </div>
+
+</div>

@@ -65,8 +65,12 @@
                 <th *matHeaderCellDef mat-header-cell mat-sort-header>name</th>
                 <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
             </ng-container>
+            <ng-container matColumnDef="lastName" sticky>
+                <th *matHeaderCellDef mat-header-cell mat-sort-header>last name</th>
+                <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
+            </ng-container>
             <ng-container matColumnDef="role">
-                <th *matHeaderCellDef mat-header-cell mat-sort-header>Statut</th>
+                <th *matHeaderCellDef mat-header-cell mat-sort-header>statut</th>
                 <td *matCellDef="let row" mat-cell>
                     <small>
                         <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-4 bg-info-subtle">

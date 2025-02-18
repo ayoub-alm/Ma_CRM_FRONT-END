@@ -6,6 +6,8 @@ export class UserResponseDto {
     image!: string;
     matricule!: string;
     name!: string;
+    lastName!: string;
+    departementId!: number;
     email!: string;
     password!: string;
     aboutMe!: string;
@@ -20,6 +22,8 @@ export class UserResponseDto {
         this.image = data.image;
         this.matricule = data.matricule;
         this.name = data.name;
+        this.lastName = data.lastName;
+        this.departementId = data.departementId;
         this.password = data.password;
         this.email = data.email;
         this.aboutMe = data.aboutMe;

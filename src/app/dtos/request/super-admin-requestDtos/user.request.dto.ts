@@ -5,6 +5,8 @@ export class UserRequestDto {
     image!: string;
     matricule!: string;
     name!: string;
+    lastName!: string;
+    departementId!: number;
     email!: string;
     password!: string;
     aboutMe!: string;
@@ -15,11 +17,13 @@ export class UserRequestDto {
     role!: RoleRequestDto;
     rights!: RightsRequestDto[];
 
-    constructor(image: string,matricule: string, name: string, email: string, password: string, aboutMe: string, phone: string, companyId: number,
+    constructor(image: string,matricule: string, name: string, lastName: string, departementId: number, email: string, password: string, aboutMe: string, phone: string, companyId: number,
                 role: RoleRequestDto, rights: RightsRequestDto[] = []) {
         this.image = image;
         this.matricule = matricule;
         this.name = name;
+        this.lastName = lastName;
+        this.departementId = departementId;
         this.password = password;
         this.email = email;
         this.aboutMe = aboutMe;
