@@ -5,6 +5,8 @@ import {CompaniesComponent} from './companies/companies.component';
 import {SuperAdminIndexComponent} from './super-admin-index/super-admin-index.component';
 import {ProjectComponent} from './project/project.component';
 import {IndexComponent} from '../index/index.component';
+import {UserCreatEditComponent} from "./users/user-creat-edit/user-creat-edit.component";
+import {UserShowComponent} from "./users/user-show/user-show.component";
 
 
 
@@ -14,6 +16,8 @@ const routes: Routes = [
     children: [
       { path: '', component: SuperAdminIndexComponent }, // Index
       { path: 'users', component: UsersComponent },
+      { path: 'users/create', component: UserCreatEditComponent },
+      { path: 'users/show', component: UserShowComponent},
       { path: 'companies', component: CompaniesComponent },
       { path: 'projects', component: ProjectComponent },
     ],
