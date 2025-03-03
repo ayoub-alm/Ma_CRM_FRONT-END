@@ -8,6 +8,15 @@
     padding-left:0.5rem !important;
     /*background-color: #e0e2ec !important;*/
     }
+.form-select-sm{
+  box-shadow: none;
+  border: 1px #005cbb solid !important;
+
+}
+.form-control{
+  box-shadow:none !important;
+}
+
 
 .custom-header-row {
     /*background-color: #e0e2ec !important;*/
@@ -111,10 +120,10 @@
 
 .fixed-header {
   position: sticky;
-  top: 0; /* Fixes the header at the top */
-  z-index: 100; /* Ensure it's above other rows */
-  background-color: #f8f9fa; /* Matches the table header color */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for distinction */
+  top: 0;
+  z-index: 1000!important;
+  background-color: #f8f9fa;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 
@@ -122,4 +131,136 @@
   border-bottom: 1px solid transparent;
   border-top: 1px solid transparent;
   cursor: pointer;
+}
+
+/*  Drop down  */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  padding: 10px;
+  background-color: #90caf9;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right:20%;
+  z-index: 10000;
+  display: block;
+  min-width: 200px;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  max-height:400px;
+  overflow:scroll;
+}
+
+.dropdown-menu div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.dropdown-menu input[type='checkbox'] {
+  margin-right: 8px;
+}
+
+
+.search-input {
+  /* Removes box shadow */
+  outline: none; /* Removes the default outline */
+  border: none; /* Removes the initial border */
+  /* border: solid 0.5px #005cbb; !* Defines a subtle border *!*/
+  border-radius: 4px; /* Adds rounded corners for a cleaner look */
+  margin: 0 !important; /* Removes any extra margin */
+  padding: 0.25rem 0.5rem !important; /* Balanced padding for better spacing */
+  transition: all 0.5s ease-in-out; /* Smooth transition for focus and width changes */
+  background-color: #f9f9f9; /* Light background for readability */
+  font-size: 0.8rem; /* Adjust font size for consistency */
+  color: #333; /* Ensures text color contrast */
+}
+
+.search-input:focus {
+  outline: none; /* Removes the default outline */
+  border: none; /* Removes the initial border */
+  box-shadow: none; /* No shadow on focus */
+  border-bottom: solid 2px #005cbb; /* Adds a distinct bottom border */
+  width: 100%; /* Expands width smoothly */
+  background-color: #ffffff; /* Ensures focus background contrasts well */
+  color: #000; /* Sharpens text color on focus */
+}
+
+
+.p-multiselect-label-container{
+  font-size:small !important;
+  padding: 0 !important;
+  /*transform: scale(0.9)!important;*/
+  /*position: relative;*/
+}
+
+.p-multiselect-label .p-placeholder{
+  padding: 0!important;
+  margin: 0!important;
+  text-align: center;
+  font-size:0.5rem!important;
+}
+
+.p-multiselect-label{
+  padding: 0!important;
+  font-size:0.5rem!important;
+  margin: 0!important;
+}
+
+
+
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  position: relative;
+}
+
+.scroll-wrapper {
+  overflow-x: auto;
+  flex: 1;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+}
+
+.scroll-content {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+
+.scroll-btn {
+  background-color: #ddd;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  font-size: 16px;
+}
+
+.scroll-btn:hover {
+  background-color: #ccc;
+}
+
+.scroll-btn.left {
+  position: absolute;
+  left: 0;
+}
+
+.scroll-btn.right {
+  position: absolute;
+  right: 0;
 }

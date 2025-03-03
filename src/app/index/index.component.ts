@@ -21,6 +21,8 @@ import {MatButtonToggle, MatButtonToggleGroup} from '@angular/material/button-to
 import {FormControl} from '@angular/forms';
 import {CompanyService} from '../../services/company.service';
 import {CompanyResponseDto} from '../../dtos/response/CompanyResponseDto';
+import {animate, state, style, transition, trigger} from '@angular/animations';
+import {AiChatComponent} from '../utils/ai-chat/ai-chat.component';
 
 interface MenuItem {
   name: string;
@@ -32,15 +34,10 @@ interface MenuItem {
 const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
   prospection: {
     icon: 'public',
-    items: [{name: 'Dashboard', icon: 'bar_chart', route: '/admin'}, {
-      name: 'Prospects',
-      icon: 'domain',
-      route: '/admin/prospects'
-    }, {name: 'Interlocutors', icon: 'contacts', route: '/admin/interlocutors'}, {
-      name: 'Interactions',
-      icon: 'forum',
-      route: '/admin/interactions'
-    },],
+    items: [{name: 'Dashboard', icon: 'bar_chart', route: '/admin'},
+      {name: 'Clients', icon: 'domain', route: '/admin/prospects'},
+      {name: 'Contacts', icon: 'contacts', route: '/admin/interlocutors'},
+      {name: 'Interactions', icon: 'forum', route: '/admin/interactions'},],
   }, crm: {
     icon: 'business_center', // Updated icon for CRM
     items: [{name: 'Dashboard', icon: 'bar_chart', route: '/admin/crm'}, {
@@ -55,7 +52,7 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
       name: 'Offre',
       icon: 'request_quote',
       route: '/admin/crm/wms/offers'
-    },{name: 'Contrats', icon: 'assignment', route: '/crm/contracts'}
+    },{name: 'Contrats', icon: 'assignment', route: '/admin/crm/wms/contracts'}
     , {name: 'Factures', icon: 'receipt_long', route: '/admin/crm/invoices'}, {
       name: 'Recouvrement',
       icon: 'account_balance_wallet',
@@ -83,15 +80,15 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
     },],
   }, admin: {
     icon: 'admin_panel_settings',
-    items: [{name: ' Entreprises', icon: 'domain', route: '/super-admin/companies'}, {
-      name: 'filiale',
-      icon: 'apartment',
-      route: '/super-admin/users'
-    }, {name: 'Project', icon: 'work_outline ', route: '/super-admin/projects'}, {
-      name: 'Utilisateur',
-      icon: 'person',
-      route: '/super-admin/users'
-    }, {name: 'Taxonomies', icon: 'category', route: '/super-admin/users', children: ["Pays", "Villes", "Banques"]},],
+    items: [
+      {name: ' Entreprises', icon: 'domain', route: '/super-admin/companies'},
+      // {name: 'filiale', icon: 'apartment', route: '/super-admin/users'},
+      // {name: 'Project', icon: 'work_outline ', route: '/super-admin/projects'},
+      {name: 'Utilisateur', icon: 'person', route: '/super-admin/users'},
+      {name: 'Roles', icon: 'person', route: '/super-admin/users'},
+      {name: 'Permissions', icon: 'person', route: '/super-admin/users'},
+      // {name: 'Taxonomies', icon: 'category', route: '/super-admin/users', children: ["Pays", "Villes", "Banques"]},
+    ],
   },
 };
 
@@ -111,10 +108,18 @@ const TREE_DATA: FoodNode[] = [{
 
 @Component({
   standalone: true,
-  imports: [MatTreeModule, RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule, MatDividerModule, RouterLink, RouterLinkWithHref, CdkTrapFocus, NgIf, MatCard, RouterLinkActive, NgForOf, MatFormField, MatSelect, MatOption, MatMenu, MatMenuItem, MatMenuTrigger, MatButtonToggle, MatButtonToggleGroup, AsyncPipe],
+  imports: [MatTreeModule, RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule,
+    MatDividerModule, RouterLink, RouterLinkWithHref, NgIf, RouterLinkActive, NgForOf, MatMenu, MatMenuItem, MatMenuTrigger, AsyncPipe, AiChatComponent],
   selector: 'app-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.css'],
+  animations: [
+    trigger('rotateIcon', [
+      state('closed', style({ transform: 'rotate(0deg)' })),
+      state('open', style({ transform: 'rotate(180deg)' })),
+      transition('closed <=> open', animate('300ms ease-in-out'))
+    ])
+  ]
 })
 export class IndexComponent implements OnInit, AfterViewInit {
   user: any;
@@ -126,6 +131,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
   selectedApplication: string = 'prospection';
   menuItems: MenuItem[] = menuData[this.selectedApplication].items;
   @ViewChild('rightDrawer') rightDrawer!: MatDrawer;
+  @ViewChild('AiDrawer') AiDrawer!: MatDrawer;
   a = 1
   b = 2
   dataSource = TREE_DATA;
@@ -149,7 +155,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe(() => {
         this.currentRoute = this.router.url;
-        this.updateSelectedApplication();
+        // this.updateSelectedApplication();
       });
     // Initial setup
     this.updateSelectedApplication();
@@ -233,5 +239,12 @@ export class IndexComponent implements OnInit, AfterViewInit {
     this.localStorageService.setItem("selected_company_id", company.id);
     this.fillCompany();
     window.location.reload();
+  }
+
+
+  logout() {
+    this.localStorageService.setItem('user', null);
+    this.router.navigate(['/login']);
+    this.localStorageService.setItem('authToken', null);
   }
 }

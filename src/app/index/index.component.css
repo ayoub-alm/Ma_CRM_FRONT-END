@@ -7,7 +7,13 @@
   left: 0;
   right: 0;
 }
+.ai-container-width{
+  width: 500px;
+}
 
+.small-left-menu-with{
+  width: 50px;
+}
 .custom-drawer-width {
   width: 300px;
   font-size:0.9rem;
@@ -32,14 +38,12 @@ mat-list-item:hover button {
 }
 
 .active-item-nav {
-  border-left: solid 3px #005cbb;
+  border-left: solid 3px rgb(0, 92, 187);
 }
 
 
 .active-link {
-  background-color: red;
-  font-weight: bold;
-
+  border-bottom: solid 3px rgb(0, 92, 187);
 }
 
 .container-fluid {
@@ -52,4 +56,47 @@ mat-list-item:hover button {
 
 img.img-fluid {
   height: 40px;
+}
+.ai-btn {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  z-index: 1000;
+  width: 50px;
+  height: 50px;
+  background-color: #005cbb; /* Primary Blue */
+  color: white;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  animation: pulse 2s infinite alternate;
+}
+
+/* Hover effect */
+.ai-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 6px 15px rgba(0, 92, 187, 0.5);
+}
+
+/* Click effect */
+.ai-btn:active {
+  transform: scale(0.9);
+  box-shadow: none;
+}
+
+/* Pulse animation */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  100% {
+    transform: scale(1.05);
+    box-shadow: 0px 6px 15px rgba(0, 92, 187, 0.5);
+  }
 }

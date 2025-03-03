@@ -1,4 +1,4 @@
-<div class="container-fluid bg-white vh-75 w-100 rounded-top-4  shadow-sm">
+<div class="container-fluid bg-white  w-100 rounded-top-4 mat-elevation-z2 shadow-sm vh-100 overflow-y-scroll">
   <p class="rounded-3 p-1  mat-elevation-z0">
     <span class="mx-2 text-secondary">
           <a routerLink="/admin">
@@ -21,109 +21,109 @@
   </p>
 
 
-    <mat-card class="mt-1 container bg-light shadow-sm p-3 rounded-2">
-      <mat-card-title class="d-flex justify-content-between" >
-        <p class="d-flex ">
-          <mat-icon class="example-tab-icon mx-2 primary-blue-color">business</mat-icon>
-          <span class="fs-5">Détails de l'interlocuteur</span>
-        </p>
-        <p>
-          <button mat-button (click)="openUpdateInterlocutorDialog()">
-            Modifier
-            <mat-icon>edit</mat-icon>
-          </button>
-        </p>
-      </mat-card-title>
-      <mat-card-content>
-        <div class="row">
-            <p>
-            <p class="col-lg-6">
-            <span class="text-secondary">
-            <i class="bi bi-building mx-2 primary-blue-color"></i>Statut :</span>
-                <button  style="transform:scale(0.8)" [ngClass]="[getChipClass(interlocutor.getValue().active), 'btn btn-sm p-1 rounded-4 px-3']">
-                    {{ getAllStatusInteraction(interlocutor.getValue().active)}}
-                </button>
-            </p>
+  <mat-card class="mt-1 container mat-elevation-z2 shadow-sm bg-white p-3 rounded-2">
+    <mat-card-title class="d-flex justify-content-between" >
+      <p class="d-flex ">
+        <mat-icon class="example-tab-icon mx-2 primary-blue-color">business</mat-icon>
+        <span class="fs-5">Détails de l'interlocuteur</span>
+      </p>
+      <p>
+        <button mat-button (click)="openUpdateInterlocutorDialog()">
+          Modifier
+          <mat-icon>edit</mat-icon>
+        </button>
+      </p>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="row">
+          <p>
           <p class="col-lg-6">
-      <span class="text-secondary">
-        <i class="primary-blue-color  mx-2 bi  bi-person-fill"></i>Nom complet :
-      </span>
+            <span class="text-secondary">
+              <i class="primary-blue-color  mx-2 bi  bi-person-fill"></i>Nom complet :
+            </span>
             <span class="mx-2 my-3">{{ interlocutor.getValue().fullName }}</span>
           </p>
-
           <p class="col-lg-6">
-      <span class="text-secondary">
-        <i class="primary-blue-color  mx-2 bi  bi-building"></i>Entreprise :
-      </span>
+          <span class="text-secondary">
+          <i class="bi bi-building mx-2 primary-blue-color"></i>Statut :</span>
+              <button  style="transform:scale(0.8)" [ngClass]="[getChipClass(interlocutor.getValue().active), 'btn btn-sm p-1 rounded-2 px-3']">
+                  {{ getAllStatusInteraction(interlocutor.getValue().active)}}
+              </button>
+          </p>
+
+        <p class="col-lg-6">
+            <span class="text-secondary">
+              <i class="primary-blue-color  mx-2 bi  bi-building"></i>Entreprise :
+            </span>
             <span class="mx-2 my-3">{{ interlocutor.getValue()?.customer?.name }}</span>
+        </p>
+
+        <p class="col-lg-6">
+    <span class="text-secondary">
+      <i class="primary-blue-color  mx-2 bi  bi-briefcase-fill"></i>Département :
+    </span>
+          <span class="mx-2 my-3">{{ interlocutor.getValue().department.name }}</span>
+        </p>
+
+        <p class="col-lg-6">
+    <span class="text-secondary">
+      <i class="primary-blue-color  mx-2 bi  bi-award-fill"></i>Titre de poste :
+    </span>
+          <span class="mx-2 my-3">{{ interlocutor.getValue().jobTitle.name }}</span>
+        </p>
+
+        <p class="col-lg-6">
+    <span class="text-secondary">
+      <i class="primary-blue-color  mx-2 bi  bi-envelope-fill"></i>Email :
+    </span>
+          <span class="mx-2 my-3">{{ interlocutor.getValue().emailAddress.address }}</span>
+        </p>
+
+        <p class="col-lg-6">
+    <span class="text-secondary">
+      <i class="primary-blue-color  mx-2 bi  bi-telephone-fill"></i>Téléphone :
+    </span>
+          <span class="mx-2 my-3">{{ interlocutor.getValue().phoneNumber.number }}</span>
+        </p>
+
+          <!-- Created At By - Updated At By -->
+          <p class="col-lg-6" >
+              <i class="bi bi-calendar-event-fill mx-2 bi primary-blue-color"></i>
+              <span class="text-secondary">Créé le : </span>
+              <span class="mx-2 my-3">{{ interlocutor.getValue().createdAt | date:'dd-MM-yyyy HH:mm' }}</span>
           </p>
-
-          <p class="col-lg-6">
-      <span class="text-secondary">
-        <i class="primary-blue-color  mx-2 bi  bi-briefcase-fill"></i>Département :
-      </span>
-            <span class="mx-2 my-3">{{ interlocutor.getValue().department.name }}</span>
+          <p class="col-lg-6" >
+              <i class="bi bi-person-lines-fill mx-2 bi primary-blue-color"></i>
+              <span class="text-secondary">Créé par : </span>
+              <span class="mx-2 my-3">{{ interlocutor.getValue().createdBy.name }}</span>
           </p>
-
-          <p class="col-lg-6">
-      <span class="text-secondary">
-        <i class="primary-blue-color  mx-2 bi  bi-award-fill"></i>Titre de poste :
-      </span>
-            <span class="mx-2 my-3">{{ interlocutor.getValue().jobTitle.name }}</span>
+          <p class="col-lg-6" >
+              <i class="bi bi-calendar-event-fill mx-2 bi primary-blue-color"></i>
+              <span class="text-secondary">Mis à jour le : </span>
+              <span class="mx-2 my-3">{{ interlocutor.getValue().updatedAt | date:'dd-MM-yyyy HH:mm' }}</span>
           </p>
-
-          <p class="col-lg-6">
-      <span class="text-secondary">
-        <i class="primary-blue-color  mx-2 bi  bi-envelope-fill"></i>Email :
-      </span>
-            <span class="mx-2 my-3">{{ interlocutor.getValue().emailAddress.address }}</span>
+          <p class="col-lg-6" >
+              <i class="bi bi-person-lines-fill mx-2 bi primary-blue-color"></i>
+              <span class="text-secondary">Mis à jour par : </span>
+              <span class="mx-2 my-3">{{ interlocutor.getValue().updatedBy.name }}</span>
           </p>
-
-          <p class="col-lg-6">
-      <span class="text-secondary">
-        <i class="primary-blue-color  mx-2 bi  bi-telephone-fill"></i>Téléphone :
-      </span>
-            <span class="mx-2 my-3">{{ interlocutor.getValue().phoneNumber.number }}</span>
-          </p>
-
-            <!-- Created At By - Updated At By -->
-            <p class="col-lg-6" *ngIf="interlocutor.getValue().createdAt">
-                <i class="bi bi-calendar-event-fill mx-2 bi primary-blue-color"></i>
-                <span class="text-secondary">Créé le : </span>
-                <span class="mx-2 my-3">{{ interlocutor.getValue().createdAt | date:'shortDate' }}</span>
-            </p>
-            <p class="col-lg-6" *ngIf="interlocutor.getValue().createdBy">
-                <i class="bi bi-person-lines-fill mx-2 bi primary-blue-color"></i>
-                <span class="text-secondary">Créé par : </span>
-                <span class="mx-2 my-3">{{ interlocutor.getValue().createdBy }}</span>
-            </p>
-            <p class="col-lg-6" *ngIf="interlocutor.getValue().updatedAt">
-                <i class="bi bi-calendar-event-fill mx-2 bi primary-blue-color"></i>
-                <span class="text-secondary">Mis à jour le : </span>
-                <span class="mx-2 my-3">{{ interlocutor.getValue().updatedAt | date:'shortDate' }}</span>
-            </p>
-            <p class="col-lg-6" *ngIf="interlocutor.getValue().updatedBy">
-                <i class="bi bi-person-lines-fill mx-2 bi primary-blue-color"></i>
-                <span class="text-secondary">Mis à jour par : </span>
-                <span class="mx-2 my-3">{{ interlocutor.getValue().updatedBy }}</span>
-            </p>
-        </div>
-      </mat-card-content>
+      </div>
+    </mat-card-content>
 
 
-    </mat-card>
+  </mat-card>
 
 
 <!--  <div class="container mat-elevation-z2 p-3  mt-3 rounded-2">-->
-    <div class="container text-dark row  d-flex justify-content-between ">
-      <div class="col-lg-5 mt-3 shadow-sm bg-light rounded-3 p-3 ">
+    <div  class="container-fluid text-dark row px-lg-5  d-flex justify-content-start">
+      <div class="col-lg-5 mt-3 shadow-sm mat-elevation-z2 rounded-3 p-3 ">
         <p class="d-flex ">
           <mat-icon class="example-tab-icon mx-2 primary-blue-color">forum</mat-icon>
           <span class="fs-5">Interactions</span>
         </p>
 
         <ng-container *ngFor="let interaction of interactions | async">
-          <mat-expansion-panel class="bg-white mt-3">
+          <mat-expansion-panel class="bg-white mt-3 rounded-2">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <i class="bi bi-telephone-fill me-2 primary-blue-color"></i>
@@ -181,7 +181,7 @@
         </ng-container>
       </div>
 
-      <div class="col-lg-7 mt-3 row d-flex justify-content-end shadowhite rounded-3">
+      <div class="col-lg-6 mx-lg-2 mt-3 d-none row d-flex justify-content-end shadow-sm rounded-3">
         <p class="d-flex col-12 mt-4 ">
           <mat-icon class="example-tab-icon mx-2 primary-blue-color">list_alt</mat-icon>
           <span class="fs-5">Suivi des activités</span>
@@ -204,7 +204,7 @@
         </ngx-timeline>
       </div>
     </div>
-     </div>
+</div>
 <!--</div>-->
 
 <app-comment  [entity]="EntityEnum.INTERLOCUTOR" [entityId]="interlocutor.getValue().id" ></app-comment>

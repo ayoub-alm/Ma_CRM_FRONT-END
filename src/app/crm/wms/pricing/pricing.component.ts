@@ -6,8 +6,8 @@ import {MatIcon} from "@angular/material/icon";
 import {MatDivider} from "@angular/material/divider";
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {Subscription} from "rxjs";
-import {AuthService} from "../../../services/AuthService";
-import {LocalStorageService} from "../../../services/local.storage.service";
+import {AuthService} from '../../../../services/AuthService';
+import {LocalStorageService} from '../../../../services/local.storage.service';
 
 @Component({
   selector: 'app-pricing',

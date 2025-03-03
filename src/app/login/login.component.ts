@@ -40,8 +40,8 @@ export class LoginComponent  {
     private localStorageService: LocalStorageService // Updated to use the new LocalStorageService
   ) {
     this.loginForm = this.fb.group({
-      email: ['alayoub33@gmail.com', [Validators.required, Validators.email]],
-      password: ['121314', [Validators.required, Validators.minLength(6)]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 

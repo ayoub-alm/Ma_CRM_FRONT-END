@@ -1,14 +1,9 @@
 import {Component, Inject, OnInit} from '@angular/core';
 import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatCardContent, MatCardTitle} from "@angular/material/card";
-import {MatDivider} from "@angular/material/divider";
-import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from "@angular/material/expansion";
 import {MatIcon} from "@angular/material/icon";
 import {MatSlideToggle} from "@angular/material/slide-toggle";
-import {MatTab, MatTabGroup, MatTabLabel} from "@angular/material/tabs";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {NgxTimelineComponent} from "@frxjs/ngx-timeline";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
+import {Router} from "@angular/router";
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -21,10 +16,8 @@ import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatOption} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
-import {MatStep, MatStepLabel, MatStepper} from '@angular/material/stepper';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {InterlocutorRequestDto} from '../../../../dtos/request/interlocutorRequestDto';
-import {MatCheckbox} from '@angular/material/checkbox';
+import {InterlocutorRequestDto} from '../../../../dtos/request/leads/interlocutorRequestDto';
 import {InterlocutorService} from '../../../../services/Leads/interlocutor.service';
 import {BehaviorSubject, catchError, of, tap, throwError} from 'rxjs';
 import {PhoneDto} from '../../../../dtos/response/phone.dto';
@@ -38,26 +31,16 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {InterlocutorResDto} from '../../../../dtos/response/interlocutor.dto';
 import {DepartmentService} from '../../../../services/data/department.service';
 import {DepartmentModel} from '../../../../models/department.model';
+import {LocalStorageService} from '../../../../services/local.storage.service';
 
 @Component({
   selector: 'app-add-update-interlocutor',
   standalone: true,
   imports: [
     MatButton,
-    MatCardContent,
-    MatCardTitle,
-    MatDivider,
-    MatExpansionPanel,
-    MatExpansionPanelHeader,
-    MatExpansionPanelTitle,
     MatIcon,
     MatSlideToggle,
-    MatTab,
-    MatTabGroup,
-    MatTabLabel,
     NgIf,
-    NgxTimelineComponent,
-    RouterLink,
     AsyncPipe,
     MatDialogActions,
     MatDialogClose,
@@ -70,12 +53,8 @@ import {DepartmentModel} from '../../../../models/department.model';
     MatLabel,
     MatOption,
     MatSelect,
-    MatStep,
-    MatStepLabel,
-    MatStepper,
     NgForOf,
     ReactiveFormsModule,
-    MatCheckbox
   ],
   templateUrl: './add-update-interlocutor.component.html',
   styleUrl: './add-update-interlocutor.component.css'
@@ -94,7 +73,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
     private jobTileService: JobTitleService,
     private departmentService: DepartmentService,
     private prospectService: ProspectService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,private localStorageService: LocalStorageService
   ) {
     this.interlocutorForm = this.fb.group({
       fullName: new FormControl("", [Validators.required, Validators.minLength(3)]),
@@ -121,7 +100,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
         }
       })).subscribe()
     // fet all prospect and fill prospect to display it in prospects field
-    this.prospectService.getAllProspects().pipe(tap(data =>{
+    this.prospectService.getAllCustomers(this.localStorageService.getCurrentCompanyId()).pipe(tap(data =>{
       this.prospects.next(data);
       // Patch value after prospects are loaded
       if (this.interlocutorToUpdate) {

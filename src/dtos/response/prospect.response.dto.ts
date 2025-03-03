@@ -11,12 +11,14 @@ import {ProspectStatus} from '../../enums/prospect.status';
 import {TrackingLogResponseDto} from './tracking.log.response.dto';
 import {InterestResponseDto} from "./interestResponseDto";
 import {ProspectInterestResponseDto} from "./prospectInterestResponseDto";
+import {UserDto} from './usersResponseDto';
+import {CustomerStatus} from '../../services/Leads/customer.status.service';
 export class ProspectResponseDto {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: string | null;
-  createdBy: string | null;
-  updatedBy: string | null;
+  createdBy: UserDto;
+  updatedBy: UserDto;
   id: number;
   logo: string | null;
   name: string;
@@ -37,8 +39,8 @@ export class ProspectResponseDto {
   ifm: string;
   patent: string;
   cnss: string;
-  prospectStatus: ProspectStatus;
-  status: ProspectStatus;
+  customerStatus: CustomerStatus;
+  active: boolean;
   businessDescription: string;
   legalStatus: LegalStatusDto | null;
   city: CityResponseDto | null;
@@ -94,8 +96,8 @@ export class ProspectResponseDto {
       ? new (data.reprosentaveJobTitle)
       : null;
     this.certificationText = data?.certificationText || null;
-    this.status = data?.status;
-    this.prospectStatus = data?.prospectStatus;
+    this.active = data?.status;
+    this.customerStatus = data.customerStatus;
     this.trackingLogs = data?.trackingLogs;
     this.interests = data?.interests;
   }

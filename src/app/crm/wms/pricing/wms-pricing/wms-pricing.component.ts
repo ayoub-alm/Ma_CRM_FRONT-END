@@ -40,14 +40,14 @@ export interface ExampleTab {
   label: string;
   content: string;
   icon:string;
-  data:any
+  data:any,
+  type:string
 }
 
 @Component({
   selector: 'app-wms-pricing',
   standalone: true,
   imports: [
-    DatePipe,
     MatButton,
     MatCell,
     MatCellDef,
@@ -98,7 +98,6 @@ export class WmsPricingComponent implements OnInit, AfterViewInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  crmType = new FormControl('');
 
 
   constructor(private interactionService: InteractionService, private snackBar: MatSnackBar, protected router: Router,
@@ -107,18 +106,15 @@ export class WmsPricingComponent implements OnInit, AfterViewInit{
     this.asyncTabs = new Observable((observer: Observer<ExampleTab[]>) => {
       setTimeout(() => {
         observer.next([
-          { label: 'Dépotage', content: 'Content 1', icon: 'local_shipping', data: this.unloadingTypes},
-          { label: 'Exigences', content: 'Content 2', icon: 'list_alt' ,data:this.requirements},
-          { label: 'Préstations', content: 'Content 3', icon: 'receipt',data:this.provisions },
-          // { label: 'Management fees', content: 'Content 4', icon: 'money' },
-          // { label: 'Insurance', content: 'Content 5', icon: 'security' }
+          { label: 'Dépotage', content: 'Content 1', icon: 'local_shipping', data: this.unloadingTypes, type:'unloading'},
+          { label: 'Exigences', content: 'Content 2', icon: 'list_alt' ,data:this.requirements, type:'requirements'},
+          { label: 'Préstations', content: 'Content 3', icon: 'receipt',data:this.provisions, type:'provisions' },
         ]);
       }, 1000);
     });
   }
 
   ngOnInit(){
-    this.loadNeedBasedOnSelectedType();
     this.loadProvisions()
     this.loadUnloadingTypes()
     this.loadRequirements()
@@ -165,58 +161,37 @@ export class WmsPricingComponent implements OnInit, AfterViewInit{
       })).subscribe()
   }
 
-  loadNeedBasedOnSelectedType(): void {
-    switch (this.crmType.value) {
-      case CrmTypeEnum.WMS:
-
-        break;
-      case CrmTypeEnum.TMS:
-        this.router.navigateByUrl('/admin/crm/need/tms/show').then(r => {return;});
-        break;
-      case CrmTypeEnum.TMSI:
-        this.router.navigateByUrl('/admin/crm/need/show').then(r => {return;});
-        break;
-    }
-    this.interactionService.getAllInteractions().subscribe({
-      next: (data) => {
-        this.dataSource.data = data;
-      },
-      error: (err) => {
-        console.error('Error loading interactions:', err);
-      },
-    });
-  }
 
   applyFilter(event: Event): void {
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
 
   /**
-   * This function allows to open dialog to add new interlocutor
+   * This function allows to open dialog to add new pricing
    */
-  openAddInterlocutor(interlocutor?: InterlocutorResDto): void {
+  openAddNewPricing(type:string): void {
     const dialogRef = this.dialog.open(AddWmsPricingComponent, {
       width: '1000px',
       maxHeight: '100vh',
-      data: interlocutor, // Pass the interlocutor if provided
+      data: type, // Pass the interlocutor if provided
     });
 
     dialogRef.afterClosed().pipe(
         filter(response => !!response), // Proceed only if response is not null/undefined
         tap(response => {
-          const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
-
-          console.log("exists", existingItemIndex, response);
-          if (existingItemIndex !== -1) {
-            // Update existing item
-            const updatedData = [...this.dataSource.data];
-            updatedData[existingItemIndex] = response;
-            this.dataSource.data = updatedData; // Assign new array to trigger change detection
-          } else {
-            // Add new item
-            this.dataSource.data = [...this.dataSource.data, response]; // Create new array with added item
+          switch (type) {
+            case 'unloading':
+              this.unloadingTypes.next([... this.unloadingTypes.getValue(), response]);
+              break;
+            case 'requirements':
+              this.requirements.next([... this.requirements.getValue(), response]);
+              break;
+            case 'provisions':
+              this.provisions.next([... this.provisions.getValue(), response]);
+              break;
+            default:
+              this.snackBar.open("Erreur","Close", {duration: 3000,})
           }
-
           // Reset paginator to the first page
           this.paginator.firstPage();
         })

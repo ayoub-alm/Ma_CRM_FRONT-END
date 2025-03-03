@@ -1,3 +1,5 @@
+import {UserDto} from './usersResponseDto';
+
 export class InteractionResponseDto {
   id: number;
   customerId: number;
@@ -16,9 +18,10 @@ export class InteractionResponseDto {
   affectedToId?: number;
   affectedToName?: string;
   createdAt: Date;
-  createdBy: string;
   updatedAt: Date;
-  updatedBy: string;
+  deletedAt: string | null;
+  createdBy: UserDto;
+  updatedBy: UserDto;
 
   constructor(data: any) {
     this.id = data.id;
@@ -41,5 +44,6 @@ export class InteractionResponseDto {
     this.createdBy = data.createdBy;
     this.updatedAt = data.updatedAt;
     this.updatedBy = data.updatedBy;
+    this.deletedAt = data.deletedAt;
   }
 }

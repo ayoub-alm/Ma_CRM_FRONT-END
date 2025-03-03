@@ -510,7 +510,7 @@ private generateUUID(): string {
    * this function allows to load costumers-prospects
    */
   loadProspects(): void{
-    this.prospectService.getAllProspects().pipe(
+    this.prospectService.getAllCustomers(this.localStorageService.getCurrentCompanyId()).pipe(
       tap(data => this.customers.next(data)),
       catchError(err => {
         console.error(err)
@@ -523,7 +523,7 @@ private generateUUID(): string {
    * this function allows to get all interlocutors
    */
   loadInterlocutors():void{
-    this.interlocutorService.getAllInterlocutors().pipe(
+    this.interlocutorService.getAllInterlocutorsByCompanyId(this.localStorageService.getCurrentCompanyId()).pipe(
       tap(data => {
         this.interlocutors.next(data);
         this.filteredInterlocutors.next(data)

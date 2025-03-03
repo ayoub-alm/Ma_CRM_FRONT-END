@@ -1,5 +1,5 @@
 export class UserDto {
-  name: string | null;      // Name can be null
+  name: string ;      // Name can be null
   email: string;            // Email is a required string
   aboutMe: string | null;   // AboutMe is a string and optional
   phone: string;            // Phone is required

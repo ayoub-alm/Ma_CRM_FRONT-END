@@ -21,6 +21,7 @@ import {
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatMenu, MatMenuItem} from '@angular/material/menu';
 import {RouterLink} from '@angular/router';
+import {CustomerFilterFields} from '../../../services/Leads/statustucs.service';
 const today = new Date();
 const month = today.getMonth();
 const year = today.getFullYear();
@@ -31,11 +32,9 @@ const year = today.getFullYear();
   imports: [
     MatCard,
     ChartModule, MatNativeDateModule,
-    MatCardHeader, MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule,
-    MatCardContent,
-    BaseChartDirective, MatCardTitle, MatIcon, MatInput, MatFormField, MatLabel, MatAccordion,
-    MatExpansionPanelDescription, MatExpansionPanelTitle, MatExpansionPanelHeader, MatExpansionPanel, MatButton,
-    MatIconButton, MatMenu, MatMenuItem, RouterLink
+    MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule,
+    BaseChartDirective, MatIcon,
+    MatButton,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
@@ -43,59 +42,78 @@ const year = today.getFullYear();
 
 })
 export class DashboardComponent implements OnInit {
+  customersFilters!: CustomerFilterFields;
   counts: BehaviorSubject<LeadsDashboardCounts> = new BehaviorSubject<LeadsDashboardCounts>({} as LeadsDashboardCounts);
-  barChartLabels: string[] = [];
-  barChartData: any[] = [];
-  barChartType: string = 'bar';
+  customerPerStatusChartLabels: string[] = [];
+  customerPerStatusData: any[] = [];
+
+  customerPerSellerChartLabels: string[] = [];
+  customerPerSellerData: any[] = [];
+
+  customerPerCityChartLabels: string[] = [];
+  customerPerCityData: any[] = [];
+
+  customerPerIndustryChartLabels: string[] = [];
+  customerPerIndustryData: any[] = [];
+
+  customerPerStructureChartLabels: string[] = [];
+  customerPerStructureData: any[] = [];
+
+  customerPerDateChartLabels: string[] = [];
+  customerPerDateData: any[] = [];
+
   chartOptions = {
     responsive: true,
     color: '#005cbb',
   };
+// Define an array of colors to be used in charts
+  chartColors = {
+    backgroundColor: [
+      '#d4edda', // NEW (Soft green)
+      '#ffeeba', // INTERESTED (Soft yellow)
+      '#cde0ff', // OPPORTUNITY (Light blue)
+      '#d4edda', // CONVERTED (Soft green)
+      '#f8d7da', // DISQUALIFIED (Soft red)
+      '#e2e3e5', // LOST (Light grey)
+      '#d6d8db',// NRP (Soft blue-grey)
+      '#c3e6cb', // QUALIFIED (Light green)
+    ],
+    borderColor: [
+      '#155724', // Dark green for border
+      '#856404', // Amber
+      '#004085', // Dark blue
+      '#155724', // Dark green
+      '#721c24', // Dark red
+      '#383d41', // Dark grey
+      '#1b1e21',  // Charcoal
+      '#155724', // Dark green
 
-
-  readonly campaignOne = new FormGroup({
-    start: new FormControl(new Date(year, month, 13)),
-    end: new FormControl(new Date(year, month, 16)),
-  });
-  readonly campaignTwo = new FormGroup({
-    start: new FormControl(new Date(year, month, 15)),
-    end: new FormControl(new Date(year, month, 19)),
-  });
+    ],
+    hoverBackgroundColor: [
+      '#b5dab9', '#ffdd99', '#adcaff',
+      '#b5dab9', '#e8b4b8', '#cacfd2', '#c4c5c7', '#a3d5a7'
+    ]
+  };
 
   constructor(private dashboardService: DashboardService) {}
 
   ngOnInit() {
-    this.dashboardService.getProspectCountPerStatus().subscribe(counts => {
-      this.barChartLabels = counts.sort((a, b) => b.count - a.count).map(item => getLabelFromStatus(item.status) || 'Unknown'); // Safely handle undefined labels
-      this.barChartData = [
-        {
-          data: counts.map(item => item.count), // Extract data
-          label: 'Prospects par statut',
-          // backgroundColor: [
-          //   '#d4edda', // NEW
-          //   '#c3e6cb', // QUALIFIED
-          //   '#ffeeba', // INTERESTED
-          //   '#cde0ff', // OPPORTUNITY
-          //   '#d4edda', // CONVERTED
-          //   '#f8d7da', // DISQUALIFIED
-          //   '#e2e3e5', // LOST
-          //   '#d6d8db'  // NRP
-          // ],
-          // borderColor: [
-          //   '#155724', // NEW
-          //   '#155724', // QUALIFIED
-          //   '#856404', // INTERESTED
-          //   '#004085', // OPPORTUNITY
-          //   '#155724', // CONVERTED
-          //   '#721c24', // DISQUALIFIED
-          //   '#383d41', // LOST
-          //   '#1b1e21'  // NRP
-          // ],
-          // borderWidth: 1
+    this.dashboardService.getProspectCountPerStatus().subscribe({
+      next:(counts)=>{
+          console.log(counts);
+          this.customerPerStatusChartLabels = counts.sort((a, b) => b.count - a.count).map(item => item.label); // Safely handle undefined labels
+          this.customerPerStatusData = [
+            {
+              data: counts.map(item => item.count),
+              label: 'Client par statut',
+              backgroundColor: this.chartColors.backgroundColor,
+              borderColor: this.chartColors.borderColor,
+              hoverBackgroundColor: this.chartColors.hoverBackgroundColor,
+              borderWidth: 1            }
+          ];
         }
-      ];
     });
-
+    // get counts
     this.dashboardService.getCounts().pipe(
       tap(data => {this.counts.next(data);}),
       catchError(err => {
@@ -103,5 +121,92 @@ export class DashboardComponent implements OnInit {
         return of(null)
       })
     ).subscribe()
+    this.getCustomerPerSellerDate();
+    this.getCustomerPerCityDate();
+    this.getCustomerPerIndustry();
+    this.getCustomerPerStructure();
+    this.getCountOfCustomerPerDate();
   }
+
+
+  getCustomerPerSellerDate(){
+    this.dashboardService.getCountOfCustomerPerSeller().subscribe(counts => {
+      this.customerPerSellerChartLabels = counts.sort((a, b) => b.count - a.count).map(item => item.label || 'Unknown'); // Safely handle undefined labels
+      this.customerPerSellerData = [
+        {
+          data: counts.map(item => item.count),
+          label: 'Client par commercial',
+          backgroundColor: this.chartColors.backgroundColor,
+          borderColor: this.chartColors.borderColor,
+          hoverBackgroundColor: this.chartColors.hoverBackgroundColor,
+          borderWidth: 1
+        }
+      ];
+    });
+  }
+
+  getCustomerPerCityDate(){
+    this.dashboardService.getCountOfCustomerPerCity().subscribe(counts => {
+      this.customerPerCityChartLabels = counts.sort((a, b) => b.count - a.count).map(item => item.label || 'Unknown'); // Safely handle undefined labels
+      this.customerPerCityData = [
+        {
+          data: counts.map(item => item.count),
+          label: 'Client par Ville',
+          backgroundColor: this.chartColors.backgroundColor,
+          borderColor: this.chartColors.borderColor,
+          hoverBackgroundColor: this.chartColors.hoverBackgroundColor,
+          borderWidth: 1
+        }
+      ];
+    });
+  }
+
+
+  getCustomerPerIndustry(){
+    this.dashboardService.getCountOfCustomerPerIndustry().subscribe(counts => {
+      this.customerPerIndustryChartLabels = counts.sort((a, b) => b.count - a.count).map(item => item.label || 'Unknown'); // Safely handle undefined labels
+      this.customerPerIndustryData = [
+        {
+          data: counts.map(item => item.count),
+          label: 'Client par Industrie',
+          backgroundColor: this.chartColors.backgroundColor,
+          borderColor: this.chartColors.borderColor,
+          hoverBackgroundColor: this.chartColors.hoverBackgroundColor,
+          borderWidth: 1
+        }
+      ];
+    });
+  }
+
+  getCustomerPerStructure(){
+    this.dashboardService.getCountOfCustomerPerStructure().subscribe(counts => {
+      this.customerPerStructureChartLabels = counts.sort((a, b) => b.count - a.count).map(item => item.label || 'Unknown'); // Safely handle undefined labels
+      this.customerPerStructureData = [
+        {
+          data: counts.map(item => item.count),
+          label: 'Client par Structure',
+          backgroundColor: this.chartColors.backgroundColor,
+          borderColor: this.chartColors.borderColor,
+          hoverBackgroundColor: this.chartColors.hoverBackgroundColor,
+          borderWidth: 1
+        }
+      ];
+    });
+  }
+
+  getCountOfCustomerPerDate(){
+  this.dashboardService.getCountOfCustomerPerDate().subscribe(counts => {
+  this.customerPerDateChartLabels = counts.sort((a, b) => b.count - a.count).map(item => item.label || 'Unknown'); // Safely handle undefined labels
+  this.customerPerDateData = [
+    {
+      data: counts.map(item => item.count),
+      label: 'Client par Jour',
+      backgroundColor: this.chartColors.backgroundColor,
+      borderColor: this.chartColors.borderColor,
+      hoverBackgroundColor: this.chartColors.hoverBackgroundColor,
+      borderWidth: 1
+    }
+  ];
+});
+}
 }

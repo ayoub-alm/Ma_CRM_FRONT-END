@@ -4,8 +4,8 @@ import {ProvisionResponseDto} from './provision.response.dto';
 export class StockedItemResponseDto {
   id: number; // The ID of the stocked item
   ref: string; // UUID of the stocked item
-  supportName: string | null; // Name of the support
-  structureName: string | null; // Name of the structure
+  supportName: string ; // Name of the support
+  structureName: string ; // Name of the structure
   stackedLevelName: string | null; // Name or level of stacking
   temperatureName: string | null; // Name of the temperature type
   isFragile: boolean; // Indicates if the item is fragile
@@ -22,7 +22,7 @@ export class StockedItemResponseDto {
     this.id = data.id;
     this.ref = data.ref;
     this.supportName = data.supportName;
-    this.structureName = data.supportStructureName;
+    this.structureName = data.structureName;
     this.stackedLevelName = data.supportStackedLevelName;
     this.temperatureName = data.supportTemperatureName;
     this.isFragile = data.supportIsFragile;
@@ -92,20 +92,3 @@ export class StorageNeed {
 //   }
 // }
 
-
-export function mapStockedItemResponseToCreate(response: StockedItemResponseDto): StockedItemCreateDto {
-  return new StockedItemCreateDto({
-    supportId: response.storageOffer?.id || 0,  // Assuming storageOffer ID represents supportId
-    structureId: response.structureName ? parseInt(response.structureName) : 0, // Convert if needed
-    temperatureId: response.temperatureName || "",
-    larger: response.dimension?.width || 0,
-    length: response.dimension?.length || 0,
-    height: response.dimension?.height || 0,
-    weight: response.isFragile ? 1 : 0, // Example conversion, adjust accordingly
-    stackedLevel: response.stackedLevelName ? parseInt(response.stackedLevelName) : 0,
-    volumeStock: response.dimension ? response.dimension.length * response.dimension.width * response.dimension.height : 0,
-    numberUvc: response.uvc || 0,
-    numberUc: response.numberOfPackages || 0,
-    provisions: response.provisionResponseDto || [],
-  });
-}

@@ -16,7 +16,6 @@ import {
   MatDatepicker, MatDatepickerInput, MatDatepickerModule, MatDatepickerToggle
 } from '@angular/material/datepicker';
 import {provideNativeDateAdapter} from '@angular/material/core';
-import {CreateCompanyRequest} from '../../../../dtos/request/CreateCompanyDto';
 import {TitleResponseDto} from '../../../../dtos/init_data/response/title.response.dto';
 import {BehaviorSubject, map, Observable, Subscription} from 'rxjs';
 import {CompanySizeResponseDto} from '../../../../dtos/init_data/response/company.size.response.dt';
@@ -36,19 +35,20 @@ import {CityService} from '../../../../services/data/city.service';
 import {CountryService} from '../../../../services/data/country.service';
 import {IndustryService} from '../../../../services/data/industry.service';
 import {CourtService} from '../../../../services/data/court.service';
-
-import {HttpClient} from '@angular/common/http';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {ProspectService} from '../../../../services/Leads/prospect.service';
-import {CreateProspectDto} from '../../../../dtos/request/CreateProspectDto';
+import {CreateProspectDto} from '../../../../dtos/request/leads/CreateProspectDto';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {ProspectResponseDto} from '../../../../dtos/response/prospect.response.dto';
 import {environment} from '../../../../environments/environment';
+import {LocalStorageService} from '../../../../services/local.storage.service';
 
 @Component({
   selector: 'app-add-prospect-dialog',
   standalone: true,
-  imports: [MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, MatButton, MatFormField, MatStep, MatIcon, MatHint, ReactiveFormsModule, MatStepLabel, MatStepper, MatStepperPrevious, MatStepperNext, MatInput, MatLabel, MatDatepickerModule, AsyncPipe, MatSelect, MatOption, NgIf, MatError, NgForOf, MatDatepickerInput, MatDatepicker, MatDatepickerToggle, MatIconButton],
+  imports: [MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, MatButton, MatFormField, MatStep,
+    MatIcon, ReactiveFormsModule, MatStepLabel, MatStepper,
+    MatInput, MatLabel, MatDatepickerModule, AsyncPipe, MatSelect, MatOption, NgIf, MatError, NgForOf, MatIconButton],
   templateUrl: './add-prospect-dialog.component.html',
   styleUrl: './add-prospect-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -83,20 +83,19 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
               private jobTitleService: JobTitleService, private proprietaryStructureService: ProprietaryStructureService,
               private cityService: CityService, private countryService: CountryService, private industryService: IndustryService,
               private courtService: CourtService, private legalStatusService: LegalStatusService, private prospectService: ProspectService,
-              private snackBar: MatSnackBar) {
+              private snackBar: MatSnackBar, private localStorageService: LocalStorageService) {
     // Define the form groups
     this.companyDetailsFormGroup = this._formBuilder.group({
       companyName: [this.prospect?.name, Validators.required],
       sigle: [this.prospect?.sigle],
-      logo: [this.prospect?.logo],
       capital: [this.prospect?.capital],
       headOffice: [this.prospect?.headOffice],
-      proprietaryStructure: [this.prospect?.proprietaryStructure?.id, Validators.required],
+      proprietaryStructure: [this.prospect?.proprietaryStructure?.id],
       yearOfCreation: [this.prospect?.yearOfCreation],
-      companySize: [this.prospect?.companySize?.id, Validators.required],
-      city: [this.prospect?.city?.id, Validators.required],
-      country: [this.prospect?.country?.id, Validators.required],
-      industry: [this.prospect?.industry?.id, Validators.required]
+      companySize: [this.prospect?.companySize?.id],
+      city: [this.prospect?.city?.id],
+      country: [this.prospect?.country?.id],
+      industry: [this.prospect?.industry?.id]
     });
 
     this.contactInfoFormGroup = this._formBuilder.group({
@@ -119,7 +118,7 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
       legalRepresentativeTitle: [this.prospect?.reprosentaveJobTitle?.id],
       legalRepresentativeJobTitle: [this.prospect?.reprosentaveJobTitle?.id],
       court: [this.prospect?.court?.name],
-      legalStatus: [this.prospect?.legalStatus?.id, Validators.required]
+      legalStatus: [this.prospect?.legalStatus?.id]
     });
 
     this.businessDescriptionFormGroup = this._formBuilder.group({
@@ -194,7 +193,7 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
     const businessDescription = this.businessDescriptionFormGroup.value;
 
     // Keep the existing logo if the prospect already has an id
-    const logo = this.prospect.id ? this.prospect.logo : companyDetails.logo;
+    // const logo = this.prospect.id ? this.prospect.logo : companyDetails.logo;
 
     // Create a new CreateCompanyRequest object
     const prospectId = this.prospect.id ? this.prospect.id : "";
@@ -205,9 +204,9 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
       contactInfo.linkedin, legalInfo.ice, legalInfo.rc, legalInfo.ifm, legalInfo.patent, legalInfo.cnss,
       legalInfo.certificationText, businessDescription.businessDescription,
       this.prospect.legalStatus, this.prospect.city, this.prospect.court, this.prospect.companySize, this.prospect.industry,
-      this.prospect.country, this.prospect.proprietaryStructure, this.prospect.title, this.prospect.reprosentaveJobTitle);
+      this.prospect.country, this.prospect.proprietaryStructure, this.prospect.title, this.prospect.reprosentaveJobTitle, this.localStorageService.getCurrentCompanyId());
     // Call the service to create the company
-    this.prospectService.createProspect(newProspect).subscribe({
+    this.prospectService.createCustomer(newProspect).subscribe({
       next: (response: CreateProspectDto) => {
         this.showSnackBar(`${response.name} a été créé avec succès`);
         this.dialogRef.close(response);
@@ -240,24 +239,24 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
    *
    * @param event
    */
-  onLogoUpload(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length) {
-      const file = input.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        // Set the base64-encoded image in the company object
-        this.prospect.logo = reader.result as string; // You store the base64 string here
-        this.companyDetailsFormGroup.patchValue({logo: this.prospect.logo});
-        const logoElement = document.getElementById('logo1') as HTMLImageElement;
-        if (logoElement) {
-          logoElement.setAttribute('src', reader.result as string);
-        }
-        this.prospect.logo = reader.result as string;
-      };
-      reader.readAsDataURL(file); // Read file as base64
-    }
-  }
+  // onLogoUpload(event: Event) {
+  //   const input = event.target as HTMLInputElement;
+  //   if (input.files && input.files.length) {
+  //     const file = input.files[0];
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       // Set the base64-encoded image in the company object
+  //       this.prospect.logo = reader.result as string; // You store the base64 string here
+  //       this.companyDetailsFormGroup.patchValue({logo: this.prospect.logo});
+  //       const logoElement = document.getElementById('logo1') as HTMLImageElement;
+  //       if (logoElement) {
+  //         logoElement.setAttribute('src', reader.result as string);
+  //       }
+  //       this.prospect.logo = reader.result as string;
+  //     };
+  //     reader.readAsDataURL(file); // Read file as base64
+  //   }
+  // }
 
   /**
    *
@@ -311,12 +310,4 @@ export class AddProspectDialogComponent implements OnInit, AfterViewInit {
     // event.target?.classList.remove('drag-over');
   }
 
-  clearLogo(): void {
-    this.companyDetailsFormGroup.get('logo')?.setValue(null);
-  }
-
-  removeLogo(): void {
-    this.prospect.logo = null; // Clear the logo from the prospect
-    this.clearLogo();
-  }
 }

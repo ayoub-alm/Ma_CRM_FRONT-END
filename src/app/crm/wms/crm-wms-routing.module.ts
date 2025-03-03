@@ -9,6 +9,9 @@ import {CreateEditWmsOfferComponent} from './wms-offer/create-edit-wms-offer/cre
 import {WmsOfferShowComponent} from './wms-offer/wms-offer-show/wms-offer-show.component';
 import {ProspectComponent} from '../../admin/prospect/prospect.component';
 import {WmsPricingComponent} from './pricing/wms-pricing/wms-pricing.component';
+import {WmsContractComponent} from './wms-contract/wms-contract.component';
+import {WmsContractShowComponent} from './wms-contract/wms-contract-show/wms-contract-show.component';
+import {WmsInvoiceCreateComponent} from './wms-invoice/wms-invoice-create/wms-invoice-create.component';
 
 
 
@@ -23,6 +26,9 @@ const routes: Routes = [
       {path:'offers/show/:id', component: WmsOfferShowComponent },
       {path:'customers', component: ProspectComponent },
       {path:'pricing', component: WmsPricingComponent },
+      {path:'contracts', component: WmsContractComponent },
+      {path:'contracts/show/:id', component: WmsContractShowComponent },
+      {path:'invoice/create', component: WmsInvoiceCreateComponent },
 
     ]},
 

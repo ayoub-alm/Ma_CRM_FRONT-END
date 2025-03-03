@@ -28,38 +28,38 @@
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Nom de prospect</mat-label>
-            <input formControlName="companyName" matInput placeholder="prospect Exemple" required>
+            <input formControlName="companyName" matInput placeholder="prospect Exemple" >
           </mat-form-field>
         </div>
-        <div class="col-6 text-center px-5" *ngIf="!prospect?.id">
-          <div (dragleave)="onDragLeave($event)"
-               (dragover)="onDragOver($event)"
-               (drop)="onLogoDrop($event)"
-               class="drop-zone bg-white rounded-2 text-center">
-            <!-- Add logo if logo not exist  -->
-            <div *ngIf="!prospect?.logo">
-              <p class="display-6 m-0 p-0"><i class="bi bi-image primary-blue-color"></i></p>
-              <input #logoInput (change)="onLogoUpload($event)" hidden type="file"/>
-              <button (click)="logoInput.click()" class="mx-2 shadow-sm small-btn" mat-button>Sélectionnez le logo</button>
-              <br>
-            </div>
-            <!-- if logo exist  -->
-            <div *ngIf="prospect?.logo">
-              <img [src]="environment.baseUrl + '/api/images/' + prospect.logo" id="logo1" alt="logo" class="img-fluid"
-                   height="100px" width="100px">
-              <button (click)="removeLogo()" [color]="'warn'" mat-icon-button style="transform:scale(0.6);position:relative;bottom:10px;">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </div>
-          </div>
-        </div>
+<!--        <div class="col-6 text-center px-5" *ngIf="!prospect?.id">-->
+<!--          <div (dragleave)="onDragLeave($event)"-->
+<!--               (dragover)="onDragOver($event)"-->
+<!--               (drop)="onLogoDrop($event)"-->
+<!--               class="drop-zone bg-white rounded-2 text-center">-->
+<!--            &lt;!&ndash; Add logo if logo not exist  &ndash;&gt;-->
+<!--            <div *ngIf="!prospect?.logo">-->
+<!--              <p class="display-6 m-0 p-0"><i class="bi bi-image primary-blue-color"></i></p>-->
+<!--              <input #logoInput (change)="onLogoUpload($event)" hidden type="file"/>-->
+<!--              <button (click)="logoInput.click()" class="mx-2 shadow-sm small-btn" mat-button>Sélectionnez le logo</button>-->
+<!--              <br>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; if logo exist  &ndash;&gt;-->
+<!--            <div *ngIf="prospect?.logo">-->
+<!--              <img [src]="environment.baseUrl + '/api/images/' + prospect.logo" id="logo1" alt="logo" class="img-fluid"-->
+<!--                   height="100px" width="100px">-->
+<!--              <button (click)="removeLogo()" [color]="'warn'" mat-icon-button style="transform:scale(0.6);position:relative;bottom:10px;">-->
+<!--                <mat-icon>delete</mat-icon>-->
+<!--              </button>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
 
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Structure</mat-label>
             <mat-select
               formControlName="proprietaryStructure"
-              required>
+              >
               <mat-option
                 *ngFor="let ps of (proprietaryStructures | async)"
                 [value]="ps.id">
@@ -74,7 +74,7 @@
             <mat-label>Industrie</mat-label>
             <mat-select
               formControlName="industry" placeholder="Fabrication"
-              required>
+              >
               <mat-option *ngFor="let industry of industries | async"
                           [value]="industry.id">{{ industry?.name }}
               </mat-option>
@@ -114,12 +114,12 @@
             <mat-label>Taille d'entrepris</mat-label>
             <mat-select
               formControlName="companySize" placeholder="PME"
-              required>
+              >
               <mat-option *ngFor="let size of companySizes | async"
                           [value]="size.id">{{ size.name }}
               </mat-option>
             </mat-select>
-            <!--            <input matInput placeholder="2020" formControlName="yearOfCreation" required type="number">-->
+            <!--            <input matInput placeholder="2020" formControlName="yearOfCreation"  type="number">-->
           </mat-form-field>
         </div>
 
@@ -171,7 +171,7 @@
             <mat-label>Titre de Représentant légal</mat-label>
             <mat-select
               formControlName="legalRepresentativeTitle" placeholder="Jean Dupont"
-              required>
+              >
               <mat-option *ngFor="let title of titles | async"
                           [value]="title.id">{{ title.title }}
               </mat-option>
@@ -183,7 +183,7 @@
             <mat-label>Titre de Représentant légal</mat-label>
             <mat-select
               formControlName="legalRepresentativeJobTitle" placeholder="CEO"
-              required>
+              >
               <mat-option *ngFor="let title of jobTitles | async"
                           [value]="title.id">{{ title.name }}
               </mat-option>
@@ -193,7 +193,7 @@
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>Représentant légal</mat-label>
-            <input formControlName="legalRepresentative" matInput placeholder="Jean Dupont" required>
+            <input formControlName="legalRepresentative" matInput placeholder="Jean Dupont" >
           </mat-form-field>
         </div>
         <div class="col-6">
@@ -201,7 +201,7 @@
             <mat-label>Status légal</mat-label>
             <mat-select
               formControlName="legalStatus" placeholder="Sarl"
-              required>
+              >
               <mat-option *ngFor="let ls of legalStatuses | async"
                           [value]="ls.id">{{ ls.name }}
               </mat-option>
@@ -213,7 +213,7 @@
             <mat-label>Tribunal</mat-label>
             <mat-select
               formControlName="court" placeholder="Casablanca"
-              required>
+              >
               <mat-option *ngFor="let court of courts | async"
                           [value]="court.id">{{ court.name }}
               </mat-option>
@@ -223,19 +223,19 @@
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>ICE</mat-label>
-            <input formControlName="ice" matInput placeholder="123456789" required>
+            <input formControlName="ice" matInput placeholder="123456789" >
           </mat-form-field>
         </div>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>RC</mat-label>
-            <input formControlName="rc" matInput placeholder="987654321" required>
+            <input formControlName="rc" matInput placeholder="987654321" >
           </mat-form-field>
         </div>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>IFM</mat-label>
-            <input formControlName="ifm" matInput placeholder="123456" required>
+            <input formControlName="ifm" matInput placeholder="123456" >
           </mat-form-field>
         </div>
         <div class="col-6">
@@ -268,11 +268,11 @@
         <ng-template matStepLabel>Infos de contact</ng-template>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Email</mat-label>
-          <input formControlName="email" matInput placeholder="contact@exemple.com" required type="email">
+          <input formControlName="email" matInput placeholder="contact@exemple.com"  type="email">
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Téléphone</mat-label>
-          <input formControlName="phone" matInput placeholder="+12345672890" required>
+          <input formControlName="phone" matInput placeholder="+12345672890" >
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Fax</mat-label>
@@ -316,7 +316,7 @@
           <mat-label>Description</mat-label>
           <textarea formControlName="businessDescription" matInput
                     placeholder="L'entreprise Exemple est un fournisseur leader de services d'exemple."
-                    required></textarea>
+                    ></textarea>
         </mat-form-field>
       </form>
     </mat-step>
@@ -327,7 +327,7 @@
       <div class="row">
         <div class="col-6">
           <h6>Détails de l'entreprise</h6>
-          <p class="mx-3"><img [src]="environment.baseUrl + '/api/images/' + prospect?.logo" alt="Logo" width="100"></p>
+<!--          <p class="mx-3"><img [src]="environment.baseUrl + '/api/images/' + prospect?.logo" alt="Logo" width="100"></p>-->
           <p>
             <span class="ma-color"> <i class="bi bi-caret-right-fill mx-2"></i> Nom de l'entreprise :</span>
             {{ companyDetailsFormGroup.get('companyName')?.value }}

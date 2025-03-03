@@ -1,114 +1,116 @@
-<div class="row d-flex justify-content-start px-2">
-    <div class="d-flex justify-content-start align-items-center">
-        <button routerLink="/admin" color="primary"  mat-button>
-            <mat-icon>arrow_back</mat-icon>
-        </button>
-        <button mat-button class="text-secondary" routerLink="/admin"  >
-            <mat-icon >house</mat-icon>
-            Accueil
-        </button>
-        /
-        <button mat-button routerLink="/super-admin/users">
-            <mat-icon class=" primary-blue-color">checklist</mat-icon>
-            Besoins
-        </button>
+<div class="container-fluid bg-white vh-100 w-100 rounded-4 mat-elevation-z2 overflow-y-scroll">
+  <div class="d-flex justify-content-start align-items-center">
+    <button color="primary" mat-button routerLink="/admin">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <button class="text-secondary" mat-button routerLink="/admin">
+      <mat-icon>house</mat-icon>
+      Accueil
+    </button>
+    /
+    <button mat-button routerLink="/super-admin/users">
+      <mat-icon class=" primary-blue-color">checklist</mat-icon>
+      Besoins
+    </button>
+  </div>
+  <!--  Filters on actions -->
+  <section class="row">
+    <div class="col-lg-8 p-1 col-12 d-flex justify-content-start">
+      <input #input (keyup)="applyFilter($event)" autofocus
+             class=" rounded-2 mat-elevation-z1  bg-light search-input"
+             matInput placeholder="Recherch"
+      />
+
     </div>
-    <!--  Filters on actions -->
-    <section class="  row">
-        <div class="col-lg-8 p-1 col-12 d-flex justify-content-start">
-            <input #input (keyup)="applyFilter($event)" autofocus
-                class=" rounded-2 mat-elevation-z1  bg-light search-input"
-                matInput placeholder="Recherch"
-            />
-
-        </div>
-        <!-- Action Buttons -->
-        <div class="col-lg-4 my-auto col-12 d-flex justify-content-lg-end  justify-content-end align-items-center">
-            <button (click)="createEditUser()" class="rounded-3 bg-light  mat-elevation-z2 " color="primary" mat-button style="transform:scale(0.9)">
-                <mat-icon>add</mat-icon>
-                <span>Ajouter</span>
-            </button>
-            <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button
-                    style="transform:scale(0.9)">
-                <mat-icon><i class="bi bi-funnel"></i></mat-icon>
-            </button>
-            <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button
-                    style="transform:scale(0.9)">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-        </div>
-    </section>
-
-</div>
-<div class="bg-light mt-2 rounded-3 mat-elevation-z2  w-100">
+    <!-- Action Buttons -->
+    <div class="col-lg-4 my-auto col-12 d-flex justify-content-lg-end  justify-content-end align-items-center">
+      <button (click)="createEditUser()" class="rounded-3 bg-light  mat-elevation-z2 " color="primary" mat-button
+              style="transform:scale(0.9)">
+        <mat-icon>add</mat-icon>
+        <span>Ajouter</span>
+      </button>
+      <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button
+              style="transform:scale(0.9)">
+        <mat-icon><i class="bi bi-funnel"></i></mat-icon>
+      </button>
+      <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button
+              style="transform:scale(0.9)">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </div>
+  </section>
+  <div class="bg-light mt-2 rounded-3 mat-elevation-z2  w-100">
     <div class="table-container  border-top-5 border-secondary w-100">
-        <table [dataSource]="dataSource" class="text-secondary" mat-table matSort>
-            <!-- Columns: Select -->
-            <ng-container matColumnDef="select" >
-                <th *matHeaderCellDef mat-header-cell>
-                    <input (change)="toggleSelectAll()" [checked]="isAllSelected" type="checkbox"/>
-                </th>
-                <td *matCellDef="let row" mat-cell (click)="$event.stopPropagation()">
-                    <input (change)="toggleRowSelection(row.id)" [checked]="isRowSelected(row.id)" type="checkbox"/>
-                </td>
-            </ng-container>
-            <!-- Columns: Fields -->
-            <ng-container matColumnDef="matricule">
-                <th *matHeaderCellDef mat-header-cell mat-sort-header>matricule</th>
-                <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
-            </ng-container>
-            <ng-container matColumnDef="image">
-                <th *matHeaderCellDef mat-header-cell mat-sort-header>image</th>
-                <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
-            </ng-container>
-            <ng-container matColumnDef="name" sticky>
-                <th *matHeaderCellDef mat-header-cell mat-sort-header>name</th>
-                <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
-            </ng-container>
-            <ng-container matColumnDef="lastName" sticky>
-                <th *matHeaderCellDef mat-header-cell mat-sort-header>last name</th>
-                <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
-            </ng-container>
-            <ng-container matColumnDef="role">
-                <th *matHeaderCellDef mat-header-cell mat-sort-header>statut</th>
-                <td *matCellDef="let row" mat-cell>
-                    <small>
-                        <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-4 bg-info-subtle">
-                        </button>
-                    </small>
-                </td>
-            </ng-container>
-            <ng-container matColumnDef="email">
-                <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Email</th>
-                <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
-            </ng-container>
+      <table [dataSource]="users.getValue()" class="text-secondary" mat-table matSort>
+        <!-- Columns: Select -->
+        <ng-container matColumnDef="select">
+          <th *matHeaderCellDef mat-header-cell>
+            <input (change)="toggleSelectAll()" [checked]="isAllSelected" type="checkbox"/>
+          </th>
+          <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
+            <input (change)="toggleRowSelection(row.id)" [checked]="isRowSelected(row.id)" type="checkbox"/>
+          </td>
+        </ng-container>
+        <!-- Columns: Fields -->
+        <ng-container matColumnDef="matricule">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>matricule</th>
+          <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
+        </ng-container>
+        <ng-container matColumnDef="image">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>image</th>
+          <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
+        </ng-container>
+        <ng-container matColumnDef="name" sticky>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>name</th>
+          <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
+        </ng-container>
+        <ng-container matColumnDef="lastName" sticky>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>last name</th>
+          <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
+        </ng-container>
+        <ng-container matColumnDef="role">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>statut</th>
+          <td *matCellDef="let row" mat-cell>
+            <small>
+              <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-4 bg-info-subtle">
+              </button>
+            </small>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="email">
+          <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Email</th>
+          <td *matCellDef="let row" class="full-width-table-celle" mat-cell></td>
+        </ng-container>
 
-            <ng-container matColumnDef="phone">
-                <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Phone</th>
-                <td *matCellDef="let row" class="full-width-table-celle" mat-cell>
-                    <small>
-                        <ng-container *ngFor="let item of row.stockedItems; let i = index" class="d-flex justify-content-start">
-                            <small>
-                                <button
-                                        class="btn btn btn-sm scale-09 p-1 px-1  rounded-4 bg-secondary-subtle">
-                                </button>
-                            </small>
-                            <!--             <button class="btn btn-sm"> {{ item.supportName + ""+item.structureName+" "+ item.temperatureName }} </button><br>-->
-                        </ng-container>
-                    </small>
-                </td>
-            </ng-container>
+        <ng-container matColumnDef="phone">
+          <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Phone</th>
+          <td *matCellDef="let row" class="full-width-table-celle" mat-cell>
+            <small>
+              <ng-container *ngFor="let item of row.stockedItems; let i = index" class="d-flex justify-content-start">
+                <small>
+                  <button
+                    class="btn btn btn-sm scale-09 p-1 px-1  rounded-4 bg-secondary-subtle">
+                  </button>
+                </small>
+                <!--             <button class="btn btn-sm"> {{ item.supportName + ""+item.structureName+" "+ item.temperatureName }} </button><br>-->
+              </ng-container>
+            </small>
+          </td>
+        </ng-container>
 
-            <tr *matHeaderRowDef="displayedColumns" class="primary-blue-color  fixed-header bg-light rounded-3  custom-header-row p-0 "
-                mat-header-row></tr>
-            <tr *matRowDef="let row; columns: displayedColumns;" (click)="showProspectDetails(row)" class="bg-white text-secondary"  mat-row></tr>
-            <!-- Row shown when there is no matching data. -->
-            <tr *matNoDataRow class="mat-row text-center d-flex w-100 justify-content-center flex-column ">
-                <td class="mat-cell  "  colspan="4">Aucune donnée ne correspond au filtre "{{ input.value }}"
-                    <p class="text-center w-100 d-flex justify-content-center"><img src="/no-data.jpg" class="img-fluid" /></p>
-                </td>
-            </tr>
-        </table>
+        <tr *matHeaderRowDef="displayedColumns"
+            class="primary-blue-color  fixed-header bg-light rounded-3  custom-header-row p-0 "
+            mat-header-row></tr>
+        <tr (click)="showProspectDetails(row)" *matRowDef="let row; columns: displayedColumns;"
+            class="bg-white text-secondary" mat-row></tr>
+        <!-- Row shown when there is no matching data. -->
+        <tr *matNoDataRow class="mat-row text-center d-flex w-100 justify-content-center flex-column ">
+          <td class="mat-cell  " colspan="4">Aucune donnée ne correspond au filtre "{{ input.value }}"
+            <p class="text-center w-100 d-flex justify-content-center"><img class="img-fluid" src="/no-data.jpg"/></p>
+          </td>
+        </tr>
+      </table>
     </div>
     <mat-paginator [pageSizeOptions]="[ 25, 50,100]" class="bg-light sticky-bottom"></mat-paginator>
+  </div>
 </div>

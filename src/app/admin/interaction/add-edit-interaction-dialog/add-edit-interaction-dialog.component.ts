@@ -11,17 +11,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import { MatInput } from '@angular/material/input';
 import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_NATIVE_DATE_FORMATS,
-  MatOption,
-  NativeDateAdapter, provideNativeDateAdapter
+  MatOption, provideNativeDateAdapter
 } from '@angular/material/core';
 import { MatSelect } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { InteractionRequestDto } from '../../../../dtos/request/interaction.request.dto';
+import { InteractionRequestDto } from '../../../../dtos/request/leads/interaction.request.dto';
 import { InteractionResponseDto } from '../../../../dtos/response/interaction.response.dto';
 import { InteractionService } from '../../../../services/Leads/interaction.service';
 import { InteractionType } from '../../../../enums/interaction.type';
@@ -35,6 +31,7 @@ import {InterlocutorService} from '../../../../services/Leads/interlocutor.servi
 import {InterlocutorResDto} from '../../../../dtos/response/interlocutor.dto';
 import {UserDto} from '../../../../dtos/response/usersResponseDto';
 import {UsersService} from '../../../../services/users.service';
+import {LocalStorageService} from '../../../../services/local.storage.service';
 export const CUSTOM_DATE_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -93,7 +90,8 @@ export class AddEditInteractionDialogComponent implements OnInit {
     private snackBar: MatSnackBar,
     private prospectService: ProspectService,
     private interlocutorService: InterlocutorService,
-    private usersService: UsersService
+    private usersService: UsersService,
+    private localStorageService: LocalStorageService
   ) {
     this.isEditMode = !!data;
   }
@@ -114,7 +112,7 @@ export class AddEditInteractionDialogComponent implements OnInit {
     });
 
     // fetch prospect
-    this.prospectService.getAllProspects().pipe(
+    this.prospectService.getAllCustomers(this.localStorageService.getCurrentCompanyId()).pipe(
       tap(data => {
         this.prospects.next(data);
         if (this.data){
@@ -124,7 +122,7 @@ export class AddEditInteractionDialogComponent implements OnInit {
     takeUntil(this.destroy$)
     ).subscribe()
     // fetch interlocutors
-    this.interlocutorService.getAllInterlocutors().pipe(
+    this.interlocutorService.getAllInterlocutorsByCompanyId(this.localStorageService.getCurrentCompanyId()).pipe(
       tap(data => {
         this.interlocutors.next(data)
         this.allInterlocutors.next(data)

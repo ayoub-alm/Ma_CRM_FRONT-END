@@ -222,7 +222,7 @@
           <tbody *ngFor="let item of storageOffer.getValue().stockedItems">
           <tr>
             <!--            <td>{{ item.ref }}</td>-->
-            <td class="text-secondary">{{ item.supportName }}</td>
+            <td class="text-secondary">{{ item.supportName || "N/A"}}</td>
             <td class="text-secondary">{{ item.structureName }}</td>
             <td class="text-secondary">{{ item.temperatureName }}</td>
             <td class="text-secondary">

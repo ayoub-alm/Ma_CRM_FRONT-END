@@ -1,6 +1,6 @@
-import {ActiveEnum} from '../../enums/active.enum';
-import {PhoneDto} from '../response/phone.dto';
-import {EmailDto} from '../response/email.dto';
+import {PhoneDto} from '../../response/phone.dto';
+import {EmailDto} from '../../response/email.dto';
+import {ActiveEnum} from '../../../enums/active.enum';
 
 export class InterlocutorRequestDto {
   id: number | null = null;

@@ -19,8 +19,8 @@ export class UserMapper {
             password: dto.password,
             aboutMe: dto.aboutMe,
             phone: dto.phone,
-            role: RoleMapper.fromDto(dto.role),
-            rights: dto.rights.map(RightsMapper.fromDto), // Mapping rights array
+            role: dto.role ,
+            rights:dto.rights
         });
     }
 

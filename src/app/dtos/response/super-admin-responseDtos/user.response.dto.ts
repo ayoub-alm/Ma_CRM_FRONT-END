@@ -2,16 +2,16 @@ import {RoleResponseDto} from "./role.response.dto";
 import {RightsResponseDto} from "./rights.response.dto";
 
 export class UserResponseDto {
-    id!: number;
-    image!: string;
-    matricule!: string;
-    name!: string;
-    lastName!: string;
-    departementId!: number;
-    email!: string;
-    password!: string;
-    aboutMe!: string;
-    phone!: string;
+    id: number;
+    image: string;
+    matricule: string;
+    name: string;
+    lastName: string;
+    departementId: number;
+    email: string;
+    password: string;
+    aboutMe: string;
+    phone: string;
 
     // Foreign keys assuming you have these objects with ID
     role!: RoleResponseDto;

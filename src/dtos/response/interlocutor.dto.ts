@@ -5,6 +5,7 @@ import {ProspectResponseDto} from './prospect.response.dto';
 import {DepartmentModel} from '../../models/department.model';
 import {JobTitleResponseDto} from '../init_data/response/job.title.response.dto';
 import {JobTitleService} from '../../services/data/job.title.service';
+import {UserDto} from './usersResponseDto';
 
 export class InterlocutorResDto{
   id:number;
@@ -16,9 +17,10 @@ export class InterlocutorResDto{
   department:DepartmentModel;
   jobTitle: JobTitleResponseDto;
   createdAt: Date;
-  createdBy: string;
   updatedAt: Date;
-  updatedBy: string;
+  deletedAt: string | null;
+  createdBy: UserDto;
+  updatedBy: UserDto;
 
   constructor(data: any ) {
     this.id = data.id ? data.id : '';
@@ -33,5 +35,6 @@ export class InterlocutorResDto{
     this.createdBy = data.createdBy;
     this.updatedAt = data.updatedAt;
     this.updatedBy = data.updatedBy;
+    this.deletedAt = data.deletedAt;
   }
 }

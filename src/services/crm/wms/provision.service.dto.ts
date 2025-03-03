@@ -3,6 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable, tap} from 'rxjs';
 import {environment} from '../../../environments/environment';
 import {ProvisionResponseDto} from '../../../dtos/response/crm/provision.response.dto';
+import {ProvisionRequestDto} from '../../../dtos/init_data/request/provision.request.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -37,7 +38,7 @@ export class ProvisionService {
    * @param provision ProvisionResponseDto object
    * @returns Observable of created ProvisionResponseDto
    */
-  createProvision(provision: ProvisionResponseDto): Observable<ProvisionResponseDto> {
+  createProvision(provision: ProvisionRequestDto): Observable<ProvisionResponseDto> {
     return this.http.post<ProvisionResponseDto>(this.baseUrl, provision);
   }
 

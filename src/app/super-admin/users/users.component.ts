@@ -27,7 +27,6 @@ import {BehaviorSubject} from "rxjs";
   standalone: true,
     imports: [
         MatDialogModule,
-        DatePipe,
         MatButton,
         MatCell,
         MatCellDef,
@@ -38,8 +37,6 @@ import {BehaviorSubject} from "rxjs";
         MatIcon,
         MatIconButton,
         MatInput,
-        MatMenu,
-        MatMenuItem,
         MatPaginator,
         MatRow,
         MatRowDef,
@@ -49,7 +46,6 @@ import {BehaviorSubject} from "rxjs";
         NgForOf,
         RouterLink,
         MatHeaderCellDef,
-        MatMenuTrigger,
         MatNoDataRow
     ],
   templateUrl: './users.component.html',

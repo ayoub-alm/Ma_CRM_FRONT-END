@@ -85,6 +85,7 @@ export class CompaniesComponent implements OnInit{
     logoPreview: string | ArrayBuffer | null = null;
 
     // Logo company
+  router: any;
     getDefaultLogo(): string {
         const company = this.company.getValue();
         return company?.id ? `${this.environment.baseUrl}/api/images/${company.logo}` : 'https://placehold.co/400';

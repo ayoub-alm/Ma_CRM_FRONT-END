@@ -124,4 +124,11 @@ export class LocalStorageService {
       return null;
     }
   }
+
+  /**
+   * this function allows to get current selected company id
+   */
+  getCurrentCompanyId(): number {
+      return localStorage.getItem('selected_company_id') != null ? parseInt(<string>localStorage.getItem('selected_company_id')) : 0;
+  }
 }

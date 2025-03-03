@@ -1,41 +1,179 @@
 <div class="full-height-size container-fluid bg-white vh-75 w-100 rounded-top-4  shadow-sm">
-  <div class="my-auto row py-3 rounded-1 mx-auto w-100 d-flex justify-content-between">
-    <p class="my-auto fs-5 col-lg-4 col-md-12">
-      <span class="mx-2 text-secondary">
-        <a routerLink="/admin">
-          <button mat-button>
-            <mat-icon class="primary-blue-color">home</mat-icon>
-            Accueil
-          </button>
-        </a> >
-        <button mat-button>
-          <mat-icon class="primary-blue-color">forum</mat-icon>
-          Tous les Interactions
+  <div class="row d-flex justify-content-start px-2">
+    <div class="d-flex justify-content-start align-items-center">
+      <button mat-button class="text-secondary" (click)="router.navigate(['/admin'])"  >
+        <mat-icon >house</mat-icon>
+        Accueil
+      </button>
+      >
+      <button mat-button (click)="router.navigate(['/admin/interactions'])">
+        <mat-icon class=" primary-blue-color">forum</mat-icon>
+        Interactions
+      </button>
+    </div>
+    <!--  Filters on actions -->
+    <section class="row">
+      <div class="col-lg-8 p-1 col-12 d-flex justify-content-start">
+        <input
+          #input
+          (keyup)="applyFilter($event)"
+          autofocus
+          class=" rounded-2 mat-elevation-z1  bg-light search-input"
+          matInput
+          placeholder="Recherch"
+        />
+      </div>
+      <!-- Action Buttons -->
+      <div class="col-lg-4 my-auto col-12 d-flex justify-content-lg-end  justify-content-end align-items-center">
+        <button (click)="openAddInteractionDialog()"
+                class="rounded-3 bg-spider" color="primary" mat-button style="transform:scale(0.9)">
+          <mat-icon>add</mat-icon>
+          <span>Ajouter</span>
         </button>
-      </span>
-    </p>
-    <div class="col-lg-5 col-12 d-flex row m-auto mt-sm-2">
-      <input
-        class="form-control m-auto rounded-2 bg-light lh-lg"
-        matInput
-        (keyup)="applyFilter($event)"
-        placeholder="Search"
-        autofocus
-        #input
-      />
-    </div>
-    <div class="col-lg-2 col-12 d-flex justify-content-end align-self-center">
-      <button mat-button class="text rounded-3 bg-light add-btn" (click)="openAddInteractionDialog()">
-        <span>Ajouter</span>
-        <mat-icon>add</mat-icon>
-      </button>
-      <button  mat-icon-button class="mat-dark bg-light rounded-3 mx-1 " color="'primary'"
-               aria-label="Filter">
-        <mat-icon>  <i class="bi bi-funnel"></i></mat-icon>
-      </button>
-    </div>
+
+        <div class="dropdown dropstart">
+          <button mat-icon-button class="mat-dark bg-light rounded-3 mx-1 scale-09"
+                  (click)="toggleDropdownOfVisibleColumns()">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <div class="dropdown-menu" *ngIf="dropdownOpen"  (mouseleave)="toggleDropdownOfVisibleColumns()">
+            <div  *ngFor="let col of allTableColumns.getValue()" class="small">
+              <input
+                type="checkbox"
+                [checked]="isColumnsChecked(col)"
+                (change)="toggleSelection(col)"
+              />
+              {{ col.label }}
+            </div>
+          </div>
+        </div>
+        <button (click)="toggleFilters()" aria-label="Filter" class="rounded-3 bg-light my-auto" mat-icon-button
+                style="transform:scale(0.9)">
+          <mat-icon><i class="bi bi-funnel"></i></mat-icon>
+        </button>
+        <button  mat-icon-button class="mat-dark bg-light rounded-3 mx-1 " color="'primary'"
+                 [matMenuTriggerFor]="menu_action" aria-label="Example icon-button with a menu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu_action="matMenu" xPosition="before" class="bg-light">
+<!--          <button  (click)="isShowImportZone.next(true)"-->
+<!--                   mat-menu-item class="mat-primary">-->
+<!--            <mat-icon class="p-0 overflow-visible"><i class="bi bi-filetype-csv primary-blue-color"></i></mat-icon>  Import-->
+<!--          </button>-->
+          <button (click)="exportExcelFile()" mat-menu-item class="mat-primary">
+            <mat-icon><i class="bi bi-cloud-arrow-down primary-blue-color"></i></mat-icon>  Exporter
+          </button>
+          <button *ngIf="selectedRows.size > 1" (click)="bulkSoftDelete()" class="text-danger" mat-menu-item>
+            <mat-icon class="text-danger">delete</mat-icon>
+            Suppression en masse
+          </button>
+        </mat-menu>
+      </div>
+    </section>
+
   </div>
-  <div class="bg-light rounded-3 mat-elevation-z2 w-100">
+  <!-- Start Filters Zone   -->
+  <section *ngIf="isFiltersVisible.getValue()" class="container-fluid" >
+    <div class="d-flex justify-content-center flex-wrap w-100 my-2 rounded-1 px-2">
+      <form [formGroup]="fieldFilterForm" (ngSubmit)="filterInteractionsBySearchFields()" class="filter-form">
+
+        <mat-form-field class="scale-08 col-3">
+          <mat-label>Client</mat-label>
+          <mat-select formControlName="customerIds" multiple>
+            <mat-option *ngFor="let customer of customers | async" [value]="customer.id">{{ customer.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="scale-08 col-3">
+          <mat-label>Interlocuteur</mat-label>
+          <mat-select formControlName="interlocutorIds" multiple>
+            <mat-option *ngFor="let interlocutor of interlocutors | async" [value]="interlocutor.id">
+              {{ interlocutor.fullName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="scale-08 col-3">
+          <mat-label>Sujet</mat-label>
+          <mat-select formControlName="interactionSubjects" multiple>
+            <mat-option *ngFor="let subject of InteractionSubject | keyvalue" [value]="subject.key">
+              {{ subject.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="scale-08 col-3">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="interactionTypes" multiple>
+            <mat-option *ngFor="let type of InteractionType | keyvalue" [value]="type.key">
+              {{ type.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="scale-08 col-3">
+          <mat-label>Affecté à</mat-label>
+          <mat-select formControlName="affectedToIds" multiple>
+            <mat-option *ngFor="let user of users | async" [value]="user.id">{{ user.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="scale-08 col-3">
+          <mat-label>Créé par</mat-label>
+          <mat-select formControlName="createdByIds" multiple>
+            <mat-option *ngFor="let user of users | async" [value]="user.id">{{ user.name }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="filter-options col-4 mx-2">
+          <mat-label>Filtrage</mat-label>
+          <mat-radio-group formControlName="filterType" class="filter-radio-group">
+            <mat-radio-button color="primary" value="AND">ET</mat-radio-button>
+            <mat-radio-button color="primary" value="OR">OU</mat-radio-button>
+          </mat-radio-group>
+        </div>
+
+        <!-- Date de création (Entre) -->
+        <mat-form-field class="example-form-field scale-08 col-3">
+          <mat-label>Date de creation</mat-label>
+          <mat-date-range-input
+            [rangePicker]="createdDatePickerPicker">
+            <input matStartDate placeholder="Start date" formControlName="createdAtStart">
+            <input matEndDate placeholder="End date" formControlName="createdAtEnd">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="createdDatePickerPicker"></mat-datepicker-toggle>
+          <mat-date-range-picker #createdDatePickerPicker></mat-date-range-picker>
+        </mat-form-field>
+
+        <mat-form-field class="example-form-field scale-08 col-3">
+          <mat-label>Date de la dernière mise à jour</mat-label>
+          <mat-date-range-input
+            [rangePicker]="updateDatePicker">
+            <input matStartDate placeholder="Start date" formControlName="updatedAtStart">
+            <input matEndDate placeholder="End date" formControlName="updatedAtEnd">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="updateDatePicker"></mat-datepicker-toggle>
+          <mat-date-range-picker #updateDatePicker></mat-date-range-picker>
+        </mat-form-field>
+        <div class="col-12">
+          <div class="filter-actions col-4">
+            <button type="submit" class="rounded-2 bg-spider" color="primary" mat-button>
+              <mat-icon><i class="bi bi-funnel"></i></mat-icon>
+              <span>Filtrer</span>
+            </button>
+            <button type="button" (click)="resetFilterForm()" class="rounded-2 bg-success-subtle mx-2 text-success" mat-button>
+              <mat-icon>refresh</mat-icon>
+              <span>Réinitialiser</span>
+            </button>
+          </div>
+        </div>
+
+      </form>
+
+    </div>
+  </section>
+  <!-- End  Filters Zone   -->
+  <div class="bg-light rounded-3  mt-2  w-100">
     <div class="table-container border-top-5 border-secondary w-100">
       <table mat-table [dataSource]="dataSource" matSort class="text-secondary">
         <!-- Columns: Select -->
@@ -49,7 +187,7 @@
         </ng-container>
         <!-- Columns: Fields -->
         <ng-container matColumnDef="prospectName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header >Entreprise</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >Client</th>
           <td mat-cell *matCellDef="let row" class="full-width-table-celle">{{ row.prospectName }}</td>
         </ng-container>
         <ng-container matColumnDef="interlocutorName" [sticky]="true">
@@ -69,7 +207,7 @@
           <td mat-cell *matCellDef="let row">{{ row.affectedToName  }}</td>
         </ng-container>
         <ng-container matColumnDef="planningDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>date de Planification</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="full-width-table-celle">Date de Planification</th>
           <td mat-cell *matCellDef="let row">{{ row.planningDate | date }}</td>
         </ng-container>
           <!-- status Column -->
@@ -78,7 +216,7 @@
               <td mat-cell *matCellDef="let row">
                   <button
                           style="transform: scale(0.8)"
-                          [ngClass]="[getChipClass(row.report), 'btn btn-sm p-1 rounded-4 px-3']"
+                          [ngClass]="[getChipClass(row.report), 'btn btn-sm p-1 rounded-2 px-3']"
                   >
                       {{ getStatusLabel(row.report) }}
                   </button>
@@ -102,9 +240,9 @@
                   </mat-menu>
               </td>
           </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"
+        <tr mat-header-row *matHeaderRowDef="getDisplayColumns()"
             class="primary-blue-color fixed-header bg-light rounded-3  custom-header-row p-0 "></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"  (click)="showDetails(row)"  class="bg-white text-secondary "></tr>
+        <tr mat-row *matRowDef="let row; columns: getDisplayColumns();"  (click)="showDetails(row)"  class="bg-white text-secondary "></tr>
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell" colspan="4">Aucune donnée ne correspond au filtre "{{input.value}}"</td>

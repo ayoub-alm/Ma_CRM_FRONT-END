@@ -70,12 +70,12 @@ color:rgb(209 177 146)
 
 /* Custom scrollbar styling for horizontal scrollbar */
 *::-webkit-scrollbar {
-  height: 4px;
-  width: 4px;
+  height: 6px;
+  width: 6px;
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: #005cbb; /* Color of the scrollbar thumb */
+  background-color: #999; /* Color of the scrollbar thumb */
   border-radius: 4px; /* Round corners of the scrollbar */
 }
 
@@ -113,4 +113,6 @@ color:rgb(209 177 146)
 .scale-08{
   transform:scale(0.8);
 }
-
+html {
+  font-size : 90%;
+}

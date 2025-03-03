@@ -21,7 +21,7 @@ export class StorageOfferCreateDto {
   requirements: RequirementResponseDto[]; // List of requirement IDs
   storageNeedId:number;
   paymentTypeId:number;
-  paymentDeadLine:number;
+  paymentDeadline:number;
   interlocutorId;
   constructor(
     ref: string,
@@ -39,7 +39,7 @@ export class StorageOfferCreateDto {
     requirements: RequirementResponseDto[] = [],
     storageNeedId:number,
     paymentTypeId:number,
-    paymentDeadLine:number,
+    paymentDeadline:number,
     interlocutorId:number
   ) {
     this.ref = ref;
@@ -58,7 +58,7 @@ export class StorageOfferCreateDto {
     this.storageNeedId = storageNeedId
     this.paymentTypeId = paymentTypeId
     this.interlocutorId = interlocutorId
-    this.paymentDeadLine = paymentDeadLine;
+    this.paymentDeadline = paymentDeadline;
   }
 }
 

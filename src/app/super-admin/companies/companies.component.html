@@ -1,172 +1,153 @@
-<div class="container-fluid bg-body row rounded-top-4">
-<!-- Page Header -->
-    <!-- Actions -->
-    <div class="d-flex justify-content-between" >
-        <div class="col-8">
-            <button color="primary"  mat-button>
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-            <button mat-button >
-                <mat-icon class=" primary-blue-color">house</mat-icon>
-                Accueil
-            </button>
-            /
-            <button mat-button >
-                <mat-icon class=" primary-blue-color">checklist</mat-icon>
-                Entreprise
-            </button>
-        </div>
-        <div class="col-1 mx-3">
-            <button [matMenuTriggerFor]="menu" class="bg-primary-blue-color scale-09 rounded-2 text-white" aria-label="Actions" mat-button>
-                Actions <mat-icon>more_vert</mat-icon>
-            </button>
-            <mat-menu #menu="matMenu" class="bg-spider">
-                <button mat-menu-item (click)="editCompany(company)" >
-                    <mat-icon>edit</mat-icon>
-                    Edit
-                </button>
-            </mat-menu>
-        </div>
+<div class="container-fluid bg-white vh-100 w-100 rounded-4 mat-elevation-z2 overflow-y-scroll">
+  <div class="row d-flex justify-content-start px-2">
+    <div class="d-flex justify-content-start align-items-center">
+      <button (click)="router.navigate(['/admin'])" color="primary" mat-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button (click)="router.navigate(['/admin'])" class="text-secondary" mat-button>
+        <mat-icon>house</mat-icon>
+        Accueil
+      </button>
+      >
+      <button (click)="router.navigate(['/admin'])" mat-button>
+        <mat-icon class=" primary-blue-color">domain</mat-icon>
+        Mon entreprise
+      </button>
     </div>
-    <hr>
     <!--  </mat-card>-->
+  </div>
 
-    <!-- Logo Section -->
-    <mat-card-title class="d-flex justify-content-between align-items-center mt-2" >
-        <p class="d-flex align-baseline">
-            <mat-icon  class="example-tab-icon mx-2 primary-blue-color">info</mat-icon>
-            <span class="fs-5">Détails de l'entreprise</span>
-        </p>
-    </mat-card-title>
-
+  <div class="container-fluid row">
     <div class="col-lg-3 col-12 mt-2">
-        <div class="position-relative logo-container mx-2 my-3"
-             (mouseenter)="showModifierHint = true"
-             (mouseleave)="showModifierHint = false"
-             (click)="!uploadingLogo && fileInput.click()"
-             role="button"
-             tabindex="0"
-             [attr.aria-disabled]="uploadingLogo ? 'true' : null">
+      <div class="position-relative logo-container mx-2 my-3"
+           (mouseenter)="showModifierHint = true"
+           (mouseleave)="showModifierHint = false"
+           (click)="!uploadingLogo && fileInput.click()"
+           role="button"
+           tabindex="0"
+           [attr.aria-disabled]="uploadingLogo ? 'true' : null">
 
-            <!-- Hidden file input -->
-            <input #fileInput
-                   type="file"
-                   hidden
-                   accept="image/*"
-                   (change)="handleLogoUpload($event)">
+        <!-- Hidden file input -->
+        <input #fileInput
+               type="file"
+               hidden
+               accept="image/*"
+               (change)="handleLogoUpload($event)">
 
-            <!-- Logo Preview -->
-            <div class="position-relative">
-                <img *ngIf="!uploadingLogo"
-                     [src]="logoPreview || getDefaultLogo()"
-                     alt="Logo"
-                     class="img-fluid rounded-2 shadow-sm cursor-pointer w-100 h-auto"
-                     [class.logo-hover]="showModifierHint">
+        <!-- Logo Preview -->
+        <div class="position-relative">
+          <img *ngIf="!uploadingLogo"
+               [src]="logoPreview || getDefaultLogo()"
+               alt="Logo"
+               class="img-fluid rounded-2 shadow-sm cursor-pointer w-100 h-auto"
+               [class.logo-hover]="showModifierHint">
 
-                <!-- Hover Hint (Centered) -->
-                <div *ngIf="showModifierHint && !uploadingLogo"
-                     class="position-absolute text-center top-50 start-50 translate-middle bg-dark-ma bg-opacity-50 text-white p-1 rounded font text-logo">
-                    Cliquez pour modifier le logo
-                </div>
+          <!-- Hover Hint (Centered) -->
+          <div *ngIf="showModifierHint && !uploadingLogo"
+               class="position-absolute text-center top-50 start-50 translate-middle bg-dark-ma bg-opacity-50 text-white p-1 rounded font text-logo">
+            Cliquez pour modifier le logo
+          </div>
 
-                <!-- Upload Overlay -->
-                <div *ngIf="uploadingLogo" class="upload-overlay">
-                    <div class="d-flex justify-content-center align-items-center w-100 h-100">
-                        <div class="spinner-border text-light" role="status">
-                            <span class="visually-hidden">Mise à jour du logo...</span>
-                        </div>
-                    </div>
-                </div>
+          <!-- Upload Overlay -->
+          <div *ngIf="uploadingLogo" class="upload-overlay">
+            <div class="d-flex justify-content-center align-items-center w-100 h-100">
+              <div class="spinner-border text-light" role="status">
+                <span class="visually-hidden">Mise à jour du logo...</span>
+              </div>
             </div>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Main Storage Information -->
     <mat-card class="mb-2 bg-white details-card col-lg-8 rounded-0 mat-elevation-z3 mx-5">
-        <mat-card-content>
-            <div class="d-flex justify-content-between row">
-                <p>
+      <mat-card-content>
+        <div class="d-flex justify-content-between row">
+          <p>
                   <span class="text-secondary">
                     <i class="primary-blue-color bi bi-building"></i> Nom de l'entreprise :
                   </span>
-                    <span class="mx-2 my-3">{{ company.getValue().name }}</span>
-                </p>
-            </div>
-            <hr class="m-0 p-0">
-            <div class="d-flex justify-content-between row">
-                <!-- Sigle -->
-                <p class="col-lg-6">
+            <span class="mx-2 my-3">{{ company.getValue().name }}</span>
+          </p>
+        </div>
+        <hr class="m-0 p-0">
+        <div class="d-flex justify-content-between row">
+          <!-- Sigle -->
+          <p class="col-lg-6">
                 <span class="text-secondary">
                 <i class="primary-blue-color bi bi-briefcase-fill"></i> Sigle :
                 </span>
-                    <span class="mx-2 my-3">{{ company.getValue().sigle }}</span>
-                </p>
-                <!-- Country -->
-                <p class="col-lg-6"><span class="text-secondary">
+            <span class="mx-2 my-3">{{ company.getValue().sigle }}</span>
+          </p>
+          <!-- Country -->
+          <p class="col-lg-6"><span class="text-secondary">
                     <i class="primary-blue-color bi bi-flag-fill"></i> Pays :
                     </span>
-                    <span class="mx-2 my-3">{{ company.getValue().country?.name }}</span>
-                </p>
-            </div>
-            <hr class="m-0 p-0">
-            <div class="d-flex justify-content-between row">
-                <!-- Capital -->
-                <p class="col-lg-6"><span class="text-secondary">
+            <span class="mx-2 my-3">{{ company.getValue().country?.name }}</span>
+          </p>
+        </div>
+        <hr class="m-0 p-0">
+        <div class="d-flex justify-content-between row">
+          <!-- Capital -->
+          <p class="col-lg-6"><span class="text-secondary">
                     <i class="primary-blue-color bi bi-currency-exchange"></i> Capital :
                     </span>
-                    <span class="mx-2 my-3">{{ company.getValue().capital }} MAD</span>
-                </p>
-                <!-- City -->
-                <p class="col-lg-6"><span class="text-secondary">
+            <span class="mx-2 my-3">{{ company.getValue().capital }} MAD</span>
+          </p>
+          <!-- City -->
+          <p class="col-lg-6"><span class="text-secondary">
                     <i class="primary-blue-color bi bi-geo-fill"></i> Ville :
                     </span>
-                    <span class="mx-2 my-3">{{ company.getValue().city?.name }}</span>
-                </p>
-            </div>
-            <hr class="m-0 p-0">
-            <div class="d-flex justify-content-between row">
-                <!-- Head Office -->
-                <p class="col-lg-6"><span class="text-secondary">
+            <span class="mx-2 my-3">{{ company.getValue().city?.name }}</span>
+          </p>
+        </div>
+        <hr class="m-0 p-0">
+        <div class="d-flex justify-content-between row">
+          <!-- Head Office -->
+          <p class="col-lg-6"><span class="text-secondary">
                     <i class="primary-blue-color bi bi-geo-alt-fill"></i> Siège social :
                     </span>
-                    <span class="mx-2 my-3">{{ company.getValue().headOffice }}</span>
-                </p>
-                <!-- Year of Creation -->
-                <p class="col-lg-6"><span class="text-secondary">
+            <span class="mx-2 my-3">{{ company.getValue().headOffice }}</span>
+          </p>
+          <!-- Year of Creation -->
+          <p class="col-lg-6"><span class="text-secondary">
                     <i class="primary-blue-color bi bi-calendar-check-fill"></i> Année de création :
                     </span>
-                    <span class="mx-2 my-3">{{ company.getValue().yearOfCreation }}</span>
-                </p>
-            </div>
-            <hr class="m-0 p-0">
-            <div class="d-flex justify-content-between row">
-                <!-- Ownership Structure -->
-                <p><span class="text-secondary">
+            <span class="mx-2 my-3">{{ company.getValue().yearOfCreation }}</span>
+          </p>
+        </div>
+        <hr class="m-0 p-0">
+        <div class="d-flex justify-content-between row">
+          <!-- Ownership Structure -->
+          <p><span class="text-secondary">
                     <i class="primary-blue-color bi bi-diagram-2-fill"></i> Structure propriété :
                     </span>
-                    <span class="mx-2 my-3">{{ company.getValue().proprietaryStructure?.name }}</span>
-                </p>
-            </div>
-            <hr class="m-0 p-0">
-            <div class="d-flex justify-content-between row">
-                <!-- Industry -->
-                <p><span class="text-secondary">
+            <span class="mx-2 my-3">{{ company.getValue().proprietaryStructure?.name }}</span>
+          </p>
+        </div>
+        <hr class="m-0 p-0">
+        <div class="d-flex justify-content-between row">
+          <!-- Industry -->
+          <p><span class="text-secondary">
                     <i class="primary-blue-color bi bi-hammer"></i> Industrie :
                     </span>
-                    <span class="mx-2 my-3">{{ company.getValue().industry?.name }}</span>
-                </p>
-            </div>
-            <hr class="m-0 p-0">
-            <div class="d-flex justify-content-between row">
-                <!-- Company Size -->
-                <p><span class="text-secondary">
+            <span class="mx-2 my-3">{{ company.getValue().industry?.name }}</span>
+          </p>
+        </div>
+        <hr class="m-0 p-0">
+        <div class="d-flex justify-content-between row">
+          <!-- Company Size -->
+          <p><span class="text-secondary">
                     <i class="primary-blue-color bi bi-people-fill"></i> Taille de l'entreprise :
                     </span>
-                    <span class="mx-2 my-3">{{ company.getValue().companySize?.name }}</span>
-                </p>
-            </div>
-        </mat-card-content>
+            <span class="mx-2 my-3">{{ company.getValue().companySize?.name }}</span>
+          </p>
+        </div>
+      </mat-card-content>
     </mat-card>
+  </div>
+
 
     <!-- More Information -->
     <mat-divider class="my-2"></mat-divider>

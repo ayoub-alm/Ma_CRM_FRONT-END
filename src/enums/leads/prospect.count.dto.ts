@@ -1,9 +1,9 @@
 export class ProspectCountDto {
   private _status: string;
   private _count: number;
-  constructor(data:any) {
-    this._status = data._status;
-    this._count = data._count;
+  constructor(status:string, count:number) {
+    this._status = status;
+    this._count = count;
   }
 
   get status(): string {

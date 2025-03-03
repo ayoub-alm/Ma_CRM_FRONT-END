@@ -114,42 +114,42 @@
       <mat-error *ngIf="interactionForm.get('report')?.hasError('required')">Report is required.</mat-error>
     </mat-form-field>
 
-      <mat-form-field appearance="outline" class="col-lg-12">
-          <mat-label>Join File Path</mat-label>
-          <input
-                  matInput
-                  placeholder="Selected file path"
-                  [value]="selectedFile?.name || ''"
-                  readonly
-                  formControlName="joinFilePath"
-          />
-          <div
-                  class="file-drop-zone"
-                  (dragover)="onDragOver($event)"
-                  (dragleave)="onDragLeave($event)"
-                  (drop)="onDrop($event)"
-          >
-              <p *ngIf="!selectedFile">{{ dragHintText }}</p>
-              <p *ngIf="selectedFile">Selected File: {{ selectedFile.name }}</p>
-              <input
-                      type="file"
-                      hidden
-                      (change)="onFileSelected($event)"
-                      #fileInput
-              />
-              <button mat-button (click)="fileInput.click()">Select File</button>
-              <!-- Add Remove File Button -->
-              <button
-                      *ngIf="selectedFile"
-                      mat-icon-button
-                      color="warn"
-                      (click)="removeFile()"
-                      aria-label="Remove File"
-              >
-                  <mat-icon>delete</mat-icon>
-              </button>
-          </div>
-      </mat-form-field>
+<!--      <mat-form-field appearance="outline" class="col-lg-12">-->
+<!--          <mat-label>Join File Path</mat-label>-->
+<!--          <input-->
+<!--                  matInput-->
+<!--                  placeholder="Selected file path"-->
+<!--                  [value]="selectedFile?.name || ''"-->
+<!--                  readonly-->
+<!--                  formControlName="joinFilePath"-->
+<!--          />-->
+<!--          <div-->
+<!--                  class="file-drop-zone"-->
+<!--                  (dragover)="onDragOver($event)"-->
+<!--                  (dragleave)="onDragLeave($event)"-->
+<!--                  (drop)="onDrop($event)"-->
+<!--          >-->
+<!--              <p *ngIf="!selectedFile">{{ dragHintText }}</p>-->
+<!--              <p *ngIf="selectedFile">Selected File: {{ selectedFile.name }}</p>-->
+<!--              <input-->
+<!--                      type="file"-->
+<!--                      hidden-->
+<!--                      (change)="onFileSelected($event)"-->
+<!--                      #fileInput-->
+<!--              />-->
+<!--              <button mat-button (click)="fileInput.click()">Select File</button>-->
+<!--              &lt;!&ndash; Add Remove File Button &ndash;&gt;-->
+<!--              <button-->
+<!--                      *ngIf="selectedFile"-->
+<!--                      mat-icon-button-->
+<!--                      color="warn"-->
+<!--                      (click)="removeFile()"-->
+<!--                      aria-label="Remove File"-->
+<!--              >-->
+<!--                  <mat-icon>delete</mat-icon>-->
+<!--              </button>-->
+<!--          </div>-->
+<!--      </mat-form-field>-->
   </form>
 </div>
 <div mat-dialog-actions align="end">
