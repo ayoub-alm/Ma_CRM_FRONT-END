@@ -1,0 +1,25 @@
+<!--<div class="chat-container">-->
+  <div class="chat-messages">
+    <div *ngFor="let msg of chatHistory; let i = index" class="chat-bubble" [ngClass]="{'user': msg.type === 'user', 'ai': msg.type === 'ai'}">
+      <strong class="small" *ngIf="msg.type === 'ai'">🤖 Spider:</strong>
+      <strong class="small" *ngIf="msg.type === 'user'">👤 Vous:</strong>
+      <p [innerHTML]="formatMessage(msg.text)"></p>
+
+      <!-- Copy Button (Only for AI responses) -->
+      <button *ngIf="msg.type === 'ai'" mat-icon-button class="copy-btn scale-08" (click)="copyToClipboard(msg.text, i)">
+        <mat-icon>content_copy</mat-icon>
+      </button>
+
+      <!-- Show "Copied!" message -->
+      <span *ngIf="copiedMessageIndex === i" class="copied-msg">✅ Copié !</span>
+    </div>
+  </div>
+
+  <form [formGroup]="aiForm" class="chat-input bg-spider rounded-top-2 " (ngSubmit)="sendPrompt()" >
+    <input type="text" formControlName="prompt" placeholder="Posez-moi une question..." class="form-control border-secondary border-2">
+    <button class="bg-white mx-2 border-secondary" type="submit" mat-icon-button [disabled]="aiForm.invalid || loading">
+      <mat-icon *ngIf="!loading">send</mat-icon>
+      <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
+    </button>
+  </form>
+<!--</div>-->
