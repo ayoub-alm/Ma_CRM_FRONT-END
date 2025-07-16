@@ -13,6 +13,8 @@ import {
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import {TokenInterceptor} from '../services/xhrInterprter';
+import {LoadingInterceptor} from '../services/loading.interceptor';
+import {provideTranslateLoader} from '../translate.config';
 
 
 
@@ -23,13 +25,12 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideAnimationsAsync(),
     provideHttpClient(withFetch(), withInterceptorsFromDi(),),
-    // Explicitly include Material Datepicker dependencies
-    // { provide: MatNativeDateModule },
-    // { provide: MatDatepickerModule },
+    provideTranslateLoader(),
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
-    }
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }
   ],
 };

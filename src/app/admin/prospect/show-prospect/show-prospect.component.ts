@@ -10,14 +10,9 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {environment} from '../../../../environments/environment';
 import {ProspectService} from '../../../../services/Leads/prospect.service';
 import {ProspectResponseDto} from '../../../../dtos/response/prospect.response.dto';
-import {MatButton} from '@angular/material/button';
-import {MatSlideToggle, MatSlideToggleChange} from '@angular/material/slide-toggle';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {TimelineModule} from 'primeng/timeline';
 import {MatCardContent, MatCardModule} from '@angular/material/card';
-import {NgxTimelineComponent} from '@frxjs/ngx-timeline';
-
-
-import {MatDivider} from '@angular/material/divider';
 import {AddProspectDialogComponent} from '../add-prospect-dialog/add-prospect-dialog.component';
 import {InterlocutorResDto} from '../../../../dtos/response/interlocutor.dto';
 import {InterlocutorService} from '../../../../services/Leads/interlocutor.service';
@@ -25,12 +20,22 @@ import {ProspectStatus} from '../../../../enums/prospect.status';
 import {InplaceModule} from 'primeng/inplace';
 import {InputTextModule} from 'primeng/inputtext';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-
-import {CommentComponent} from '../../../utils/comment/comment.component';
 import {EntityEnum} from '../../../../enums/entity.enum';
 import {InterestResponseDto} from "../../../../dtos/response/interestResponseDto";
 import {LocalStorageService} from "../../../../services/local.storage.service";
-import {CustomerStatus, CustomerStatusService} from '../../../../services/Leads/customer.status.service';
+import {CustomerStatusService} from '../../../../services/Leads/customer.status.service';
+import {GeneralInfosComponent} from "../../../utils/general-infos/general-infos.component";
+import {CustomerStatus} from '../../../../dtos/response/cutomer.status.dto';
+import {
+  AddUpdateInterlocutorComponent
+} from '../../interlocutor/add-update-interlocutor/add-update-interlocutor.component';
+import {MatChip} from '@angular/material/chips';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {CommentComponent} from '../../../utils/comment/comment.component';
+import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav';
+import {MatToolbar} from '@angular/material/toolbar';
+import {NgxTimelineComponent} from '@frxjs/ngx-timeline';
+import {TranslatePipe} from '@ngx-translate/core';
 
 interface EventItem {
   status?: string;
@@ -44,9 +49,9 @@ interface EventItem {
   selector: 'app-show-prospect',
   standalone: true,
   imports: [MatIcon, MatExpansionPanelHeader, MatExpansionPanel, MatExpansionPanelTitle, MatTab, MatTabLabel, AsyncPipe,
-    NgForOf, MatTabGroup, RouterLink, MatButton, MatSlideToggle, TimelineModule, MatCardContent, MatCardModule,
-    NgxTimelineComponent, DatePipe, NgClass, MatDivider, InplaceModule, InputTextModule, ReactiveFormsModule,
-    CommentComponent, NgIf],
+    NgForOf, MatTabGroup, RouterLink, MatButton, TimelineModule, MatCardContent, MatCardModule, NgClass, InplaceModule,
+    InputTextModule, ReactiveFormsModule, NgIf, MatIconButton, MatDrawerContainer, MatDrawer, MatSlideToggle, CommentComponent, MatDrawer,
+    MatToolbar, GeneralInfosComponent, NgxTimelineComponent, TranslatePipe],
   templateUrl: './show-prospect.component.html',
   styleUrl: './show-prospect.component.css'
 })
@@ -91,6 +96,7 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
     if (prospectId) {
       this.prospectService.getCustomerById(parseInt(prospectId)).pipe(tap(prospect => {
         this.customer.next(prospect);
+        console.log(this.customer.getValue());
         this.statusForm.patchValue({ status: prospect.active });
       }), catchError((error) => {
         this.snackBar.open(error.message, "Ok", {duration: 3000});
@@ -126,7 +132,7 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
     //
     // })).subscribe()
     // Add this to load the toggle states
-    this.loadInterests();
+
   }
   ngAfterViewInit() {
     this.customerStatusService.getAllActiveStatuses().pipe(
@@ -164,6 +170,8 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
         }
 
       })).subscribe()
+
+    this.loadInterests();
   }
   /**
    * Load toggle states from the Interest
@@ -182,8 +190,8 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
     // const isChecked = event.checked; // ✅ Correct way to get checkbox state
     alert("test")
     // Check if the prospect already has this interest
-    if (this.customer.getValue().interests) {
-      const hasInterest = !!this.customer.getValue().interests.find(interest => interest.id === interestId);
+    if (this.customer.getValue().interest) {
+      const hasInterest = !!this.customer.getValue().interest.find(interest => interest.id === interestId);
 
       // Call the appropriate service method based on the checkbox state
       const requestObservable = hasInterest ? this.prospectService.addInterestToCustomer(this.customer.getValue().id, interestId) : this.prospectService.removeInterestFromCustomer(this.customer.getValue().id, interestId);
@@ -191,7 +199,6 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
       // Execute the request and handle responses
       requestObservable.pipe(tap(() => {
         this.snackBar.open(`Intérêt ${hasInterest ? 'ajouté' : 'supprimé'} avec succès ✅`, 'Fermer', {duration: 3000});
-
         // Refresh local interests list
         this.loadInterests();
       }), catchError((err) => {
@@ -239,27 +246,28 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
 
 
   getChipClass(status: string): string {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case "nouvelle":
-        return 'status-new'; // Apply class for "NEW"
-      case "Qualsifiée":
-        return 'status-qualified'; // Apply class for "QUALIFIED"
-      case "Qualifiée":
-        return 'status-interested'; // Apply class for "INTERESTED"
-      case "OPPORTUNITY":
-        return 'status-opportunity'; // Apply class for "OPPORTUNITY"
-      case "CONVERTED":
-        return 'status-converted'; // Apply class for "CONVERTED"
-      case "DISQUALIFIED":
-        return 'status-disqualified'; // Apply class for "DISQUALIFIED"
-      case "LOST":
-        return 'status-lost'; // Apply class for "LOST"
-      case "NRP":
-        return 'status-nrp'; // Apply class for "NRP"
+        return "status-new"; // "NEW"
+      case "qualifiée":
+        return "status-qualified"; // "QUALIFIED"
+      case "intéressée":
+        return "status-interested"; // "INTERESTED"
+      case "opportunité":
+        return "status-opportunity"; // "OPPORTUNITY"
+      case "convertie":
+        return "status-converted"; // "CONVERTED"
+      case "disqualifiée":
+        return "status-disqualified"; // "DISQUALIFIED"
+      case "perdue":
+        return "status-lost"; // "LOST"
+      case "nrp":
+        return "status-nrp"; // "NRP"
       default:
-        return 'status-default'; // Apply default class for unknown statuses
+        return "status-default"; // Default class for unknown statuses
     }
   }
+
 
   getProspectStatusLabel(status: string): string {
     return ProspectStatus[status as keyof typeof ProspectStatus] || "Unknown Status";
@@ -299,8 +307,8 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   isChecked(name: string): boolean {
-    if (this.customer.getValue().interests) {
-      return this.customer.getValue().interests.some(interest => interest.name === name);
+    if (this.customer.getValue().interest) {
+      return this.customer.getValue().interest.some(interest => interest.name === name);
     } else {
       return false;
     }
@@ -310,4 +318,16 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
     this.isEditStatus = true;
   }
 
+  onAddNewContacts() {
+    const dialogRef = this.dialog.open(AddUpdateInterlocutorComponent, {
+      maxWidth: '900px', data: new InterlocutorResDto({customer:this.customer.getValue()}) // Pass the prospect data to the dialog for editing
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Handle the result, update the prospect if necessary
+        this.interlocutors.next([... this.interlocutors.getValue(),result])
+      }
+    });
+  }
 }

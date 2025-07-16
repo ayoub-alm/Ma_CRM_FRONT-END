@@ -22,6 +22,7 @@ import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatMenu, MatMenuItem} from '@angular/material/menu';
 import {RouterLink} from '@angular/router';
 import {CustomerFilterFields} from '../../../services/Leads/statustucs.service';
+import {TranslatePipe} from '@ngx-translate/core';
 const today = new Date();
 const month = today.getMonth();
 const year = today.getFullYear();
@@ -34,7 +35,7 @@ const year = today.getFullYear();
     ChartModule, MatNativeDateModule,
     MatFormFieldModule, MatDatepickerModule, FormsModule, ReactiveFormsModule,
     BaseChartDirective, MatIcon,
-    MatButton,
+    MatButton, TranslatePipe,
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',

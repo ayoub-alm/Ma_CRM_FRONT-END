@@ -15,6 +15,7 @@ import {UserModel} from "../../../models/super-admin/user.model";
 import {ActivatedRoute, Router} from "@angular/router";
 import {UserService} from "../../../services/super-admin/user.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {UserResponseDto} from '../../../dtos/response/super-admin-responseDtos/user.response.dto';
 
 @Component({
   selector: 'app-user-show',
@@ -22,35 +23,16 @@ import {MatSnackBar} from "@angular/material/snack-bar";
   imports: [
     MatIcon,
     MatButton,
-    MatIconButton,
-    MatChipListbox,
-    MatChip,
-    MatFormField,
-    MatSelect,
-    MatOption, MatLabel, MatCardTitle, NgIf, MatCard, MatCardContent, MatMenu, MatMenuItem, MatMenuTrigger, MatDivider, MatSlideToggle, MatTab, MatTabGroup, MatTabLabel, NgForOf
+   MatCardTitle, MatCard, MatCardContent, MatDivider
   ],
   templateUrl: './user-show.component.html',
   styleUrl: './user-show.component.css'
 })
 export class UserShowComponent implements OnInit {
-  user: BehaviorSubject<UserModel> = new BehaviorSubject<UserModel>({} as UserModel);
+  user: BehaviorSubject<UserResponseDto> = new BehaviorSubject<UserResponseDto>({} as UserResponseDto);
   isEditing = false; // Controls whether the form is in edit mode or not
   showRightsPanel = false; // Controls the visibility of the rights panel
 
-  // user = {
-  //   matricule: '12345',
-  //   name: 'John Doe',
-  //   email: 'john.doe@example.com',
-  //   phone: '123-456-7890',
-  //   role: 'Admin',
-  //   rights: [{name: 'Read Access'}, {name: 'Write Access'}],
-  // };
-  // roles = ['Admin', 'Editor', 'Viewer'];
-  // rights = [
-  //   { name: 'Admin Access', description: 'Full access to the system' },
-  //   { name: 'Editor Access', description: 'Can edit content' },
-  //   { name: 'Viewer Access', description: 'Can view content only' }
-  // ];
 
   constructor(public router: Router, private activeRouter: ActivatedRoute, private userService: UserService,
               private snackBar: MatSnackBar) {

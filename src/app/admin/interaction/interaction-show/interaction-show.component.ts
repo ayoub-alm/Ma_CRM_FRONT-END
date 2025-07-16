@@ -1,6 +1,6 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {DatePipe, NgClass, NgIf} from "@angular/common";
-import {MatButton} from "@angular/material/button";
+import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
 import {ActivatedRoute, RouterLink} from "@angular/router";
@@ -15,33 +15,45 @@ import {MatInput} from "@angular/material/input";
 import {MatDialog} from "@angular/material/dialog";
 import {AddEditInteractionDialogComponent} from "../add-edit-interaction-dialog/add-edit-interaction-dialog.component";
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDrawer, MatDrawerContainer} from "@angular/material/sidenav";
+import {MatToolbar} from "@angular/material/toolbar";
+import {TrackingLogComponent} from '../../../utils/tracking-log/tracking-log.component';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {UploadFileComponent} from '../../../utils/upload-file/upload-file.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-interaction-show',
   standalone: true,
-    imports: [
-        DatePipe,
-        MatButton,
-        MatCard,
-        MatCardContent,
-        MatCardTitle,
-        MatIcon,
-        NgIf,
-        RouterLink,
-        CommentComponent,
-        NgClass,
-        FormsModule,
-        MatFormField,
-        MatInput,
-        MatLabel,
-        ReactiveFormsModule,
-    ],
+  imports: [
+    DatePipe,
+    MatButton,
+    MatCard,
+    MatCardContent,
+    MatCardTitle,
+    MatIcon,
+    NgIf,
+    RouterLink,
+    CommentComponent,
+    NgClass,
+    FormsModule,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    ReactiveFormsModule,
+    MatDrawer,
+    MatIconButton,
+    MatToolbar, MatDrawerContainer, MatDrawer, TranslatePipe,
+  ],
   templateUrl: './interaction-show.component.html',
   styleUrl: './interaction-show.component.css'
 })
 export class InteractionShowComponent implements OnInit{
   interaction: BehaviorSubject<InteractionResponseDto> = new BehaviorSubject<InteractionResponseDto>({} as InteractionResponseDto);
   interactionForm!: FormGroup;
+  selectedFile: File | null = null;
+  isDragging = false;
+  uploadedUrl: string | undefined = undefined;
 
   constructor(private activeRouter: ActivatedRoute, private dialog: MatDialog,
               private interactionService: InteractionService, private fb: FormBuilder,private snackBar: MatSnackBar) {
@@ -56,6 +68,8 @@ export class InteractionShowComponent implements OnInit{
     if (interactionId){
       this.interactionService.getInteractionById(parseInt(interactionId)).pipe(tap(data => {
         this.interaction.next(data);
+        this.uploadedUrl = data.joinFilePath;
+
         this.interactionForm.patchValue({
             report: data.report,
             joinFilePath: data.joinFilePath
@@ -119,5 +133,54 @@ export class InteractionShowComponent implements OnInit{
               this.interaction.next(result)
           }
       });
+  }
+  private _bottomSheet = inject(MatBottomSheet);
+  openBottomSheet() {
+      this._bottomSheet.open(TrackingLogComponent);
+  }
+
+
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+
+    if (file) {
+      this.uploadFile(file);
+    }
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+  }
+
+  onDrop(event: DragEvent): void {
+    event.preventDefault();
+    this.isDragging = false;
+
+    const file = event.dataTransfer?.files?.[0];
+    if (file) {
+      this.uploadFile(file);
+    }
+  }
+
+  uploadFile(file: File): void {
+    if (!this.interaction.getValue().id) return;
+    this.selectedFile = file;
+    this.interactionService.uploadReportFile(this.interaction.getValue().id, file).subscribe({
+      next: (url) => {
+        this.uploadedUrl = url;
+        this.interaction.getValue().joinFilePath = url;
+        this.snackBar.open('Rapport PDF téléversé avec succès ✅', 'Fermer', { duration: 3000 });
+      },
+      error: () => {
+        this.snackBar.open('Erreur lors du téléversement du Rapport PDF ❌', 'Fermer', { duration: 3000 });
+      },
+    });
   }
 }

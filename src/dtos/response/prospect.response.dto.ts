@@ -12,7 +12,8 @@ import {TrackingLogResponseDto} from './tracking.log.response.dto';
 import {InterestResponseDto} from "./interestResponseDto";
 import {ProspectInterestResponseDto} from "./prospectInterestResponseDto";
 import {UserDto} from './usersResponseDto';
-import {CustomerStatus} from '../../services/Leads/customer.status.service';
+import {CustomerStatus} from './cutomer.status.dto';
+
 export class ProspectResponseDto {
   createdAt: Date;
   updatedAt: Date;
@@ -53,7 +54,7 @@ export class ProspectResponseDto {
   reprosentaveJobTitle: JobTitleResponseDto | null;
   certificationText: string | null;
   trackingLogs: TrackingLogResponseDto[];
-  interests: ProspectInterestResponseDto[];
+  interest: ProspectInterestResponseDto[];
 
   constructor(data: any) {
     this.createdAt = data?.createdAt || '';
@@ -99,6 +100,6 @@ export class ProspectResponseDto {
     this.active = data?.status;
     this.customerStatus = data.customerStatus;
     this.trackingLogs = data?.trackingLogs;
-    this.interests = data?.interests;
+    this.interest = data.interest;
   }
 }

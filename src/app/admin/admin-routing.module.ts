@@ -15,7 +15,7 @@ const routes: Routes = [
     path: '',
     component: IndexComponent,
     children: [
-      { path: '', component: DashboardComponent },
+      { path: 'dashboard', component: DashboardComponent },
       { path: 'prospects', component: ProspectComponent },
       { path: 'prospects/:id', component: ShowProspectComponent },
       { path: 'interlocutors', component: InterlocutorComponent },

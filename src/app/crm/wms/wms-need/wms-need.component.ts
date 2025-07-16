@@ -34,6 +34,8 @@ import {StorageNeedService} from '../../../../services/crm/wms/storage.need.serv
 import {LivreEnum} from '../../../../enums/crm/livre.enum';
 import {getLabelFromStorageReasonEnum, StorageReasonEnum} from '../../../../enums/crm/storage.reason.enum';
 import {provideNativeDateAdapter} from '@angular/material/core';
+import {WmsNeedCreateComponent} from './wms-need-create/wms-need-create.component';
+import {tap} from 'rxjs';
 
 
 @Component({
@@ -109,7 +111,7 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
     const selectedCompanyId = parseInt(this.localStorageService.getItem("selected_company_id"));
     this.storageNeedService.getAllStorageNeedsByCompanyId(selectedCompanyId).subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+        this.dataSource.data = data.sort((a, b) => b.id - a.id);
       },
       error: (err) => {
         console.error('Error loading interactions:', err);
@@ -121,9 +123,19 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
 
-  createEditWmsNeed(): void {
-    this.router.navigateByUrl('/admin/crm/wms/needs/create').then(value => {return;});
 
+
+  createEditWmsNeed(): void {
+    // this.router.navigateByUrl('/admin/crm/wms/needs/create').then(value => {return;});
+    const dialogRef = this.dialog.open(WmsNeedCreateComponent, {
+      maxWidth: '50vw', maxHeight: '80vh'
+    });
+
+    dialogRef.afterClosed().subscribe({
+      next: (storageNeed) => {
+        this.loadNeedBasedOnSelectedType();
+      }
+    })
   }
 
   toggleRowSelection(rowId: number): void {

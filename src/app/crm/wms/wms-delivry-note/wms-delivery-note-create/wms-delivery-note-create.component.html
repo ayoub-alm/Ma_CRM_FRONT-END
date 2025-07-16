@@ -1,0 +1,268 @@
+<div class="container-fluid bg-body row ">
+  <!-- Page Header -->
+  <!-- Actions -->
+  <div class="d-flex justify-content-between row">
+    <div class="col-8">
+      <button (click)="router.navigate(['/admin/crm/wms/offers'])" color="primary" mat-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button (click)="router.navigate(['/admin/crm/wms'])" mat-button>
+        <mat-icon class=" primary-blue-color">house</mat-icon>
+        Accueil
+      </button>
+      >
+      <button (click)="router.navigate(['/admin/crm/wms/'])" mat-button>
+        <mat-icon class=" primary-blue-color">checklist</mat-icon>
+        Bon de livraison
+      </button>
+      >
+      <button (click)="router.navigate(['/admin/crm/wms/delivery-note'])" mat-button>
+        <mat-icon class=" primary-blue-color">details</mat-icon>
+        Crée
+      </button>
+    </div>
+  </div>
+  <hr>
+
+  <section class="w-100">
+    <div>
+      <mat-card class="bg-white rounded-2"  >
+        <mat-card-content>
+          <form [formGroup]="storageDeliveryNoteForm" class="w-100 d-flex row justify-content-around align-baseline">
+            <div *ngIf="!selectedCustomer.getValue()"  class="col-lg-4 ">
+              <mat-form-field appearance="outline" >
+                <mat-label>Client</mat-label>
+                <input #input
+                       type="text"
+                       placeholder=""
+                       matInput
+                       formControlName="customerId"
+                       [matAutocomplete]="auto"
+                       (input)="onFilterCustomer($event)"
+                       (keydown.enter)="$event.preventDefault()"
+                       (focus)="onFilterCustomer($event)">
+                <mat-autocomplete requireSelection #auto="matAutocomplete">
+                  @for (customer of filteredCustomers.getValue(); track customer) {
+                    <mat-option (click)="onSelectCustomer(customer)" [value]="customer">{{customer.name}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div *ngIf="selectedCustomer.getValue()" class="col-lg-4 col-6 d-flex align-baseline">
+            <p class="text-secondary m-auto">Client: <span class="text-dark">
+              {{ selectedCustomer.getValue()?.name}}</span>
+            </p>
+            <button (click)="onRestSelectCustomer()"
+                      mat-icon-button class="text-secondary"><mat-icon>close</mat-icon></button>
+            </div>
+            <div *ngIf="selectedCustomer.getValue()" class="col-lg-4 ">
+            <mat-form-field appearance="outline" class="">
+              <mat-label>Contrat</mat-label>
+              <mat-select formControlName="contractIds">
+                <mat-option *ngFor="let contract of contracts.getValue()" [value]="contract.id">{{ contract.number }}</mat-option>
+              </mat-select>
+<!--              <mat-hint align="end">Here's the dropdown arrow ^</mat-hint>-->
+            </mat-form-field>
+            </div>
+
+            <div *ngIf="selectedStorageContract.getValue()" class="col-lg-2  ">
+              <button (click)="onCreateNewNote()"
+                mat-button class="rounded-2 bg-spider">Valider</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </section>
+
+
+  <section>
+<!--    <ng-container  class="col-11" >-->
+      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z3 border border-secondary-subtle border-1">
+        <mat-card-content>
+          <div class="card-body">
+            <table  class="table small border-secondary">
+              <thead class=" fw-light">
+              <tr>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Contrat</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Préstations</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Unité</th>
+              </tr>
+              </thead>
+              <tbody >
+              <ng-container *ngFor="let item of selectedStorageContract.getValue().stockedItems">
+                <tr  *ngFor="let prv of item.provisionResponseDto" class="p-0">
+                  <td>{{ selectedStorageContract.getValue().number }}</td>
+                  <td>{{ prv.name +" "+ item.supportName+" "+ item.structureName }}</td>
+                  <td>{{ prv.unitOfMeasurement }}</td>
+                </tr>
+              </ng-container>
+              <!--  provisions Annexes      -->
+              <ng-container  *ngFor="let annexe of selectedStorageContract.getValue().annexes">
+                <ng-container *ngFor="let item of annexe.stockedItems">
+                  <tr  *ngFor="let prv of item.provisionResponseDto" class="p-0">
+                    <td>{{ annexe.number }}</td>
+                    <td>{{ prv.name +" "+ item.supportName+" "+ item.structureName }}</td>
+                    <td>{{ prv.unitOfMeasurement }}</td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+              <!-- unloading     **********************************************************-->
+              <p class="primary-blue-color ">
+<!--                <mat-icon class="">local_shipping</mat-icon>-->
+                Dépotage
+              </p>
+              <ng-container *ngFor="let unload of selectedStorageContract.getValue().unloadingTypes">
+                <tr >
+                  <td>{{ selectedStorageContract.getValue().number }}</td>
+                  <td>{{ unload.name}}</td>
+                  <td>{{ unload.unitOfMeasurement }}</td>
+                </tr>
+              </ng-container>
+              <!--  Unload  Annexes      -->
+              <ng-container *ngFor="let annexe of selectedStorageContract.getValue().annexes">
+                <ng-container *ngFor="let unload of annexe.unloadingTypes">
+                  <tr >
+                    <td>{{ annexe.number }}</td>
+                    <td>{{ unload.name}}</td>
+                    <td>{{ unload.unitOfMeasurement }}</td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+
+              <!-- Requirments    **********************************************************-->
+              <p class="primary-blue-color ">
+<!--                <mat-icon class="">rule</mat-icon>-->
+                Exigences
+              </p>
+              <ng-container *ngFor="let req of selectedStorageContract.getValue().requirements">
+                <tr >
+                  <td>{{ selectedStorageContract.getValue().number }}</td>
+                  <td>{{ req.name}}</td>
+                  <td>{{ req.unitOfMeasurement }}</td>
+                </tr>
+              </ng-container>
+              <!--  requirements  Annexes      -->
+              <ng-container *ngFor="let annexe of selectedStorageContract.getValue().annexes">
+                <ng-container *ngFor="let req of annexe.requirements">
+                  <tr >
+                    <td>{{ annexe.number }}</td>
+                    <td>{{ req.name}}</td>
+                    <td>{{ req.unitOfMeasurement }}</td>
+                  </tr>
+                </ng-container>
+              </ng-container>
+
+              </tbody>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+<!--    </ng-container>-->
+  </section>
+
+
+<!--  <section *ngIf="selectedStorageContract.getValue().id != null" class="w-100 mt-2 ">-->
+<!--&lt;!&ndash;    <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-0 mat-elevation-z2 col-12 border border-secondary-subtle border-1 rounded-2">&ndash;&gt;-->
+<!--      <p class="primary-blue-color fs-6 d-flex">-->
+<!--        <mat-icon class="me-2">local_shipping</mat-icon>-->
+<!--        Dépotage-->
+<!--      </p>-->
+<!--      <div class="row">-->
+<!--        <div class="col-lg-12 col-md-12 col-12">-->
+<!--          <table [dataSource]="selectedStorageContract.getValue().unloadingTypes" class="mat-elevation-z1 w-100" mat-table>-->
+<!--            &lt;!&ndash; Name Column &ndash;&gt;-->
+<!--            <ng-container matColumnDef="name">-->
+<!--              <th *matHeaderCellDef mat-header-cell>Désignation</th>-->
+<!--              <td *matCellDef="let element" mat-cell>{{ element.name }}</td>-->
+<!--            </ng-container>-->
+
+<!--            &lt;!&ndash; Price Column &ndash;&gt;-->
+<!--            <ng-container matColumnDef="price">-->
+<!--              <th *matHeaderCellDef mat-header-cell>Prix</th>-->
+<!--              <td *matCellDef="let element" mat-cell>{{ element.initPrice | currency }}</td>-->
+<!--            </ng-container>-->
+
+<!--            &lt;!&ndash; Unit Column &ndash;&gt;-->
+<!--            <ng-container matColumnDef="unite">-->
+<!--              <th *matHeaderCellDef mat-header-cell>Unité</th>-->
+<!--              <td *matCellDef="let element" mat-cell>{{ element.unitOfMeasurement }}</td>-->
+<!--            </ng-container>-->
+<!--            &lt;!&ndash; final price &ndash;&gt;-->
+<!--            <ng-container matColumnDef="finalPrice">-->
+<!--              <th *matHeaderCellDef mat-header-cell>Prix de vente</th>-->
+<!--              <td *matCellDef="let element" mat-cell>-->
+<!--                {{element.salesPrice}}-->
+<!--              </td>-->
+<!--            </ng-container>-->
+<!--            &lt;!&ndash; Quantity &ndash;&gt;-->
+<!--            <ng-container matColumnDef="quantity">-->
+<!--              <th *matHeaderCellDef mat-header-cell>Quantité</th>-->
+<!--              <td *matCellDef="let element" mat-cell>-->
+<!--                <input type="number" name="" class="custom-input">-->
+<!--              </td>-->
+<!--            </ng-container>-->
+<!--            &lt;!&ndash; Header Row &ndash;&gt;-->
+<!--            <tr *matHeaderRowDef="displayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"-->
+<!--                mat-header-row></tr>-->
+<!--            &lt;!&ndash; Data Row &ndash;&gt;-->
+<!--            <tr *matRowDef="let row; columns: displayedColumns;" class="bg-white text-secondary" mat-row></tr>-->
+<!--          </table>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--&lt;!&ndash;    </mat-card>&ndash;&gt;-->
+<!--    <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-0 mat-elevation-z2 col-12 border border-secondary-subtle border-1 rounded-2">-->
+<!--      <p class="primary-blue-color fs-6 d-flex">-->
+<!--        <mat-icon class="me-2">rule</mat-icon>-->
+<!--        Exigences-->
+<!--      </p>-->
+<!--      <div class="row">-->
+<!--        &lt;!&ndash; Tableau &ndash;&gt;-->
+<!--        <div class="col-lg-12 col-md-12 col-12">-->
+<!--          <table [dataSource]="selectedStorageContract.getValue().requirements" class="mat-elevation-z1 w-100" mat-table>-->
+<!--            &lt;!&ndash; Name Column &ndash;&gt;-->
+<!--            <ng-container matColumnDef="name">-->
+<!--              <th *matHeaderCellDef mat-header-cell>Désignation</th>-->
+<!--              <td *matCellDef="let element" mat-cell>{{ element.name }}</td>-->
+<!--            </ng-container>-->
+
+<!--            &lt;!&ndash; Price Column &ndash;&gt;-->
+<!--            <ng-container matColumnDef="price">-->
+<!--              <th *matHeaderCellDef mat-header-cell>Prix</th>-->
+<!--              <td *matCellDef="let element" mat-cell>{{ element.initPrice | currency }}</td>-->
+<!--            </ng-container>-->
+
+<!--            &lt;!&ndash; Unit Column &ndash;&gt;-->
+<!--            <ng-container matColumnDef="unite">-->
+<!--              <th *matHeaderCellDef mat-header-cell>Unité</th>-->
+<!--              <td *matCellDef="let element" mat-cell>{{ element.unitOfMeasurement }}</td>-->
+<!--            </ng-container>-->
+<!--            &lt;!&ndash; final price &ndash;&gt;-->
+<!--            <ng-container matColumnDef="finalPrice">-->
+<!--              <th *matHeaderCellDef mat-header-cell>Prix de vente</th>-->
+<!--              <td *matCellDef="let element" mat-cell>-->
+<!--                {{element.salesPrice}}-->
+<!--              </td>-->
+<!--            </ng-container>-->
+<!--            &lt;!&ndash; Quantity &ndash;&gt;-->
+<!--            <ng-container matColumnDef="quantity">-->
+<!--              <th *matHeaderCellDef mat-header-cell>Quantité</th>-->
+<!--              <td *matCellDef="let element" mat-cell>-->
+<!--                <input type="number" name="" class="custom-input my-1">-->
+<!--              </td>-->
+<!--            </ng-container>-->
+
+<!--            &lt;!&ndash; Header Row &ndash;&gt;-->
+<!--            <tr *matHeaderRowDef="displayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"-->
+<!--                mat-header-row></tr>-->
+
+<!--            &lt;!&ndash; Data Row &ndash;&gt;-->
+<!--            <tr *matRowDef="let row; columns: displayedColumns;" class="bg-white text-secondary" mat-row></tr>-->
+<!--          </table>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </mat-card>-->
+<!--  </section>-->
+
+</div>

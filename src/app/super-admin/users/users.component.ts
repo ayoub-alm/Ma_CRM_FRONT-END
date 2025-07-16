@@ -21,6 +21,7 @@ import {Router, RouterLink} from "@angular/router";
 import {UserModel} from "../../models/super-admin/user.model";
 import {UserService} from "../../services/super-admin/user.service";
 import {BehaviorSubject} from "rxjs";
+import {UserResponseDto} from '../../dtos/response/super-admin-responseDtos/user.response.dto';
 
 @Component({
   selector: 'app-users',
@@ -53,9 +54,9 @@ import {BehaviorSubject} from "rxjs";
 })
 export class UsersComponent implements OnInit, AfterViewInit{
 
-    displayedColumns: string[] = ['select', 'matricule', 'image', 'name', 'lastName', 'role', 'email', 'phone'];
-    dataSource: MatTableDataSource<UserModel> = new MatTableDataSource();
-    users: BehaviorSubject<UserModel[]> = new BehaviorSubject<UserModel[]>([]);
+    displayedColumns: string[] = ['select', 'matricule', 'name', 'role', 'email', 'phone', 'status'];
+    dataSource: MatTableDataSource<UserResponseDto> = new MatTableDataSource();
+    users: BehaviorSubject<UserResponseDto[]> = new BehaviorSubject<UserResponseDto[]>([]);
     isAllSelected = false;
     selectedRows: Set<number> = new Set();
 
@@ -67,7 +68,7 @@ export class UsersComponent implements OnInit, AfterViewInit{
     ngOnInit() {
         // Fetch and populate Users data
         this.userService.getAllUsers().subscribe({
-            next: (data: UserModel[]) => {
+            next: (data: UserResponseDto[]) => {
                 this.users.next(data);
                 this.dataSource.data = data;
                 this.dataSource.filterPredicate = (data: any, filter): boolean=>{
@@ -120,7 +121,7 @@ export class UsersComponent implements OnInit, AfterViewInit{
         return this.selectedRows.has(rowId);
     }
 
-    showProspectDetails(row: UserModel) {
-        this.router.navigateByUrl(`super-admin/users/${row.id}`)
+    showUserDetails(row: UserModel) {
+        this.router.navigateByUrl(`super-admin/users/show/${row.id}`)
     }
 }

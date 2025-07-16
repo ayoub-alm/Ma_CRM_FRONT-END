@@ -96,3 +96,26 @@ img.img-fluid {
   background-size: contain;
   background: url('https://cdn.creazilla.com/silhouettes/7937048/spider-web-silhouette-4bb7ee-original.svg') no-repeat fixed center center;
 }
+.background-wrapper {
+  background-image: url('/login_background.svg');
+  background-size: contain ;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.background-wrapper::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); /* white overlay with 50% opacity */
+  z-index: 1;
+}
+
+.background-wrapper > * {
+  position: relative;
+  z-index: 2; /* bring actual content above the overlay */
+}

@@ -50,6 +50,10 @@ import {
   MatEndDate,
   MatStartDate
 } from '@angular/material/datepicker';
+import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav';
+import {MatToolbar} from '@angular/material/toolbar';
+import {CommentComponent} from '../../utils/comment/comment.component';
+import {TranslatePipe} from '@ngx-translate/core';
 
 
 @Component({
@@ -93,8 +97,8 @@ import {
     MatDateRangePicker,
     MatDatepickerToggle,
     MatEndDate,
-    MatStartDate,
-    MatSuffix,MatDatepickerModule
+    MatStartDate, MatDrawerContainer, MatDrawer,
+    MatSuffix, MatDatepickerModule, MatToolbar, CommentComponent, TranslatePipe
   ],
   templateUrl: './interlocutor.component.html',
   styleUrl: './interlocutor.component.css',

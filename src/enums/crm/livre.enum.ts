@@ -1,4 +1,4 @@
 export enum LivreEnum {
-  OPEN = 'OPEN',
-  CLOSE = 'CLOSE',
+  OPEN = 'OUVERT',
+  CLOSE = 'FERMÉ',
 }

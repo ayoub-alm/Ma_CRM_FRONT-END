@@ -6,6 +6,7 @@ import {UnloadingTypeResponseDto} from '../../response/crm/unloading.type.respon
 import {RequirementResponseDto} from '../../response/crm/requirement.response.dto';
 
 export class StorageOfferCreateDto {
+  id: number |string = "";
   ref: string; // UUID reference for the storage need
   storageReason: StorageReasonEnum; // Reason for storage (TEMPORARY, PERMANENT, etc.)
   status: NeedStatusEnum; // Status of the need (CREATED, NEGOTIATION, CANCELED)
@@ -20,10 +21,18 @@ export class StorageOfferCreateDto {
   unloadingTypes: UnloadingTypeResponseDto[]; // List of unloading type IDs
   requirements: RequirementResponseDto[]; // List of requirement IDs
   storageNeedId:number;
-  paymentTypeId:number;
+  paymentTypeIds:number[];
   paymentDeadline:number;
-  interlocutorId;
+  interlocutorId:number
+  note: string = "";
+  managementFees: number = 0;
+  numberOfReservedPlaces: number = 0;
+  minimumBillingGuaranteed: number = 0;
+  withRevision:boolean;
+
+
   constructor(
+    id:number | string,
     ref: string,
     storageReason: StorageReasonEnum,
     status: NeedStatusEnum,
@@ -38,10 +47,11 @@ export class StorageOfferCreateDto {
     unloadingTypes: UnloadingTypeResponseDto[] = [],
     requirements: RequirementResponseDto[] = [],
     storageNeedId:number,
-    paymentTypeId:number,
+    paymentTypeIds:number[],
     paymentDeadline:number,
     interlocutorId:number
   ) {
+    this.id = id;
     this.ref = ref;
     this.storageReason = storageReason;
     this.status = status;
@@ -56,9 +66,31 @@ export class StorageOfferCreateDto {
     this.unloadingTypes = unloadingTypes;
     this.requirements = requirements;
     this.storageNeedId = storageNeedId
-    this.paymentTypeId = paymentTypeId
+    this.paymentTypeIds = paymentTypeIds
     this.interlocutorId = interlocutorId
     this.paymentDeadline = paymentDeadline;
+    this.withRevision = false;
+  }
+
+
+  initializeFromObject(data:any):void{
+    this.ref = data.ref;
+    this.storageReason = data.storageReason;
+    this.status = data.status;
+    this.liverStatus = data.liverStatus;
+    this.expirationDate = data.expirationDate;
+    this.duration = data.duration;
+    this.numberOfSku = data.numberOfSku;
+    this.productType = data.productType;
+    this.customerId = data.customerId;
+    this.companyId = data.companyId;
+    this.paymentTypeIds = data.paymentTypeIds
+    this.interlocutorId = data.interlocutorId
+    this.paymentDeadline = data.paymentDeadline;
+    this.note = data.note;
+    this.managementFees = data.managementFees;
+    this.numberOfReservedPlaces = data.numberOfReservedPlaces;
+    this.minimumBillingGuaranteed = data.minimumBillingGuaranteed;
   }
 }
 

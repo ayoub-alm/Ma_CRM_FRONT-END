@@ -7,6 +7,7 @@ import {ProjectComponent} from './project/project.component';
 import {IndexComponent} from '../index/index.component';
 import {UserCreatEditComponent} from "./users/user-creat-edit/user-creat-edit.component";
 import {UserShowComponent} from "./users/user-show/user-show.component";
+import {CompanyShowComponent} from './companies/company-show/company-show.component';
 
 
 
@@ -14,11 +15,11 @@ const routes: Routes = [
   {
     path: '', component:IndexComponent,
     children: [
-      { path: '', component: SuperAdminIndexComponent }, // Index
       { path: 'users', component: UsersComponent },
       { path: 'users/create', component: UserCreatEditComponent },
-      { path: 'users/show', component: UserShowComponent},
+      { path: 'users/show/:id', component: UserShowComponent},
       { path: 'companies', component: CompaniesComponent },
+      { path: 'companies/:id', component: CompanyShowComponent },
       { path: 'projects', component: ProjectComponent },
     ],
   },

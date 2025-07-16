@@ -6,13 +6,16 @@ import {StockedItemResponseDto} from './stocked.itemresponse.dto';
 import {UnloadingTypeResponseDto} from './unloading.type.response.dto';
 import {RequirementResponseDto} from './requirement.response.dto';
 import {InterlocutorResDto} from '../interlocutor.dto';
+import {UserDto} from '../usersResponseDto';
+import {StorageNeedStatus} from './storage.need.status';
 
 export class StorageNeedResponseDto {
   id!: number; // ID of the storage need
   ref!: string; // UUID reference of the storage need
+  number!: string; // UUID reference of the storage need
   liverStatus!: LivreEnum; // OPEN or CLOSE
   storageReason!: StorageReasonEnum; // TEMPORARY, PERMANENT, SEASONAL
-  status!: NeedStatusEnum; // CREATED, NEGOTIATION, CANCELED, etc.
+  status!: StorageNeedStatus; // CREATED, NEGOTIATION, CANCELED, etc.
   expirationDate!: string; // Expiration date in ISO format
   duration!: number; // Duration of the storage in days or units
   numberOfSku!: number; // Number of SKUs involved in the storage
@@ -23,10 +26,19 @@ export class StorageNeedResponseDto {
   unloadingTypes: UnloadingTypeResponseDto[];
   requirements: RequirementResponseDto[];
   interlocutor:InterlocutorResDto;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: UserDto;
+  updatedBy: UserDto;
 
   constructor(data: any) {
+    this.createdAt = data?.createdAt || '';
+    this.updatedAt = data?.updatedAt || '';
+    this.createdBy = data?.createdBy || null;
+    this.updatedBy = data?.updatedBy || null;
     this.id = data.id;
     this.ref = data.ref;
+    this.number = data.number;
     this.liverStatus = data.liverStatus;
     this.storageReason = data.storageReason;
     this.status = data.status;
@@ -40,6 +52,6 @@ export class StorageNeedResponseDto {
     this.stockedItems = data.stockedItems;
     this.unloadingTypes = data.unloadingTypes;
     this.requirements = data.requirements;
-    this.interlocutor = data.interlocutor
+    this.interlocutor = data.interlocutor;
   }
 }

@@ -11,3 +11,6 @@
   /*font-size: 0.8rem; !* Adjust font size for consistency *!*/
   color: #333; /* Ensures text color contrast */
 }
+td{
+  padding: 0.5rem;
+}

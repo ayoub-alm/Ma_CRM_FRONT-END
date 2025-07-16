@@ -8,13 +8,14 @@
         <mat-icon class=" primary-blue-color">house</mat-icon>
         Accueil
       </button>
-      /
+      >
       <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
         <mat-icon class=" primary-blue-color">checklist</mat-icon>
         Tarifs
       </button>
     </div>
   </div>
+
 
     @if ((asyncTabs | async) === null) {
         Loading tabs...
@@ -31,10 +32,18 @@
                 <div class="table-container  border-top-5 border-secondary w-100">
                   <div class="row d-flex my-2 justify-content-around">
                     <div class="col-lg-8 col-12 d-flex justify-content-start mt-sm-2 ">
+<!--                      <input-->
+<!--                        matInput-->
+<!--                        class=" rounded-2 mat-elevation-z2  bg-light search-input"-->
+<!--                        (keyup)="applyFilter($event)"-->
+<!--                        placeholder="Recherch"-->
+<!--                        autofocus-->
+<!--                        #input-->
+<!--                      />-->
                       <input
                         matInput
-                        class=" rounded-2 mat-elevation-z2  bg-light search-input"
-                        (keyup)="applyFilter($event)"
+                        class="rounded-2 mat-elevation-z2 bg-light search-input"
+                        (keyup)="applyFilter($event, tab.data)"
                         placeholder="Recherch"
                         autofocus
                         #input
@@ -71,7 +80,8 @@
                         <!-- Columns: Fields -->
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Désignation</th>
-                            <td mat-cell *matCellDef="let row">{{ row.name }}</td>
+                            <td mat-cell *matCellDef="let row">{{ row.name }}
+                              <span *ngIf="row.isStoragePrice"><mat-icon>inventory_2 </mat-icon></span> </td>
                         </ng-container>
                         <ng-container matColumnDef="unite">
                             <th mat-header-cell *matHeaderCellDef mat-sort-header>Unité</th>
@@ -81,32 +91,38 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>Prix</th>
                         <td mat-cell *matCellDef="let row">{{ row.initPrice }}</td>
                       </ng-container>
+                      <ng-container matColumnDef="order">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>Order</th>
+                        <td mat-cell *matCellDef="let row">{{ row.order }}</td>
+                      </ng-container>
                         <ng-container matColumnDef="actions">
                             <th mat-header-cell *matHeaderCellDef></th>
                             <td mat-cell *matCellDef="let row">
-                                <button mat-icon-button  aria-label="Actions">
+                                <button mat-icon-button  [matMenuTriggerFor]="menu" aria-label="Actions">
                                     <mat-icon>more_vert</mat-icon>
                                 </button>
                                 <mat-menu #menu="matMenu">
-                                    <button mat-menu-item >
-                                        <mat-icon>edit</mat-icon>Edit
+                                    <button mat-menu-item (click)="showDetails(row, tab.type)" >
+                                        <mat-icon>edit</mat-icon>Modifier
                                     </button>
-                                    <button mat-menu-item >
-                                        <mat-icon>delete</mat-icon>Delete
+                                    <button *ngIf="tab.type === 'provisions'" mat-menu-item (click)="markProvisionAsStoragePrice(row)" >
+                                      <mat-icon>inventory_2 </mat-icon>Définir comme prix de stockage
                                     </button>
                                 </mat-menu>
                             </td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"
                             class="primary-blue-color  fixed-header bg-light rounded-3  custom-header-row p-0 "></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"  (click)="showDetails(row)"  class="bg-white text-secondary "></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="bg-white text-secondary "></tr>
                         <!-- Row shown when there is no matching data. -->
                         <tr class="mat-row" *matNoDataRow>
                             <td class="mat-cell" colspan="4">Aucune donnée ne correspond au filtre "{{input.value}}"</td>
                         </tr>
                     </table>
                 </div>
-                <mat-paginator class="bg-light sticky-bottom" [pageSizeOptions]="[ 25, 50,100]"></mat-paginator>
+<!--                <mat-paginator class="bg-light sticky-bottom" [pageSizeOptions]="[ 25, 50,100]"></mat-paginator>-->
+                <mat-paginator [pageSizeOptions]="[25, 50, 100]" showFirstLastButtons></mat-paginator>
+
             </mat-tab>
         }
     </mat-tab-group>

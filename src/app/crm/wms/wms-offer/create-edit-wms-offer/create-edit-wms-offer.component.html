@@ -20,11 +20,9 @@
     </div>
   </div>
 
-
-
   <section class="">
     <!-- Form Section -->
-    <form [formGroup]="generalInfoFormGroup" class="rounded-0 p-lg-3 mat-elevation-z2 bg-white mx-1 row ">
+    <form [formGroup]="generalInfoFormGroup" class="rounded-2 p-lg-3 mat-elevation-z2 bg-white mx-1 row ">
       <p class="col-12 primary-blue-color fs-6 d-flex">
         <mat-icon class="me-2">person</mat-icon> Information du Client
       </p>
@@ -117,18 +115,18 @@
         </mat-form-field>
       </div>
      <!-- Payment methode-->
-      <form [formGroup]="paymentTypeForm">
-      <div class="col-lg-4">
+      <form [formGroup]="paymentTypeForm" class="col-6 row">
+      <div class="col-lg-6">
            <mat-form-field appearance="fill" class="w-100 mb-3">
              <mat-label>Modalités de paiement</mat-label>
-             <mat-select formControlName="paymentTypeId" required>
+             <mat-select formControlName="paymentTypeIds" required multiple>
                <mat-option *ngFor="let type of paymentMethods.getValue()" [value]="type.id">
                  {{ type.name }}
                </mat-option>
              </mat-select>
            </mat-form-field>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-6">
         <mat-form-field appearance="fill" class="w-100 mb-3">
           <mat-label>Délais de Paiement (jours)</mat-label>
           <input matInput type="number" formControlName="paymentDeadline"/>
@@ -138,407 +136,83 @@
     </form>
   </section>
 
-
-
-<!--  <section>-->
-<!--    <div class="fs-5 small mt-2  ">-->
-<!--      &lt;!&ndash; Élément à stocker &ndash;&gt;-->
-<!--      <mat-card class="bg-light mb-2 p-lg-3 rounded-0 mat-elevation-z2 small">-->
-<!--        <div class="mb-3 row ">-->
-<!--          &lt;!&ndash; Nested Form &ndash;&gt;-->
-<!--          <form-->
-<!--            [formGroup]="itemToStoreFormGroup"-->
-<!--            class="rounded-3 col-12 row ">-->
-<!--            &lt;!&ndash; Conditionnement &ndash;&gt;-->
-<!--            <p class="col-12 primary-blue-color fs-6 d-flex ">-->
-<!--              <mat-icon class="me-2">inventory</mat-icon> Conditionnement-->
-<!--            </p>-->
-<!--            <div class="col-lg-3 col-md-6 col-12">-->
-<!--              <mat-form-field appearance="fill" class="w-100">-->
-<!--                <mat-label>Support </mat-label>-->
-<!--                <mat-select formControlName="supportId" required>-->
-<!--                  <mat-option *ngFor="let support of supports.getValue()" [value]="support.id">{{support.name}}</mat-option>-->
-<!--                </mat-select>-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-
-<!--            &lt;!&ndash; Structure &ndash;&gt;-->
-<!--            <div class="col-lg-3 col-md-6 col-12">-->
-<!--              <mat-form-field appearance="fill" class="w-100">-->
-<!--                <mat-label>Structure</mat-label>-->
-<!--                <mat-select formControlName="structureId">-->
-<!--                  <mat-option *ngFor="let structure of structures.getValue()" [value]="structure.id">{{ structure.name }}</mat-option>-->
-<!--                </mat-select>-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-
-<!--            &lt;!&ndash; Température de stockage &ndash;&gt;-->
-<!--            <div class="col-lg-3 col-md-6 col-12">-->
-<!--              <mat-form-field appearance="fill" class="w-100  ">-->
-<!--                <mat-label>Température de stockage</mat-label>-->
-<!--                <mat-select formControlName="temperatureId"  required>-->
-<!--                  <mat-option *ngFor="let temperature of temperatures.getValue()" [value]="temperature.id">{{ temperature.name }}</mat-option>-->
-<!--                </mat-select>-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; Température de stockage &ndash;&gt;-->
-<!--            <div  *ngIf="itemToStoreFormGroup.get('storageTemperature')?.touched && itemToStoreFormGroup.get('storageTemperature')?.value !== 'Ambiante'"-->
-<!--                  class="col-lg-3 col-md-6 col-12" >-->
-<!--              <mat-form-field appearance="fill" class="w-100  ">-->
-<!--                <mat-label>Température C°</mat-label>-->
-<!--                <input matInput >-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-
-<!--            <p class="col-12 primary-blue-color fs-6 d-flex">-->
-<!--              <mat-icon class="me-2">straighten</mat-icon> Dimensions-->
-<!--            </p>-->
-
-<!--            &lt;!&ndash; Largeur &ndash;&gt;-->
-<!--            <div class="col-lg-3 col-md-4 col-12">-->
-<!--              <mat-form-field appearance="fill" class="w-100">-->
-<!--                <mat-label>Largeur (cm)</mat-label>-->
-<!--                <input matInput type="number" formControlName="larger" />-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-
-<!--            &lt;!&ndash; Longueur &ndash;&gt;-->
-<!--            <div class="col-lg-3 col-md-4 col-12">-->
-<!--              <mat-form-field appearance="fill" class="w-100">-->
-<!--                <mat-label>Longueur (cm)</mat-label>-->
-<!--                <input matInput type="number" formControlName="length" />-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-
-<!--            &lt;!&ndash; Hauteur &ndash;&gt;-->
-<!--            <div class="col-lg-3 col-md-4 col-12">-->
-<!--              <mat-form-field appearance="fill" class="w-100">-->
-<!--                <mat-label>Hauteur (cm)</mat-label>-->
-<!--                <input matInput type="number" formControlName="height" />-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
-
-
-
-<!--            <div class="row col-lg-12 col-12 align-items-start">-->
-<!--              <p class="col-12 primary-blue-color fs-6 d-flex">-->
-<!--                <mat-icon class="me-2">informations</mat-icon> Informations supplémentaires-->
-<!--              </p>-->
-
-<!--              &lt;!&ndash; Poids &ndash;&gt;-->
-<!--              <div class="col-lg-3 col-md-6 col-12">-->
-<!--                <mat-form-field appearance="fill" class="w-100">-->
-<!--                  <mat-label>Poids (kg)</mat-label>-->
-<!--                  <input matInput type="number" formControlName="weight" />-->
-<!--                </mat-form-field>-->
-<!--              </div>-->
-
-<!--              &lt;!&ndash; Metre cube max &ndash;&gt;-->
-<!--              <div class="col-lg-3 col-md-6 col-12">-->
-<!--                <mat-form-field appearance="fill" class="w-100">-->
-<!--                  <mat-label>Metre cube max</mat-label>-->
-<!--                  <input matInput type="number" formControlName="metreCubeMax" />-->
-<!--                </mat-form-field>-->
-<!--              </div>-->
-
-<!--              &lt;!&ndash; Niveaux de gerbabilité &ndash;&gt;-->
-<!--              <div class="col-lg-3 col-md-6 col-12">-->
-<!--                <mat-form-field appearance="fill" class="w-100">-->
-<!--                  <mat-label>Niveaux de gerbabilité </mat-label>-->
-<!--                  <input matInput type="number" formControlName="StackabilityLevels"  />-->
-<!--                </mat-form-field>-->
-<!--              </div>-->
-
-<!--              &lt;!&ndash; Volume de stock &ndash;&gt;-->
-<!--              <div class="col-lg-3 col-md-4 col-12">-->
-<!--                <mat-form-field appearance="fill" class="w-100">-->
-<!--                  <mat-label>Volume de stock</mat-label>-->
-<!--                  <input matInput type="number" formControlName="volumeStock" />-->
-<!--                </mat-form-field>-->
-<!--              </div>-->
-
-<!--              &lt;!&ndash; Nombre de UVC &ndash;&gt;-->
-<!--              <div class="col-lg-3 col-md-4 col-12">-->
-<!--                <mat-form-field appearance="fill" class="w-100">-->
-<!--                  <mat-label>Nombre de UVC</mat-label>-->
-<!--                  <input matInput type="number" formControlName="numberOfUvc" />-->
-<!--                </mat-form-field>-->
-<!--              </div>-->
-
-<!--              &lt;!&ndash; Nombre de UC &ndash;&gt;-->
-<!--              <div class="col-lg-3 col-md-4 col-12">-->
-<!--                <mat-form-field appearance="fill" class="w-100">-->
-<!--                  <mat-label>Nombre de UC</mat-label>-->
-<!--                  <input matInput type="number" formControlName="numberOfUc" />-->
-<!--                </mat-form-field>-->
-<!--              </div>-->
-
-<!--            </div>-->
-
-<!--            <div class="col-lg-12 col-md-12 col-12 row">-->
-<!--              <p class="col-12 primary-blue-color  ">-->
-<!--                <mat-icon class="me-2">assignment</mat-icon> Préstations-->
-<!--              </p>-->
-<!--              <div class="col-lg-6">-->
-<!--                <mat-form-field appearance="fill" class="w-100">-->
-<!--                  <mat-label>Prestation</mat-label>-->
-<!--                  <mat-select formControlName="provisions" multiple>-->
-<!--                    <mat-option  *ngFor="let provision of provisions | async" [value]="provision.id">-->
-<!--                      {{ provision.name }}-->
-<!--                    </mat-option>-->
-<!--                  </mat-select>-->
-<!--                </mat-form-field>-->
-<!--              </div>-->
-
-<!--              <div class="col-lg-3 text-end m-auto col-md-4 col-12">-->
-<!--                <button mat-button (click)="addItemToItemToStore()"-->
-<!--                        [color]="'primary'"-->
-<!--                        class="text-white bg-primary-blue-color rounded-2"-->
-<!--                >-->
-<!--                  <mat-icon>add</mat-icon>Ajouter-->
-<!--                </button>-->
-<!--              </div>-->
-<!--              <div class="col-lg-8 col-12" >-->
-<!--                <table mat-table [dataSource]="selectedProvisions.getValue()" class="mat-elevation-z1 col-lg-6 col-12">-->
-
-<!--                  &lt;!&ndash; Name Column &ndash;&gt;-->
-<!--                  <ng-container matColumnDef="name">-->
-<!--                    <th mat-header-cell *matHeaderCellDef > Désignation </th>-->
-<!--                    <td mat-cell *matCellDef="let element" > {{ element.name }} </td>-->
-<!--                  </ng-container>-->
-
-<!--                  &lt;!&ndash; Unit Column &ndash;&gt;-->
-<!--                  <ng-container matColumnDef="unite">-->
-<!--                    <th mat-header-cell *matHeaderCellDef > Unité </th>-->
-<!--                    <td mat-cell *matCellDef="let element" > {{ element.unitOfMeasurement }} </td>-->
-<!--                  </ng-container>-->
-
-<!--                  &lt;!&ndash; Actions Column &ndash;&gt;-->
-<!--                  <ng-container matColumnDef="actions">-->
-<!--                    <th mat-header-cell *matHeaderCellDef ></th>-->
-<!--                    <td mat-cell *matCellDef="let row" >-->
-<!--                      <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">-->
-<!--                        <mat-icon>more_vert</mat-icon>-->
-<!--                      </button>-->
-<!--                      <mat-menu #menu="matMenu">-->
-<!--                        <button mat-menu-item>-->
-<!--                          <mat-icon>edit</mat-icon>Edit-->
-<!--                        </button>-->
-<!--                        <button mat-menu-item>-->
-<!--                          <mat-icon>delete</mat-icon>Delete-->
-<!--                        </button>-->
-<!--                      </mat-menu>-->
-<!--                    </td>-->
-<!--                  </ng-container>-->
-
-<!--                  &lt;!&ndash; Header Row &ndash;&gt;-->
-<!--                  <tr mat-header-row *matHeaderRowDef="provisionsDisplayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"></tr>-->
-
-<!--                  &lt;!&ndash; Data Row &ndash;&gt;-->
-<!--                  <tr mat-row *matRowDef="let row; columns: provisionsDisplayedColumns;" class="bg-white text-secondary"></tr>-->
-<!--                </table>-->
-
-<!--              </div>-->
-<!--            </div>-->
-
-<!--          </form>-->
-<!--        </div>-->
-
-<!--        <div class="table-container" *ngIf="itemsToStore.getValue().length">-->
-<!--          <table mat-table [dataSource]="itemsToStore.getValue()" class="table-container mat-elevation-z1 w-100" >-->
-
-<!--            &lt;!&ndash; Conditionnement Column &ndash;&gt;-->
-<!--            <ng-container matColumnDef="conditionnement">-->
-<!--              <th mat-header-cell *matHeaderCellDef >Conditionnement</th>-->
-<!--              <td mat-cell *matCellDef="let element" > {{ element.conditionnement }} </td>-->
-<!--            </ng-container>-->
-
-<!--            &lt;!&ndash; Structure Column &ndash;&gt;-->
-<!--            <ng-container matColumnDef="structure">-->
-<!--              <th mat-header-cell *matHeaderCellDef >Structure</th>e-->
-<!--              <td mat-cell *matCellDef="let element" > {{ element.structure || '-' }} </td>-->
-<!--            </ng-container>-->
-
-<!--            &lt;!&ndash; Temperature Storage Column &ndash;&gt;-->
-<!--            <ng-container matColumnDef="temperatureStockage">-->
-<!--              <th mat-header-cell *matHeaderCellDef class="small small">Température</th>-->
-<!--              <td mat-cell *matCellDef="let element" > {{ element.storageTemperature }} </td>-->
-<!--            </ng-container>-->
-
-<!--            &lt;!&ndash; Largeur Column &ndash;&gt;-->
-<!--            <ng-container matColumnDef="largeur">-->
-<!--              <th mat-header-cell *matHeaderCellDef class="small full-width-table-celle">Largeur (cm)</th>-->
-<!--              <td mat-cell *matCellDef="let element" > {{ element.larger || '-' }} </td>-->
-<!--            </ng-container>-->
-
-<!--            &lt;!&ndash; Hauteur Column &ndash;&gt;-->
-<!--            <ng-container matColumnDef="hauteur" >-->
-<!--              <th mat-header-cell *matHeaderCellDef class="small full-width-table-celle">Hauteur (cm)</th>-->
-<!--              <td mat-cell *matCellDef="let element" > {{ element.height || '-' }} </td>-->
-<!--            </ng-container>-->
-
-<!--            &lt;!&ndash; Provisions Column &ndash;&gt;-->
-<!--            <ng-container matColumnDef="provisions">-->
-<!--              <th mat-header-cell *matHeaderCellDef class="small">Préstations</th>-->
-<!--              <td mat-cell *matCellDef="let element" >-->
-<!--                &lt;!&ndash;                  <mat-chip class="small p-0" *ngFor="let prov of element.provisions" > {{ prov.name }}</mat-chip>&ndash;&gt;-->
-<!--                <div class="d-flex justify-content-start align-items-center">-->
-<!--                  <button type="button" *ngFor="let prov of element.provisions"-->
-<!--                          class="btn fs-30 btn-fill-secondary btn-sm rounded-3 scale-09 provision-tag"-->
-<!--                          style="white-space: nowrap;">-->
-<!--                    {{ prov.name }}-->
-<!--                    <i class="bi bi-x small provision-tag-remove d-none" (click)="removeProvision(element, prov)"></i>-->
-<!--                  </button>-->
-<!--                </div>-->
-<!--              </td>-->
-<!--            </ng-container>-->
-
-<!--            &lt;!&ndash; Actions Column &ndash;&gt;-->
-<!--            <ng-container matColumnDef="actions" stickyEnd>-->
-<!--              <th mat-header-cell *matHeaderCellDef ></th>-->
-<!--              <td mat-cell *matCellDef="let row" class="border border-left border-dark">-->
-<!--                <button (click)="removeItemToStore(row)"-->
-<!--                        mat-icon-button  aria-label="Actions ">-->
-<!--                  <mat-icon class="text-danger scale-08">delete</mat-icon>-->
-<!--                </button>-->
-<!--              </td>-->
-<!--            </ng-container>-->
-
-<!--            &lt;!&ndash; Header Row &ndash;&gt;-->
-<!--            <tr mat-header-row *matHeaderRowDef="itemsToStoredisplayedColumns" class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0"></tr>-->
-
-<!--            &lt;!&ndash; Data Row &ndash;&gt;-->
-<!--            <tr mat-row *matRowDef="let row; columns: itemsToStoredisplayedColumns;" class="bg-white text-secondary"></tr>-->
-<!--          </table>-->
-<!--        </div>-->
-<!--      </mat-card>-->
-<!--    </div>-->
-<!--  </section>-->
-
-<!-- Articles Stockés ************************************************-->
-  <mat-card class="mb-2 bg-white mt-2 details-card col-12 rounded-0 mat-elevation-z3 ">
-    <mat-card-content>
-      <p class="fs-6 align-items-center d-flex primary-blue-color">
-        <mat-icon class="scale-08">inventory</mat-icon>
-        Articles a Stockés
-      </p>
-      <div class="mat-elevation-z0 table-container">
-        <table class="table   rounded-2 mat-elevation-z1 overflow-hidden">
-          <!-- Table Header -->
-          <thead class="table-light  fw-light">
-          <tr class="">
-            <!--            <th>Référence</th>-->
-            <th class="  fw-light">Support</th>
-            <th class=" fw-light">Structure</th>
-            <th class=" fw-light">Température</th>
-            <th class=" fw-light">Dimensions L*L*H</th>
-            <th class=" fw-light">Fragile</th>
-            <th class=" fw-light">gerbabilié</th>
-            <th class=" fw-light">Uc</th>
-            <th class=" fw-light">Uvc</th>
-            <th class=" fw-light">Préstations</th>
-
-            <th class="bg-white fw-light"></th>
+<mat-card class="p-2 rounded-2  my-2">
+  <p class="fs-6 align-items-center d-flex primary-blue-color">
+    <mat-icon class="scale-08">inventory</mat-icon>
+    Articles a Stockés
+  </p>
+  <ng-container  *ngFor="let item of itemsToStore.getValue()" >
+    <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z3">
+      <mat-card-content>
+        <div class="row text-secondary" >
+          <p class=" fw-light col-lg-3 col-6">Support: <span class=" text-dark">{{item.supportName}}</span></p>
+          <p class=" fw-light col-lg-3 col-6">Structure: <span class=" text-dark">{{item.structureName}}</span></p>
+          <p class=" fw-light col-lg-3 col-6">Température: <span class=" text-dark">{{item.temperatureName}}</span></p>
+          <p class=" fw-light col-lg-3 col-6">Dimensions L*L*H: <span class=" text-dark">  {{ item.dimension?.length }}*{{ item.dimension?.width }}* {{ item.dimension?.height }}</span></p>
+          <p class=" fw-light col-lg-3 col-6">Fragile: <span class=" text-dark">{{item.isFragile}}</span></p>
+          <p class=" fw-light col-lg-3 col-6">gerbabilié: <span class=" text-dark">{{item.stackedLevelName}}</span></p>
+          <p class=" fw-light col-lg-3 col-6">Uc: <span class=" text-dark">{{item.uvc}}</span></p>
+          <p class=" fw-light col-lg-3 col-6">Uvc: <span class=" text-dark">{{item.uvc}}</span></p>
+        </div>
+        <table *ngIf="item?.provisionResponseDto?.length " class="table small border-secondary">
+          <thead class=" fw-light">
+          <tr>
+            <th scope="col" class="bg-light primary-blue-color fw-light">Préstations</th>
+            <th scope="col" class="bg-light primary-blue-color fw-light">Unité</th>
+            <th scope="col" class="bg-light primary-blue-color fw-light">Prix de base</th>
+            <th scope="col" class="bg-light primary-blue-color fw-light">Remise</th>
+            <th scope="col" class="bg-light primary-blue-color fw-light">Valeur de remise</th>
+            <th scope="col" class="bg-light primary-blue-color fw-light">Augmentation</th>
+            <th scope="col" class="bg-light primary-blue-color fw-light">Prix de vente</th>
           </tr>
           </thead>
+          <tbody>
+          <tr *ngFor="let prv of item.provisionResponseDto" class="p-0">
+            <td>{{ prv.name }}</td>
+            <td>{{ prv.unitOfMeasurement }}</td> <!-- Uncommented & Fixed -->
+            <td>{{ prv.initPrice }}</td>
+            <td>
+              <select class="form-select form-select-sm custom-input " (change)="selectDiscountTypeForProvision(item, prv, $event)">
+                <option selected [value]="DiscountTypeEnum.NOTAPPLICABLE">N/a</option>
+                <option [value]="DiscountTypeEnum.RATE">%</option>
+                <option  [value]="DiscountTypeEnum.VALUE">Valeur en DH</option>
+              </select>
+            </td>
+            <td>
 
-          <!-- Table Body -->
-          <tbody *ngFor="let item of itemsToStore.getValue()">
-          <tr>
-            <!--            <td>{{ item.ref }}</td>-->
-            <td class="text-secondary">{{ item.supportName }}</td>
-            <td class="text-secondary">{{ item.structureName }}</td>
-            <td class="text-secondary">{{ item.temperatureName }}</td>
-            <td class="text-secondary">
-              {{ item.dimension?.length }}*{{ item.dimension?.width }}* {{ item.dimension?.height }}
+              <input disabled
+                     *ngIf="prv.discountType == DiscountTypeEnum.NOTAPPLICABLE "
+                     class="form-control custom-input form-control-sm" placeholder="0.00" value="0.0" type="text">
+              <input
+                (change)="addDiscountValueForProvision(item, prv, $event)"
+                *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.VALUE"
+                class="form-control custom-input  form-control-sm" placeholder="0.00" type="number">
+              <select
+                (change)="addDiscountRateForProvision(item, prv, $event)"
+                *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.RATE"
+                class="form-select form-select-sm custom-input ">
+                <option  [value]="3">3%</option>
+                <option  [value]="5">5%</option>
+                <option  [value]="10">10%</option>
+                <option  [value]="15">10%</option>
+              </select>
             </td>
-            <td class="">
-              <p *ngIf="item.isFragile" class="text-danger small"><i class="bi bi-exclamation-triangle text-danger"></i> Oui</p>
-              <p *ngIf="!item.isFragile" class="text-success dmall"><i class="bi bi-check-circle text-success"></i>Non</p>
+            <td>
+              <input (change)="addIncreaseValueForProvision(prv, $event)"
+                type="number" step="0.1" class="form-control custom-input  form-control-sm"/>
             </td>
-            <td class="text-secondary">{{ item.stackedLevelName }}</td>
-            <td class="text-secondary">{{ item.uvc }}</td>
-            <td class="text-secondary">{{ item.uvc }}</td>
-            <td (click)="expandedElement = expandedElement === item ? null : item" class="text-secondary">
-              <!--              <button class="btn btn-fill-primary btn-sm" >-->
-              {{ item.provisionResponseDto?.length }}
-              <i [ngClass]="expandedElement === item ? 'bi-chevron-up' : 'bi-chevron-down'"
-                                                                     class="bi"></i>
-              <!--              </button>-->
-            </td>
+            <td>{{  prv.salesPrice }}</td>
           </tr>
-          <tr *ngIf="item?.provisionResponseDto != undefined">
-            <td colspan="6">
-              <div class="card-body">
-                <table *ngIf="item?.provisionResponseDto?.length " class="table small border-secondary">
-                  <thead class=" fw-light">
-                  <tr>
-                    <th scope="col" class="bg-spider fw-light">Préstations</th>
-                    <th scope="col" class="bg-spider fw-light">Unité</th>
-                    <th scope="col" class="bg-spider fw-light">Prix de base</th>
-                    <th scope="col" class="bg-spider fw-light">Remise</th>
-                    <th scope="col" class="bg-spider fw-light">Valeur de remise</th>
-                    <th scope="col" class="bg-spider fw-light">Prix de vente</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <tr *ngFor="let prv of item.provisionResponseDto" class="p-0">
-                    <td>{{ prv.name }}</td>
-                    <td>{{ prv.unitOfMeasurement }}</td> <!-- Uncommented & Fixed -->
-                    <td>{{ prv.initPrice | currency }}</td>
-                    <td>
-                      <select class="form-select form-select-sm custom-input " (change)="selectDiscountTypeForProvision(item, prv, $event)">
-                        <option selected [value]="DiscountTypeEnum.NOTAPPLICABLE">N/a</option>
-                        <option [value]="DiscountTypeEnum.RATE">%</option>
-                        <option  [value]="DiscountTypeEnum.VALUE">Valeur en DH</option>
-                      </select>
-                    </td>
-                    <td>
-
-                      <input disabled
-                        *ngIf="prv.discountType == DiscountTypeEnum.NOTAPPLICABLE "
-                        class="form-control custom-input form-control-sm" placeholder="0.00" value="0.0" type="text">
-                      <input
-                        (change)="addDiscountValueForProvision(item, prv, $event)"
-                        *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.VALUE"
-                        class="form-control custom-input  form-control-sm" placeholder="0.00" type="number">
-                      <select
-                        (change)="addDiscountRateForProvision(item, prv, $event)"
-                        *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.RATE"
-                        class="form-select form-select-sm custom-input ">
-                        <option  [value]="3">3%</option>
-                        <option  [value]="5">5%</option>
-                        <option  [value]="10">10%</option>
-                        <option  [value]="15">10%</option>
-                      </select>
-                    </td>
-                    <td>{{  prv.salesPrice | currency }}</td>
-                  </tr>
-                  </tbody>
-                </table>
-
-                <p *ngIf="!item?.provisionResponseDto?.length" class="text-muted">
-                  <em>Aucune provision associée</em>
-                </p>
-              </div>
-
-            </td>
-          </tr>
-
-          <!-- Expanded Row for Provisions -->
-
           </tbody>
         </table>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</mat-card>
 
-      </div>
 
-
-    </mat-card-content>
-  </mat-card>
-
-  <!-- Additional Sections -->
   <div class="row d-flex justify-content-around px-lg-3">
-    <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-0 mat-elevation-z2 col-12">
+    <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-2 mat-elevation-z2 col-12">
       <p class="primary-blue-color fs-6 d-flex">
         <mat-icon class="me-2">local_shipping</mat-icon> Dépotage
       </p>
@@ -568,8 +242,8 @@
 
             <!-- Price Column -->
             <ng-container matColumnDef="price">
-              <th mat-header-cell *matHeaderCellDef >Price</th>
-              <td mat-cell *matCellDef="let element" >{{ element.initPrice | currency }}</td>
+              <th mat-header-cell *matHeaderCellDef >Prix</th>
+              <td mat-cell *matCellDef="let element" >{{ element.initPrice  }}</td>
             </ng-container>
 
             <!-- Unit Column -->
@@ -594,9 +268,11 @@
             <ng-container matColumnDef="remiseValue">
               <th mat-header-cell *matHeaderCellDef >Valeur de remise</th>
               <td mat-cell *matCellDef="let element" >
-                <input disabled
-                       *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null"
-                       class="form-control custom-input form-control-sm" placeholder="0.00" value="0.0" type="text">
+                <p *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null"
+                ></p>
+<!--                <input disabled-->
+<!--                       *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null"-->
+<!--                       class="form-control custom-input form-control-sm" placeholder="0.00" value="0.0" type="text">-->
                 <input
                   (change)="addDiscountValueForUnloading(element, $event)"
                   *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.VALUE"
@@ -617,7 +293,15 @@
             <ng-container matColumnDef="finalPrice">
               <th mat-header-cell *matHeaderCellDef >Prix de vente</th>
               <td mat-cell *matCellDef="let element" >
-                <input [value]="element.salesPrice" class="form-control form-control-sm" type="text" placeholder="0.00">
+                {{element.salesPrice}}
+<!--                <input [value]="element.salesPrice" class="form-control form-control-sm" type="text" placeholder="0.00">-->
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="increaseValue">
+              <th mat-header-cell *matHeaderCellDef >Augmentation</th>
+              <td mat-cell *matCellDef="let element" >
+                <input (change)="addIncreaseValueForUnloadingType(element, $event)"
+                  class="form-control form-control-sm custom-input" type="text" >
               </td>
             </ng-container>
             <!-- Actions Column -->
@@ -647,7 +331,8 @@
         </div>
       </div>
     </mat-card>
-    <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-0 mat-elevation-z2 col-12">
+
+    <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-2 mat-elevation-z2 col-12">
       <p class="primary-blue-color fs-6 d-flex">
         <mat-icon class="me-2">rule</mat-icon> Exigences
       </p>
@@ -678,7 +363,7 @@
             <!-- Price Column -->
             <ng-container matColumnDef="price">
               <th mat-header-cell *matHeaderCellDef >Prix</th>
-              <td mat-cell *matCellDef="let element" >{{ element.initPrice | currency }}</td>
+              <td mat-cell *matCellDef="let element" >{{ element.initPrice  }}</td>
             </ng-container>
 
             <!-- Unit Column -->
@@ -703,9 +388,11 @@
             <ng-container matColumnDef="remiseValue">
               <th mat-header-cell *matHeaderCellDef >Valeur de remise</th>
               <td mat-cell *matCellDef="let element" >
-                <input disabled
-                       *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null"
-                       class="form-control custom-input form-control-sm" placeholder="0.00" value="0.0" type="text">
+                <p *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null">
+                </p>
+<!--                <input disabled-->
+<!--                       *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null"-->
+<!--                       class="form-control custom-input form-control-sm" placeholder="0.00" value="0.0" type="text">-->
                 <input
                   (change)="addDiscountValueForRequirement(element, $event)"
                   *ngIf="element.discount !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.VALUE"
@@ -722,11 +409,20 @@
               </select>
               </td>
             </ng-container>
+
+            <ng-container matColumnDef="increaseValue">
+              <th mat-header-cell *matHeaderCellDef >Augmentation </th>
+              <td mat-cell *matCellDef="let element" >
+                <input (change)="addIncreaseValueForRequirement(element, $event)"
+                  class="form-control custom-input form-control-sm" type="text" >
+              </td>
+            </ng-container>
             <!-- final price -->
             <ng-container matColumnDef="finalPrice">
               <th mat-header-cell *matHeaderCellDef >Prix de vente</th>
               <td mat-cell *matCellDef="let element" >
-                <input [value]="element.salesPrice" class="form-control custom-input  form-control-sm" type="text" placeholder="0.00">
+                {{element.salesPrice}}
+<!--                <input [value]="element.salesPrice" class="form-control custom-input  form-control-sm" type="text" placeholder="0.00">-->
               </td>
             </ng-container>
 

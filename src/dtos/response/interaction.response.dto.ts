@@ -22,6 +22,7 @@ export class InteractionResponseDto {
   deletedAt: string | null;
   createdBy: UserDto;
   updatedBy: UserDto;
+  interactionDate: Date;
 
   constructor(data: any) {
     this.id = data.id;
@@ -45,5 +46,6 @@ export class InteractionResponseDto {
     this.updatedAt = data.updatedAt;
     this.updatedBy = data.updatedBy;
     this.deletedAt = data.deletedAt;
+    this.interactionDate = data.interactionDate
   }
 }

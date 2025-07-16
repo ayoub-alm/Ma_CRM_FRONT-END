@@ -1,0 +1,26 @@
+<div
+  class="drop-zone bg-white rounded-2 text-center p-3 mat-elevation-z2"
+  (dragover)="onDragOver($event)"
+  (dragleave)="onDragLeave($event)"
+  (drop)="onDrop($event)"
+  [class.dragover]="isDragging"
+>
+  <div *ngIf="!selectedFile">
+    <h3><i class="bi bi-upload primary-blue-color"></i></h3>
+    <p class="text-secondary">Glissez-déposez un fichier ici ou cliquez pour en sélectionner un</p>
+
+    <input type="file" (change)="onFileSelected($event)" hidden #fileInput />
+    <button mat-button (click)="fileInput.click()">Sélectionner un fichier</button>
+  </div>
+
+  <div *ngIf="selectedFile">
+    <p class="text-secondary my-2">
+      Fichier sélectionné: <span class="primary-blue-color">{{ selectedFile.name }}</span>
+    </p>
+    <button mat-stroked-button disabled>Importation en cours...</button>
+  </div>
+
+  <div *ngIf="uploadedUrl" class="text-success mt-2">
+    📎 Contrat disponible <a [href]="'http://localhost:8080/'+uploadedUrl" target="_blank">ici</a>
+  </div>
+</div>

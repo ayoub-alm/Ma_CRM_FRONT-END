@@ -3,7 +3,7 @@ import {
   ActivatedRoute, NavigationEnd, Router, RouterLink, RouterLinkActive, RouterLinkWithHref, RouterOutlet
 } from '@angular/router';
 import {LocalStorageService} from '../../services/local.storage.service';
-import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, NgForOf, NgIf, UpperCasePipe} from '@angular/common';
 import {MatCard} from '@angular/material/card';
 import {CdkTrapFocus} from '@angular/cdk/a11y';
 import {MatIconModule} from '@angular/material/icon';
@@ -13,7 +13,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatTreeModule} from '@angular/material/tree';
 import {MatListModule} from '@angular/material/list';
-import {BehaviorSubject, catchError, filter, of, tap} from 'rxjs';
+import {BehaviorSubject, catchError, filter, Observable, of, tap} from 'rxjs';
 import {MatFormField} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
@@ -23,6 +23,11 @@ import {CompanyService} from '../../services/company.service';
 import {CompanyResponseDto} from '../../dtos/response/CompanyResponseDto';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import {AiChatComponent} from '../utils/ai-chat/ai-chat.component';
+import {MatBadge} from '@angular/material/badge';
+import {MatTooltip} from '@angular/material/tooltip';
+import {LoadingService} from '../../services/loading.service';
+import {MatProgressBar} from '@angular/material/progress-bar';
+import {TranslatePipe, TranslateService} from '@ngx-translate/core';
 
 interface MenuItem {
   name: string;
@@ -34,59 +39,55 @@ interface MenuItem {
 const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
   prospection: {
     icon: 'public',
-    items: [{name: 'Dashboard', icon: 'bar_chart', route: '/admin'},
-      {name: 'Clients', icon: 'domain', route: '/admin/prospects'},
-      {name: 'Contacts', icon: 'contacts', route: '/admin/interlocutors'},
-      {name: 'Interactions', icon: 'forum', route: '/admin/interactions'},],
-  }, crm: {
+    items: [{name: 'DASHBOARD', icon: 'bar_chart', route: '/admin/dashboard'},
+      {name: 'PROSPECTS', icon: 'domain', route: '/admin/prospects'},
+      {name: 'CONTACTS', icon: 'contacts', route: '/admin/interlocutors'},
+      {name: 'INTERACTIONS', icon: 'forum', route: '/admin/interactions'},],
+  },
+  crm: {
     icon: 'business_center', // Updated icon for CRM
-    items: [{name: 'Dashboard', icon: 'bar_chart', route: '/admin/crm'}, {
-      name: 'Clients',
-      icon: 'contacts',
-      route: '/admin/crm/wms/customers'
-    }, {
-      name: 'Tarifs',
-      icon: 'price_change',
-      route: '/admin/crm/wms/pricing'
-    }, {name: 'Besoins', icon: 'checklist', route: '/admin/crm/wms/needs'}, {
-      name: 'Offre',
-      icon: 'request_quote',
-      route: '/admin/crm/wms/offers'
-    },{name: 'Contrats', icon: 'assignment', route: '/admin/crm/wms/contracts'}
-    , {name: 'Factures', icon: 'receipt_long', route: '/admin/crm/invoices'}, {
-      name: 'Recouvrement',
-      icon: 'account_balance_wallet',
-      route: '/crm/collections'
-    },
-      {name: 'Avoirs', icon: 'credit_score', route: '/crm/credits'},
+    items: [
+      {name: 'DASHBOARD', icon: 'bar_chart', route: '/admin/crm/wms/dashboard'},
+      {name: 'NEEDS', icon: 'checklist', route: '/admin/crm/wms/needs'},
+      {name: 'OFFERS', icon: 'request_quote', route: '/admin/crm/wms/offers'},
+      {name: 'CONTRACTS', icon: 'assignment', route: '/admin/crm/wms/contracts'},
+      {name: 'DELIVERY_NOTES', icon: 'assignment', route: '/admin/crm/wms/delivery-note'},
+      {name: 'INVOICES', icon: 'receipt_long', route: '/admin/crm/wms/invoice'},
+      {name: 'PRICING_BASE', icon: 'price_change', route: '/admin/crm/wms/pricing'},
+      // {name: 'Grille tarifaire', icon: 'price_change', route: '/admin/crm/wms/pricing'},
     ],
-  }, tms: {
+  },
+  tms: {
     icon: 'local_shipping',
-    items: [{name: 'Deliveries', icon: 'local_shipping', route: '/tms/deliveries'}, {
-      name: 'Orders',
-      icon: 'shopping_cart',
-      route: '/tms/orders'
-    },],
-  }, workspace: {
+    items: [
+      {name: 'Deliveries', icon: 'local_shipping', route: '/tms/deliveries'},
+      {name: 'Orders', icon: 'shopping_cart', route: '/tms/orders'}
+    ],
+  },
+  finances: {
+    icon: 'attach_money',
+    items: [
+      {name: 'Contrats', icon: 'assignment', route: '/admin/crm/wms/contracts'},
+      {name: 'Bon de livraison', icon: 'assignment', route: '/admin/crm/wms/delivery-note'},
+      {name: 'Factures', icon: 'receipt_long', route: '/admin/crm/wms/invoice'},
+    ],
+  },
+  workspace: {
     icon: 'workspace',
-    items: [{name: ' Entreprises', icon: 'domain', route: '/super-admin/companies'}, {
-      name: 'Project',
-      icon: 'work_outline ',
-      route: '/super-admin/projects'
-    }, {name: 'Utilisateur', icon: 'person', route: '/super-admin/users'}, {
-      name: 'Mes application',
-      icon: 'apps',
-      route: '/super-admin/users'
-    },],
-  }, admin: {
+    items: [
+      {name: ' Entreprises', icon: 'domain', route: '/super-admin/companies'},
+      {name: 'Project', icon: 'work_outline ', route: '/super-admin/projects'},
+      {name: 'Utilisateur', icon: 'person', route: '/super-admin/users'},
+      {name: 'Mes application', icon: 'apps', route: '/super-admin/users'}
+    ],
+  },
+  admin: {
     icon: 'admin_panel_settings',
     items: [
       {name: ' Entreprises', icon: 'domain', route: '/super-admin/companies'},
-      // {name: 'filiale', icon: 'apartment', route: '/super-admin/users'},
-      // {name: 'Project', icon: 'work_outline ', route: '/super-admin/projects'},
       {name: 'Utilisateur', icon: 'person', route: '/super-admin/users'},
-      {name: 'Roles', icon: 'person', route: '/super-admin/users'},
-      {name: 'Permissions', icon: 'person', route: '/super-admin/users'},
+      // {name: 'Roles', icon: 'person', route: '/super-admin/users'},
+      // {name: 'Permissions', icon: 'person', route: '/super-admin/users'},
       // {name: 'Taxonomies', icon: 'category', route: '/super-admin/users', children: ["Pays", "Villes", "Banques"]},
     ],
   },
@@ -109,7 +110,7 @@ const TREE_DATA: FoodNode[] = [{
 @Component({
   standalone: true,
   imports: [MatTreeModule, RouterOutlet, MatToolbarModule, MatButtonModule, MatIconModule, MatSidenavModule, MatListModule,
-    MatDividerModule, RouterLink, RouterLinkWithHref, NgIf, RouterLinkActive, NgForOf, MatMenu, MatMenuItem, MatMenuTrigger, AsyncPipe, AiChatComponent],
+    MatDividerModule, RouterLink, RouterLinkWithHref, NgIf, RouterLinkActive, NgForOf, MatMenu, MatMenuItem, MatMenuTrigger, AsyncPipe, AiChatComponent, MatBadge, MatTooltip, MatProgressBar, UpperCasePipe, TranslatePipe],
   selector: 'app-index',
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.css'],
@@ -136,19 +137,23 @@ export class IndexComponent implements OnInit, AfterViewInit {
   b = 2
   dataSource = TREE_DATA;
   protected readonly menuData = menuData;
-
+  loading$!: Observable<boolean>;
+  availableLanguages = [
+     { code: 'it', label: 'Italiano' },
+     { code: 'fr', label: 'Français' }
+  ];
+  currentLanguage = 'fr';
   constructor(private localStorageService: LocalStorageService, private router: Router, private activeRoute: ActivatedRoute,
-              private companyService: CompanyService) {
+              private companyService: CompanyService, private loadingService: LoadingService,
+              private translateService: TranslateService) {
   }
 
-  childrenAccessor = (node: FoodNode) => node.children ?? [];
-
-  hasChild = (_: number, node: FoodNode) => !!node.children && node.children.length > 0;
 
   /**
    *
    */
   ngOnInit(): void {
+    this.loading$ = this.loadingService.loading$;
     this.currentRoute = this.router.url;
     // Listen to route changes
     this.router.events
@@ -170,6 +175,10 @@ export class IndexComponent implements OnInit, AfterViewInit {
         return of(null)
       })
     ).subscribe()
+    // init language
+    const savedLang = localStorage.getItem('lang') || 'fr';
+    this.currentLanguage = savedLang;
+    this.translateService.use(savedLang);
   }
 
   /**
@@ -241,10 +250,22 @@ export class IndexComponent implements OnInit, AfterViewInit {
     window.location.reload();
   }
 
-
+  /**
+   *
+   */
   logout() {
     this.localStorageService.setItem('user', null);
     this.router.navigate(['/login']);
     this.localStorageService.setItem('authToken', null);
+  }
+
+  /**
+   *
+   * @param langCode
+   */
+  changeLanguage(langCode: string): void {
+    this.currentLanguage = langCode;
+    localStorage.setItem('lang', langCode);
+    this.translateService.use(langCode);
   }
 }

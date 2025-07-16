@@ -71,7 +71,9 @@ import {
 } from '@angular/material/datepicker';
 import {MAT_DATE_LOCALE, NativeDateAdapter, provideNativeDateAdapter} from '@angular/material/core';
 import {CustomerBulkEditComponent} from './customer-bulk-edit/customer-bulk-edit.component';
-import {CustomerStatus, CustomerStatusService} from '../../../services/Leads/customer.status.service';
+import {CustomerStatusService} from '../../../services/Leads/customer.status.service';
+import {CustomerStatus} from '../../../dtos/response/cutomer.status.dto';
+import {TranslatePipe} from '@ngx-translate/core';
 
 const today = new Date();
 const month = today.getMonth();
@@ -82,7 +84,7 @@ const year = today.getFullYear();
   imports: [MatFormFieldModule, MatInputModule, MatTableModule, MatSortModule, MatPaginatorModule, MatIconModule,
     MatButtonModule, MatCheckboxModule, CheckboxModule, MatMenu, MatMenuTrigger, MatMenuItem, NgIf, NgClass,
     MatTabNavPanel, NgForOf, MultiSelectModule, ReactiveFormsModule, DatePipe, MatSelect, MatOption,
-    MatRadioButton, MatRadioGroup, MatDateRangeInput, MatDatepickerToggle, MatDateRangePicker,MatDatepickerModule],
+    MatRadioButton, MatRadioGroup, MatDateRangeInput, MatDatepickerToggle, MatDateRangePicker, MatDatepickerModule, TranslatePipe],
   templateUrl: './prospect.component.html',
   styleUrls: ['./prospect.component.css'],
   providers: [provideNativeDateAdapter()],
@@ -184,16 +186,16 @@ export class ProspectComponent implements OnInit, AfterViewInit {
     // init fields form
     this.fieldFilterForm = fb.group({
       filterType:["OR"],
-      statusIds:[""],
-      industryIds:[""],
-      cityIds:[""],
-      countryIds:[""],
-      companySizeIds:[""],
-      structureIds:[""],
-      legalStatusIds:[""],
-      createdByIds:[""],
-      updatedByIds:[""],
-      affectedToIds:[""],
+      statusIds:[[]],
+      industryIds:[[]],
+      cityIds:[[]],
+      countryIds:[[]],
+      companySizeIds:[[]],
+      structureIds:[[]],
+      legalStatusIds:[[]],
+      createdByIds:[[]],
+      updatedByIds:[[]],
+      affectedToIds:[[]],
       createdAtStart: [null],  // Date de début de création
       createdAtEnd: [null],    // Date de fin de création
       updatedAtStart: [null],  // Date de début de mise à jour
@@ -277,22 +279,7 @@ export class ProspectComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().pipe(tap(response => {
       if (response) {
-        // Check if the item already exists in the data source based on the ID
-        const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
-        console.log("message ", existingItemIndex)
-        if (existingItemIndex > -1) {
-          // If the item exists, update it
-          const updatedData = [...this.dataSource.data];
-          updatedData[existingItemIndex] = response;
-          this.dataSource.data = updatedData; // Trigger Angular's Change Detection
-        } else {
-          // If it doesn't exist, add the new item to the data
-          this.dataSource.data = [...this.dataSource.data, response]; // Add new item and trigger Change Detection
-        }
-        // Reset paginator to the first page
-        if (this.paginator) {
-          this.paginator.firstPage();
-        }
+        this.loadCustomers()
       }
     })).subscribe();
 
@@ -310,10 +297,11 @@ export class ProspectComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         // Handle the result, update the prospect if necessary
-        const index = this.dataSource.data.findIndex(p => p.id === row.id);
-        if (index !== -1) {
-          this.dataSource.data[index] = result;
-        }
+        // const index = this.dataSource.data.findIndex(p => p.id === row.id);
+        // if (index !== -1) {
+        //   this.dataSource.data[index] = result;
+        // }
+        this.loadCustomers();
       }
     });
   }
@@ -458,26 +446,27 @@ export class ProspectComponent implements OnInit, AfterViewInit {
     return this.displayedColumns.getValue().map(col => col.title);
   }
 
+
   getChipClass(status: string): string {
-    switch (status) {
+    switch (status.toLowerCase()) {
       case "nouvelle":
-        return 'status-new'; // Apply class for "NEW"
-      case "Qualsifiée":
-        return 'status-qualified'; // Apply class for "QUALIFIED"
-      case "Qualifiée":
-        return 'status-interested'; // Apply class for "INTERESTED"
-      case "OPPORTUNITY":
-        return 'status-opportunity'; // Apply class for "OPPORTUNITY"
-      case "CONVERTED":
-        return 'status-converted'; // Apply class for "CONVERTED"
-      case "DISQUALIFIED":
-        return 'status-disqualified'; // Apply class for "DISQUALIFIED"
-      case "LOST":
-        return 'status-lost'; // Apply class for "LOST"
-      case "NRP":
-        return 'status-nrp'; // Apply class for "NRP"
+        return "status-new"; // "NEW"
+      case "qualifiée":
+        return "status-qualified"; // "QUALIFIED"
+      case "intéressée":
+        return "status-interested"; // "INTERESTED"
+      case "opportunité":
+        return "status-opportunity"; // "OPPORTUNITY"
+      case "convertie":
+        return "status-converted"; // "CONVERTED"
+      case "disqualifiée":
+        return "status-disqualified"; // "DISQUALIFIED"
+      case "perdue":
+        return "status-lost"; // "LOST"
+      case "nrp":
+        return "status-nrp"; // "NRP"
       default:
-        return 'status-default'; // Apply default class for unknown statuses
+        return "status-default"; // Default class for unknown statuses
     }
   }
 

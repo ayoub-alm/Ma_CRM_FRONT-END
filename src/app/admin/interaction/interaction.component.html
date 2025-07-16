@@ -3,12 +3,12 @@
     <div class="d-flex justify-content-start align-items-center">
       <button mat-button class="text-secondary" (click)="router.navigate(['/admin'])"  >
         <mat-icon >house</mat-icon>
-        Accueil
+        {{ "HOME" | translate }}
       </button>
       >
       <button mat-button (click)="router.navigate(['/admin/interactions'])">
         <mat-icon class=" primary-blue-color">forum</mat-icon>
-        Interactions
+        {{ "INTERACTIONS" | translate }}
       </button>
     </div>
     <!--  Filters on actions -->
@@ -28,7 +28,7 @@
         <button (click)="openAddInteractionDialog()"
                 class="rounded-3 bg-spider" color="primary" mat-button style="transform:scale(0.9)">
           <mat-icon>add</mat-icon>
-          <span>Ajouter</span>
+          <span>  {{ "ADD" | translate }}</span>
         </button>
 
         <div class="dropdown dropstart">
@@ -56,16 +56,12 @@
           <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu_action="matMenu" xPosition="before" class="bg-light">
-<!--          <button  (click)="isShowImportZone.next(true)"-->
-<!--                   mat-menu-item class="mat-primary">-->
-<!--            <mat-icon class="p-0 overflow-visible"><i class="bi bi-filetype-csv primary-blue-color"></i></mat-icon>  Import-->
-<!--          </button>-->
           <button (click)="exportExcelFile()" mat-menu-item class="mat-primary">
-            <mat-icon><i class="bi bi-cloud-arrow-down primary-blue-color"></i></mat-icon>  Exporter
+            <mat-icon><i class="bi bi-cloud-arrow-down primary-blue-color"></i></mat-icon>  {{ "EXPORT" | translate }}
           </button>
           <button *ngIf="selectedRows.size > 1" (click)="bulkSoftDelete()" class="text-danger" mat-menu-item>
             <mat-icon class="text-danger">delete</mat-icon>
-            Suppression en masse
+            {{ "BULK_DELETE" | translate }}
           </button>
         </mat-menu>
       </div>
@@ -78,14 +74,14 @@
       <form [formGroup]="fieldFilterForm" (ngSubmit)="filterInteractionsBySearchFields()" class="filter-form">
 
         <mat-form-field class="scale-08 col-3">
-          <mat-label>Client</mat-label>
+          <mat-label>    {{ "PROSPECT" | translate }}</mat-label>
           <mat-select formControlName="customerIds" multiple>
             <mat-option *ngFor="let customer of customers | async" [value]="customer.id">{{ customer.name }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field class="scale-08 col-3">
-          <mat-label>Interlocuteur</mat-label>
+          <mat-label> {{ "INTERLOCUTOR" | translate }}</mat-label>
           <mat-select formControlName="interlocutorIds" multiple>
             <mat-option *ngFor="let interlocutor of interlocutors | async" [value]="interlocutor.id">
               {{ interlocutor.fullName }}
@@ -94,7 +90,7 @@
         </mat-form-field>
 
         <mat-form-field class="scale-08 col-3">
-          <mat-label>Sujet</mat-label>
+          <mat-label> {{ "SUBJECT" | translate }}</mat-label>
           <mat-select formControlName="interactionSubjects" multiple>
             <mat-option *ngFor="let subject of InteractionSubject | keyvalue" [value]="subject.key">
               {{ subject.value }}
@@ -103,7 +99,7 @@
         </mat-form-field>
 
         <mat-form-field class="scale-08 col-3">
-          <mat-label>Type</mat-label>
+          <mat-label>{{ "TYPE" | translate }}</mat-label>
           <mat-select formControlName="interactionTypes" multiple>
             <mat-option *ngFor="let type of InteractionType | keyvalue" [value]="type.key">
               {{ type.value }}
@@ -112,14 +108,14 @@
         </mat-form-field>
 
         <mat-form-field class="scale-08 col-3">
-          <mat-label>Affecté à</mat-label>
+          <mat-label>{{ "ASSIGNED_TO" | translate }}</mat-label>
           <mat-select formControlName="affectedToIds" multiple>
             <mat-option *ngFor="let user of users | async" [value]="user.id">{{ user.name }}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field class="scale-08 col-3">
-          <mat-label>Créé par</mat-label>
+          <mat-label>{{ "CREATED_BY" | translate }}</mat-label>
           <mat-select formControlName="createdByIds" multiple>
             <mat-option *ngFor="let user of users | async" [value]="user.id">{{ user.name }}</mat-option>
           </mat-select>
@@ -135,7 +131,7 @@
 
         <!-- Date de création (Entre) -->
         <mat-form-field class="example-form-field scale-08 col-3">
-          <mat-label>Date de creation</mat-label>
+          <mat-label>{{ "CREATED_AT" | translate }}</mat-label>
           <mat-date-range-input
             [rangePicker]="createdDatePickerPicker">
             <input matStartDate placeholder="Start date" formControlName="createdAtStart">
@@ -146,7 +142,7 @@
         </mat-form-field>
 
         <mat-form-field class="example-form-field scale-08 col-3">
-          <mat-label>Date de la dernière mise à jour</mat-label>
+          <mat-label>{{ "UPDATED_AT" | translate}}</mat-label>
           <mat-date-range-input
             [rangePicker]="updateDatePicker">
             <input matStartDate placeholder="Start date" formControlName="updatedAtStart">
@@ -163,7 +159,7 @@
             </button>
             <button type="button" (click)="resetFilterForm()" class="rounded-2 bg-success-subtle mx-2 text-success" mat-button>
               <mat-icon>refresh</mat-icon>
-              <span>Réinitialiser</span>
+              <span>{{ "RESET"  | translate}}</span>
             </button>
           </div>
         </div>
@@ -187,32 +183,32 @@
         </ng-container>
         <!-- Columns: Fields -->
         <ng-container matColumnDef="prospectName">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header >Client</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header >{{ "PROSPECT"  | translate}}</th>
           <td mat-cell *matCellDef="let row" class="full-width-table-celle">{{ row.prospectName }}</td>
         </ng-container>
         <ng-container matColumnDef="interlocutorName" [sticky]="true">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Interlocuteur</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ "INTERLOCUTOR"  | translate}}</th>
           <td mat-cell *matCellDef="let row" class="full-width-table-celle" >{{ row.interlocutorName }}</td>
         </ng-container>
         <ng-container matColumnDef="interactionSubject">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Sujet</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ "SUBJECT"  | translate}}</th>
           <td mat-cell *matCellDef="let row" class="full-width-table-celle">{{ row.interactionSubject }}</td>
         </ng-container>
         <ng-container matColumnDef="interactionType">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Type</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ "TYPE"  | translate}}</th>
           <td mat-cell *matCellDef="let row" class="full-width-table-celle">{{ row.interactionType }}</td>
         </ng-container>
         <ng-container matColumnDef="affectedTo">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Affecté à</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ "ASSIGNED_TO"  | translate}}</th>
           <td mat-cell *matCellDef="let row">{{ row.affectedToName  }}</td>
         </ng-container>
         <ng-container matColumnDef="planningDate">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="full-width-table-celle">Date de Planification</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="full-width-table-celle">{{ "PLANNING_DATE"  | translate}}</th>
           <td mat-cell *matCellDef="let row">{{ row.planningDate | date }}</td>
         </ng-container>
           <!-- status Column -->
           <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut</th>
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ "STATUS"  | translate}}</th>
               <td mat-cell *matCellDef="let row">
                   <button
                           style="transform: scale(0.8)"
@@ -232,10 +228,10 @@
                   </button>
                   <mat-menu #menu="matMenu" xPosition="before" class="bg-light">
                       <button  class="text-secondary" mat-menu-item (click)="editInteraction(row)" >
-                          <mat-icon class="text-secondary" >edit</mat-icon> <span>Modifier</span>
+                          <mat-icon class="text-secondary" >edit</mat-icon> <span>{{ "UPDATE"  | translate}}</span>
                       </button>
                       <button  mat-menu-item class="text-danger  " (click)="deleteInteraction(row)">
-                          <mat-icon class="text-danger">delete</mat-icon> <span>Supprimer</span>
+                          <mat-icon class="text-danger">delete</mat-icon> <span>{{ "DELETE"  | translate}}</span>
                       </button>
                   </mat-menu>
               </td>

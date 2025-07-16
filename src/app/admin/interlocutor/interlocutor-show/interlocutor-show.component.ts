@@ -1,8 +1,13 @@
-import {Component, OnInit} from '@angular/core';
-import {MatButton} from '@angular/material/button';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {MatButton, MatIconButton} from '@angular/material/button';
 import {MatCard, MatCardContent, MatCardTitle} from '@angular/material/card';
 import {MatDivider} from '@angular/material/divider';
-import {MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle
+} from '@angular/material/expansion';
 import {MatIcon} from '@angular/material/icon';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
 import {MatTab, MatTabGroup, MatTabLabel} from '@angular/material/tabs';
@@ -19,6 +24,13 @@ import {InteractionService} from '../../../../services/Leads/interaction.service
 import {EntityEnum} from '../../../../enums/entity.enum';
 import {CommentComponent} from '../../../utils/comment/comment.component';
 import {ActiveEnum} from "../../../../enums/active.enum";
+import {GeneralInfosComponent} from "../../../utils/general-infos/general-infos.component";
+import {
+  AddEditInteractionDialogComponent
+} from '../../interaction/add-edit-interaction-dialog/add-edit-interaction-dialog.component';
+import {MatDrawer, MatDrawerContainer} from "@angular/material/sidenav";
+import {MatToolbar} from "@angular/material/toolbar";
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-interlocutor-show',
@@ -39,7 +51,14 @@ import {ActiveEnum} from "../../../../enums/active.enum";
     AsyncPipe,
     NgForOf,
     DatePipe,
-    CommentComponent
+    CommentComponent,
+    GeneralInfosComponent,
+    MatIconButton,
+    MatDrawer,
+    MatToolbar,
+    MatDrawerContainer,
+    MatAccordion,
+    TranslatePipe
   ],
   templateUrl: './interlocutor-show.component.html',
   styleUrl: './interlocutor-show.component.css'
@@ -48,7 +67,8 @@ export class InterlocutorShowComponent implements OnInit{
   interlocutor: BehaviorSubject<InterlocutorResDto> = new BehaviorSubject<InterlocutorResDto>({} as InterlocutorResDto);
   interactions: BehaviorSubject<InteractionResponseDto[]> = new BehaviorSubject<InteractionResponseDto[]>([]);
   events: NgxTimelineEvent[];
-
+  selectedInteraction: BehaviorSubject<InteractionResponseDto> =  new BehaviorSubject({} as InteractionResponseDto)
+  @ViewChild('leftDrawer') leftDrawer: MatDrawer | undefined;
   constructor(private interlocutorService: InterlocutorService, private activeRouter: ActivatedRoute,
               private dialog: MatDialog, private interactionsService: InteractionService) {
     this.events =  [
@@ -99,6 +119,12 @@ export class InterlocutorShowComponent implements OnInit{
 
   }
 
+
+  openInteractionInDrawer(interaction: InteractionResponseDto): void {
+    this.selectedInteraction.next(interaction) ;
+    if (!this.leftDrawer?.opened) this.leftDrawer?.toggle();
+  }
+
   openUpdateInterlocutorDialog(interlocutor?: InterlocutorResDto): void {
     console.log(this.interlocutor.getValue())
     const dialogRef = this.dialog.open(AddUpdateInterlocutorComponent, {
@@ -133,4 +159,31 @@ export class InterlocutorShowComponent implements OnInit{
         return 'status-default'; // Apply default class for unknown statuses
     }
   }
+
+  onAddNewInteraction() {
+    const dialogRef = this.dialog.open(AddEditInteractionDialogComponent, {
+      maxWidth: '900px', data: new InteractionResponseDto({
+        interlocutorId:this.interlocutor.getValue().id,
+        customerId:this.interlocutor.getValue().customer.id
+      }) // Pass the prospect data to the dialog for editing
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        // Handle the result, update the prospect if necessary
+        this.interactions.next([... this.interactions.getValue(),result])
+      }
+    });
+  }
+
+  getStatusLabel(report: string | null): string {
+    return report && report.trim() !== '' ? 'Complété' : 'En attente';
+  }
+
+  getChipClass2(report: string | null): string {
+    return report && report.trim() !== ''
+      ? 'bg-success text-white'
+      : 'bg-warning text-dark';
+  }
+
 }

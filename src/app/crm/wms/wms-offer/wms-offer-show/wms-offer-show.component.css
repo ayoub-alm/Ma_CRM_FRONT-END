@@ -1,0 +1,16 @@
+.custom-input {
+  /* Removes box shadow */
+  outline: none; /* Removes the default outline */
+  border: none; /* Removes the initial border */
+  /* border: solid 0.5px #005cbb; !* Defines a subtle border *!*/
+  border-radius: 4px; /* Adds rounded corners for a cleaner look */
+  margin: 0 !important; /* Removes any extra margin */
+  padding: 0.25rem 0.5rem !important; /* Balanced padding for better spacing */
+  transition: all 0.5s ease-in-out; /* Smooth transition for focus and width changes */
+  background-color: #f9f9f9; /* Light background for readability */
+  /*font-size: 0.8rem; !* Adjust font size for consistency *!*/
+  color: #333; /* Ensures text color contrast */
+}
+td{
+  padding: 0.5rem;
+}

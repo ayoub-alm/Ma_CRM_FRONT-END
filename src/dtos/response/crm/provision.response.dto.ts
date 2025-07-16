@@ -1,6 +1,7 @@
 import {DiscountTypeEnum} from '../../../enums/discount.type.enum';
 
 export class ProvisionResponseDto {
+  stockedItemProvisionId: number;
   id: number; // ID of the provision
   name: string; // Name of the provision
   ref: string; // Reference UUID of the provision
@@ -11,7 +12,12 @@ export class ProvisionResponseDto {
   discountType:DiscountTypeEnum;
   discountValue:number;
   salesPrice:number;
+  increaseValue: number;
+  order:number;
+  isStoragePrice:boolean;
+
   constructor(data: any) {
+    this.stockedItemProvisionId = data.stockedItemProvisionId ;
     this.id = data.id;
     this.name = data.name;
     this.ref = data.ref;
@@ -22,5 +28,8 @@ export class ProvisionResponseDto {
     this.salesPrice = data.salesPrice;
     this.discountValue = data.discountValue;
     this.discountType = data.discountType;
+    this.increaseValue = data.increaseValue;
+    this.order = data.order;
+    this.isStoragePrice = data.isStoragePrice;
   }
 }

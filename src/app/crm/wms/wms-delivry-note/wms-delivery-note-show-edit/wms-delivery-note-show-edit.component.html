@@ -1,0 +1,181 @@
+<div class="container-fluid bg-body row d-flex justify-content-center w-100">
+  <!-- Page Header -->
+  <!-- Actions -->
+  <div class="d-flex justify-content-between row" >
+    <div class="col-8">
+      <button (click)="router.navigate(['/admin/crm/wms/wms/delivery-note'])" color="primary"  mat-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button mat-button (click)="router.navigate(['/admin/crm/wms'])"  >
+        <mat-icon class=" primary-blue-color">house</mat-icon>
+        Accueil
+      </button>
+      >
+      <button mat-button (click)="router.navigate(['/admin/crm/wms/delivery-note'])">
+        <mat-icon class=" primary-blue-color">checklist</mat-icon>
+        Bon de livraison
+      </button>
+      >
+      <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
+        <mat-icon class=" primary-blue-color">details</mat-icon>
+        Détailes
+      </button>
+    </div>
+    <div class="col-2 d-flex justify-content-end">
+      <button [matMenuTriggerFor]="menu"  class="bg-spider scale-08 primary-blue-color fw-bold rounded-2" aria-label="Actions" mat-raised-button>
+        Actions <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" class="bg-spider scale-09">
+        <button mat-menu-item >
+          <mat-icon>add</mat-icon>
+          Valider par RE
+        </button>
+        <button mat-menu-item >
+          <mat-icon>add</mat-icon>
+          Valider par C
+        </button>
+        <button (click)="CreateStorageInvoice()" mat-menu-item >
+          <mat-icon>add</mat-icon>
+          Créé une facture
+        </button>
+        <button mat-menu-item (click)="onCreateModificationRequest()">
+          <mat-icon>edit</mat-icon>
+          Créé une demande de modification
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <hr>
+</div>
+<section class="container-fluid px-2">
+  <div class="row p-2">
+    <ng-container  class="col-12 row " >
+      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-6">
+        <mat-card-content>
+          <p class="fs-6 align-items-center d-flex primary-blue-color">
+            <mat-icon class="scale-08">business</mat-icon>
+            Informations General
+          </p>
+          <p><span class="text-secondary">Référence:</span> {{ deliveryNote.getValue().number }}</p>
+          <p><span class="text-secondary">Status:</span>
+            <button  [ngClass]="['btn', 'btn-sm', 'bg-warning-subtle']">
+              {{ deliveryNote.getValue().status?.name }}</button>
+          </p>
+          <p><span class="text-secondary">Date:</span> {{ deliveryNote.getValue().createdAt | date:'dd/MM/YYYY HH:mm' }}</p>
+        </mat-card-content>
+      </mat-card>
+      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-6">
+        <mat-card-content>
+          <p class="fs-6 align-items-center d-flex primary-blue-color">
+            <mat-icon class="scale-08">business</mat-icon>
+            Informations du Client
+          </p>
+          <p><span class="text-secondary">Client:</span> {{ deliveryNote.getValue().storageContract?.customer?.name }}</p>
+          <p><span class="text-secondary">Contrat:</span> {{ deliveryNote.getValue().storageContract?.number }}</p>
+          <p>
+            <span class="text-secondary">Facture:</span>
+            <span *ngFor="let item of deliveryNote.getValue().storageInvoiceResponseDtos">{{item.number }}</span>
+          </p>
+        </mat-card-content>
+      </mat-card>
+
+    </ng-container>
+    <ng-container  class="col-12" >
+      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1">
+        <mat-card-content>
+          <div class="card-body">
+            <p class="primary-blue-color text-decoration-underline m-2">
+              <mat-icon class="scale-08 me-2">edit</mat-icon>Demandes de modification:</p>
+            <table  class="table small border-secondary">
+              <thead class=" fw-light">
+              <tr>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Commentaire</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Statut</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Date</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Crée par</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+
+              <tr  class="p-0"  *ngFor="let item of deliveryNote.getValue().storageDeliveryNoteUpdateRequests">
+                <td>{{  item.note }}</td>
+                <td><button  [ngClass]="['btn', 'btn-sm', item.status < 2 ? 'bg-warning-subtle' : 'bg-success-subtle']">{{ getRequestStatus(item.status) }}</button></td> <!-- Uncommented & Fixed -->
+                <td>{{  item.createdAt }}</td>
+                <td>{{  item.createdBy?.name   }}</td>
+                <td><button *ngIf="item.status < 2"
+                            (click)="OnValidateUpdateRequest(item.id)" class="text-success " mat-button >Validée</button></td>
+              </tr>
+
+              </tbody>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+    <ng-container  class="col-12" >
+      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1">
+        <mat-card-content>
+          <div class="card-body">
+            <table  class="table small border-secondary">
+              <thead class=" fw-light">
+              <tr>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Préstations</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Unité</th>
+                <!--                <th scope="col" class="bg-light primary-blue-color fw-light">Prix de vente</th>-->
+                <th scope="col" class="bg-light primary-blue-color fw-light">Quantié</th>
+              </tr>
+              </thead>
+              <tbody>
+              <p class="primary-blue-color fw-bold text-decoration-underline m-2">Préstations:</p>
+              <tr  class="p-0"  *ngFor="let item of deliveryNote.getValue().stockedItemResponseDtos">
+                <td>{{  item.provisionResponseDto.name +" "+ item.stockedItemResponseDto.supportName+" "+ item.stockedItemResponseDto.structureName }}</td>
+                <td>{{ item.provisionResponseDto.unitOfMeasurement }}</td> <!-- Uncommented & Fixed -->
+                <!--                <td>{{  prv.salesPrice }}</td>-->
+                <td>
+                  <input [value]="item.quantity"
+                         [disabled]="!isEditing.getValue()"
+                         (change)="updateProvisionQuantity(item, $event)"
+                         class="form-control custom-input form-control-sm" type="number"/>
+                </td>
+
+              </tr>
+              <p class="primary-blue-color fw-bold text-decoration-underline m-2">Dépotages</p>
+              <tr  class="p-0"  *ngFor="let item of deliveryNote.getValue().unloadingTypeResponseDtos">
+                <td>{{  item.unloadingTypeResponseDto.name }}</td>
+                <td>{{ item.unloadingTypeResponseDto.unitOfMeasurement }}</td> <!-- Uncommented & Fixed -->
+                <!--                <td>{{  prv.salesPrice }}</td>-->
+                <td>
+                 <input [value]="item.quantity"
+                        [disabled]="!isEditing.getValue()"
+                       (change)="updateUnloadingQuantity(item, $event)"
+                       class="form-control custom-input form-control-sm" type="number"/>
+              </td>
+              </tr>
+
+              <p class="primary-blue-color fw-bold text-decoration-underline m-2">Services </p>
+              <tr  class="p-0"  *ngFor="let item of deliveryNote.getValue().requirementResponseDtos">
+                <td>{{  item.requirementResponseDto.name }}</td>
+                <td>{{ item.requirementResponseDto.unitOfMeasurement }}</td> <!-- Uncommented & Fixed -->
+                <!--                <td>{{  prv.salesPrice }}</td>-->
+                <td>
+                  <input [value]="item.quantity"
+                         [disabled]="!isEditing.getValue()"
+                         (change)="updateRequirementQuantity(item, $event)"
+                         class="form-control custom-input form-control-sm" type="number"/>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+
+
+  </div>
+</section>
+<app-general-infos
+[createdAt]="deliveryNote.getValue().createdAt" [createdBy]="deliveryNote.getValue().createdBy"
+[updatedAt]="deliveryNote.getValue().updatedAt" [updatedBy]="deliveryNote.getValue().updatedBy"
+></app-general-infos>

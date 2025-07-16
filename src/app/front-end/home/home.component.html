@@ -1,4 +1,4 @@
-<mat-drawer-container class="example-container vh-100">
+<mat-drawer-container class="example-container vh-100  ">
 
   <!-- Left Drawer -->
   <mat-drawer #leftDrawer class="example-sidenav rounded-0 custom-drawer-width bg-light" mode="over" position="start" [opened]="false">
@@ -77,13 +77,13 @@
       <div class="col-md-6 p-3">
         <h5 class="primary-blue-color primary-blue-color-light">Caractéristiques Clés</h5>
         <ul class="list-unstyled text-start fs-5 d-flex flex-column justify-content-around h-75">
-          <li><i class="bi bi-check-circle primary-blue-color"></i> Gestion Intégrée</li>
-          <li><i class="bi bi-check-circle primary-blue-color"></i> Optimisation Logistique</li>
-          <li><i class="bi bi-check-circle primary-blue-color"></i> Solutions Scalables</li>
-          <li><i class="bi bi-check-circle primary-blue-color"></i> Automatisation des Processus</li>
-          <li><i class="bi bi-check-circle primary-blue-color"></i> Sécurité & Protection des Données</li>
-          <li><i class="bi bi-check-circle primary-blue-color"></i> Analyse & Reporting en Temps Réel</li>
-          <li><i class="bi bi-check-circle primary-blue-color"></i> Gestion Multicanal des Ventes</li>
+          <li class="rounded-2 shadow p-3"><i class="bi bi-check-circle primary-blue-color"></i> Gestion Intégrée</li>
+          <li class="rounded-2 shadow p-3"><i class="bi bi-check-circle primary-blue-color"></i> Optimisation Logistique</li>
+          <li class="rounded-2 shadow p-3"><i class="bi bi-check-circle primary-blue-color"></i> Solutions Scalables</li>
+          <li class="rounded-2 shadow p-3"><i class="bi bi-check-circle primary-blue-color"></i> Automatisation des Processus</li>
+          <li class="rounded-2 shadow p-3"><i class="bi bi-check-circle primary-blue-color"></i> Sécurité & Protection des Données</li>
+          <li class="rounded-2 shadow p-3"><i class="bi bi-check-circle primary-blue-color"></i> Analyse & Reporting en Temps Réel</li>
+          <li class="rounded-2 shadow p-3"><i class="bi bi-check-circle primary-blue-color"></i> Gestion Multicanal des Ventes</li>
         </ul>
       </div>
       <div class="col-md-4">
@@ -122,20 +122,20 @@
 
 
   <!-- Testimonials Section -->
-<!--  <div class="container-fluid bg-light py-5">-->
-<!--    <h2 class="text-center primary-blue-color mat-primary-color">Ce Que Nos Clients Disent</h2>-->
-<!--    <div class="row justify-content-center mt-4">-->
-<!--      <div class="col-md-4" *ngFor="let testimonial of testimonials">-->
-<!--        <mat-card class="border-0 shadow-sm p-3">-->
-<!--          <mat-card-content>-->
-<!--            <p class="fst-italic">"{{ testimonial.feedback }}"</p>-->
-<!--            <p class="primary-blue-color mb-0">{{ testimonial.name }}</p>-->
-<!--            <small class="text-muted">{{ testimonial.company }}</small>-->
-<!--          </mat-card-content>-->
-<!--        </mat-card>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
+  <div class="container-fluid bg-light py-5">
+    <h2 class="text-center primary-blue-color mat-primary-color">Ce Que Nos Clients Disent</h2>
+    <div class="row justify-content-center mt-4">
+      <div class="col-md-4" *ngFor="let testimonial of testimonials">
+        <mat-card class="border-0 shadow-sm p-3">
+          <mat-card-content>
+            <p class="fst-italic">"{{ testimonial.feedback }}"</p>
+            <p class="primary-blue-color mb-0">{{ testimonial.name }}</p>
+            <small class="text-muted">{{ testimonial.company }}</small>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
 
   <div class="px-4  text-center ">
     <div class="col-lg-8 mx-auto">
@@ -154,67 +154,65 @@
     </div>
   </div>
 
-  <br>
-  <br>
-  <br>
-
-
-
   <!-- Contact Section -->
-<!--  <div class="container text-center my-5">-->
-<!--    <h2 class="primary-blue-color mat-primary-color">Commencez Avec Spider ERP</h2>-->
-<!--    <p class="lead">Transformez dès aujourd'hui vos opérations logistiques, de transport et d'entrepôt.</p>-->
-<!--    <button mat-raised-button color="primary" class="btn-lg">Demander une Démo</button>-->
-<!--  </div>-->
-  <footer class="p-3 bg-spider-light">
-    <div class="row">
-      <div class="col-12 col-md text-center">
-            <p class="">
-              <button mat-button class="bg-white mat-elevation-z3  m-auto  text-primary primary-blue-color rounded-3 mx-1">
-                🕸️Spider <span class="small text-secondary">ERP</span>
-              </button>
-            </p>
-<!--        <img class="mb-2" src="../assets/brand/bootstrap-logo.svg" alt="" width="24" height="19">-->
-        <small class="d-block mb-3 text-body-secondary">
-          Cteated with ❤️ By <br>
-          <span class="primary-blue-color">
+  <div class="container text-center my-5">
+    <h2 class="primary-blue-color mat-primary-color">Commencez Avec Spider ERP</h2>
+    <p class="lead">Transformez dès aujourd'hui vos opérations logistiques, de transport et d'entrepôt.</p>
+    <button mat-raised-button color="primary" class="btn-lg">Demander une Démo</button>
+  </div>
+  <!-- Footer Section -->
+  <section class="container-fluid background-wrapper">
+    <footer class="p-3  ">
+      <div class="row">
+        <div class="col-12 col-md text-center">
+          <p class="">
+            <button mat-button class="bg-white mat-elevation-z3  m-auto  text-primary primary-blue-color rounded-3 mx-1">
+              🕸️Spider <span class="small text-secondary">ERP</span>
+            </button>
+          </p>
+          <!--        <img class="mb-2" src="../assets/brand/bootstrap-logo.svg" alt="" width="24" height="19">-->
+          <small class="d-block mb-3 text-body-secondary">
+            Cteated with ❤️ By <br>
+            <span class="primary-blue-color">
           &copy;3ABC business center</span>
-          <br>2024–2025</small>
-      </div>
-      <div class="col-6 col-md">
-        <h6 class="primary-blue-color fw-light">Fonctionnalités</h6>
-        <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Fonctionnalité intéressante</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Fonctionnalité aléatoire</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Fonctionnalité d’équipe</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Ressources pour développeurs</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Une autre</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Dernière mise à jour</a></li>
-        </ul>
-      </div>
+            <br>2024–2025</small>
+        </div>
+        <div class="col-6 col-md">
+          <h6 class="primary-blue-color fw-light">Fonctionnalités</h6>
+          <ul class="list-unstyled text-small">
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Fonctionnalité intéressante</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Fonctionnalité aléatoire</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Fonctionnalité d’équipe</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Ressources pour développeurs</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Une autre</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Dernière mise à jour</a></li>
+          </ul>
+        </div>
 
-      <div class="col-6 col-md">
-        <h6 class="primary-blue-color fw-light">Ressources</h6>
-        <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Ressource</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Nom de la ressource</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Autre ressource</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Ressource finale</a></li>
-        </ul>
-      </div>
+        <div class="col-6 col-md">
+          <h6 class="primary-blue-color fw-light">Ressources</h6>
+          <ul class="list-unstyled text-small">
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Ressource</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Nom de la ressource</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Autre ressource</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Ressource finale</a></li>
+          </ul>
+        </div>
 
-      <div class="col-6 col-md">
-        <h6 class="primary-blue-color fw-light">À Propos</h6>
-        <ul class="list-unstyled text-small">
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Équipe</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Emplacements</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Confidentialité</a></li>
-          <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Conditions</a></li>
-        </ul>
-      </div>
+        <div class="col-6 col-md">
+          <h6 class="primary-blue-color fw-light">À Propos</h6>
+          <ul class="list-unstyled text-small">
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Équipe</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Emplacements</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Confidentialité</a></li>
+            <li class="mb-1"><a class="link-secondary text-decoration-none" href="#">Conditions</a></li>
+          </ul>
+        </div>
 
-    </div>
-  </footer>
+      </div>
+    </footer>
+  </section>
+
 </mat-drawer-container>
 
 

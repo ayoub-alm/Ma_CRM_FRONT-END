@@ -436,8 +436,6 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit, OnDestr
       console.log('New Need Request DTO:', newNeedRequestDto);
       return newNeedRequestDto;
     }
-
-
   }
 
   /**
@@ -557,7 +555,6 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit, OnDestr
       })
     ).subscribe()
   }
-
 
   /**
    * this function allows to load structures by company ID

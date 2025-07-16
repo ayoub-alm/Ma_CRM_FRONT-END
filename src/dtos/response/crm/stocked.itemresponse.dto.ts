@@ -10,30 +10,36 @@ export class StockedItemResponseDto {
   temperatureName: string | null; // Name of the temperature type
   isFragile: boolean; // Indicates if the item is fragile
   uvc: number | null; // Unit volume count
+  uc: number | null; // Unit volume count
   numberOfPackages: number | null; // Total number of packages
   dimension: Dimension | null; // Dimension object
   price: number | null; // Price of the stocked item
   storageOffer: StorageOffer | null; // Associated storage offer
   storageNeed: StorageNeed | null; // Associated storage need
-  provisionResponseDto: ProvisionResponseDto[] | null; // Provision response details
+  provisionResponseDto: ProvisionResponseDto[] ; // Provision response details
   volume:number;
+  weight:number;
+  quantity:number;
 
   constructor(data:any) {
     this.id = data.id;
     this.ref = data.ref;
     this.supportName = data.supportName;
     this.structureName = data.structureName;
-    this.stackedLevelName = data.supportStackedLevelName;
+    this.stackedLevelName = data.stackedLevelName;
     this.temperatureName = data.supportTemperatureName;
-    this.isFragile = data.supportIsFragile;
+    this.isFragile = data.isFragile;
     this.uvc = data.uvc;
+    this.uc = data.uc;
     this.numberOfPackages = data.numberOfPackages;
     this.dimension = data.dimension;
     this.price = data.price;
     this.storageOffer = data.storageOffer;
     this.storageNeed = data.storageNeed;
     this.provisionResponseDto = data.provisionResponseDto;
-    this.volume = data.valume;
+    this.volume = data.volume;
+    this.weight = data.weight;
+    this.quantity = data.quantity;
   }
 }
 

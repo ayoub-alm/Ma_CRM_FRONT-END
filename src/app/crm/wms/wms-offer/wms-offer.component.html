@@ -7,7 +7,7 @@
       <mat-icon >house</mat-icon>
       Accueil
     </button>
-    /
+    >
     <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
       <mat-icon class=" primary-blue-color">checklist</mat-icon>
       Offres
@@ -26,21 +26,19 @@
       />
 
     </div>
-    <!-- Action Buttons -->
+
     <div class="col-lg-4 my-auto col-12 d-flex justify-content-lg-end  justify-content-end align-items-center">
-      <button (click)="createEditWmsNeed()"
-              class="rounded-3 bg-light  mat-elevation-z2 " color="primary" mat-button style="transform:scale(0.9)">
-        <mat-icon>add</mat-icon>
-        <span>Ajouter</span>
-      </button>
-      <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button
-              style="transform:scale(0.9)">
-        <mat-icon><i class="bi bi-funnel"></i></mat-icon>
-      </button>
-      <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button
-              style="transform:scale(0.9)">
-        <mat-icon>more_vert</mat-icon>
-      </button>
+<!--      <button (click)="createEditWmsNeed()"-->
+<!--              class="rounded-3 bg-spider scale-09" color="primary" mat-button>-->
+<!--        <mat-icon>add</mat-icon>-->
+<!--        <span>Ajouter</span>-->
+<!--      </button>-->
+<!--      <button aria-label="Filter" class="rounded-3 bg-light my-auto scale-09" mat-icon-button>-->
+<!--        <mat-icon><i class="bi bi-funnel"></i></mat-icon>-->
+<!--      </button>-->
+<!--      <button aria-label="Filter" class="rounded-3 bg-light my-auto scale-09" mat-icon-button>-->
+<!--        <mat-icon>more_vert</mat-icon>-->
+<!--      </button>-->
     </div>
   </section>
 
@@ -60,7 +58,7 @@
       <!-- Columns: Fields -->
       <ng-container matColumnDef="ref">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Référence</th>
-        <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.ref.slice(0, 10) }}</td>
+        <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.number }}</td>
       </ng-container>
       <ng-container matColumnDef="customer" sticky>
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Client</th>
@@ -78,7 +76,7 @@
             <ng-container *ngFor="let item of row.stockedItems; let i = index" class="d-flex justify-content-start">
               <small>
                 <button
-                  class="btn btn btn-sm scale-09 p-1 px-1  rounded-4 bg-secondary-subtle">{{ item.supportName + " " + item.structureName + " " + item.temperatureName }}
+                  class="btn btn btn-sm scale-09 p-1 px-1  rounded-1 bg-secondary-subtle">{{ item.supportName + " " + item.structureName + " " + item.temperatureName }}
                 </button>
               </small>
               <!--             <button class="btn btn-sm"> {{ item.supportName + ""+item.structureName+" "+ item.temperatureName }} </button><br>-->
@@ -91,7 +89,7 @@
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Statut</th>
         <td *matCellDef="let row" mat-cell>
           <small>
-            <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-4 bg-info-subtle">{{ getNeedStatus(row.status) }}
+            <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-info-subtle">{{ row.status?.name }}
             </button>
           </small>
         </td>
@@ -108,7 +106,7 @@
         <td *matCellDef="let row" mat-cell>
           <small>
             <button
-              class="scale-08 btn btn btn-sm p-1 px-2 rounded-4 bg-warning-subtle">{{ getLabelFromStorageReasonEnum(row.storageReason) }}
+              class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-warning-subtle">{{ getLabelFromStorageReasonEnum(row.storageReason) }}
             </button>
           </small>
         </td>
@@ -135,11 +133,21 @@
           mat-header-row></tr>
       <tr *matRowDef="let row; columns: displayedColumns;" (click)="showOfferDetails(row)" class="bg-white text-secondary" mat-row></tr>
       <!-- Row shown when there is no matching data. -->
-      <tr *matNoDataRow class="mat-row text-center d-flex w-100 justify-content-center flex-column ">
-        <td class="mat-cell  "  colspan="4">Aucune donnée ne correspond au filtre "{{ input.value }}"
-          <p class="text-center w-100 d-flex justify-content-center"><img src="/no-data.jpg" class="img-fluid" /></p>
+      <tr *matNoDataRow class="mat-row">
+        <td class="mat-cell text-center" colspan="8">
+          <div class="d-flex flex-column align-items-center justify-content-center py-4">
+            <ng-container *ngIf="loading$; else noData">
+              <mat-spinner diameter="30" class="mb-2"></mat-spinner>
+              <p class="mb-0">Veuillez patienter, chargement des données en cours…</p>
+            </ng-container>
+            <ng-template #noData>
+              <img src="/empty_file.svg" alt="empty_data" class="mb-2" style="max-width: 150px;">
+              <p class="mb-0">Aucune donnée</p>
+            </ng-template>
+          </div>
         </td>
       </tr>
+
     </table>
   </div>
   <mat-paginator [pageSizeOptions]="[ 25, 50,100]" class="bg-light sticky-bottom"></mat-paginator>

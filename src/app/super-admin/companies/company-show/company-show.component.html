@@ -1,0 +1,342 @@
+<mat-drawer-container>
+  <div class="container-fluid bg-white  vh-100 w-100 rounded-4 mat-elevation-z2 overflow-y-scroll">
+    <p class="rounded-3 p-1 bg-white  ">
+    <span class="mx-2 text-secondary">
+          <a routerLink="/admin">
+             <button mat-button>
+               <mat-icon class=" primary-blue-color">home</mat-icon>
+               {{ 'HOME' | translate }}
+             </button>
+          </a> >
+          <a routerLink="/admin/prospects">
+            <button mat-button>
+               <mat-icon class=" primary-blue-color">domain</mat-icon>
+              {{ 'PROSPECTS' | translate }}
+             </button>
+          </a> >
+          <button mat-button>
+               <mat-icon class=" primary-blue-color">info</mat-icon>
+            {{ 'DETAILS' | translate }}
+          </button>
+      </span>
+    </p>
+
+    <div class="container-fluid tab-container p-1 mat-elevation-z2  rounded-3  ">
+      <section class="mt-1">
+        <mat-card-title class="d-flex justify-content-between align-items-center">
+          <p class="d-flex align-baseline">
+            <mat-icon class="example-tab-icon mx-2 primary-blue-color">business</mat-icon>
+            <span class="fs-5">{{'COMPANY_DETAILS' | translate}}</span>
+          </p>
+          <p>
+            <button mat-button>
+              {{ 'UPDATE' | translate }}
+              <mat-icon>edit</mat-icon>
+            </button>
+          </p>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="justify-content-around">
+            <div class="d-flex justify-content-around row">
+              <!-- Company Information Section -->
+              <div class="col-lg-12 row d-flex justify-content-start">
+                <div class="col-lg-4 col-12">
+                  <!-- Company Name -->
+                  <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-building"></i>{{ 'PROSPECT_NAME' | translate }} :
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().name }}</span>
+                  </p>
+
+                  <!-- Sigle -->
+                  <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-briefcase-fill"></i> {{ 'ACRONYM' | translate }} :
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().sigle }}</span>
+                  </p>
+
+                  <!-- Capital -->
+                  <p>
+                    <span class="text-secondary">
+                      <i class="primary-blue-color bi bi-currency-exchange"></i> {{ 'CAPITAL' | translate }} :
+                    </span>
+                    <span class="mx-2 my-3">{{ company.getValue().capital }}</span>
+                  </p>
+
+                  <!-- Head Office -->
+                  <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-geo-alt-fill"></i> {{ 'HEAD_OFFICE' | translate }} :
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().headOffice }}</span>
+                  </p>
+
+                  <!-- Ownership Structure -->
+                  <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-diagram-2-fill"></i> {{ 'STRUCTURE' | translate }} :
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().proprietaryStructure?.name }}</span>
+                  </p>
+
+                  <!-- Industry -->
+                  <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-hammer"></i> {{ 'INDUSTRY' | translate }} :
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().industry?.name }}</span>
+                  </p>
+                </div>
+
+                <div class="col-lg-4 col-12 border-start border-secondary-subtle px-3">
+                  <!-- City -->
+                  <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-geo-fill"></i> {{ 'CITY' | translate }} :
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().city?.name }}</span>
+                  </p>
+                  <!-- Country -->
+                  <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-flag-fill"></i> {{ 'COUNTRY' | translate }} :
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().country?.name }}</span>
+                  </p>
+                  <!-- Year of Creation -->
+                  <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-calendar-check-fill"></i> {{ 'CREATION_DATE' | translate }} :
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().yearOfCreation }}</span>
+                  </p>
+
+                  <!-- Company Size -->
+                  <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-people-fill"></i> {{'COMPANY_SIZE' | translate }} :
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().companySize?.name }}</span>
+                  </p>
+
+
+                </div>
+
+                <!-- Business Description -->
+                <div class="col-lg-4 col-12 border-start border-secondary-subtle px-3">
+                  <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-card-text"></i> {{'DESCRIPTION' | translate}}: <br/>
+                  </span>
+                    <span class="mx-2 my-3">{{ company.getValue().businessDescription }}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+
+
+      </section>
+    </div>
+
+
+
+    <!--  <mat-divider class="my-2"></mat-divider>-->
+
+    <section class="container-fluid mt-3">
+      <div class="row d-flex justify-content-around">
+        <mat-card class="bg-white col-lg-9 rounded-2">
+          <section class="d-flex row">
+            <mat-tab-group class="rounded-2 " mat-align-tabs="start"
+                           mat-stretch-tabs="true">
+              <!-- Informations de contact Tab -->
+              <mat-tab label="Informations de contact">
+                <ng-template mat-tab-label>
+                  <i class="bi bi-person-lines-fill mx-2 primary-blue-color"></i>
+                  {{ 'CONTACT_INFORMATION' | translate }}
+                </ng-template>
+                <div class="d-flex mt-3 p-4">
+                  <div class="col-lg-6">
+                    <p>
+                      <span class="text-secondary"><i class="bi bi-envelope-fill primary-blue-color"></i> Email :</span>
+                      <span class="mx-2"><a href="mailto:{{ company.getValue().email }}">{{ company.getValue().email }}</a></span>
+                    </p>
+                    <p>
+                      <span class="text-secondary"><i class="bi bi-telephone-fill primary-blue-color"></i> {{ 'PHONE' | translate }} :</span>
+                      <span class="mx-2"><a href="tel:{{ company.getValue().phone }}">{{ company.getValue().phone }}</a></span>
+                    </p>
+                    <p>
+                      <span class="text-secondary"><i class="bi bi-printer-fill primary-blue-color"></i> Fax :</span>
+                      <span class="mx-2">{{ company.getValue().fax }}</span>
+                    </p>
+                  </div>
+                  <div class="col-lg-6">
+                    <p>
+                      <span class="text-secondary"><i class="bi bi-chat-dots-fill primary-blue-color"></i> WhatsApp :</span>
+                      <span class="mx-2">
+              <a href="https://wa.me/{{ company.getValue().whatsapp }}" target="_blank" class="text-success"> {{company.getValue().whatsapp}} </a>
+            </span>
+                    </p>
+                    <p>
+                      <span class="text-secondary"><i class="bi bi-globe primary-blue-color"></i> Site Web :</span>
+                      <span class="mx-2"><a target="_blank" href="{{ company.getValue().website }}">{{ company.getValue().website }}</a></span>
+                    </p>
+                    <p>
+                      <span class="text-secondary"><i class="bi bi-linkedin primary-blue-color"></i> LinkedIn :</span>
+                      <span class="mx-2">{{ company.getValue().linkedin }}</span>
+                    </p>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <!-- Informations légales Tab -->
+              <mat-tab label="Informations légales">
+                <ng-template mat-tab-label>
+                  <i class="bi bi-bank primary-blue-color mx-2"></i>
+                  {{ 'LEGAL_INFORMATION' | translate }}
+                </ng-template>
+                <div class="d-flex mt-3 p-4">
+                  <div class="col-lg-6">
+                    <p><span class="text-secondary"><i class="bi bi-file-earmark-code-fill primary-blue-color"></i>
+                      {{ 'LEGAL_STATUS' | translate}}:</span>
+                      <span class="mx-2">{{ company.getValue().legalStatus?.name }}</span>
+                    </p>
+                    <p><span class="text-secondary"><i class="bi bi-person-check-fill primary-blue-color"></i>
+                      {{ 'LEGAL_REPRESENTATIVE' | translate}}:</span>
+                      <span class="mx-2"> {{ company.getValue().title?.title }} {{ company.getValue().legalRepresentative }}</span>
+                    </p>
+                    <p><span class="text-secondary"><i class="bi bi-briefcase-fill primary-blue-color"></i>
+                      {{ 'LEGAL_REPRESENTATIVE_JOB_TITLE' | translate }} :</span>
+                      <span class="mx-2">{{ company.getValue().reprosentaveJobTitle?.name }}</span>
+                    </p>
+                  </div>
+                  <div class="col-lg-6">
+                    <p><span class="text-secondary"><i class="bi bi-card-checklist primary-blue-color"></i> Certificat :</span>
+                      <span class="mx-2">{{ company.getValue().certificationText }}</span>
+                    </p>
+                    <p><span class="text-secondary"><i class="bi bi-file-earmark-code-fill primary-blue-color"></i> ICE :</span>
+                      <span class="mx-2">{{ company.getValue().ice }}</span>
+                    </p>
+                    <p><span class="text-secondary"><i class="bi bi-briefcase-fill primary-blue-color"></i> RC :</span>
+                      <span class="mx-2">{{ company.getValue().rc }}</span>
+                    </p>
+                    <p><span class="text-secondary"><i class="bi bi-cash-stack primary-blue-color"></i> IFM :</span>
+                      <span class="mx-2">{{ company.getValue().ifm }}</span>
+                    </p>
+                  </div>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </section>
+        </mat-card>
+
+      </div>
+    </section>
+
+    <!--  <mat-divider class="my-2"></mat-divider>-->
+    <div class="container-fluid my-3">
+      <div class=" text-dark row  d-flex justify-content-around ">
+        <mat-card
+          class="col-lg-6 p-4 align-baseline bg-light rounded-2  ">
+          <div class="d-flex justify-content-between">
+            <p class="d-flex align-baseline ">
+              <mat-icon class="m-0 p-0 mx-2 primary-blue-color">group</mat-icon>
+              <span class="fs-5">{{ 'CONTACTS' | translate }}</span>
+            </p>
+            <p>
+              <button
+                      mat-icon-button >
+                <mat-icon>add</mat-icon></button>
+            </p>
+          </div>
+
+<!--          <ng-container *ngFor="let interlocutor of interlocutors | async">-->
+<!--            <mat-expansion-panel class=" mb-2 bg-white rounded-2 ">-->
+<!--              <mat-expansion-panel-header>-->
+<!--                <mat-panel-title>-->
+<!--                  <mat-icon class="p mx-2 text-secondary">account_circle</mat-icon>-->
+<!--                  {{ interlocutor.fullName }}-->
+<!--                </mat-panel-title>-->
+<!--              </mat-expansion-panel-header>-->
+<!--              <div class="px-3">-->
+<!--                <p>-->
+<!--                  <i class="bi bi-envelope-fill me-2 primary-blue-color"></i>-->
+<!--                  <span>Email :</span> <span class="text-dark">{{ interlocutor.emailAddress.address }}</span>-->
+<!--                </p>-->
+<!--                <p>-->
+<!--                  <i class="bi bi-telephone-fill me-2 primary-blue-color"></i>-->
+<!--                  <span>Téléphone :</span> <span class="text-dark">{{ interlocutor.phoneNumber.number }}</span>-->
+<!--                </p>-->
+<!--                <p>-->
+<!--                  <i class="bi bi-building me-2 primary-blue-color"></i>-->
+<!--                  <span>Département :</span> <span class="text-dark">{{ interlocutor.department.name }}</span>-->
+<!--                </p>-->
+<!--                <p>-->
+<!--                  <i class="bi bi-briefcase-fill me-2 primary-blue-color"></i>-->
+<!--                  <span>Titre de poste :</span> <span class="text-dark">{{ interlocutor.jobTitle }}</span>-->
+<!--                </p>-->
+<!--              </div>-->
+<!--            </mat-expansion-panel>-->
+<!--          </ng-container>-->
+        </mat-card>
+
+        <div class="col-lg-6 row  d-flex flex-column justify-content-end shadow-sm bg-white rounded-3 p-4">
+          <!--         Custom Event Template-->
+          <!--          <ng-template #innerEventCustomTemplate class="" let-event="event">-->
+          <!--            <div class="event d-flex justify-content-end">-->
+          <!--              <mat-expansion-panel class="bg-light mt-3 col-12 shadow-sm rounded-3 w-100">-->
+          <!--                <mat-expansion-panel-header>-->
+          <!--                  <mat-panel-title>-->
+          <!--                    <mat-icon class="me-2 text-secondary">group</mat-icon>-->
+          <!--                    <span class="small">{{ event.eventInfo.title }}</span>-->
+          <!--                  </mat-panel-title>-->
+          <!--                </mat-expansion-panel-header>-->
+          <!--                <div class="p-1">-->
+          <!--                  &lt;!&ndash;              <p class="mb-0 primary-blue-color text-secondary d-flex align-items-center">&ndash;&gt;-->
+          <!--                  &lt;!&ndash;                <mat-icon class="me-2 text-secondary">person</mat-icon>&ndash;&gt;-->
+          <!--                  &lt;!&ndash;                {{ event.eventInfo.user.name }}&ndash;&gt;-->
+          <!--                  &lt;!&ndash;              </p>&ndash;&gt;-->
+          <!--                  <p class="text-muted mb-2">{{ event.eventInfo.description }}</p>-->
+          <!--                </div>-->
+          <!--              </mat-expansion-panel>-->
+          <!--            </div>-->
+          <!--          </ng-template>-->
+
+          <!--         Timeline Component-->
+          <!--          <ngx-timeline-->
+          <!--            [enableAnimation]="true"-->
+          <!--            [events]="events"-->
+          <!--            [innerEventCustomTemplate]="innerEventCustomTemplate"-->
+          <!--            [langCode]="'fr'"-->
+          <!--            [ngClass]="'custom-theme right-aligned justify-content-end'"-->
+          <!--            [reverseOrder]="true"-->
+          <!--            class="mt-4 "-->
+          <!--          >-->
+          <!--          </ngx-timeline>-->
+
+        </div>
+
+      </div>
+    </div>
+
+    <app-general-infos
+      [createdBy]="company.getValue().createdBy" [createdAt]="company.getValue().createdAt"
+      [updatedBy]="company.getValue().updatedBy" [updatedAt]="company.getValue().updatedAt"
+      (onClickOnComment)="drawer.toggle()"
+    ></app-general-infos>
+  </div>
+  <!-- Mat Drawer (End Side) -->
+  <mat-drawer #drawer mode="side" position="end" class="bg-light px-2 py-1 shadow-sm rounded-0 ">
+    <mat-toolbar class="text-end w-100 d-flex mb-2 justify-content-between bg-spider rounded-2 mat-elevation-z3" >
+      <span class="small">💬 Commentaires </span>
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar>
+    <app-comment [entity]="EntityEnum.COMPANY" [entityId]="company.getValue().id"></app-comment>
+  </mat-drawer>
+
+</mat-drawer-container>

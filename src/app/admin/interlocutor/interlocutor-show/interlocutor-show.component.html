@@ -1,35 +1,36 @@
+<mat-drawer-container>
 <div class="container-fluid bg-white  w-100 rounded-top-4 mat-elevation-z2 shadow-sm vh-100 overflow-y-scroll">
   <p class="rounded-3 p-1  mat-elevation-z0">
     <span class="mx-2 text-secondary">
           <a routerLink="/admin">
              <button mat-button>
                <mat-icon class=" primary-blue-color">home</mat-icon>
-                Accueil
+               {{ "HOME" | translate }}
              </button>
           </a> >
           <a routerLink="/admin/interlocutors">
             <button mat-button>
                <mat-icon class=" primary-blue-color">business_center</mat-icon>
-              Interlocuteurs
+              {{ "CONTACTS" | translate}}
              </button>
           </a> >
           <button mat-button>
                <mat-icon class=" primary-blue-color">info</mat-icon>
-              Détails
+            {{ "DETAILS" | translate}}
           </button>
       </span>
   </p>
 
 
-  <mat-card class="mt-1 container mat-elevation-z2 shadow-sm bg-white p-3 rounded-2">
+  <mat-card class="mt-1 w-100 mat-elevation-z5 shadow-sm bg-white p-3 rounded-2">
     <mat-card-title class="d-flex justify-content-between" >
       <p class="d-flex ">
         <mat-icon class="example-tab-icon mx-2 primary-blue-color">business</mat-icon>
-        <span class="fs-5">Détails de l'interlocuteur</span>
+        <span class="fs-5">{{ "INTERLOCUTOR_DETAILS" | translate}}</span>
       </p>
       <p>
         <button mat-button (click)="openUpdateInterlocutorDialog()">
-          Modifier
+          {{ "EDIT" | translate}}
           <mat-icon>edit</mat-icon>
         </button>
       </p>
@@ -39,13 +40,13 @@
           <p>
           <p class="col-lg-6">
             <span class="text-secondary">
-              <i class="primary-blue-color  mx-2 bi  bi-person-fill"></i>Nom complet :
+              <i class="primary-blue-color  mx-2 bi  bi-person-fill"></i>{{ "FULL_NAME" | translate}} :
             </span>
             <span class="mx-2 my-3">{{ interlocutor.getValue().fullName }}</span>
           </p>
           <p class="col-lg-6">
           <span class="text-secondary">
-          <i class="bi bi-building mx-2 primary-blue-color"></i>Statut :</span>
+          <i class="bi bi-building mx-2 primary-blue-color"></i>{{ "STATUS" | translate}} :</span>
               <button  style="transform:scale(0.8)" [ngClass]="[getChipClass(interlocutor.getValue().active), 'btn btn-sm p-1 rounded-2 px-3']">
                   {{ getAllStatusInteraction(interlocutor.getValue().active)}}
               </button>
@@ -53,23 +54,23 @@
 
         <p class="col-lg-6">
             <span class="text-secondary">
-              <i class="primary-blue-color  mx-2 bi  bi-building"></i>Entreprise :
+              <i class="primary-blue-color  mx-2 bi  bi-building"></i>{{ "PROSPECT" | translate}} :
             </span>
             <span class="mx-2 my-3">{{ interlocutor.getValue()?.customer?.name }}</span>
         </p>
 
         <p class="col-lg-6">
     <span class="text-secondary">
-      <i class="primary-blue-color  mx-2 bi  bi-briefcase-fill"></i>Département :
+      <i class="primary-blue-color  mx-2 bi  bi-briefcase-fill"></i>{{ "DEPARTMENT" | translate}} :
     </span>
           <span class="mx-2 my-3">{{ interlocutor.getValue().department.name }}</span>
         </p>
 
         <p class="col-lg-6">
     <span class="text-secondary">
-      <i class="primary-blue-color  mx-2 bi  bi-award-fill"></i>Titre de poste :
+      <i class="primary-blue-color  mx-2 bi  bi-award-fill"></i>{{ "TITRE_DE_POSTE" | translate}} :
     </span>
-          <span class="mx-2 my-3">{{ interlocutor.getValue().jobTitle.name }}</span>
+          <span class="mx-2 my-3">{{ interlocutor.getValue().jobTitle }}</span>
         </p>
 
         <p class="col-lg-6">
@@ -81,32 +82,10 @@
 
         <p class="col-lg-6">
     <span class="text-secondary">
-      <i class="primary-blue-color  mx-2 bi  bi-telephone-fill"></i>Téléphone :
+      <i class="primary-blue-color  mx-2 bi  bi-telephone-fill"></i>{{ "PHONE" | translate}} :
     </span>
           <span class="mx-2 my-3">{{ interlocutor.getValue().phoneNumber.number }}</span>
         </p>
-
-          <!-- Created At By - Updated At By -->
-          <p class="col-lg-6" >
-              <i class="bi bi-calendar-event-fill mx-2 bi primary-blue-color"></i>
-              <span class="text-secondary">Créé le : </span>
-              <span class="mx-2 my-3">{{ interlocutor.getValue().createdAt | date:'dd-MM-yyyy HH:mm' }}</span>
-          </p>
-          <p class="col-lg-6" >
-              <i class="bi bi-person-lines-fill mx-2 bi primary-blue-color"></i>
-              <span class="text-secondary">Créé par : </span>
-              <span class="mx-2 my-3">{{ interlocutor.getValue().createdBy.name }}</span>
-          </p>
-          <p class="col-lg-6" >
-              <i class="bi bi-calendar-event-fill mx-2 bi primary-blue-color"></i>
-              <span class="text-secondary">Mis à jour le : </span>
-              <span class="mx-2 my-3">{{ interlocutor.getValue().updatedAt | date:'dd-MM-yyyy HH:mm' }}</span>
-          </p>
-          <p class="col-lg-6" >
-              <i class="bi bi-person-lines-fill mx-2 bi primary-blue-color"></i>
-              <span class="text-secondary">Mis à jour par : </span>
-              <span class="mx-2 my-3">{{ interlocutor.getValue().updatedBy.name }}</span>
-          </p>
       </div>
     </mat-card-content>
 
@@ -114,97 +93,185 @@
   </mat-card>
 
 
-<!--  <div class="container mat-elevation-z2 p-3  mt-3 rounded-2">-->
-    <div  class="container-fluid text-dark row px-lg-5  d-flex justify-content-start">
-      <div class="col-lg-5 mt-3 shadow-sm mat-elevation-z2 rounded-3 p-3 ">
+
+  <div  class="container-fluid text-dark row  d-flex justify-content-start my-2">
+    <div class="col-lg-6 mt-3 shadow-sm mat-elevation-z5 rounded-3 py-2" >
+      <div class="d-flex justify-content-between">
         <p class="d-flex ">
           <mat-icon class="example-tab-icon mx-2 primary-blue-color">forum</mat-icon>
-          <span class="fs-5">Interactions</span>
+          <span class="fs-5">{{ "INTERACTIONS" | translate}}</span>
         </p>
+        <p>
+          <button (click)="onAddNewInteraction()"
+                   mat-icon-button>
+            <mat-icon>add</mat-icon>
+          </button>
+        </p>
+      </div>
 
-        <ng-container *ngFor="let interaction of interactions | async">
-          <mat-expansion-panel class="bg-white mt-3 rounded-2">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
+      <div style="max-height:40vh;overflow:scroll;" class="p-2">
+        <ng-container *ngFor="let interaction of interactions | async"  >
+          <mat-card class="my-2 p-2 shadow-sm" (click)="openInteractionInDrawer(interaction)">
+            <div class="d-flex justify-content-between">
+              <div>
                 <i class="bi bi-telephone-fill me-2 primary-blue-color"></i>
-                <span class="text-dark">{{ interaction.interactionType }}</span>
-                <small class="mx-3 text-secondary" style="font-size:0.8rem;">
-                  {{ interaction.createdAt | date:'short' }}
-                </small>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-
-            <!-- Interaction Details -->
-            <div class="px-3">
-              <p>
-                <i class="bi bi-building me-2 primary-blue-color"></i>
-                <span class="text-dark">Prospect:</span>
-                <span class="text-secondary">{{ interaction.prospectName }}</span>
-              </p>
-              <p *ngIf="interaction.interlocutorName">
-                <i class="bi bi-person-fill me-2 primary-blue-color"></i>
-                <span class="text-dark">Interlocuteur:</span>
-                <span class="text-secondary">{{ interaction.interlocutorName }}</span>
-              </p>
-              <p>
-                <i class="bi bi-chat-dots-fill me-2 primary-blue-color"></i>
-                <span class="text-dark">Sujet d'interaction:</span>
-                <span class="text-secondary">{{ interaction.interactionSubject }}</span>
-              </p>
-              <p *ngIf="interaction.report">
-                <i class="bi bi-file-earmark-text-fill me-2 primary-blue-color"></i>
-                <span class="text-dark">Rapport:</span>
-                <span class="text-secondary">{{ interaction.report }}</span>
-              </p>
-              <p *ngIf="interaction.planningDate">
-                <i class="bi bi-calendar-event-fill me-2 primary-blue-color"></i>
-                <span class="text-dark">Date planifiée:</span>
-                <span class="text-secondary">{{ interaction.planningDate | date:'shortDate' }}</span>
-              </p>
-              <p *ngIf="interaction.address">
-                <i class="bi bi-geo-alt-fill me-2 primary-blue-color"></i>
-                <span class="text-dark">Adresse:</span>
-                <span class="text-secondary">{{ interaction.address }}</span>
-              </p>
-              <p *ngIf="interaction.agentName">
-                <i class="bi bi-person-badge-fill me-2 primary-blue-color"></i>
-                <span class="text-dark">Agent:</span>
-                <span class="text-secondary">{{ interaction.agentName }}</span>
-              </p>
-              <p *ngIf="interaction.affectedToName">
-                <i class="bi bi-person-lines-fill me-2 primary-blue-color"></i>
-                <span class="text-dark">Affecté à:</span>
-                <span class="text-secondary">{{ interaction.affectedToName }}</span>
-              </p>
+                <strong>{{ interaction.interactionType }}</strong>
+              </div>
+              <p class="mt-2 text-secondary">{{ interaction.interactionSubject }}</p>
+              <small class="text-muted">{{ interaction.createdAt | date:'short' }}</small>
             </div>
-          </mat-expansion-panel>
+
+          </mat-card>
+
         </ng-container>
       </div>
-
-      <div class="col-lg-6 mx-lg-2 mt-3 d-none row d-flex justify-content-end shadow-sm rounded-3">
-        <p class="d-flex col-12 mt-4 ">
-          <mat-icon class="example-tab-icon mx-2 primary-blue-color">list_alt</mat-icon>
-          <span class="fs-5">Suivi des activités</span>
-        </p>
-        <ng-template class="col-12" #innerEventCustomTemplate let-event=event>
-          <div class="event ">
-            <mat-expansion-panel class="bg-white mt-3 event">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon class="mx-2 text-secondary">group</mat-icon> {{event.eventInfo.title}}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-                {{ event.eventInfo.description }}
-            </mat-expansion-panel>
-          </div>
-        </ng-template>
-        <ngx-timeline [enableAnimation]="false" [events]="events" [innerEventCustomTemplate]="innerEventCustomTemplate"
-                      [langCode]="'fr'" [ngClass]="'custom-theme'"
-                      class="col-6">
-        </ngx-timeline>
-      </div>
     </div>
-</div>
-<!--</div>-->
 
-<app-comment  [entity]="EntityEnum.INTERLOCUTOR" [entityId]="interlocutor.getValue().id" ></app-comment>
+    <div class="col-lg-6 mx-lg-2 mt-3 d-none row d-flex justify-content-end shadow-sm rounded-3">
+      <p class="d-flex col-12 mt-4 ">
+        <mat-icon class="example-tab-icon mx-2 primary-blue-color">list_alt</mat-icon>
+        <span class="fs-5">{{ "ACTIVITY_TRACKING" | translate }}</span>
+      </p>
+      <ng-template class="col-12" #innerEventCustomTemplate let-event=event>
+        <div class="event ">
+          <mat-expansion-panel class="bg-white mt-3 event">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon class="mx-2 text-secondary">group</mat-icon> {{event.eventInfo.title}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+              {{ event.eventInfo.description }}
+          </mat-expansion-panel>
+        </div>
+      </ng-template>
+      <ngx-timeline [enableAnimation]="false" [events]="events" [innerEventCustomTemplate]="innerEventCustomTemplate"
+                    [langCode]="'fr'" [ngClass]="'custom-theme'"
+                    class="col-6">
+      </ngx-timeline>
+    </div>
+  </div>
+
+  <app-general-infos
+    [createdBy]="interlocutor.getValue().createdBy" [createdAt]="interlocutor.getValue().createdAt"
+    [updatedBy]="interlocutor.getValue().updatedBy" [updatedAt]="interlocutor.getValue().updatedAt"
+    (onClickOnComment)="drawer.toggle()"
+  ></app-general-infos>
+</div>
+
+
+  <mat-drawer #leftDrawer mode="side" position="start" class="bg-white mat-elevation-z3 rounded-2 px-2 py-1 shadow-sm rounded-0 ">
+    <mat-toolbar class="text-end w-100 d-flex mb-2 justify-content-between bg-spider rounded-2 mat-elevation-z3">
+      <span class="small">💬 Détail de l’interaction</span>
+      <button mat-icon-button (click)="leftDrawer.toggle()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <div *ngIf="selectedInteraction" class="px-2 py-2">
+<!--      <h6 class="mb-3">-->
+<!--        <mat-icon class="primary-blue-color me-2">forum</mat-icon>-->
+<!--        Détail de l'interaction-->
+<!--      </h6>-->
+
+      <!-- Statut -->
+      <p>
+        <i class="bi bi-circle-fill me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "STATUS" | translate }} :</span>
+        <span class="ms-2 badge rounded-pill"
+              [ngClass]="getChipClass2(selectedInteraction.getValue().report ?? null)">
+      {{ getStatusLabel(selectedInteraction.getValue().report ?? null) }}
+    </span>
+      </p>
+
+      <!-- Interlocuteur -->
+      <p>
+        <i class="bi bi-person-fill me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "INTERLOCUTOR" | translate }} :</span>
+        <span class="text-secondary ms-1">{{ selectedInteraction.getValue().interlocutorName }}</span>
+      </p>
+
+      <!-- Prospect -->
+      <p>
+        <i class="bi bi-building me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "PROSPECT" | translate }}  :</span>
+        <span class="text-secondary ms-1">{{ selectedInteraction.getValue().prospectName }}</span>
+      </p>
+
+      <!-- Sujet -->
+      <p>
+        <i class="bi bi-chat-dots-fill me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "SUBJECT" | translate }}  :</span>
+        <span class="text-secondary ms-1">{{ selectedInteraction.getValue().interactionSubject }}</span>
+      </p>
+
+      <!-- Type d'interaction -->
+      <p>
+        <i class="bi bi-share-fill me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "TYPE" | translate }} :</span>
+        <span class="text-secondary ms-1">{{ selectedInteraction.getValue().interactionType }}</span>
+      </p>
+
+      <!-- Date planifiée -->
+      <p *ngIf="selectedInteraction.getValue().planningDate">
+        <i class="bi bi-calendar-event-fill me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "PLANNED_DATE" | translate }} :</span>
+        <span class="text-secondary ms-1">{{ selectedInteraction.getValue().planningDate | date:'fullDate' }}</span>
+      </p>
+
+      <!-- Date d'interaction -->
+      <p *ngIf="selectedInteraction.getValue().interactionDate">
+        <i class="bi bi-calendar-check-fill me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "INTERACTION_DATE" | translate }} :</span>
+        <span class="text-secondary ms-1">{{ selectedInteraction.getValue().interactionDate | date:'fullDate' }}</span>
+      </p>
+
+      <!-- Adresse -->
+      <p *ngIf="selectedInteraction.getValue().address">
+        <i class="bi bi-geo-alt-fill me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "ADDRESS" | translate }}  :</span>
+        <span class="text-secondary ms-1">{{ selectedInteraction.getValue().address }}</span>
+      </p>
+
+      <!-- Agent -->
+      <p *ngIf="selectedInteraction.getValue().agentName">
+        <i class="bi bi-person-badge-fill me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "SALES_AGENT" | translate }} :</span>
+        <span class="text-secondary ms-1">{{ selectedInteraction.getValue().agentName }}</span>
+      </p>
+
+      <!-- Affecté à -->
+      <p *ngIf="selectedInteraction.getValue().affectedToName">
+        <i class="bi bi-person-lines-fill me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "ASSIGNED_TO" | translate }}:</span>
+        <span class="text-secondary ms-1">{{ selectedInteraction.getValue().affectedToName }}</span>
+      </p>
+
+      <!-- Rapport -->
+      <p *ngIf="selectedInteraction.getValue().report">
+        <i class="bi bi-file-earmark-text me-2 primary-blue-color"></i>
+        <span class="text-dark">{{ "REPORT" | translate }} :</span>
+        <span class="text-secondary ms-1">{{ selectedInteraction.getValue().report }}</span>
+      </p>
+
+
+      <p >
+        <a [routerLink]="'/admin/interactions/'+ selectedInteraction.getValue().id" target="_blank">
+          {{ "SEE_DETAILS" | translate }}
+          <i class="bi bi-box-arrow-up-right"></i></a>
+      </p>
+    </div>
+
+  </mat-drawer>
+
+  <!-- Mat Drawer (End Side) -->
+<mat-drawer #drawer mode="side" position="end" class="bg-light px-2 py-1 shadow-sm rounded-0 ">
+  <mat-toolbar class="text-end w-100 d-flex mb-2 justify-content-between bg-spider rounded-2 mat-elevation-z3" >
+    <span class="small">💬 Commentaires </span>
+    <button mat-icon-button (click)="drawer.toggle()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+  <app-comment [entity]="EntityEnum.INTERLOCUTOR" [entityId]="interlocutor.getValue().id"></app-comment>
+</mat-drawer>
+
+</mat-drawer-container>

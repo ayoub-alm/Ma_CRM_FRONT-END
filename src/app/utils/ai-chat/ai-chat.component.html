@@ -1,4 +1,4 @@
-<!--<div class="chat-container">-->
+<div class="chat-container">
   <div class="chat-messages">
     <div *ngFor="let msg of chatHistory; let i = index" class="chat-bubble" [ngClass]="{'user': msg.type === 'user', 'ai': msg.type === 'ai'}">
       <strong class="small" *ngIf="msg.type === 'ai'">🤖 Spider:</strong>
@@ -22,4 +22,4 @@
       <mat-icon *ngIf="loading">hourglass_empty</mat-icon>
     </button>
   </form>
-<!--</div>-->
+</div>

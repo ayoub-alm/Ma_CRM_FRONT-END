@@ -2,6 +2,7 @@ import {DiscountTypeEnum} from '../../../enums/discount.type.enum';
 
 export class RequirementResponseDto {
   id: number;                     // Long in Java maps to number in TypeScript
+  storageOfferRequirementId: number;                     // Long in Java maps to number in TypeScript
   ref: string;                    // UUID in Java maps to string in TypeScript
   name: string;
   initPrice: number;              // Double in Java maps to number in TypeScript
@@ -12,8 +13,12 @@ export class RequirementResponseDto {
   discountType:DiscountTypeEnum;
   discountValue:number;
   salesPrice:number;
+  increaseValue:number;
+  order:number;
+
   constructor(data: any) {
     this.id = data.id;
+    this.storageOfferRequirementId = data.storageOfferRequirementId;
     this.name = data.name;
     this.ref = data.ref;
     this.initPrice = data.initPrice;
@@ -24,5 +29,7 @@ export class RequirementResponseDto {
     this.salesPrice = data.salesPrice ? data.salesPrice:  0 ;
     this.discountValue = data.discountValue;
     this.discountType = data.discountType;
+    this.increaseValue = data.increaseValue;
+    this.order = data.order;
   }
 }

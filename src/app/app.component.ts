@@ -11,7 +11,7 @@ import {NgForOf, NgIf} from "@angular/common";
 @Component({
   selector: 'app-root',
   standalone: true,
-    imports: [RouterOutlet, MatButton, MatDivider, MatDrawer, MatDrawerContainer, MatIcon, MatIconButton, MatList, MatListItem, MatToolbar, NgForOf, NgIf, RouterLink, RouterLinkActive],
+    imports: [RouterOutlet, ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

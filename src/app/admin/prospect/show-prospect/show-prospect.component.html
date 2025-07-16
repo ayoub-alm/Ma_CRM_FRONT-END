@@ -1,35 +1,36 @@
+<mat-drawer-container>
 <div class="container-fluid bg-white  vh-100 w-100 rounded-4 mat-elevation-z2 overflow-y-scroll">
-  <p class="rounded-3 p-1 bg-white  position-fixed">
+  <p class="rounded-3 p-1 bg-white  ">
     <span class="mx-2 text-secondary">
           <a routerLink="/admin">
              <button mat-button>
                <mat-icon class=" primary-blue-color">home</mat-icon>
-                Accueil
+               {{ 'HOME' | translate }}
              </button>
           </a> >
           <a routerLink="/admin/prospects">
             <button mat-button>
                <mat-icon class=" primary-blue-color">domain</mat-icon>
-              Clients
+              {{ 'PROSPECTS' | translate }}
              </button>
           </a> >
           <button mat-button>
                <mat-icon class=" primary-blue-color">info</mat-icon>
-              Détails
+            {{ 'DETAILS' | translate }}
           </button>
       </span>
-  </p><br><br><br>
+  </p>
 
-  <div class="container-fluid tab-container p-3 mat-elevation-z2  rounded-3  ">
+  <div class="container-fluid tab-container p-1 mat-elevation-z2  rounded-3  ">
     <section class="mt-1">
       <mat-card-title class="d-flex justify-content-between align-items-center">
         <p class="d-flex align-baseline">
           <mat-icon class="example-tab-icon mx-2 primary-blue-color">business</mat-icon>
-          <span class="fs-5">Détails de l'entreprise</span>
+          <span class="fs-5">{{'COMPANY_DETAILS' | translate}}</span>
         </p>
         <p>
           <button (click)="editProspect(customer.getValue())" mat-button>
-            Modifier
+            {{ 'UPDATE' | translate }}
             <mat-icon>edit</mat-icon>
           </button>
         </p>
@@ -39,18 +40,18 @@
           <div class="d-flex justify-content-around row">
             <!-- Company Information Section -->
             <div class="col-lg-12 row d-flex justify-content-start">
-              <div class="col-lg-4 col-12 border-start border-secondary-subtle px-3">
+              <div class="col-lg-4 col-12">
                 <!-- Company Name -->
                 <p>
                   <span class="text-secondary">
-                    <i class="primary-blue-color bi bi-building"></i>Raison sociale :
+                    <i class="primary-blue-color bi bi-building"></i>{{ 'PROSPECT_NAME' | translate }} :
                   </span>
                   <span class="mx-2 my-3">{{ customer.getValue().name }}</span>
                 </p>
 
                 <p class="d-flex align-items-center">
                   <span class="text-secondary">
-                    <i class="primary-blue-color bi bi-exclamation-circle"></i> Statut :
+                    <i class="primary-blue-color bi bi-exclamation-circle"></i> {{ 'STATUS' | translate }} :
                   </span>
                   <button  *ngIf="!isEditStatus" (click)="showChangeStatusForm()"
                     [ngClass]="[getChipClass(customer.getValue().customerStatus.name),'btn btn-sm rounded-2  px-3  mx-2']">
@@ -71,7 +72,7 @@
                 <!-- Sigle -->
                 <p>
                   <span class="text-secondary">
-                    <i class="primary-blue-color bi bi-briefcase-fill"></i> Sigle :
+                    <i class="primary-blue-color bi bi-briefcase-fill"></i> {{ 'ACRONYM' | translate }} :
                   </span>
                   <span class="mx-2 my-3">{{ customer.getValue().sigle }}</span>
                 </p>
@@ -79,15 +80,15 @@
                 <!-- Capital -->
                 <p>
                     <span class="text-secondary">
-                      <i class="primary-blue-color bi bi-currency-exchange"></i> Capital :
+                      <i class="primary-blue-color bi bi-currency-exchange"></i> {{ 'CAPITAL' | translate }} :
                     </span>
-                  <span class="mx-2 my-3">{{ customer.getValue().capital }} MAD</span>
+                  <span class="mx-2 my-3">{{ customer.getValue().capital }}</span>
                 </p>
 
                 <!-- Head Office -->
                 <p>
                   <span class="text-secondary">
-                    <i class="primary-blue-color bi bi-geo-alt-fill"></i> Siège social :
+                    <i class="primary-blue-color bi bi-geo-alt-fill"></i> {{ 'HEAD_OFFICE' | translate }} :
                   </span>
                   <span class="mx-2 my-3">{{ customer.getValue().headOffice }}</span>
                 </p>
@@ -95,7 +96,7 @@
                 <!-- Ownership Structure -->
                 <p>
                   <span class="text-secondary">
-                    <i class="primary-blue-color bi bi-diagram-2-fill"></i> Structure propriété :
+                    <i class="primary-blue-color bi bi-diagram-2-fill"></i> {{ 'STRUCTURE' | translate }} :
                   </span>
                   <span class="mx-2 my-3">{{ customer.getValue().proprietaryStructure?.name }}</span>
                 </p>
@@ -103,34 +104,31 @@
                 <!-- Industry -->
                 <p>
                   <span class="text-secondary">
-                    <i class="primary-blue-color bi bi-hammer"></i> Industrie :
+                    <i class="primary-blue-color bi bi-hammer"></i> {{ 'INDUSTRY' | translate }} :
                   </span>
                   <span class="mx-2 my-3">{{ customer.getValue().industry?.name }}</span>
                 </p>
-
-                <!-- City -->
-                <p>
-            <span class="text-secondary">
-              <i class="primary-blue-color bi bi-geo-fill"></i> Ville :
-            </span>
-                  <span class="mx-2 my-3">{{ customer.getValue().city?.name }}</span>
-                </p>
-
-                <!-- Country -->
-                <p>
-            <span class="text-secondary">
-              <i class="primary-blue-color bi bi-flag-fill"></i> Pays :
-            </span>
-                  <span class="mx-2 my-3">{{ customer.getValue().country?.name }}</span>
-                </p>
-
               </div>
 
               <div class="col-lg-4 col-12 border-start border-secondary-subtle px-3">
+                <!-- City -->
+                <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-geo-fill"></i> {{ 'CITY' | translate }} :
+                  </span>
+                  <span class="mx-2 my-3">{{ customer.getValue().city?.name }}</span>
+                </p>
+                <!-- Country -->
+                <p>
+                  <span class="text-secondary">
+                    <i class="primary-blue-color bi bi-flag-fill"></i> {{ 'COUNTRY' | translate }} :
+                  </span>
+                  <span class="mx-2 my-3">{{ customer.getValue().country?.name }}</span>
+                </p>
                 <!-- Year of Creation -->
                 <p>
                   <span class="text-secondary">
-                    <i class="primary-blue-color bi bi-calendar-check-fill"></i> Année de création :
+                    <i class="primary-blue-color bi bi-calendar-check-fill"></i> {{ 'CREATION_DATE' | translate }} :
                   </span>
                   <span class="mx-2 my-3">{{ customer.getValue().yearOfCreation }}</span>
                 </p>
@@ -138,33 +136,11 @@
                 <!-- Company Size -->
                 <p>
                   <span class="text-secondary">
-                    <i class="primary-blue-color bi bi-people-fill"></i> Taille de l'entreprise :
+                    <i class="primary-blue-color bi bi-people-fill"></i> {{'COMPANY_SIZE' | translate }} :
                   </span>
                   <span class="mx-2 my-3">{{ customer.getValue().companySize?.name }}</span>
                 </p>
 
-
-                <!-- Created At By - Updated At By -->
-                <p>
-                  <i class="bi bi-calendar-event-fill primary-blue-color"></i>
-                  <span class="text-secondary"> Créé le : </span>
-                  <span class="mx-2 my-3">{{ customer.getValue().createdAt | date:'dd/MM/yyyy hh:mm' }}</span>
-                </p>
-                <p>
-                  <i class="bi bi-person-lines-fill primary-blue-color"></i>
-                  <span class="text-secondary"> Créé par : </span>
-                  <span class="mx-2 my-3">{{ customer.getValue().createdBy.name }}</span>
-                </p>
-                <p>
-                  <i class="bi bi-calendar-event-fill primary-blue-color"></i>
-                  <span class="text-secondary"> Mis à jour le : </span>
-                  <span class="mx-2 my-3">{{ customer.getValue().updatedAt | date:'dd/MM/yyyy hh:mm' }}</span>
-                </p>
-                <p>
-                  <i class="bi bi-person-lines-fill primary-blue-color"></i>
-                  <span class="text-secondary"> Mis à jour par : </span>
-                  <span class="mx-2 my-3">{{ customer.getValue().updatedBy.name }}</span>
-                </p>
 
               </div>
 
@@ -172,7 +148,7 @@
               <div class="col-lg-4 col-12 border-start border-secondary-subtle px-3">
                 <p>
                   <span class="text-secondary">
-                    <i class="primary-blue-color bi bi-card-text"></i> Description de l'activité : <br/>
+                    <i class="primary-blue-color bi bi-card-text"></i> {{'DESCRIPTION' | translate}}: <br/>
                   </span>
                   <span class="mx-2 my-3">{{ customer.getValue().businessDescription }}</span>
                 </p>
@@ -184,152 +160,183 @@
 
 
     </section>
+  </div>
 
 
-    <mat-divider class="my-2"></mat-divider>
 
-    <section class="d-flex row">
-      <mat-tab-group class="rounded-0 mat-elevation-z1 col-lg-8" mat-align-tabs="start"
-                     mat-stretch-tabs="true">
-        <!-- Informations de contact Tab -->
-        <mat-tab label="Informations de contact">
-          <ng-template mat-tab-label>
-            <i class="bi bi-person-lines-fill mx-2 primary-blue-color"></i>
-            Informations de contact
-          </ng-template>
-          <div class="d-flex mt-3 p-4">
-            <div class="col-lg-6">
-              <p>
-                <span class="text-secondary"><i class="bi bi-envelope-fill primary-blue-color"></i> Email :</span>
-                <span class="mx-2"><a href="mailto:{{ customer.getValue().email }}">{{ customer.getValue().email }}</a></span>
-              </p>
-              <p>
-                <span class="text-secondary"><i class="bi bi-telephone-fill primary-blue-color"></i> Téléphone :</span>
-                <span class="mx-2"><a href="tel:{{ customer.getValue().phone }}">{{ customer.getValue().phone }}</a></span>
-              </p>
-              <p>
-                <span class="text-secondary"><i class="bi bi-printer-fill primary-blue-color"></i> Fax :</span>
-                <span class="mx-2">{{ customer.getValue().fax }}</span>
-              </p>
-            </div>
-            <div class="col-lg-6">
-              <p>
-                <span class="text-secondary"><i class="bi bi-chat-dots-fill primary-blue-color"></i> WhatsApp :</span>
-                <span class="mx-2">
-                <a href="https://wa.me/{{ customer.getValue().whatsapp }}" target="_blank" class="text-success"> {{customer.getValue().whatsapp}} </a>
-              </span>
-              </p>
-              <p>
-                <span class="text-secondary"><i class="bi bi-globe primary-blue-color"></i> Site Web :</span>
-                <span class="mx-2"><a target="_blank" href="{{ customer.getValue().website }}">{{ customer.getValue().website }}</a></span>
-              </p>
-              <p>
-                <span class="text-secondary"><i class="bi bi-linkedin primary-blue-color"></i> LinkedIn :</span>
-                <span class="mx-2">{{ customer.getValue().linkedin }}</span>
-              </p>
-            </div>
-          </div>
-        </mat-tab>
+<!--  <mat-divider class="my-2"></mat-divider>-->
 
-        <!-- Informations légales Tab -->
-        <mat-tab label="Informations légales">
-          <ng-template mat-tab-label>
-            <i class="bi bi-bank primary-blue-color mx-2"></i>
-            Informations légales
-          </ng-template>
-          <div class="d-flex mt-3 p-4">
-            <div class="col-lg-6">
-              <p><span class="text-secondary"><i class="bi bi-file-earmark-code-fill primary-blue-color"></i> Statut juridique :</span>
-                <span class="mx-2">{{ customer.getValue().legalStatus?.name }}</span>
-              </p>
-              <p><span class="text-secondary"><i class="bi bi-person-check-fill primary-blue-color"></i> Représentant légal :</span>
-                <span class="mx-2"> {{ customer.getValue().title?.title }} {{ customer.getValue().legalRepresentative }}</span>
-              </p>
-              <p><span class="text-secondary"><i class="bi bi-briefcase-fill primary-blue-color"></i> Function du représentant légal :</span>
-                <span class="mx-2">{{ customer.getValue().reprosentaveJobTitle?.name }}</span>
-              </p>
-            </div>
-            <div class="col-lg-6">
-              <p><span class="text-secondary"><i class="bi bi-card-checklist primary-blue-color"></i> Certificat :</span>
-                <span class="mx-2">{{ customer.getValue().certificationText }}</span>
-              </p>
-              <p><span class="text-secondary"><i class="bi bi-file-earmark-code-fill primary-blue-color"></i> ICE :</span>
-                <span class="mx-2">{{ customer.getValue().ice }}</span>
-              </p>
-              <p><span class="text-secondary"><i class="bi bi-briefcase-fill primary-blue-color"></i> RC :</span>
-                <span class="mx-2">{{ customer.getValue().rc }}</span>
-              </p>
-              <p><span class="text-secondary"><i class="bi bi-cash-stack primary-blue-color"></i> IFM :</span>
-                <span class="mx-2">{{ customer.getValue().ifm }}</span>
-              </p>
-            </div>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-      <div class="col-lg-4">
-        <p class="d-flex align-baseline my-2">
-          <mat-icon class="example-tab-icon mx-2 primary-blue-color">check_list</mat-icon>
-          <span class="fs-4 primary-blue-color">Les intérêts</span>
-        </p>
-          <p *ngFor="let interest of interests.getValue()">
+  <section class="container-fluid mt-3">
+    <div class="row d-flex justify-content-around">
+      <mat-card class="bg-white col-lg-9 rounded-2">
+        <section class="d-flex row">
+          <mat-tab-group class="rounded-2 " mat-align-tabs="start"
+                         mat-stretch-tabs="true">
+            <!-- Informations de contact Tab -->
+            <mat-tab label="Informations de contact">
+              <ng-template mat-tab-label>
+                <i class="bi bi-person-lines-fill mx-2 primary-blue-color"></i>
+                {{ 'CONTACT_INFORMATION' | translate }}
+              </ng-template>
+              <div class="d-flex mt-3 p-4">
+                <div class="col-lg-6">
+                  <p>
+                    <span class="text-secondary"><i class="bi bi-envelope-fill primary-blue-color"></i> Email :</span>
+                    <span class="mx-2"><a href="mailto:{{ customer.getValue().email }}">{{ customer.getValue().email }}</a></span>
+                  </p>
+                  <p>
+                    <span class="text-secondary"><i class="bi bi-telephone-fill primary-blue-color"></i> {{ 'PHONE' | translate }} :</span>
+                    <span class="mx-2"><a href="tel:{{ customer.getValue().phone }}">{{ customer.getValue().phone }}</a></span>
+                  </p>
+                  <p>
+                    <span class="text-secondary"><i class="bi bi-printer-fill primary-blue-color"></i> Fax :</span>
+                    <span class="mx-2">{{ customer.getValue().fax }}</span>
+                  </p>
+                </div>
+                <div class="col-lg-6">
+                  <p>
+                    <span class="text-secondary"><i class="bi bi-chat-dots-fill primary-blue-color"></i> WhatsApp :</span>
+                    <span class="mx-2">
+              <a href="https://wa.me/{{ customer.getValue().whatsapp }}" target="_blank" class="text-success"> {{customer.getValue().whatsapp}} </a>
+            </span>
+                  </p>
+                  <p>
+                    <span class="text-secondary"><i class="bi bi-globe primary-blue-color"></i> Site Web :</span>
+                    <span class="mx-2"><a target="_blank" href="{{ customer.getValue().website }}">{{ customer.getValue().website }}</a></span>
+                  </p>
+                  <p>
+                    <span class="text-secondary"><i class="bi bi-linkedin primary-blue-color"></i> LinkedIn :</span>
+                    <span class="mx-2">{{ customer.getValue().linkedin }}</span>
+                  </p>
+                </div>
+              </div>
+            </mat-tab>
+
+            <!-- Informations légales Tab -->
+            <mat-tab label="Informations légales">
+              <ng-template mat-tab-label>
+                <i class="bi bi-bank primary-blue-color mx-2"></i>
+                {{ 'LEGAL_INFORMATION' | translate }}
+              </ng-template>
+              <div class="d-flex mt-3 p-4">
+                <div class="col-lg-6">
+                  <p><span class="text-secondary"><i class="bi bi-file-earmark-code-fill primary-blue-color"></i>
+                    {{ 'LEGAL_STATUS' | translate}}:</span>
+                    <span class="mx-2">{{ customer.getValue().legalStatus?.name }}</span>
+                  </p>
+                  <p><span class="text-secondary"><i class="bi bi-person-check-fill primary-blue-color"></i>
+                    {{ 'LEGAL_REPRESENTATIVE' | translate}}:</span>
+                    <span class="mx-2"> {{ customer.getValue().title?.title }} {{ customer.getValue().legalRepresentative }}</span>
+                  </p>
+                  <p><span class="text-secondary"><i class="bi bi-briefcase-fill primary-blue-color"></i>
+                    {{ 'LEGAL_REPRESENTATIVE_JOB_TITLE' | translate }} :</span>
+                    <span class="mx-2">{{ customer.getValue().reprosentaveJobTitle?.name }}</span>
+                  </p>
+                </div>
+                <div class="col-lg-6">
+                  <p><span class="text-secondary"><i class="bi bi-card-checklist primary-blue-color"></i> Certificat :</span>
+                    <span class="mx-2">{{ customer.getValue().certificationText }}</span>
+                  </p>
+                  <p><span class="text-secondary"><i class="bi bi-file-earmark-code-fill primary-blue-color"></i> ICE :</span>
+                    <span class="mx-2">{{ customer.getValue().ice }}</span>
+                  </p>
+                  <p><span class="text-secondary"><i class="bi bi-briefcase-fill primary-blue-color"></i> RC :</span>
+                    <span class="mx-2">{{ customer.getValue().rc }}</span>
+                  </p>
+                  <p><span class="text-secondary"><i class="bi bi-cash-stack primary-blue-color"></i> IFM :</span>
+                    <span class="mx-2">{{ customer.getValue().ifm }}</span>
+                  </p>
+                </div>
+              </div>
+            </mat-tab>
+          </mat-tab-group>
+        </section>
+      </mat-card>
+
+      <mat-card class="bg-white rounded-2 col-lg-3">
+        <div class="">
+          <p class="d-flex align-baseline my-2">
+            <mat-icon class="example-tab-icon mx-2 primary-blue-color">check_list</mat-icon>
+            <span class="fs-4 primary-blue-color">Les intérêts</span>
+          </p>
+<!--            <ng-container *ngFor="let interest of customer.getValue().interest">-->
+<!--                <button  mat-button class="scale-09 rounded-1"-->
+<!--                        (click)="updateInterest(interest.id)">-->
+<!--                    {{ interest.name }}-->
+<!--                </button><br>-->
+<!--            </ng-container>-->
+<!--            <button mat-icon-button class="bg-spider scale-08">-->
+<!--                <mat-icon>add</mat-icon>-->
+<!--            </button>-->
+            <p *ngFor="let interest of interests.getValue()">
                 <span class="text-secondary">
 
                   <section class="example-section fs-6">
                   <mat-slide-toggle
-                    (change)="updateInterest(interest.id)"
-                    [checked]="isChecked(interest.name)"
-                    [color]="'primary'"
-                    class="custom-toggle scale-08">
+                          (change)="updateInterest(interest.id)"
+                          [checked]="isChecked(interest.name)"
+                          [color]="'primary'"
+                          class="custom-toggle scale-08">
                   </mat-slide-toggle>
 
-                    {{ interest.name }}
+                      {{ interest.name }}
                 </section>
               </span>
-          </p>
-      </div>
-    </section>
-
-    <mat-divider class="my-2"></mat-divider>
-    <div class="container-fluid mt-3">
-      <div class=" text-dark row  d-flex justify-content-around ">
-        <div class="col-lg-6 p-4 align-baseline bg-light rounded-2 shadow-sm ">
-          <p class="d-flex align-baseline ">
-            <mat-icon class="m-0 p-0 mx-2 primary-blue-color">group</mat-icon>
-            <span class="fs-5">Interlocuteurs</span>
-          </p>
-
-          <ng-container *ngFor="let interlocutor of interlocutors | async">
-            <mat-expansion-panel class=" mb-2 bg-white rounded-2 ">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <mat-icon class="p mx-2 text-secondary">account_circle</mat-icon>
-                  {{ interlocutor.fullName }}
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <div class="px-3">
-                <p>
-                  <i class="bi bi-envelope-fill me-2 primary-blue-color"></i>
-                  <span>Email :</span> <span class="text-dark">{{ interlocutor.emailAddress.address }}</span>
-                </p>
-                <p>
-                  <i class="bi bi-telephone-fill me-2 primary-blue-color"></i>
-                  <span>Téléphone :</span> <span class="text-dark">{{ interlocutor.phoneNumber.number }}</span>
-                </p>
-                <p>
-                  <i class="bi bi-building me-2 primary-blue-color"></i>
-                  <span>Département :</span> <span class="text-dark">{{ interlocutor.department.name }}</span>
-                </p>
-                <p>
-                  <i class="bi bi-briefcase-fill me-2 primary-blue-color"></i>
-                  <span>Titre de poste :</span> <span class="text-dark">{{ interlocutor.jobTitle.name }}</span>
-                </p>
-              </div>
-            </mat-expansion-panel>
-          </ng-container>
+            </p>
         </div>
+      </mat-card>
+    </div>
+  </section>
 
-        <div class="col-lg-6 row  d-flex flex-column justify-content-end shadow-sm bg-white rounded-3 p-4">
-          <!-- Custom Event Template -->
+<!--  <mat-divider class="my-2"></mat-divider>-->
+  <div class="container-fluid my-3">
+    <div class=" text-dark row  d-flex justify-content-around ">
+      <mat-card
+        class="col-lg-6 p-4 align-baseline bg-light rounded-2  ">
+       <div class="d-flex justify-content-between">
+         <p class="d-flex align-baseline ">
+           <mat-icon class="m-0 p-0 mx-2 primary-blue-color">group</mat-icon>
+           <span class="fs-5">{{ 'CONTACTS' | translate }}</span>
+         </p>
+         <p>
+           <button (click)="onAddNewContacts()"
+             mat-icon-button >
+             <mat-icon>add</mat-icon></button>
+         </p>
+       </div>
+
+        <ng-container *ngFor="let interlocutor of interlocutors | async">
+          <mat-expansion-panel class=" mb-2 bg-white rounded-2 ">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <mat-icon class="p mx-2 text-secondary">account_circle</mat-icon>
+                {{ interlocutor.fullName }}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="px-3">
+              <p>
+                <i class="bi bi-envelope-fill me-2 primary-blue-color"></i>
+                <span>Email :</span> <span class="text-dark">{{ interlocutor.emailAddress.address }}</span>
+              </p>
+              <p>
+                <i class="bi bi-telephone-fill me-2 primary-blue-color"></i>
+                <span>Téléphone :</span> <span class="text-dark">{{ interlocutor.phoneNumber.number }}</span>
+              </p>
+              <p>
+                <i class="bi bi-building me-2 primary-blue-color"></i>
+                <span>Département :</span> <span class="text-dark">{{ interlocutor.department.name }}</span>
+              </p>
+              <p>
+                <i class="bi bi-briefcase-fill me-2 primary-blue-color"></i>
+                <span>Titre de poste :</span> <span class="text-dark">{{ interlocutor.jobTitle }}</span>
+              </p>
+            </div>
+          </mat-expansion-panel>
+        </ng-container>
+      </mat-card>
+
+      <div class="col-lg-6 row  d-flex flex-column justify-content-end shadow-sm bg-white rounded-3 p-4">
+<!--         Custom Event Template-->
 <!--          <ng-template #innerEventCustomTemplate class="" let-event="event">-->
 <!--            <div class="event d-flex justify-content-end">-->
 <!--              <mat-expansion-panel class="bg-light mt-3 col-12 shadow-sm rounded-3 w-100">-->
@@ -350,7 +357,7 @@
 <!--            </div>-->
 <!--          </ng-template>-->
 
-          <!-- Timeline Component -->
+<!--         Timeline Component-->
 <!--          <ngx-timeline-->
 <!--            [enableAnimation]="true"-->
 <!--            [events]="events"-->
@@ -362,48 +369,26 @@
 <!--          >-->
 <!--          </ngx-timeline>-->
 
-          <div class="d-flex mt-3 p-4">
-<!--            <div class="col-lg-6">-->
-<!--              <p>-->
-<!--              <span class="text-secondary">-->
-<!--                <section class="example-section fs-6">-->
-<!--                  <mat-slide-toggle [checked]="true" [color]="'primary'" [disabled]="false" class="custom-toggle"-->
-<!--                                    style="transform:scale(0.8) !important;">-->
-<!--                  </mat-slide-toggle>-->
-<!--                    Status-->
-<!--                </section>-->
-<!--              </span>-->
-<!--              </p>-->
-<!--            </div>-->
-
-<!--            <div class="col-lg-12">-->
-<!--              <div>-->
-<!--                <p *ngFor="let interest of interests.getValue()">-->
-<!--                <span class="text-secondary">-->
-<!--                  <section class="example-section fs-6">-->
-<!--                  <mat-slide-toggle-->
-<!--                                        (change)="updateInterest( interest.id)"-->
-<!--                                        [checked]="isChecked(interest.name)"-->
-<!--                                        [color]="'primary'"-->
-<!--                                        class="custom-toggle scale-08">-->
-<!--                                      </mat-slide-toggle>-->
-<!--                  <input type="checkbox"-->
-<!--                         (change)="updateInterest(interest.id)"-->
-<!--                         [checked]="isChecked(interest.name)">-->
-<!--                    {{ interest.name }}-->
-<!--                </section>-->
-<!--              </span>-->
-<!--                </p>-->
-<!--              </div>-->
-<!--            </div>-->
-
-          </div>
-        </div>
-
       </div>
+
     </div>
-
-
   </div>
+
+  <app-general-infos
+    [createdBy]="customer.getValue().createdBy" [createdAt]="customer.getValue().createdAt"
+    [updatedBy]="customer.getValue().updatedBy" [updatedAt]="customer.getValue().updatedAt"
+    (onClickOnComment)="drawer.toggle()"
+  ></app-general-infos>
 </div>
-<app-comment [entityId]="customer.getValue().id" [entity]="EntityEnum.PROSPECT"></app-comment>
+<!-- Mat Drawer (End Side) -->
+<mat-drawer #drawer mode="side" position="end" class="bg-light px-2 py-1 shadow-sm rounded-0 ">
+  <mat-toolbar class="text-end w-100 d-flex mb-2 justify-content-between bg-spider rounded-2 mat-elevation-z3" >
+    <span class="small">💬 Commentaires </span>
+    <button mat-icon-button (click)="drawer.toggle()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+  <app-comment [entity]="EntityEnum.PROSPECT" [entityId]="customer.getValue().id"></app-comment>
+</mat-drawer>
+
+</mat-drawer-container>

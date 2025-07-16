@@ -42,13 +42,14 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 import {ProspectResponseDto} from '../../../../dtos/response/prospect.response.dto';
 import {environment} from '../../../../environments/environment';
 import {LocalStorageService} from '../../../../services/local.storage.service';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-prospect-dialog',
   standalone: true,
   imports: [MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle, MatButton, MatFormField, MatStep,
     MatIcon, ReactiveFormsModule, MatStepLabel, MatStepper,
-    MatInput, MatLabel, MatDatepickerModule, AsyncPipe, MatSelect, MatOption, NgIf, MatError, NgForOf, MatIconButton],
+    MatInput, MatLabel, MatDatepickerModule, AsyncPipe, MatSelect, MatOption, NgIf, MatError, NgForOf, MatIconButton, TranslatePipe],
   templateUrl: './add-prospect-dialog.component.html',
   styleUrl: './add-prospect-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

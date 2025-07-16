@@ -38,13 +38,13 @@ mat-icon {
   color: #005cbb !important;
 }
 .primary-blue-color-light{
-  color: cornflowerblue !important;
+  color: rgba(100, 149, 237, 0.69) !important;
 }
 .bg-primary-blue-color{
   background: #005cbb !important;
 }
 .bg-spider-light{
-  background: rgba(128, 174, 243, 0.3) !important;
+  background: rgb(234, 244, 255,0.3)  !important;
 }
 .bg-spider{
   background: rgb(234, 244, 255) !important;
@@ -66,7 +66,11 @@ color:rgb(209 177 146)
   /* Enable vertical scrolling */
 }
 
-
+/*.comment-drawer{*/
+/*  max-height: 90vh;*/
+/*  scrollbar-width: none;*/
+/*  -ms-overflow-style: none; !* IE and Edge *!*/
+/*}*/
 
 /* Custom scrollbar styling for horizontal scrollbar */
 *::-webkit-scrollbar {
@@ -115,4 +119,17 @@ color:rgb(209 177 146)
 }
 html {
   font-size : 90%;
+}
+
+.snackbar-success {
+  background-color: #4caf50;
+  color: #fff;
+}
+.snackbar-error {
+  background-color: #f44336;
+  color: #fff;
+}
+.snackbar-warning {
+  background-color: #ff9800;
+  color: #fff;
 }

@@ -1,0 +1,11 @@
+.drop-zone {
+  border: 2px dashed rgba(36, 112, 220, 0.67);
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  cursor: pointer;
+  max-width: 600px;
+}
+
+.drop-zone.dragover {
+  border-color: #3f51b5;
+  background-color: #f8f9fa;
+}

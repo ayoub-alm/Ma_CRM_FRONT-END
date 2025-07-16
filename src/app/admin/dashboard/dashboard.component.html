@@ -2,7 +2,7 @@
   <div>
     <button mat-button>
       <mat-icon class="primary-blue-color">bar_chart</mat-icon>
-      Tableau de Bord
+      {{ 'DASHBOARD' | translate }}
     </button>
   </div>
 
@@ -14,7 +14,7 @@
           <div class="row p-2">
             <div class="col-12 d-flex align-items-center">
               <mat-icon class="text-secondary">domain</mat-icon>
-              <span class="mx-2 text-secondary">Prospects</span>
+              <span class="mx-2 text-secondary">{{ 'PROSPECTS' | translate }}</span>
             </div>
             <div class="display-6 mt-3 col-12 text-center primary-blue-color">{{ counts.getValue()?.countOfProspects || 0 }}</div>
           </div>
@@ -26,7 +26,7 @@
           <div class="row p-2">
             <div class="col-12 d-flex align-items-center">
               <mat-icon class="text-secondary">contacts</mat-icon>
-              <span class="mx-2 text-secondary">Contacts</span>
+              <span class="mx-2 text-secondary">{{ 'CONTACTS' | translate }}</span>
             </div>
             <div class="display-6 mt-3 col-12 text-center primary-blue-color">{{ counts.getValue()?.countOfInterlocutors || 0 }}</div>
           </div>
@@ -38,7 +38,7 @@
           <div class="row p-2">
             <div class="col-12 d-flex align-items-center">
               <mat-icon class="text-secondary">forum</mat-icon>
-              <span class="mx-2 text-secondary">Interactions</span>
+              <span class="mx-2 text-secondary">{{'INTERACTIONS' | translate}}</span>
             </div>
             <div class="display-6 mt-3 col-12 text-center primary-blue-color">{{ counts.getValue()?.countOfInteractions || 0 }}</div>
           </div>
@@ -50,7 +50,7 @@
           <div class="row p-2">
             <div class="col-12 d-flex align-items-center">
               <mat-icon class="text-secondary">info</mat-icon>
-              <span class="mx-2 text-secondary">Mes informations</span>
+              <span class="mx-2 text-secondary">{{'MY_INFO' | translate}}</span>
             </div>
             <div class="display-6 mt-3 col-12 text-center primary-blue-color">{{ counts.getValue()?.countOfInteractions || 0 }}</div>
           </div>
@@ -62,7 +62,7 @@
   <!-- 📈 Graphs -->
   <div class="container-fluid p-3 row d-flex justify-content-around">
     <div class="col-md-4 mat-elevation-z1 p-3 rounded-2">
-      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> Client par statut</p>
+      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> {{ 'CHART.BY_STATUS' | translate }}</p>
       <canvas baseChart
               [datasets]="customerPerStatusData"
               [labels]="customerPerStatusChartLabels"
@@ -75,7 +75,7 @@
 
 
     <div class="col-md-4 mat-elevation-z1 p-3 rounded-2">
-      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> Client par Commercial</p>
+      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> {{'CHART.' + 'BY_SELLER' | translate}}</p>
       <canvas baseChart
               [datasets]="customerPerSellerData"
               [labels]="customerPerSellerChartLabels"
@@ -88,7 +88,7 @@
 
 
     <div class="col-md-4 mat-elevation-z1 p-3 rounded-2">
-      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> Client par Ville</p>
+      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> {{ 'CHART.BY_CITY' | translate }}</p>
       <canvas baseChart
               [datasets]="customerPerCityData"
               [labels]="customerPerCityChartLabels"
@@ -101,7 +101,7 @@
 
 
     <div class="col-md-4 mat-elevation-z1 p-3 rounded-2">
-      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> Client par Industrie</p>
+      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> {{ 'CHART.BY_INDUSTRY' | translate }}</p>
       <canvas baseChart
               [datasets]="customerPerIndustryData"
               [labels]="customerPerIndustryChartLabels"
@@ -114,7 +114,7 @@
 
 
     <div class="col-md-4 mat-elevation-z1 p-3 rounded-2">
-      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> Client par Structure</p>
+      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> {{ 'CHART.BY_STRUCTURE' | translate }}</p>
       <canvas baseChart
               [datasets]="customerPerStructureData"
               [labels]="customerPerStructureChartLabels"
@@ -126,7 +126,7 @@
     </div>
 
     <div class="col-md-4 mat-elevation-z1 p-3 rounded-2">
-      <p class="text-secondary"><mat-icon>bar_chart</mat-icon> Client par Jour</p>
+      <p class="text-secondary"><mat-icon>bar_chart</mat-icon>{{ 'CHART.BY_STRUCTURE' | translate }}</p>
       <canvas baseChart
               [datasets]="customerPerDateData"
               [labels]="customerPerDateChartLabels"

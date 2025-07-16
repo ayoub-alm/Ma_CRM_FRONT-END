@@ -1,54 +1,3 @@
-.form-control{
-    box-shadow: none;
-    border-color: transparent;
-    /*font-size:1rem;*/
-    border-bottom: solid 0.5px #005cbb;
-    margin:0% !important;
-    padding:4% !important;
-    padding-left:0.5rem !important;
-    /*background-color: #e0e2ec !important;*/
-}
-.user-info {
-    display: flex;
-    align-items: center; /* Centers the icon and text vertically */
-}
-.user-icon {
-    font-size: 24px; /* Adjust icon size */
-    margin-right: 8px; /* Add spacing between icon and text */
-    color: #3f51b5;
-}
-.comments-button{
-    position: fixed;
-    bottom: 6px;
-    right: 16px;
-    z-index: 1050;
-    transition: right 0.3s ease-in-out;
-}
-.commentdate{
-    font-size:0.7rem !important;
-}
-
-.reply{
-    font-size:0.8rem !important;
-}
-
-:host {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-  .demo-section + .demo-section {
-      margin-top: 16px;
-      color: red;
-  }
-
-.comment-container {
-  position: relative; /* Ensure proper positioning for the child elements */
-  transition: opacity 0.3s ease-in-out; /* Faster and smoother transition */
-}
-
-
 
 .comments-options {
   transition: opacity 1s ease-in-out, transform 1s ease-in-out; /* Smooth transitions for visibility */
@@ -59,3 +8,96 @@
   opacity: 1; /* Ensure the options are fully visible */
 }
 
+/*.comment-container {*/
+/*  !*max-width: 500px;*!*/
+/*  margin: auto;*/
+/*  display: flex;*/
+/*  flex-direction: column;*/
+/*  border: 1px solid #ddd;*/
+/*  border-radius: 10px;*/
+/*  background: #fff;*/
+/*  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);*/
+/*}*/
+
+.comment-messages {
+  min-height: 70vh;
+  /*overflow-y: auto;*/
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-bubble {
+  max-width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  word-wrap: break-word;
+  position: relative;
+}
+
+.comment-bubble.user {
+  align-self: flex-end;
+  background: #9eceff;
+  color: white;
+  width:100%;
+}
+
+.comment-bubble.ai {
+  align-self: flex-start;
+  background: #f1f1f1;
+}
+
+/*.comment-input {*/
+/*  display: flex;*/
+/*  padding: 10px;*/
+/*  border-top: 1px solid #ddd;*/
+/*  position: fixed;*/
+/*  bottom: 5px;*/
+/*}*/
+
+.comment-input input {
+  flex-grow: 1;
+  width: 300px;
+  border-radius: 5px;
+  border-color: lightslategray;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  cursor: pointer;
+}
+
+.delete-btn {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  cursor: pointer;
+}
+
+.copied-msg {
+  font-size: 12px;
+  color: green;
+  margin-left: 5px;
+}
+
+.chat-input {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #ddd;
+}
+
+
+.comment-messages::-webkit-scrollbar,
+.chat-messages::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.comment-messages,
+.chat-messages {
+  scrollbar-width: none;
+  -ms-overflow-style: none; /* IE and Edge */
+}

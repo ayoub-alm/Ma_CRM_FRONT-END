@@ -105,4 +105,16 @@ export class InteractionService {
     return this.http.post<InteractionResponseDto[]>(`${this.baseUrl}/filter-by-fields`, filterData);
   }
 
+  /**
+   * This function allows to upload file report for interaction
+   * @param interactionId the interaction ID
+   * @param file this file Pdf
+   */
+  uploadReportFile(interactionId: number, file: File): Observable<string> {
+      const formData = new FormData();
+      formData.append('file', file);
+      return this.http.post(`${this.baseUrl}/${interactionId}/upload-pdf`, formData, {
+        responseType: 'text',
+      });
+    }
 }

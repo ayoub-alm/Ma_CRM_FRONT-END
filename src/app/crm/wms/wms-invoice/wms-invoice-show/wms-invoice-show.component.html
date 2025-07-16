@@ -1,1 +1,301 @@
-<p>wms-invoice-show works!</p>
+<div class="container-fluid bg-body row d-flex justify-content-center w-100">
+  <!-- Actions -->
+  <div class="d-flex justify-content-between row" >
+    <div class="col-8">
+      <button (click)="router.navigate(['/admin/crm/wms/wms/delivery-note'])" color="primary"  mat-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button mat-button (click)="router.navigate(['/admin/crm/wms'])"  >
+        <mat-icon class=" primary-blue-color">house</mat-icon>
+        Accueil
+      </button>
+      >
+      <button mat-button (click)="router.navigate(['/admin/crm/wms/invoice'])">
+        <mat-icon class=" primary-blue-color">checklist</mat-icon>
+        Facturs
+      </button>
+      >
+      <button mat-button (click)="router.navigate(['/admin/crm/wms/invoice'])">
+        <mat-icon class=" primary-blue-color">details</mat-icon>
+        Détailes
+      </button>
+    </div>
+    <div class="col-2 d-flex justify-content-end">
+      <button [matMenuTriggerFor]="menu"  class="bg-spider scale-08 primary-blue-color fw-bold rounded-2" aria-label="Actions" mat-raised-button>
+        Actions <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" class="bg-spider scale-09">
+        <button mat-menu-item (click)="onValidateFinances()" >
+          <mat-icon>add</mat-icon>
+          Valider par C
+        </button>
+        <button  mat-menu-item (click)="onValidateFinances()">
+          <mat-icon>approve</mat-icon>
+          Validation financier
+        </button>
+        <button mat-menu-item (click)="onPrintInvoice()">
+          <mat-icon>print</mat-icon>
+          Télécharger
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <hr>
+</div>
+<form [formGroup]="invoiceForm" class="row g-2">
+<section class="container-fluid px-2">
+  <div class="row p-2">
+    <ng-container  class="col-12 row " >
+      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-4">
+        <mat-card-content>
+          <p class="fs-6 align-items-center d-flex primary-blue-color">
+            <mat-icon class="scale-08">business</mat-icon>
+            Informations General
+          </p>
+          <p><span class="text-secondary">Référence:</span> {{ invoice.getValue().number }}</p>
+          <p><span class="text-secondary">Status:</span> <button [class]="'btn btn-sm bg-success-subtle scale-09'">{{ invoice.getValue()?.status?.name }}</button></p>
+<!--          <p><span class="text-secondary">Date de creation:</span> {{ invoice.getValue().createdAt | date:'dd/MM/YYYY HH:mm' }}</p>-->
+          <p><span class="text-secondary">Client:</span> {{ invoice.getValue().storageContract?.customer?.name }}</p>
+          <p><span class="text-secondary">Contrat:</span>
+            <a [href]="'/admin/crm/wms/contracts/show/'+invoice.getValue().storageContract?.id" target="_blank">
+              {{invoice.getValue().storageContract?.number }}</a>
+          </p>
+          <p><span class="text-secondary">BL:</span>
+            <a [href]="'/admin/crm/wms/delivery-note/show/'+invoice.getValue().storageDeliveryNote.id" target="_blank">
+              {{invoice.getValue().storageDeliveryNote.number }}</a
+            ></p>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-4">
+        <mat-card-content>
+          <p class="fs-6 align-items-center d-flex primary-blue-color">
+            <mat-icon class="scale-08">euro</mat-icon>
+            Informations de Paiement
+          </p>
+          <p>Statut de paiement :
+            <button [class]="getPaymentStatusClass()">{{getPaymentStatus() }}</button></p>
+          <p>Total Ht : {{invoice.getValue().totalHt.toFixed(2)}} </p>
+          <p>Total Tva : {{invoice.getValue().tva.toFixed(2)}} </p>
+          <p>Total TTC :
+            <span [ngClass]="invoice.getValue().totalTtc > invoice.getValue().storageContract.minimumBillingGuaranteed ? 'text-success' :'text-warning' ">
+                {{invoice.getValue().totalTtc.toFixed(2)}}
+                </span><br>
+            <span *ngIf="invoice.getValue().totalTtc < invoice.getValue().storageContract.minimumBillingGuaranteed"
+                  class="text-warning">
+                  Facturation selon la facturation minimum assuré
+                </span>
+          </p>
+          <p>Facturation minimale assurée {{invoice.getValue().storageContract.minimumBillingGuaranteed.toFixed(2)}}</p>
+        </mat-card-content>
+      </mat-card>
+
+<!--      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-4">-->
+<!--        <mat-card-content>-->
+<!--          <p class="fs-6 align-items-center d-flex primary-blue-color">-->
+<!--            <mat-icon class="scale-08">business</mat-icon>-->
+<!--            Informations du Client-->
+<!--          </p>-->
+<!--          <p><span class="text-secondary">Client:</span> {{ invoice.getValue().storageContract?.customer?.name }}</p>-->
+<!--          &lt;!&ndash;              <p><span class="text-secondary">Interlocuteur:</span> {{ deliveryNote.getValue().interlocutor.fullName }}</p>&ndash;&gt;-->
+<!--          <p><span class="text-secondary">Contrat:</span>-->
+<!--            <a [href]="'/admin/crm/wms/contracts/show/'+invoice.getValue().storageContract?.id" target="_blank">-->
+<!--              {{invoice.getValue().storageContract?.number }}</a>-->
+<!--          </p>-->
+<!--          <p><span class="text-secondary">BL:</span>-->
+<!--            <a [href]="'/admin/crm/wms/delivery-note/show/'+invoice.getValue().storageDeliveryNote.id" target="_blank">-->
+<!--              {{invoice.getValue().storageDeliveryNote.number }}</a-->
+<!--            ></p>-->
+<!--        </mat-card-content>-->
+<!--      </mat-card>-->
+    </ng-container>
+
+    <ng-container class="col-12 row " >
+        <!-- Colonne 1 -->
+          <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-4">
+            <mat-card-content>
+              <p class="fs-6 align-items-center d-flex primary-blue-color">
+                <mat-icon class="scale-08">attach_money</mat-icon>
+                Modalité de Paiement
+              </p>
+              <p>Méthod: {{ invoice.getValue().storageContract.paymentType.name }}</p>
+              <p>Échience: {{ invoice.getValue().storageContract.paymentDeadline }}</p>
+              <p>Date de Facture :<br>
+                <input formControlName="invoiceDate"
+                  type="date" [value]="invoice.getValue().invoiceDate" class="form-control form-control-sm "></p>
+              <p>Date d'Échience: <br>
+                <input formControlName="dueDate"
+                  type="date" [value]="invoice.getValue().dueDate" class="form-control form-control-sm ">
+                </p>
+
+            </mat-card-content>
+          </mat-card>
+          <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-6">
+            <mat-card-content>
+              <div class="row d-flex justify-content-between">
+                <p class="col-9 fs-6 align-items-center d-flex primary-blue-color">
+                  <mat-icon class="scale-08">attach_money</mat-icon>
+                  Paiements
+                </p>
+                <p class="col-3">
+                  <button *ngIf="(invoice.getValue().totalTtc - getSumOfPayments()) > 0" (click)="OnAddPayment()"
+                    mat-icon-button class="btn "><mat-icon>add</mat-icon></button>
+                </p>
+              </div>
+              <table *ngIf="invoice.getValue().storageInvoicePaymentRequestDtos.length" class="table table-sm table-bordered">
+                <thead class="table-primary text-light">
+                <tr>
+                  <th class="fw-light">Montant</th>
+                  <th class="fw-light">Référence</th>
+                  <th class="fw-light">Moyen de paiement</th>
+                  <th class="fw-light">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let payment of invoice.getValue().storageInvoicePaymentRequestDtos">
+                  <td class="">{{ payment.amount }}</td>
+                  <td class="">{{ payment.ref }}</td>
+                  <td class="">{{ payment.paymentMethod }}</td>
+                  <td class="">{{ payment.createdAt | date:'yyyy-MM-dd hh:mm' }}</td>
+                </tr>
+                <tr >
+                  <td class=""></td>
+                  <td><strong>Total</strong></td>
+                  <td>
+                    {{ getSumOfPayments()}}
+                  </td>
+                </tr>
+                </tbody>
+              </table>
+              <p><span class="text-secondary">Reste à payer: </span> {{invoice.getValue().totalTtc - getSumOfPayments()}}</p>
+              <br>
+            </mat-card-content>
+          </mat-card>
+      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-6">
+        <mat-card-content>
+          <p class="fs-6 align-items-center d-flex primary-blue-color">
+            <mat-icon class="scale-08">edit</mat-icon>
+            Mise à jour Envoi & Retour
+          </p>
+          <div class="row d-flex justify-content-around">
+            <div class="col-md-6">
+              <label for="sendDate" class="form-label">Date d'envoi</label>
+              <input
+                type="date"
+                id="sendDate"
+                formControlName="sendDate"
+                class="form-control form-control-sm"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="sendStatus" class="form-label">Status d'envoi</label>
+              <select
+                id="sendStatus"
+                formControlName="sendStatus"
+                class="form-select form-select-sm"
+              >
+                <option [ngValue]="null">Choisir...</option>
+                <option value="SENT">Envoyé</option>
+                <option value="PENDING">En attente</option>
+                <option value="CANCELLED">Annulé</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label for="returnDate" class="form-label">Date de retour</label>
+              <input
+                type="date"
+                id="returnDate"
+                formControlName="returnDate"
+                class="form-control form-control-sm"
+              />
+            </div>
+
+            <div class="col-md-6">
+              <label for="returnStatus" class="form-label">Status de retour</label>
+              <select
+                id="returnStatus"
+                formControlName="returnStatus"
+                class="form-select form-select-sm"
+              >
+                <option [ngValue]="null">Choisir...</option>
+                <option value="RETURNED">Retourné</option>
+                <option value="PENDING">En attente</option>
+                <option value="CANCELLED">Annulé</option>
+              </select>
+            </div>
+          </div>
+
+          <!--      <div class="col-12 mt-2 text-end">-->
+          <!--        <button (click)="onUpdateInvoice()" mat-raised-button color="primary" type="submit">-->
+          <!--          Mettre à jour-->
+          <!--        </button>-->
+          <!--      </div>-->
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+    <ng-container  class="col-12" >
+      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1">
+        <mat-card-content>
+          <div class="card-body">
+            <table  class="table small border-secondary">
+              <thead class=" fw-light">
+              <tr>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Préstations</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Unité</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Prix de vente</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Quantié</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Total</th>
+              </tr>
+              </thead>
+              <tbody>
+              <ng-container *ngFor="let item of invoice.getValue().stockedItemResponseDtos">
+                <tr class="p-0" *ngIf="item.quantity > 0">
+                  <td>
+                    {{ item.provisionResponseDto.name }}
+                    {{ item.stockedItemResponseDto.supportName }}
+                    {{ item.stockedItemResponseDto.structureName }}
+                  </td>
+                  <td>{{ item.provisionResponseDto.unitOfMeasurement }}</td>
+                  <td>{{ item.provisionResponseDto.salesPrice  }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.quantity * item.provisionResponseDto.salesPrice  }}</td>
+                </tr>
+              </ng-container>
+              <br>
+<!--              <p *ngIf="invoice.getValue().unloadingTypeResponseDtos.length > 0" class="primary-blue-color fw-bold text-decoration-underline m-2">Dépotages</p>-->
+              <ng-container *ngFor="let item of invoice.getValue().unloadingTypeResponseDtos">
+                <tr class="p-0" *ngIf="item.quantity > 0">
+                  <td>{{ item.unloadingTypeResponseDto.name }}</td>
+                  <td>{{ item.unloadingTypeResponseDto.unitOfMeasurement }}</td>
+                  <td>{{ item.unloadingTypeResponseDto.salesPrice }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.quantity * item.unloadingTypeResponseDto.salesPrice }}</td>
+                </tr>
+              </ng-container>
+              <br>
+<!--              <p *ngIf="invoice.getValue().requirementResponseDtos.length > 0" class="primary-blue-color fw-bold text-decoration-underline m-2">Services </p>-->
+              <ng-container *ngFor="let item of invoice.getValue().requirementResponseDtos">
+                <tr class="p-0" *ngIf="item.quantity > 0">
+                  <td>{{ item.requirementResponseDto.name }}</td>
+                  <td>{{ item.requirementResponseDto.unitOfMeasurement }}</td>
+                  <td>{{ item.requirementResponseDto.salesPrice  }}</td>
+                  <td>{{ item.quantity }}</td>
+                  <td>{{ item.quantity * item.requirementResponseDto.salesPrice  }}</td>
+                </tr>
+              </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </ng-container>
+  </div>
+</section>
+<!-- update invoices send date and accusation infos  -->
+</form>
+<app-general-infos
+  [createdAt]="invoice.getValue().createdAt" [createdBy]="invoice.getValue().createdBy"
+  [updatedAt]="invoice.getValue().updatedAt" [updatedBy]="invoice.getValue().updatedBy"
+></app-general-infos>

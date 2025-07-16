@@ -3,7 +3,8 @@
       <button  color="primary" mat-icon-button>
         <mat-icon >domain</mat-icon>
       </button>
-     <span *ngIf="!prospect?.id"> Créer </span> <span *ngIf="prospect?.id"> Mettre à jour </span>  l'entreprise
+     <span *ngIf="!prospect?.id"> {{ 'CREATE' | translate }} </span> <span *ngIf="prospect?.id">
+    {{ 'UPDATE' | translate }}</span>  {{'COMPANY' | translate}}
   </div>
   <!-- Reset Button -->
 
@@ -22,41 +23,18 @@
   <mat-stepper #stepper
                [linear]="false">
     <!-- Step 1: Company Details -->
-    <mat-step [stepControl]="companyDetailsFormGroup" errorMessage="Les champs obligatoires doivent être remplis.">
+    <mat-step [stepControl]="companyDetailsFormGroup" [errorMessage]="'REQUIRED_FIELDS_ERROR' | translate">
       <form [formGroup]="companyDetailsFormGroup" class="row">
-        <ng-template matStepLabel>Détails de prospect</ng-template>
+        <ng-template matStepLabel>{{ 'COMPANY_DETAILS' | translate }}</ng-template>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Nom de prospect</mat-label>
+            <mat-label>{{ 'PROSPECT_NAME' | translate }}</mat-label>
             <input formControlName="companyName" matInput placeholder="prospect Exemple" >
           </mat-form-field>
         </div>
-<!--        <div class="col-6 text-center px-5" *ngIf="!prospect?.id">-->
-<!--          <div (dragleave)="onDragLeave($event)"-->
-<!--               (dragover)="onDragOver($event)"-->
-<!--               (drop)="onLogoDrop($event)"-->
-<!--               class="drop-zone bg-white rounded-2 text-center">-->
-<!--            &lt;!&ndash; Add logo if logo not exist  &ndash;&gt;-->
-<!--            <div *ngIf="!prospect?.logo">-->
-<!--              <p class="display-6 m-0 p-0"><i class="bi bi-image primary-blue-color"></i></p>-->
-<!--              <input #logoInput (change)="onLogoUpload($event)" hidden type="file"/>-->
-<!--              <button (click)="logoInput.click()" class="mx-2 shadow-sm small-btn" mat-button>Sélectionnez le logo</button>-->
-<!--              <br>-->
-<!--            </div>-->
-<!--            &lt;!&ndash; if logo exist  &ndash;&gt;-->
-<!--            <div *ngIf="prospect?.logo">-->
-<!--              <img [src]="environment.baseUrl + '/api/images/' + prospect.logo" id="logo1" alt="logo" class="img-fluid"-->
-<!--                   height="100px" width="100px">-->
-<!--              <button (click)="removeLogo()" [color]="'warn'" mat-icon-button style="transform:scale(0.6);position:relative;bottom:10px;">-->
-<!--                <mat-icon>delete</mat-icon>-->
-<!--              </button>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--        </div>-->
-
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Structure</mat-label>
+            <mat-label>{{ 'STRUCTURE' | translate }}</mat-label>
             <mat-select
               formControlName="proprietaryStructure"
               >
@@ -71,7 +49,7 @@
         </div>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Industrie</mat-label>
+            <mat-label>{{ 'INDUSTRY' | translate }}</mat-label>
             <mat-select
               formControlName="industry" placeholder="Fabrication"
               >
@@ -84,7 +62,7 @@
 
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Pays</mat-label>
+            <mat-label>{{ 'COUNTRY' | translate }}</mat-label>
             <mat-select
               formControlName="country" placeholder="Casablanca"
             >
@@ -97,7 +75,7 @@
 
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>ville</mat-label>
+            <mat-label>{{ 'CITY' | translate }}</mat-label>
             <mat-select
               formControlName="city" placeholder="Casablanca"
             >
@@ -111,7 +89,7 @@
 
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Taille d'entrepris</mat-label>
+            <mat-label>{{ 'COMPANY_SIZE' | translate }}</mat-label>
             <mat-select
               formControlName="companySize" placeholder="PME"
               >
@@ -125,7 +103,7 @@
 
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Siège social</mat-label>
+            <mat-label>{{ 'HEAD_OFFICE' | translate }}</mat-label>
             <input formControlName="headOffice" matInput placeholder="123 Rue Exemple, Ville Exemple">
           </mat-form-field>
         </div>
@@ -133,17 +111,10 @@
 
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Année de création</mat-label>
+            <mat-label>{{ 'YEAR_OF_CREATION' | translate }}</mat-label>
             <input formControlName="yearOfCreation" matInput placeholder="2020" type="number">
           </mat-form-field>
         </div>
-
-        <!--        <div class="col-6">-->
-        <!--          <mat-form-field appearance="outline" class="w-100">-->
-        <!--            <mat-label>Année de création</mat-label>-->
-        <!--            <input formControlName="yearOfCreation" matInput placeholder="2020"  type="number">-->
-        <!--          </mat-form-field>-->
-        <!--        </div>-->
 
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
@@ -154,7 +125,7 @@
 
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Sigle</mat-label>
+            <mat-label>{{ 'ACRONYM' | translate }}</mat-label>
             <input formControlName="sigle" matInput placeholder="EXC">
           </mat-form-field>
         </div>
@@ -163,12 +134,12 @@
       </form>
     </mat-step>
     <!-- Step 2:  légal-->
-    <mat-step [stepControl]="legalInfoFormGroup" errorMessage="Les champs obligatoires doivent être remplis.">
+    <mat-step [stepControl]="legalInfoFormGroup" [errorMessage]="'REQUIRED_FIELDS_ERROR' | translate">
       <form [formGroup]="legalInfoFormGroup" class="row">
-        <ng-template matStepLabel>Infos légales</ng-template>
+        <ng-template matStepLabel>{{ 'LEGAL_INFORMATION' | translate }}</ng-template>
         <div class="col-2">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Titre de Représentant légal</mat-label>
+            <mat-label>{{ 'LEGAL_REPRESENTATIVE_TITLE' | translate }}</mat-label>
             <mat-select
               formControlName="legalRepresentativeTitle" placeholder="Jean Dupont"
               >
@@ -180,7 +151,7 @@
         </div>
         <div class="col-4">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Titre de Représentant légal</mat-label>
+            <mat-label>{{ 'LEGAL_REPRESENTATIVE_JOB_TITLE' | translate }}</mat-label>
             <mat-select
               formControlName="legalRepresentativeJobTitle" placeholder="CEO"
               >
@@ -192,13 +163,13 @@
         </div>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Représentant légal</mat-label>
+            <mat-label>{{ 'LEGAL_REPRESENTATIVE' | translate }}</mat-label>
             <input formControlName="legalRepresentative" matInput placeholder="Jean Dupont" >
           </mat-form-field>
         </div>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Status légal</mat-label>
+            <mat-label>{{ 'LEGAL_STATUS' | translate }}</mat-label>
             <mat-select
               formControlName="legalStatus" placeholder="Sarl"
               >
@@ -210,7 +181,7 @@
         </div>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Tribunal</mat-label>
+            <mat-label>{{ 'COURT' | translate }}</mat-label>
             <mat-select
               formControlName="court" placeholder="Casablanca"
               >
@@ -263,15 +234,15 @@
 
 
     <!-- Step 4: Contact Information -->
-    <mat-step [stepControl]="contactInfoFormGroup" errorMessage="Les champs obligatoires doivent être remplis.">
+    <mat-step [stepControl]="contactInfoFormGroup" [errorMessage]="'REQUIRED_FIELDS_ERROR' | translate">
       <form [formGroup]="contactInfoFormGroup" class="row">
-        <ng-template matStepLabel>Infos de contact</ng-template>
+        <ng-template matStepLabel>{{ 'CONTACT_INFORMATION' | translate }}</ng-template>
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>Email</mat-label>
           <input formControlName="email" matInput placeholder="contact@exemple.com"  type="email">
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Téléphone</mat-label>
+          <mat-label>{{ 'PHONE' | translate }}</mat-label>
           <input formControlName="phone" matInput placeholder="+12345672890" >
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
@@ -313,114 +284,29 @@
       <ng-template matStepLabel>Description</ng-template>
       <form [formGroup]="businessDescriptionFormGroup">
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Description</mat-label>
+          <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>
           <textarea formControlName="businessDescription" matInput
+                    rows="15"
                     placeholder="L'entreprise Exemple est un fournisseur leader de services d'exemple."
                     ></textarea>
         </mat-form-field>
       </form>
     </mat-step>
-
-    <!-- Step 6: Review and Confirmation -->
-    <mat-step>
-      <ng-template matStepLabel>Revue & Confirmation</ng-template>
-      <div class="row">
-        <div class="col-6">
-          <h6>Détails de l'entreprise</h6>
-<!--          <p class="mx-3"><img [src]="environment.baseUrl + '/api/images/' + prospect?.logo" alt="Logo" width="100"></p>-->
-          <p>
-            <span class="ma-color"> <i class="bi bi-caret-right-fill mx-2"></i> Nom de l'entreprise :</span>
-            {{ companyDetailsFormGroup.get('companyName')?.value }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i>Sigle :</span> {{ companyDetailsFormGroup.get('sigle')?.value }}</p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i>Capital :</span> {{ companyDetailsFormGroup.get('capital')?.value }}
-            MAD</p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i>Siège social :</span> {{ companyDetailsFormGroup.get('headOffice')?.value }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i>Structure propriétaire :</span> {{ prospect?.proprietaryStructure?.name }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i>Année de création :</span> {{ companyDetailsFormGroup.get('yearOfCreation')?.value }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i>Taille de l'entreprise :</span> {{ prospect?.companySize?.name }}
-          </p>
-          <p><span class="ma-color"><i class="bi bi-caret-right-fill mx-2"></i>Ville :</span> {{ prospect?.city?.name }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i>Pays :</span> {{ prospect?.country?.name }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i>Industrie :</span> {{ prospect?.industry?.name }}</p>
-        </div>
-
-        <div class="col-6">
-          <h6>Informations légales</h6>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> ICE :</span> {{ legalInfoFormGroup.get('ice')?.value }}</p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> RC :</span> {{ legalInfoFormGroup.get('rc')?.value }}</p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> IFM :</span> {{ legalInfoFormGroup.get('ifm')?.value }}</p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> Certificat :</span> {{ legalInfoFormGroup.get('certificationText')?.value }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> Représentant légal :</span> {{ legalInfoFormGroup.get('legalRepresentative')?.value }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> Titre du représentant légal :</span> {{ prospect?.reprosentaveJobTitle?.name }}
-          </p>
-        </div>
-
-
-        <div class="col-6">
-          <h6>Informations de contact</h6>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> Email :</span> {{ contactInfoFormGroup.get('email')?.value }}</p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> Téléphone :</span> {{ contactInfoFormGroup.get('phone')?.value }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> Fax :</span> {{ contactInfoFormGroup.get('fax')?.value }}</p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> WhatsApp :</span> {{ contactInfoFormGroup.get('whatsapp')?.value }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> Site Web :</span> {{ contactInfoFormGroup.get('website')?.value }}
-          </p>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> LinkedIn :</span> {{ contactInfoFormGroup.get('linkedin')?.value }}
-          </p>
-        </div>
-
-        <div class="col-6">
-          <h6>Description de l'activité</h6>
-          <p><span class="ma-color"><i
-            class="bi bi-caret-right-fill mx-2"></i> Description de l'activité :</span> {{ businessDescriptionFormGroup.get('businessDescription')?.value }}
-          </p>
-        </div>
-      </div>
-    </mat-step>
   </mat-stepper>
 </mat-dialog-content>
 <mat-dialog-actions align="end" class="shadow mat-">
-  <button [color]="'warn'" class="btn py-1" mat-button mat-dialog-close>Annuler</button>
-  <button (click)="stepper.previous()" class="text-secondary" mat-button>Précédent</button>
+  <button [color]="'warn'" class="btn py-1" mat-button mat-dialog-close>{{ 'CANCEL' | translate }}</button>
+  <button (click)="stepper.previous()" class="text-secondary" mat-button>{{ 'PREVIOUS' | translate }}</button>
   <button (click)="stepper.next()"
           class="" color="'primary'"
           mat-button>
-    suivant
+    {{ 'NEXT' | translate }}
   </button>
   <button (click)="createProspect()" [disabled]="!isEnabledToCreateCompany()"
           class="btn mat-primary" mat-raised-button>
-    <span *ngIf="!prospect?.id"> Créer </span>
-    <span *ngIf="prospect?.id"> Mettre à jour </span>
-    l'entreprise
+    <span *ngIf="!prospect?.id"> {{ 'CREATE' | translate }} </span>
+    <span *ngIf="prospect?.id">{{ 'UPDATE' | translate }}</span>
+    {{'COMPANY' | translate}}
   </button>
 
 </mat-dialog-actions>

@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DatePipe, NgForOf} from '@angular/common';
+import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {
   MatCell,
@@ -26,6 +26,9 @@ import {CrmTypeEnum} from '../../../../enums/crm/crm.type.enum';
 import {getLabelFromStorageReasonEnum} from '../../../../enums/crm/storage.reason.enum';
 import {StorageOfferResponseDto} from '../../../../dtos/response/crm/storage.offer.response.dto';
 import {StorageOfferService} from '../../../../services/crm/wms/storage.offer.service';
+import {LoadingService} from '../../../../services/loading.service';
+import {Observable} from 'rxjs';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-wms-offer',
@@ -53,7 +56,7 @@ import {StorageOfferService} from '../../../../services/crm/wms/storage.offer.se
     NgForOf,
     MatMenuTrigger,
     MatHeaderCellDef,
-    MatNoDataRow
+    MatNoDataRow, MatProgressSpinnerModule, NgIf
   ],
   templateUrl: './wms-offer.component.html',
   styleUrl: './wms-offer.component.css'
@@ -69,13 +72,15 @@ export class WmsOfferComponent implements OnInit, AfterViewInit{
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
+  loading$!:Observable<boolean>;
   crmType = new FormControl('');
   constructor(private storageOfferService: StorageOfferService, private localStorageService: LocalStorageService, private dialog: MatDialog, private snackBar: MatSnackBar,
-              protected router: Router) {}
+              protected router: Router, private loadingService: LoadingService) {}
 
   ngOnInit(): void {
+    this.loading$ = this.loadingService.loading$;
     this.loadNeedBasedOnSelectedType();
+
   }
 
   ngAfterViewInit(): void {
@@ -98,7 +103,7 @@ export class WmsOfferComponent implements OnInit, AfterViewInit{
     const selectedCompanyId = parseInt(this.localStorageService.getItem("selected_company_id"));
     this.storageOfferService.getAllStorageOffersByCompanyId(selectedCompanyId).subscribe({
       next: (data) => {
-        this.storageOffers.data = data;
+        this.storageOffers.data = data.sort((a, b) => b.id - a.id);
       },
       error: (err) => {
         console.error('Error loading interactions:', err);
@@ -110,10 +115,7 @@ export class WmsOfferComponent implements OnInit, AfterViewInit{
     this.storageOffers.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
 
-  createEditWmsNeed(): void {
-    this.router.navigateByUrl('/admin/crm/wms/offers/create').then(value => {return;});
 
-  }
 
   toggleRowSelection(rowId: number): void {
     if (this.selectedRows.has(rowId)) {

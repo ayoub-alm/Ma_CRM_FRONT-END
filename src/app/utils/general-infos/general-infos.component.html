@@ -1,0 +1,23 @@
+<div class="row mx-1 w-100">
+  <mat-card class="mb-2 bg-white col-lg-12 rounded-2 mat-elevation-z3">
+    <mat-card-content class="w-100 d-flex justify-content-between row text-secondary small text-start">
+      <div class="col-lg-2 col-6 "><span class="text-dark">Créé le</span>  <br>{{createdAt | date:'yyyy-MM-dd hh:mm'}}</div>
+      <div class="col-lg-2 col-6 "><span class="text-dark">Créé par</span> <br> {{createdBy ? createdBy.name : ''}}</div>
+      <div class="col-lg-2 col-6 "><span class="text-dark">Mis à jour le</span>  <br>{{updatedAt | date:'yyyy-MM-dd hh:mm'}}</div>
+      <div class="col-lg-2 col-6 "><span class="text-dark">Mis à jour par </span> <br> {{updatedBy ? updatedBy.name : '' }}</div>
+      <div class="col-lg-4 col-12 d-flex justify-content-lg-end ">
+        <button class="scale-09 bg-light" mat-icon-button (click)="openBottomSheet()" matTooltip="Tracking & logs">
+          <mat-icon>history</mat-icon>
+        </button>
+        <button (click)="onClickOnCommentBtn()"
+          class="scale-09 bg-light" mat-icon-button matTooltip="Commentaires & messages" c>
+          <mat-icon>message</mat-icon>
+        </button>
+        <button class="scale-09 bg-light"
+          mat-icon-button (click)="copyUrl()"  matTooltip="Copy URL">
+          <mat-icon>link</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

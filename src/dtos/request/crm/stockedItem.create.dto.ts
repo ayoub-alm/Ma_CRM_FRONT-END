@@ -10,9 +10,10 @@ export class StockedItemCreateDto{
   height: number; // Optional field, must be >= 0
   weight: number; // Optional field, must be >= 0
   stackedLevel: number; // Required field, must be >= 0
-  volume?: number; // Optional field, must be >= 0
-  numberUvc?: number;
-  numberUc?: number;
+  volume: number; // Optional field, must be >= 0
+  quantity: number;
+  uvc?: number;
+  uc?: number;
   isFragile?:number
   provisions: ProvisionResponseDto[]; // List of provisions
 
@@ -22,14 +23,15 @@ export class StockedItemCreateDto{
     this.temperatureId = data.temperatureId;
     this.width = data.width;
     this.height = data.height;
-    this.weight = data.poids;
+    this.weight = data.weight;
     this.length = data.length;
     this.stackedLevel = data.stackedLevel;
     this.volume = data.volume;
-    this.numberUvc = data.nombreUvc;
-    this.numberUc = data.numberUc;
+    this.uvc = data.uvc;
+    this.uc = data.uc;
     this.provisions = data.provisions;
     this.isFragile = data.isFragile;
+    this.quantity = data.quantity;
   }
 }
 
@@ -46,12 +48,13 @@ export function mapStockedItemResponseToCreate(response: StockedItemResponseDto)
     width: response.dimension?.width ?? 0,
     length: response.dimension?.length ?? 0,
     height: response.dimension?.height ?? 0,
-    weight: response.isFragile ? 1 : 0,
+    weight: response.weight ? response.weight : 0,
     stackedLevel: response.stackedLevelName && !isNaN(Number(response.stackedLevelName)) ? Number(response.stackedLevelName) : 0,
-    volumeStock: response.dimension ? (response.dimension.length * response.dimension.width * response.dimension.height) : 0,
-    numberUvc: response.uvc ?? 0,
-    numberUc: response.numberOfPackages ?? 0,
+    volume: response.volume ? response.volume : 0,
+    Uvc: response.uvc ?? 0,
+    Uc: response.uc ?? 0,
     isFragile:response.isFragile ? 1 : 0,
     provisions: response.provisionResponseDto ?? [],
+    quantity: response.quantity ?? 0,
   });
 }

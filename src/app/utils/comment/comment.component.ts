@@ -14,6 +14,7 @@ import {CommentService} from "../../../services/comment.service";
 import {EntityEnum} from "../../../enums/entity.enum";
 import {AuthService} from "../../../services/AuthService";
 import {MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
+import {MatToolbar} from '@angular/material/toolbar';
 
 
 
@@ -21,7 +22,6 @@ import {MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav'
   selector: 'app-comment',
   standalone: true,
   imports: [
-    MatButton,
     PaginatorModule,
     ReactiveFormsModule,
     NgClass,
@@ -29,12 +29,8 @@ import {MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav'
     NgFor,
     MatIconButton,
     MatIcon,
-    DatePipe,
-    MatBadge,
-    MatFabButton,
     AsyncPipe,
-    MatSidenavContent,
-    MatSidenavContainer
+    MatToolbar
   ],
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.css'
@@ -44,6 +40,7 @@ export class CommentComponent implements OnInit, AfterViewInit {
   @Input() replies: CommentResponseDto[] = [];
   @Input() entity!: EntityEnum;
   @Input() entityId!: number;
+  copiedMessageIndex: number | null = null;
 
   @ViewChild('commentInput') commentInput!: ElementRef<HTMLInputElement>;
 
@@ -57,7 +54,7 @@ export class CommentComponent implements OnInit, AfterViewInit {
   constructor(private commentService: CommentService,
               private snackBar: MatSnackBar,
               private fb: FormBuilder,
-              private authService: AuthService) {
+              public authService: AuthService) {
     this.commentForm = this.fb.group({
       comment:['', Validators.required]
     })
@@ -145,4 +142,10 @@ export class CommentComponent implements OnInit, AfterViewInit {
     }
   }
 
+  copyToClipboard(text: string, index: number): void {
+    navigator.clipboard.writeText(text).then(() => {
+      this.copiedMessageIndex = index;
+      setTimeout(() => this.copiedMessageIndex = null, 1500);
+    });
+  }
 }

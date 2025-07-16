@@ -15,7 +15,7 @@
   width: 50px;
 }
 .custom-drawer-width {
-  width: 300px;
+  width: 250px;
   font-size:0.9rem;
 }
 
@@ -42,8 +42,13 @@ mat-list-item:hover button {
 }
 
 
-.active-link {
-  border-bottom: solid 3px rgb(0, 92, 187);
+.active-link button {
+  color:  rgb(0, 92, 187)!important;
+  border-left: solid 3px rgb(0, 92, 187);
+
+}
+.active-link li button  mat-icon {
+  color:  rgb(0, 92, 187)!important;
 }
 
 .container-fluid {
@@ -99,4 +104,52 @@ img.img-fluid {
     transform: scale(1.05);
     box-shadow: 0px 6px 15px rgba(0, 92, 187, 0.5);
   }
+}
+.simple-bg {
+  background-image: url('/simple_bg.svg');
+  background-size: contain ;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  position: relative;
+  height:100vh;
+}
+.simple-bg::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); /* white overlay with 50% opacity */
+  z-index: 1;
+}
+
+.simple-bg > * {
+  position: relative;
+  z-index: 2; /* bring actual content above the overlay */
+}
+
+
+.simple-bg-2 {
+  background-image: url('/login_background.svg');
+  background-size: contain ;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  position: relative;
+  height:100vh;
+}
+.simple-bg-2::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.5); /* white overlay with 50% opacity */
+  z-index: 1;
+}
+
+.simple-bg-2 > * {
+  position: relative;
+  z-index: 2; /* bring actual content above the overlay */
 }

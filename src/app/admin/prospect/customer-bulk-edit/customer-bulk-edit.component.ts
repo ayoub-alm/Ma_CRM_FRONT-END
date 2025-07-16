@@ -40,7 +40,8 @@ import {ProspectStatus} from '../../../../enums/prospect.status';
 import {BulkCustomerEditRequestDto} from '../../../../dtos/request/leads/bluk.edit.customers.dto';
 import {ProspectService} from '../../../../services/Leads/prospect.service';
 import {MatSnackBar} from '@angular/material/snack-bar';
-import {CustomerStatus, CustomerStatusService} from '../../../../services/Leads/customer.status.service';
+import { CustomerStatusService} from '../../../../services/Leads/customer.status.service';
+import {CustomerStatus} from '../../../../dtos/response/cutomer.status.dto';
 
 @Component({
   selector: 'app-customer-bulk-edit',
@@ -51,7 +52,6 @@ import {CustomerStatus, CustomerStatusService} from '../../../../services/Leads/
     MatDialogClose,
     MatDialogContent,
     MatDialogTitle,
-    KeyValuePipe,
     MatFormField,
     MatIcon,
     MatLabel,
@@ -80,8 +80,8 @@ export class CustomerBulkEditComponent implements OnInit{
   users: BehaviorSubject<UserDto[]> = new BehaviorSubject<UserDto[]>([])
   customersStatus: BehaviorSubject<CustomerStatus[]> = new BehaviorSubject<CustomerStatus[]>([])
   constructor(
-    public dialogRef: MatDialogRef<CustomerBulkEditComponent>, // ✅ Correct type
-    @Inject(MAT_DIALOG_DATA) public data: Set<number>, // ✅ Correct injection
+    public dialogRef: MatDialogRef<CustomerBulkEditComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Set<number>,
     protected router: Router,
     private localStorageService: LocalStorageService,
     private fb: FormBuilder,

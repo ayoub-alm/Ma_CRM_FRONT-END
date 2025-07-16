@@ -20,7 +20,8 @@ export class ProvisionService {
   getAllProvisionsByCompanyId(companyId: number): Observable<ProvisionResponseDto[]> {
     const params = new HttpParams().set('companyId', companyId);
     return this.http.get<ProvisionResponseDto[]>(this.baseUrl,{params}).pipe(tap((response: ProvisionResponseDto[]) => {
-      response.map(provision => new ProvisionResponseDto(provision));
+      response.map(provision => new ProvisionResponseDto(provision))
+        .sort((a,b)=> a.order - b.order);
     }));
   }
 
@@ -44,12 +45,11 @@ export class ProvisionService {
 
   /**
    * Update an existing provision
-   * @param id Provision ID
    * @param provision ProvisionResponseDto object with updated data
    * @returns Observable of updated ProvisionResponseDto
    */
-  updateProvision(id: number, provision: ProvisionResponseDto): Observable<ProvisionResponseDto> {
-    return this.http.put<ProvisionResponseDto>(`${this.baseUrl}/${id}`, provision);
+  updateProvision(provision: ProvisionRequestDto): Observable<ProvisionResponseDto> {
+    return this.http.put<ProvisionResponseDto>(`${this.baseUrl}`, provision);
   }
 
   /**
@@ -59,5 +59,33 @@ export class ProvisionService {
    */
   deleteProvision(id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${id}`);
+  }
+
+
+  /**
+   * Remove a provision from a stocked item.
+   * @param stockedItemId - ID of the stocked item
+   * @param provisionId - ID of the provision to remove
+   * @returns Observable<boolean>
+   */
+  removeProvisionFromStockedItem(stockedItemId: number, provisionId: number): Observable<boolean> {
+    return this.http.delete<boolean>(`${this.baseUrl}/stocked-item/${stockedItemId}/provision/${provisionId}`);
+  }
+
+  /**
+   * this function allows to add new PROVISION to stocked item
+   * @param stockedItemId
+   * @param provisionId
+   */
+  addProvisionToStockedItem(stockedItemId: number, provisionId: number): Observable<boolean>{
+    return this.http.post<boolean>(`${this.baseUrl}/add-to-stocked-item/${stockedItemId}/provision/${provisionId}`, {});
+  }
+
+  /**
+   * This function allows as to mark provision as storage price
+   * @param provisionId provision Id
+   */
+  markProvisionAsStoragePrice(provisionId: number): Observable<ProvisionResponseDto>{
+    return this.http.get<ProvisionResponseDto>(`${this.baseUrl}/mark-provision-as-storage-price/${provisionId}`);
   }
 }

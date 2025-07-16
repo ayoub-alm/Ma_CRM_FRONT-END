@@ -19,7 +19,7 @@ import {MatSelect} from '@angular/material/select';
 import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {InterlocutorRequestDto} from '../../../../dtos/request/leads/interlocutorRequestDto';
 import {InterlocutorService} from '../../../../services/Leads/interlocutor.service';
-import {BehaviorSubject, catchError, of, tap, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, map, Observable, of, startWith, tap, throwError} from 'rxjs';
 import {PhoneDto} from '../../../../dtos/response/phone.dto';
 import {EmailDto} from '../../../../dtos/response/email.dto';
 import {ActiveEnum} from '../../../../enums/active.enum';
@@ -32,6 +32,8 @@ import {InterlocutorResDto} from '../../../../dtos/response/interlocutor.dto';
 import {DepartmentService} from '../../../../services/data/department.service';
 import {DepartmentModel} from '../../../../models/department.model';
 import {LocalStorageService} from '../../../../services/local.storage.service';
+import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-update-interlocutor',
@@ -55,6 +57,9 @@ import {LocalStorageService} from '../../../../services/local.storage.service';
     MatSelect,
     NgForOf,
     ReactiveFormsModule,
+    MatAutocomplete,
+    MatAutocompleteTrigger,
+    TranslatePipe,
   ],
   templateUrl: './add-update-interlocutor.component.html',
   styleUrl: './add-update-interlocutor.component.css'
@@ -64,6 +69,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
   jobTitles: BehaviorSubject<JobTitleResponseDto[]> = new BehaviorSubject<JobTitleResponseDto[]>([])
   prospects: BehaviorSubject<ProspectResponseDto[]> = new BehaviorSubject<ProspectResponseDto[]>([])
   departments: BehaviorSubject<DepartmentModel[]> = new BehaviorSubject<DepartmentModel[]>([])
+  filteredOptions: Observable<string[]> | undefined;
   constructor(
     private router: Router,
     private dialogRef: MatDialogRef<AddUpdateInterlocutorComponent>,
@@ -96,37 +102,45 @@ export class AddUpdateInterlocutorComponent implements OnInit{
         this.jobTitles.next(data);
         // Patch value after job titles are loaded
         if (this.interlocutorToUpdate) {
-          this.interlocutorForm.get('jobTitle')?.setValue(this.interlocutorToUpdate.jobTitle.id);
+          this.interlocutorForm.get('jobTitle')?.setValue(this.interlocutorToUpdate.jobTitle);
         }
       })).subscribe()
     // fet all prospect and fill prospect to display it in prospects field
-    this.prospectService.getAllCustomers(this.localStorageService.getCurrentCompanyId()).pipe(tap(data =>{
-      this.prospects.next(data);
-      // Patch value after prospects are loaded
-      if (this.interlocutorToUpdate) {
-        this.interlocutorForm.get('prospectId')?.setValue(this.interlocutorToUpdate.customer.id);
-      }
-    })).subscribe()
+      this.prospectService.getAllCustomers(this.localStorageService.getCurrentCompanyId()).pipe(
+          tap(data =>{
+            this.prospects.next(data);
+            // Patch value after prospects are loaded
+          if (this.interlocutorToUpdate) {
+            this.interlocutorForm.get('prospectId')?.setValue(this.interlocutorToUpdate.customer.id);
+          }
+      })).subscribe()
 
     this.departmentService.getAllDepartment().pipe(tap(data => {
       this.departments.next(data);
       if (this.interlocutorToUpdate){
-
         this.interlocutorForm.get('departmentId')?.setValue(this.interlocutorToUpdate.department.id);
       }
     })).subscribe()
 
-    if (this.interlocutorToUpdate.id ) {
+    if (this.interlocutorToUpdate && this.interlocutorToUpdate.id ) {
       this.interlocutorForm.patchValue({
         fullName: this.interlocutorToUpdate.fullName,
         active: this.interlocutorToUpdate.active.toLowerCase() === 'active',
         phoneNumber: this.interlocutorToUpdate.phoneNumber?.number,
         emailAddress: this.interlocutorToUpdate.emailAddress?.address,
         prospectId: this.interlocutorToUpdate.customer.id,
-        jobTitle: this.interlocutorToUpdate.jobTitle ? this.interlocutorToUpdate.jobTitle.id : null,
+        jobTitle: this.interlocutorToUpdate.jobTitle ,
         departmentId: this.interlocutorToUpdate.department ? this.interlocutorToUpdate.department.id : null
       });
     }
+
+
+    setTimeout(()=>{
+      this.filteredOptions = this.interlocutorForm.get('jobTitle')!.valueChanges.pipe(
+        startWith(''),
+        map(value => this._filter(value || '')),
+      );
+    }, 1000)
   }
 
   // Method to handle form submission
@@ -159,7 +173,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
         ).subscribe();
 
       } else {
-        // create prospect
+        // create contact
         const dto = new InterlocutorRequestDto(
           null, // id is null for creation
           this.interlocutorForm.get('fullName')?.value, // fullName from the form
@@ -197,7 +211,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
         phoneNumber: this.interlocutorToUpdate.phoneNumber?.number,
         emailAddress: this.interlocutorToUpdate.emailAddress?.address,
         prospectId: this.interlocutorToUpdate.customer.id, // Matches the value in prospect options
-        jobTitle: this.interlocutorToUpdate.jobTitle ? this.interlocutorToUpdate.jobTitle.id : null,
+        jobTitle:  this.interlocutorToUpdate.jobTitle,
         departmentId: this.interlocutorToUpdate.department ? this.interlocutorToUpdate.department.id : null
       });
     }
@@ -211,5 +225,18 @@ export class AddUpdateInterlocutorComponent implements OnInit{
 
   isEnabledToCreateInterlocutor() {
     return false;
+  }
+
+  /**
+   * this function is a filter for unite of job title
+   * @param value
+   * @private
+   */
+  private _filter(value: string): string[] {
+    const filterValue = value.toLowerCase();
+
+    return this.jobTitles.getValue()
+      .filter(option => option.name.toLowerCase().includes(filterValue))
+      .map(option => option.name); // preserve original case
   }
 }

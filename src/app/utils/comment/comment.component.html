@@ -1,92 +1,48 @@
-<div class="position-relative">
+<div class="comment-container border-1 border-primary" >
+  <div class="comment-messages border border-2 "  *ngIf="comments.getValue().length" style="min-height:70vh">
+    <div *ngFor="let comment of comments | async; let i = index"
+         class="comment-bubble"
+         [ngClass]="{'user': comment.userId === authService.getCurrentUserId(), 'ai': comment.userId !== authService.getCurrentUserId()}">
+      <!-- User Info -->
+      <strong class="small">
+        <mat-icon class="mx-1">account_circle</mat-icon>
+        {{ comment.userName }}
+      </strong>
 
-    <button
-            *ngIf="!isCommentOpen.getValue()"
-            class="btn btn-primary d-flex align-items-center mb-4 comments-button shadow-sm"
-            type="button"
-            aria-controls="offcanvasRight"
-            (click)="toggleComment()"
-            mat-fab
-    >
-            <mat-icon matBadge="{{ comments.getValue().length }}"  matBadgeColor="accent">chat_bubble</mat-icon>
-    </button>
+      <!-- Comment Text -->
+      <p [innerHTML]="comment.commentTxt"></p>
+      <!-- Copy Button -->
 
-    <div class="offcanvas offcanvas-end d-flex flex-column"
-         [ngClass]="{ show: isCommentOpen.getValue() }"
-         *ngIf="isCommentOpen.getValue()"
-         tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
-        <div class="offcanvas-header mat-elevation-z1">
-            <p class="offcanvas-title user-info h5 text-secondary " id="offcanvasRightLabel">
-                <mat-icon class="primary-blue-color mx-2">chat_bubble</mat-icon> Commentaires
-            </p>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"
-                    (click)="closeComment()"
-            ></button>
-        </div>
+      <!-- Show "Copied!" Message -->
+      <span *ngIf="copiedMessageIndex === i" class="copied-msg">✅ Copié !</span>
+      <p>
+        <button mat-icon-button class=" scale-08" (click)="copyToClipboard(comment.commentTxt, i)">
+          <mat-icon>content_copy</mat-icon>
+        </button>
 
-
-        <!-- Comments Replies here -->
-        <div class="offcanvas-body flex-grow-1 " *ngIf="comments.getValue().length > 0">
-            <ul class="list-group"  *ngFor="let comment of comments | async;" >
-              <li class="bg-light list-group-item mb-2 p-0 comment-container mat-elevation-z1">
-                <!-- User Info Section -->
-                <div class="user-info d-flex  p-0 justify-content-between align-items-center">
-                  <button mat-button class="bg-white  rounded-start-0 mat-elevation-z1">
-                    <mat-icon class="">account_circle</mat-icon>
-                    {{ comment.userName }}
-                  </button>
-
-                  <small class="text-muted small mx-3">{{comment.createdAt | date:'dd-MM-yyyy hh:mm'}}</small>
-
-                  <!-- Options Section -->
-                  <div class="comments-options d-none small scale-09 p-0 m-0 text-end">
-                    <button mat-icon-button class="text-danger" (click)="deleteComment(comment.id)">
-                      <mat-icon class="text-danger">delete</mat-icon>
-                    </button>
-                  </div>
-                </div>
-
-                <!-- Comment Text -->
-                <div class="toast-body my-2 mx-2">
-                  {{ comment.commentTxt }}
-                </div>
-
-
-              </li>
-
-            </ul>
-
-        </div>
-
-        <!-- Aucun commentaire -->
-        <div *ngIf="!(comments.getValue().length > 0)" #noComments>
-            <div class="text-center p-4">
-                <img src="/emptycomment.png" class="img-fluid" alt="Aucun commentaire">
-                <p class="text-muted mb-0 fs-5">
-                    Aucun commentaire pour l'instant.
-                </p>
-            </div>
-        </div>
-
-        <!-- (formulaire de commentaire) -->
-        <div class="offcanvas-footer mt-auto mat-elevation-z2">
-            <div class="d-flex align-items-center align-baseline mb-3 p-1">
-
-                <form [formGroup]="commentForm" class="w-100">
-                  <input #commentInput
-                         formControlName="comment"
-                         type="text"
-                         class="form-control w-100"
-                         placeholder="Comment"
-                         (keydown.enter)="addComment()"
-                  />
-                </form>
-                <button  mat-icon-button class="text rounded-3 bg-light  add-btn" [color]="'primary'" type="button"
-                        (click)="addComment()"
-                        [disabled]="!commentForm.get('comment')?.valid">
-                    <mat-icon>send</mat-icon>
-                </button>
-            </div>
-        </div>
+        <!-- Delete Button (if user owns the comment) -->
+        <button *ngIf="comment.userId === authService.getCurrentUserId()"
+                mat-icon-button class=" scale-09"
+                (click)="deleteComment(comment.id)">
+          <mat-icon class="text-dark">delete</mat-icon>
+        </button>
     </div>
+  </div>
+
+  <div *ngIf="!comments.getValue().length" class="text-center d-flex flex-column" style="min-height:70vh">
+    <p class="col-12 p-4 mt-5">
+      <img src="/empty_file.svg" class="imf-fluid m-auto text-dark ">
+    </p>
+    <p class="text-secondary fs-3 col-12">aucun commentaire</p>
+  </div>
+  <!-- Comment Input -->
+  <form [formGroup]="commentForm" class="chat-input bg-spider rounded-top-2" (ngSubmit)="addComment()">
+    <input type="text" formControlName="comment" placeholder="Ajoutez un commentaire..." class="form-control border-secondary border-1 border-secondary-subtle">
+    <button class="bg-white mx-2 border-secondary" type="submit" mat-icon-button [disabled]="commentForm.invalid">
+      <mat-icon>send</mat-icon>
+    </button>
+  </form>
+
+
 </div>
+

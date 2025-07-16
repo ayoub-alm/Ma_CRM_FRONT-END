@@ -22,7 +22,7 @@ import { InteractionResponseDto } from '../../../../dtos/response/interaction.re
 import { InteractionService } from '../../../../services/Leads/interaction.service';
 import { InteractionType } from '../../../../enums/interaction.type';
 import { InteractionSubject } from '../../../../enums/interaction.subject';
-import {AsyncPipe, NgForOf, NgIf} from '@angular/common';
+import {AsyncPipe, CommonModule, NgForOf, NgIf} from '@angular/common';
 import {MatIcon} from '@angular/material/icon';
 import {ProspectService} from '../../../../services/Leads/prospect.service';
 import {BehaviorSubject, Subject, takeUntil, tap} from 'rxjs';
@@ -32,6 +32,7 @@ import {InterlocutorResDto} from '../../../../dtos/response/interlocutor.dto';
 import {UserDto} from '../../../../dtos/response/usersResponseDto';
 import {UsersService} from '../../../../services/users.service';
 import {LocalStorageService} from '../../../../services/local.storage.service';
+import {TranslatePipe} from '@ngx-translate/core';
 export const CUSTOM_DATE_FORMATS = {
   parse: {
     dateInput: 'LL',
@@ -64,7 +65,8 @@ export const CUSTOM_DATE_FORMATS = {
     MatIcon,
     MatDialogClose,
     MatIconButton,
-    AsyncPipe
+    AsyncPipe,CommonModule,
+    TranslatePipe
   ],
   templateUrl: './add-edit-interaction-dialog.component.html',
   styleUrls: ['./add-edit-interaction-dialog.component.css'],
@@ -108,7 +110,8 @@ export class AddEditInteractionDialogComponent implements OnInit {
       joinFilePath: [this.data?.joinFilePath || null], // Optional field
       address: [this.data?.address || ''], // Optional field
       agentId: [this.data?.agentId || ''],
-      affectedToId: [this.data?.affectedToId || ''], // Optional field
+      affectedToId: [this.data?.affectedToId || ''],
+      interactionDate:[this.data?.interactionDate]
     });
 
     // fetch prospect

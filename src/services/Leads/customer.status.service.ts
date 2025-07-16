@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import {CustomerStatus} from '../../dtos/response/cutomer.status.dto';
 
-export class CustomerStatus {
-
-
-  constructor(public id: number, public name: string, public order: number, public color: string,
-              public backgroundColor: string, public deletedAt?: string | null,) {
-  }
-}
 
 @Injectable({
   providedIn: 'root'

@@ -7,12 +7,14 @@ import { ProprietaryStructureModel } from '../init_data_models/proprietaryStruct
 import { TitleModel } from '../init_data_models/title.model';
 import { JobTitleModel } from '../init_data_models/jobTitle.model';
 import { CompanySizeModel } from '../init_data_models/companySize.model';
+import {UserDto} from '../../../dtos/response/usersResponseDto';
 
 export class CompanyModel {
     createdAt: Date;
-    updatedAt: Date | null;
+    updatedAt: Date ;
     deletedAt: Date | null;
-    createdBy: string;
+    createdBy: UserDto;
+    updatedBy: UserDto;
     id: number;
     logo: string;
     name: string;
@@ -47,7 +49,7 @@ export class CompanyModel {
 
     constructor(data: any) {
         this.createdAt = new Date(data.createdAt);
-        this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : null;
+        this.updatedAt = data.updatedAt ;
         this.deletedAt = data.deletedAt ? new Date(data.deletedAt) : null;
         this.createdBy = data.createdBy;
         this.id = data.id;
@@ -81,5 +83,6 @@ export class CompanyModel {
         this.title = new TitleModel(data.title);
         this.reprosentaveJobTitle = new JobTitleModel(data.reprosentaveJobTitle);
         this.certificationText = data.certificationText;
+        this.updatedBy = data.updatedBy;
     }
 }

@@ -3,12 +3,12 @@
     <div class="d-flex justify-content-start align-items-center">
       <button mat-button class="text-secondary" (click)="router.navigate(['/admin'])"  >
         <mat-icon >house</mat-icon>
-        Accueil
+        {{ "HOME" | translate }}
       </button>
       >
       <button mat-button (click)="router.navigate(['/admin/interlocutors'])">
         <mat-icon class=" primary-blue-color">contacts</mat-icon>
-        Interlocuteurs
+        {{ "INTERLOCUTORS" | translate }}
       </button>
     </div>
     <!--  Filters on actions -->
@@ -29,7 +29,7 @@
         <button (click)="openAddInterlocutor()"
                 class="rounded-3 bg-spider" color="primary" mat-button style="transform:scale(0.9)">
           <mat-icon>add</mat-icon>
-          <span>Ajouter</span>
+          <span>{{ "ADD" | translate }}</span>
         </button>
 
         <div class="dropdown dropstart">
@@ -62,11 +62,12 @@
 <!--            <mat-icon class="p-0 overflow-visible"><i class="bi bi-filetype-csv primary-blue-color"></i></mat-icon>  Import-->
 <!--          </button>-->
           <button (click)="exportExcelFile()" mat-menu-item class="mat-primary">
-            <mat-icon><i class="bi bi-cloud-arrow-down primary-blue-color"></i></mat-icon>  Exporter
+            <mat-icon><i class="bi bi-cloud-arrow-down primary-blue-color"></i></mat-icon>
+            {{ "EXPORT" | translate }}
           </button>
           <button *ngIf="selectedRows.size > 1" (click)="bulkSoftDelete()" class="text-danger" mat-menu-item>
             <mat-icon class="text-danger">delete</mat-icon>
-            Suppression en masse
+            {{ "BULK_DELETE" | translate }}
           </button>
         </mat-menu>
       </div>
@@ -111,35 +112,35 @@
       <form [formGroup]="fieldFilterForm" >
 
         <mat-form-field class="scale-08 col-3">
-          <mat-label>Statut</mat-label>
+          <mat-label>{{ "STATUS" | translate }}</mat-label>
           <mat-select  formControlName="status" multiple>
             <mat-option *ngFor="let status of ProspectStatus | keyvalue" [value]="status.key">{{status.value}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field class="scale-08 col-3" >
-          <mat-label>Client</mat-label>
+          <mat-label>{{ "CLIENTS" | translate }}</mat-label>
           <mat-select  formControlName="customersIds" multiple>
             <mat-option *ngFor="let customer of customers.getValue()" [value]="customer.id">{{customer.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field class="scale-08 col-3" >
-          <mat-label>Département</mat-label>
+          <mat-label>{{ "DEPARTMENT" | translate }}</mat-label>
           <mat-select  formControlName="departments" multiple>
             <mat-option *ngFor="let department of departements.getValue()" [value]="department.id">{{department.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field class="scale-08 col-3" >
-          <mat-label>Titre de post</mat-label>
+          <mat-label>{{ "TITRE_DE_POSTE" | translate }}</mat-label>
           <mat-select  formControlName="jobTitlesIds" multiple>
             <mat-option *ngFor="let job of jobTitles.getValue()" [value]="job.id">{{job.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field class="scale-08 col-3" >
-          <mat-label>Créé par</mat-label>
+          <mat-label>{{"CREATED_BY"| translate}}</mat-label>
           <mat-select  formControlName="createdByIds" multiple>
             <mat-option *ngFor="let user of users.getValue()" [value]="user.id">{{user.name}}</mat-option>
           </mat-select>
@@ -147,7 +148,7 @@
 
         <!-- Date de création (Entre) -->
         <mat-form-field class="example-form-field scale-08 col-3">
-          <mat-label>Date de creation</mat-label>
+          <mat-label>{{ "CREATED_AT" | translate }}</mat-label>
           <mat-date-range-input
             [rangePicker]="createdDatePickerPicker">
             <input matStartDate placeholder="Start date" formControlName="createdAtStart">
@@ -158,7 +159,7 @@
         </mat-form-field>
 
         <mat-form-field class="example-form-field scale-08 col-3">
-          <mat-label>Date de la dernière mise à jour</mat-label>
+          <mat-label>{{ "UPDATED_AT" | translate }}</mat-label>
           <mat-date-range-input
             [rangePicker]="updateDatePicker">
             <input matStartDate placeholder="Start date" formControlName="updatedAtStart">
@@ -179,7 +180,7 @@
         </button>
         <button (click)="restFilterFrom()" class="rounded-2 bg-success-subtle mx-2 text-success"  mat-button>
           <mat-icon>refresh</mat-icon>
-          <span>Rénisialiser</span>
+          <span>{{ "RESET"  | translate}}</span>
         </button>
 
       </form>
@@ -203,13 +204,13 @@
 
         <!-- Name Column -->
         <ng-container matColumnDef="name" [sticky]="true" class="w-100">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >Nom</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >{{ "NAME" | translate }}</th>
           <td mat-cell *matCellDef="let row" style="white-space: nowrap !important;" > {{row.fullName}} </td>
         </ng-container>
 
         <!-- status Column -->
         <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Statut</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ "STATUS" | translate }}</th>
           <td mat-cell *matCellDef="let row">
             <button  style="transform:scale(0.8)" [ngClass]="[getChipClass(row.active), 'btn btn-sm p-1 rounded-2 px-3']">
               {{ getAllStatusInteraction(row.active)}}
@@ -220,7 +221,7 @@
 
         <!-- Phone Column -->
         <ng-container matColumnDef="phone"  class="w-100">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >Téléphone</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >{{ "PHONE" | translate }}</th>
           <td mat-cell *matCellDef="let row" style="white-space: nowrap !important;" > {{row.phoneNumber?.number}} </td>
         </ng-container>
 
@@ -232,20 +233,20 @@
 
         <!-- Enterprise Column -->
         <ng-container matColumnDef="enterprise"  class="w-100">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >Entreprise</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >{{ "COMPANY_NAME" | translate}}</th>
           <td mat-cell *matCellDef="let row" style="white-space: nowrap !important;" > {{row.customer.name }} </td>
         </ng-container>
 
         <!-- Department Column -->
         <ng-container matColumnDef="department" class="w-100">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >Département</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >{{ "DEPARTMENT" | translate }}</th>
           <td mat-cell *matCellDef="let row" style="white-space: nowrap !important;" > {{row.department?.name }} </td>
         </ng-container>
 
         <!-- Job title Column -->
         <ng-container matColumnDef="job_title" class="w-100">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >Titre de poste</th>
-          <td mat-cell *matCellDef="let row" style="white-space: nowrap !important;"  > {{ row.jobTitle?.name}} </td>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >{{ "TITRE_DE_POSTE" | translate }}</th>
+          <td mat-cell *matCellDef="let row" style="white-space: nowrap !important;"  > {{ row.jobTitle}} </td>
         </ng-container>
 
         <!-- Actions Column -->
@@ -258,18 +259,14 @@
             </button>
             <mat-menu #menu="matMenu" xPosition="before" class="bg-light">
               <button  class="text-secondary" mat-menu-item (click)="openAddInterlocutor(row)"  >
-                <mat-icon class="text-secondary" >edit</mat-icon> <span>Modifier</span>
+                <mat-icon class="text-secondary" >edit</mat-icon> <span>{{ "UPDATE" | translate }}</span>
               </button>
               <button  mat-menu-item class="text-danger  " (click)="deleteInterlocutor(row)">
-                <mat-icon class="text-danger">delete</mat-icon> <span>Supprimer</span>
+                <mat-icon class="text-danger">delete</mat-icon> <span>{{ "DELETE" | translate }}</span>
               </button>
             </mat-menu>
           </td>
         </ng-container>
-
-<!--        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="primary-blue-color fixed-header   bg-light rounded-3  custom-header-row p-0 "></tr>-->
-<!--        <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="bg-white text-secondary " (click)="showInterlocutorDetails(row)"-->
-<!--            style="font-size:0.8rem !important;"></tr>-->
 
         <tr mat-header-row *matHeaderRowDef="getDisplayColumnsTable" class="primary-blue-color fixed-header   bg-light rounded-3  custom-header-row p-0 "></tr>
         <tr mat-row *matRowDef="let row; columns: getDisplayColumnsTable;" (click)="showInterlocutorDetails(row)" class="bg-white text-secondary "
@@ -286,3 +283,4 @@
 
   </div>
 </div>
+

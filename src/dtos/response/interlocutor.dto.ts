@@ -15,7 +15,7 @@ export class InterlocutorResDto{
   active: ActiveEnum;
   customer:ProspectResponseDto;
   department:DepartmentModel;
-  jobTitle: JobTitleResponseDto;
+  jobTitle: string;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: string | null;
@@ -28,7 +28,7 @@ export class InterlocutorResDto{
     this.emailAddress = data.emailAddress;
     this.phoneNumber = data.phoneNumber;
     this.active = data.active;
-    this.customer = data.custumer;
+    this.customer = data.customer;
     this.department = data.department;
     this.jobTitle = data.jobTitle;
     this.createdAt = data.createdAt;

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class GeminiService {
-  private apiUrl = 'http://127.0.0.1:5000/generate'; // Your Flask API endpoint
+  private apiUrl = 'http://127.0.0.1:5000/chat-ai'; // Your Flask API endpoint
 
   constructor(private http: HttpClient) {}
 

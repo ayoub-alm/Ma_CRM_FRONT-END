@@ -12,6 +12,16 @@ import {WmsPricingComponent} from './pricing/wms-pricing/wms-pricing.component';
 import {WmsContractComponent} from './wms-contract/wms-contract.component';
 import {WmsContractShowComponent} from './wms-contract/wms-contract-show/wms-contract-show.component';
 import {WmsInvoiceCreateComponent} from './wms-invoice/wms-invoice-create/wms-invoice-create.component';
+import {
+  WmsDeliveryNoteCreateComponent
+} from './wms-delivry-note/wms-delivery-note-create/wms-delivery-note-create.component';
+import {WmsDeliveryNoteComponent} from './wms-delivry-note/wms-delivery-note.component';
+import {
+  WmsDeliveryNoteShowEditComponent
+} from './wms-delivry-note/wms-delivery-note-show-edit/wms-delivery-note-show-edit.component';
+import {WmsInvoiceShowComponent} from './wms-invoice/wms-invoice-show/wms-invoice-show.component';
+import {WmsInvoiceComponent} from './wms-invoice/wms-invoice.component';
+import {WmsAnnexeComponent} from './wms-contract/wms-annexe/wms-annexe.component';
 
 
 
@@ -28,8 +38,13 @@ const routes: Routes = [
       {path:'pricing', component: WmsPricingComponent },
       {path:'contracts', component: WmsContractComponent },
       {path:'contracts/show/:id', component: WmsContractShowComponent },
+      {path:'contracts/annexe/:id', component: WmsAnnexeComponent },
+      {path:'delivery-note', component: WmsDeliveryNoteComponent },
+      {path:'delivery-note/create', component: WmsDeliveryNoteCreateComponent },
+      {path:'delivery-note/show/:id', component: WmsDeliveryNoteShowEditComponent },
+      {path:'invoice', component: WmsInvoiceComponent },
       {path:'invoice/create', component: WmsInvoiceCreateComponent },
-
+      {path:'invoice/show/:id', component: WmsInvoiceShowComponent},
     ]},
 
 ];

@@ -46,6 +46,7 @@ import {InteractionFilterDto} from '../../../dtos/filters/interaction.filter.req
 import {
   MatDatepickerModule, MatDatepickerToggle, MatDateRangeInput, MatDateRangePicker, MatEndDate, MatStartDate
 } from '@angular/material/datepicker';
+import {TranslatePipe} from '@ngx-translate/core';
 
 
 @Component({
@@ -55,7 +56,7 @@ import {
     DatePipe, MatTable, MatInput, MatButton, MatIconButton, MatMenuItem, MatHeaderRow, MatRow, MatSort, MatDatepickerModule,
     MatSortHeader, MatCellDef, MatHeaderRowDef, MatRowDef, MatNoDataRow, NgClass, NgForOf, NgIf, FormsModule, KeyValuePipe,
     MatFormField, MatLabel, MatOption, MatRadioButton, MatRadioGroup, MatSelect, ReactiveFormsModule, AsyncPipe,
-    MatDateRangeInput, MatDateRangePicker, MatDatepickerToggle, MatEndDate, MatStartDate, MatSuffix],
+    MatDateRangeInput, MatDateRangePicker, MatDatepickerToggle, MatEndDate, MatStartDate, MatSuffix, TranslatePipe],
   templateUrl: './interaction.component.html',
   styleUrl: './interaction.component.css',
   providers: [provideNativeDateAdapter()],
@@ -176,7 +177,7 @@ export class InteractionComponent implements OnInit, AfterViewInit {
   loadInteractions(searchValue: string = ""): void {
     this.interactionService.getAllInteractions(this.localStorageService.getCurrentCompanyId(), searchValue).subscribe({
       next: (data) => {
-        this.dataSource.data = data;
+        this.dataSource.data = data.sort((a,b) =>  b.id - a.id);
       }, error: (err) => {
         this.snackBar.open("Erreur lors de téléchargement des interaction: " + err.message, "Fermer", {
           duration: 3000,

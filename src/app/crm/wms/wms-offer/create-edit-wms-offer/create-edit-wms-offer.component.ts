@@ -59,6 +59,9 @@ import {StorageOfferCreateDto} from '../../../../../dtos/request/crm/storage.off
 import {StorageOfferService} from '../../../../../services/crm/wms/storage.offer.service';
 import {PaymentMethodResponseDto} from '../../../../../dtos/init_data/response/paymentMethodResponseDto';
 import {PaymentMethodService} from '../../../../../services/data/payemet.method.service';
+import {MatDialog} from '@angular/material/dialog';
+import {ConfirmationDialogComponent} from '../../../../utils/confirmation-dialog/confirmation-dialog.component';
+
 
 @Component({
   selector: 'app-create-edit-wms-offer',
@@ -130,16 +133,16 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
   // unloading type infos
   unloadingTypes: BehaviorSubject<UnloadingTypeResponseDto[]> =  new BehaviorSubject<UnloadingTypeResponseDto[]>([])
   selectedUnloadingTypes:  BehaviorSubject<UnloadingTypeResponseDto[]> =  new BehaviorSubject<UnloadingTypeResponseDto[]>([])
-  unloadingDisplayedColumns: string[] =  [ 'name', "unite","price", "remise", "remiseValue", "finalPrice", "actions",];
+  unloadingDisplayedColumns: string[] =  [ 'name', "unite","price", "remise", "remiseValue","increaseValue", "finalPrice",];
   unloadingDataSource: BehaviorSubject<UnloadingTypeResponseDto[]> = new BehaviorSubject<UnloadingTypeResponseDto[]>([]);
   // provisions infos
   provisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
   selectedProvisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
-  provisionsDisplayedColumns: string[] = [ 'name', "unite","price", "remise", "remiseValue", "finalPrice", "actions",];
+  provisionsDisplayedColumns: string[] = ['name', 'unitOfMeasurement', 'initPrice', 'discountType', 'discountValue', 'increaseValue', 'salesPrice'];
   // requirements infos
   requirements: BehaviorSubject<RequirementResponseDto[]> =  new BehaviorSubject<RequirementResponseDto[]>([])
   selectedRequirements: BehaviorSubject<RequirementResponseDto[]> =  new BehaviorSubject<RequirementResponseDto[]>([])
-  requirementsColumns: string[] = [ 'name', "unite","price", "remise", "remiseValue", "finalPrice", "actions",];
+  requirementsColumns: string[] = [ 'name', "unite","price", "remise", "remiseValue","increaseValue","finalPrice"];
 
   supports: BehaviorSubject<SupportResponseDto[]> = new BehaviorSubject<SupportResponseDto[]>([]);
   structures: BehaviorSubject<StructureResponseDto[]> = new BehaviorSubject<StructureResponseDto[]>([]);
@@ -153,7 +156,8 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
     private requirementService: RequirementService,private storageNeedService: StorageNeedService,private storageOfferService: StorageOfferService,
     private prospectService: ProspectService, private interlocutorService: InterlocutorService,
     private snackBar: MatSnackBar,private supportService: SupportService, private structureService: StructureService,
-    private temperatureServices: TemperatureService, private route: ActivatedRoute, private paymentsMethodsService: PaymentMethodService) {}
+    private temperatureServices: TemperatureService, private route: ActivatedRoute, private paymentsMethodsService: PaymentMethodService,
+              private dialog: MatDialog) {}
 
   ngOnInit(): void {
     this.initializeGeneralInfoForm()
@@ -219,7 +223,7 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
   initializePaymentsTypeFrom(){
     this.paymentTypeForm = this.fb.group({
       paymentDeadline:["", Validators.required],
-      paymentTypeId:["",  Validators.required],
+      paymentTypeIds:[[],  Validators.required],
     })
   }
 
@@ -393,23 +397,74 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   *
+   * Vérifie si une offre existe déjà pour ce besoin.
+   * Si oui, affiche une confirmation pour révision ou création d'une nouvelle offre.
+   * Puis crée l'offre en conséquence.
    */
-  createStorageOffer(){
-    const storageOfferTOCreate = this.createNewOfferRequestDto();
-    console.log(storageOfferTOCreate);
-    if (storageOfferTOCreate){
-      this.storageOfferService.createStorageOffer(storageOfferTOCreate).pipe(
-        tap(data => {
-          this.snackBar.open("Le offer du client a été bien créé. ✅","OK", {duration:3000})
-          this.router.navigateByUrl('/admin/crm/wms/offers').then();
-        }),
-        catchError(err => {
-          return of(null)
-        })
-      ).subscribe()
-    }
+  createStorageOffer(): void {
+    const needId = this.storageNeed.getValue().id;
+
+    this.storageNeedService.checkIfStorageNeedHasOffer(needId).subscribe({
+      next: (hasOffer) => {
+        if (hasOffer) {
+          // Demander à l'utilisateur s'il souhaite créer une nouvelle offre ou réviser l'existante
+          const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+            data: {
+              title: 'Une offre existe déjà',
+              message: 'Ce besoin a déjà une offre. Souhaitez-vous créer une nouvelle offre ou réviser l\'ancienne ?',
+              confirmText: 'Nouvelle offre',
+              cancelText: 'Réviser l\'ancienne',
+              confirmButtonColor: 'primary'
+            }
+          });
+
+          dialogRef.afterClosed().subscribe(result => {
+            const offerToCreate = this.createNewOfferRequestDto();
+            if (!offerToCreate) return;
+
+            // Si l'utilisateur clique sur "Réviser l'ancienne", activer le flag
+            if (!result) {
+              offerToCreate.withRevision = true;
+            }
+
+            this.storageOfferService.createStorageOffer(offerToCreate).pipe(
+              tap(() => {
+                this.snackBar.open("L'offre du client a été bien créée ✅", "OK", { duration: 3000 });
+                this.router.navigateByUrl('/admin/crm/wms/offers');
+              }),
+              catchError(err => {
+                this.snackBar.open("Erreur lors de la création de l'offre ❌", "OK", { duration: 3000 });
+                console.error(err);
+                return of(null);
+              })
+            ).subscribe();
+          });
+
+        } else {
+          // Aucune offre existante : créer directement
+          const offerToCreate = this.createNewOfferRequestDto();
+          if (!offerToCreate) return;
+
+          this.storageOfferService.createStorageOffer(offerToCreate).pipe(
+            tap(() => {
+              this.snackBar.open("L'offre du client a été bien créée ✅", "OK", { duration: 3000 });
+              this.router.navigateByUrl('/admin/crm/wms/offers');
+            }),
+            catchError(err => {
+              this.snackBar.open("Erreur lors de la création de l'offre ❌", "OK", { duration: 3000 });
+              console.error(err);
+              return of(null);
+            })
+          ).subscribe();
+        }
+      },
+      error: (err) => {
+        this.snackBar.open("Erreur lors de la vérification de l'offre existante ❌", "OK", { duration: 3000 });
+        console.error(err);
+      }
+    });
   }
+
 
   /**
    *
@@ -427,6 +482,7 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
     const requirements = this.selectedRequirements.getValue();
     // Create StorageNeedCreateDto
     return new StorageOfferCreateDto(
+      "",
       this.generateUUID(),
       this.storageNeed.getValue().storageReason,
       generalInfo.statut,
@@ -437,13 +493,13 @@ export class CreateEditWmsOfferComponent implements OnInit, AfterViewInit {
       this.storageNeed.getValue().productType,
       this.storageNeed.getValue().customer.id,
       this.localStorageService.getItem("selected_company_id"),
-      stockedItems.map(item =>  mapStockedItemResponseToCreate(item)),
+      this.storageNeed.getValue().stockedItems.map(item =>  mapStockedItemResponseToCreate(item)),
       unloadingTypes,
       requirements,
       this.storageNeed.getValue().id,
-      this.paymentTypeForm.get('paymentTypeId')?.value,
+      this.paymentTypeForm.get('paymentTypeIds')?.value,
       this.paymentTypeForm.get('paymentDeadline')?.value,
-      this.storageNeed.getValue().interlocutor.id
+      this.storageNeed.getValue().interlocutor.id,
     );
 }
 
@@ -644,6 +700,14 @@ private subscribeToCustomFieldChanges() {
     }
   }
 
+  addIncreaseValueForProvision(element: ProvisionResponseDto, $event: Event) {
+    const increaseValue = parseFloat(($event.target as HTMLInputElement).value); // Convert input value to a number
+    if (!isNaN(increaseValue)) {
+      element.increaseValue = increaseValue;
+      element.salesPrice += increaseValue;
+    }
+  }
+
   protected readonly getLabelFromStorageReasonEnum = getLabelFromStorageReasonEnum;
 
   selectDiscountTypeForRequirement(element: RequirementResponseDto, event: Event) {
@@ -667,15 +731,12 @@ private subscribeToCustomFieldChanges() {
     }
   }
 
-
   addDiscountValueForRequirement(element: RequirementResponseDto, $event: Event) {
     if ($event){
       element.discountValue =  parseInt(($event.target as HTMLSelectElement).value) ;
       element.salesPrice = element.initPrice - element.discountValue;
     }
   }
-
-  protected readonly elements = elements;
 
   addDiscountRateForRequirement(element: RequirementResponseDto, $event: Event) {
     const discountValue = parseFloat(($event.target as HTMLInputElement).value); // Convert input value to a number
@@ -684,6 +745,12 @@ private subscribeToCustomFieldChanges() {
     } else {
       element.salesPrice = element.initPrice; // Keep original price if invalid input
     }
+  }
+
+  addIncreaseValueForRequirement(element:RequirementResponseDto, $event: Event) {
+    const increaseValue = parseFloat(($event.target as HTMLInputElement).value);
+    element.increaseValue = increaseValue;
+    element.salesPrice += increaseValue;
   }
 
   selectDiscountTypeForUnloading(element: UnloadingTypeResponseDto, event: Event) {
@@ -707,7 +774,6 @@ private subscribeToCustomFieldChanges() {
     }
   }
 
-
   addDiscountValueForUnloading(element: UnloadingTypeResponseDto, $event: Event) {
     if ($event){
       element.discountValue =  parseInt(($event.target as HTMLSelectElement).value) ;
@@ -722,5 +788,11 @@ private subscribeToCustomFieldChanges() {
     } else {
       element.salesPrice = element.initPrice; // Keep original price if invalid input
     }
+  }
+
+  addIncreaseValueForUnloadingType(element:UnloadingTypeResponseDto, $event: Event) {
+    const increaseValue = parseFloat(($event.target as HTMLInputElement).value);
+    element.increaseValue = increaseValue;
+    element.salesPrice += increaseValue;
   }
 }

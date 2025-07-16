@@ -32,4 +32,8 @@ export class  RequirementService {
   createRequirement(requirement: RequirementRequestDto): Observable<RequirementResponseDto> {
     return this.http.post<RequirementResponseDto>(`${this.baseUrl}`, requirement)
   }
+
+  updateRequirement(requirement: RequirementRequestDto): Observable<RequirementResponseDto> {
+    return this.http.put<RequirementResponseDto>(`${this.baseUrl}`, requirement)
+  }
 }

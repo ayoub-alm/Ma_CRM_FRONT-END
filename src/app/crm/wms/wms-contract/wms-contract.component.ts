@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DatePipe, NgForOf} from '@angular/common';
+import {DatePipe, NgForOf, NgIf} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {
   MatCell,
@@ -26,6 +26,10 @@ import {CrmTypeEnum} from '../../../../enums/crm/crm.type.enum';
 import {StorageNeedResponseDto} from '../../../../dtos/response/crm/storage.need.response.dto';
 import {getLabelFromStorageReasonEnum} from '../../../../enums/crm/storage.reason.enum';
 import {StorageContractService} from '../../../../services/crm/wms/storage.contract.service';
+import {StorageContractResponseDto} from '../../../../dtos/response/crm/storage.contract.response.dto';
+import {Observable} from 'rxjs';
+import {MatProgressSpinner} from '@angular/material/progress-spinner';
+import {LoadingService} from '../../../../services/loading.service';
 
 @Component({
   selector: 'app-wms-contract',
@@ -53,7 +57,9 @@ import {StorageContractService} from '../../../../services/crm/wms/storage.contr
     NgForOf,
     MatMenuTrigger,
     MatHeaderCellDef,
-    MatNoDataRow
+    MatNoDataRow,
+    MatProgressSpinner,
+    NgIf
   ],
   templateUrl: './wms-contract.component.html',
   styleUrl: './wms-contract.component.css'
@@ -63,7 +69,7 @@ export class WmsContractComponent  implements OnInit, AfterViewInit{
   displayedColumns: string[] = ['select', 'ref', 'customer','status', 'productType',
     'date','storageReason','stockedItem', 'actions'];
 
-  storageOffers: MatTableDataSource<StorageOfferResponseDto> = new MatTableDataSource();
+  storageContratcs: MatTableDataSource<StorageContractResponseDto> = new MatTableDataSource();
   isAllSelected = false;
   selectedRows: Set<number> = new Set();
 
@@ -71,35 +77,26 @@ export class WmsContractComponent  implements OnInit, AfterViewInit{
   @ViewChild(MatSort) sort!: MatSort;
 
   crmType = new FormControl('');
-
+  loading$!: Observable<boolean>;
   constructor(private storageContractService: StorageContractService, private localStorageService: LocalStorageService, private dialog: MatDialog, private snackBar: MatSnackBar,
-              protected router: Router) {}
+              protected router: Router, private loadingService: LoadingService) {}
 
   ngOnInit(): void {
+    this.loading$ = this.loadingService.loading$
     this.loadNeedBasedOnSelectedType();
+
   }
 
   ngAfterViewInit(): void {
-    this.storageOffers.paginator = this.paginator;
-    this.storageOffers.sort = this.sort;
+    this.storageContratcs.paginator = this.paginator;
+    this.storageContratcs.sort = this.sort;
   }
 
   loadNeedBasedOnSelectedType(): void {
-    switch (this.crmType.value) {
-      case CrmTypeEnum.WMS:
-
-        break;
-      case CrmTypeEnum.TMS:
-        this.router.navigateByUrl('/admin/crm/need/tms/show').then(r => {return;});
-        break;
-      case CrmTypeEnum.TMSI:
-        this.router.navigateByUrl('/admin/crm/need/show').then(r => {return;});
-        break;
-    }
     const selectedCompanyId = parseInt(this.localStorageService.getItem("selected_company_id"));
     this.storageContractService.getAllStorageContractsByCompanyId(selectedCompanyId).subscribe({
       next: (data) => {
-        this.storageOffers.data = data;
+        this.storageContratcs.data = data.sort((a, b) => b.id - a.id);
       },
       error: (err) => {
         console.error('Error loading interactions:', err);
@@ -108,7 +105,7 @@ export class WmsContractComponent  implements OnInit, AfterViewInit{
   }
 
   applyFilter(event: Event): void {
-    this.storageOffers.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.storageContratcs.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
   }
 
   createEditWmsNeed(): void {
@@ -129,13 +126,13 @@ export class WmsContractComponent  implements OnInit, AfterViewInit{
     if (this.isAllSelected) {
       this.selectedRows.clear();
     } else {
-      this.storageOffers.data.forEach((row) => this.selectedRows.add(row.id));
+      this.storageContratcs.data.forEach((row) => this.selectedRows.add(row.id));
     }
     this.isAllSelected = !this.isAllSelected;
   }
 
   checkIfAllSelected(): void {
-    this.isAllSelected = this.storageOffers.data.every((row) => this.selectedRows.has(row.id));
+    this.isAllSelected = this.storageContratcs.data.every((row) => this.selectedRows.has(row.id));
   }
 
   isRowSelected(rowId: number): boolean {
@@ -167,4 +164,17 @@ export class WmsContractComponent  implements OnInit, AfterViewInit{
   }
 
   protected readonly getLabelFromStorageReasonEnum = getLabelFromStorageReasonEnum;
+
+
+  /**
+   * This function allows us to get the color of background of annexes and contracts
+   * @param row
+   */
+  getRowBg(row: StorageContractResponseDto): string{
+    if(row.parentContract ){
+      return 'bg-spider-light text-secondary';
+    }else {
+      return 'bg-white text-secondary';
+    }
+  }
 }

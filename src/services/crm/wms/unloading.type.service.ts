@@ -32,6 +32,16 @@ export class  UnloadingTypeService {
      )
   }
 
+  /**
+   * this function allows to update unloading types
+   * @param unloading
+   */
+  updateUnloadingType(unloading: UnloadingRequestDto): Observable<UnloadingTypeResponseDto> {
+    return this.http.put<UnloadingTypeResponseDto>(`${this.baseUrl}/api/unloading-types`, unloading).pipe(
+      tap(unloadingType => {new UnloadingTypeResponseDto(unloadingType)})
+    )
+  }
+
 
 
 }

@@ -9,7 +9,7 @@ export class InterlocutorRequestDto {
   departmentId: number |null;
   phoneNumber: PhoneDto;
   emailAddress: EmailDto;
-  jobTitleId: number | null;
+  jobTitle: string | null;
   active: ActiveEnum;
 
   constructor(id: number | null,
@@ -18,7 +18,7 @@ export class InterlocutorRequestDto {
   departmentId: number,
   phoneNumber: PhoneDto,
   emailAddress: EmailDto,
-  jobTitleId: number,
+  jobTitle: string,
   active: ActiveEnum) {
     this.id = id || null;
     this.fullName =fullName || '';
@@ -26,7 +26,7 @@ export class InterlocutorRequestDto {
     this.departmentId =departmentId || null;
     this.phoneNumber =phoneNumber || '';
     this.emailAddress =emailAddress || '';
-    this.jobTitleId =jobTitleId || null;
+    this.jobTitle = jobTitle || null;
     this.active = active || ActiveEnum.ACTIVE;
   }
 }

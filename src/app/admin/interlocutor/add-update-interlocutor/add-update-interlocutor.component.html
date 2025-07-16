@@ -3,8 +3,8 @@
     <button color="primary" mat-icon-button>
       <mat-icon>domain</mat-icon>
     </button>
-    <span *ngIf="!interlocutorToUpdate?.id">Créer</span>
-    <span *ngIf="interlocutorToUpdate?.id">Mettre à jour</span> l'entreprise
+    <span *ngIf="!interlocutorToUpdate?.id">  {{ 'CREATE' | translate }}</span>
+    <span *ngIf="interlocutorToUpdate?.id"> {{ 'UPDATE' | translate }}</span>  {{ 'CONTACT' | translate }}
   </div>
   <!-- Reset Button -->
   <div class="col-2 text-end">
@@ -25,7 +25,7 @@
       <!-- Prospect ID (Select Box) -->
       <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Prospect </mat-label>
+              <mat-label>{{ "PROSPECT" | translate }} </mat-label>
               <mat-select formControlName="prospectId" required>
                   <mat-option *ngFor="let prospect of prospects | async" [value]="prospect.id">
                       {{ prospect.name }}
@@ -39,17 +39,20 @@
 
       <!-- Job Title (Select Box) -->
       <div class="col-lg-6">
-          <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Titre du poste</mat-label>
-              <mat-select formControlName="jobTitle" >
-                  <mat-option *ngFor="let title of jobTitles | async" [value]="title.id">
-                      {{ title.name }}
-                  </mat-option>
-              </mat-select>
-              <mat-error *ngIf="interlocutorForm.get('jobTitle')?.hasError('required')">
-                  Le titre du poste est obligatoire.
-              </mat-error>
-          </mat-form-field>
+        <mat-form-field class="w-100" appearance="outline">
+          <mat-label>{{ "JOB_TITLE" | translate }}</mat-label>
+          <input type="text"
+                 placeholder="Titre du poste"
+                 aria-label="Titre du poste"
+                 formControlName="jobTitle"
+                 matInput
+                 [matAutocomplete]="auto">
+          <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+            @for (option of filteredOptions | async; track option) {
+              <mat-option [value]="option">{{option}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
       </div>
 
 
@@ -57,22 +60,19 @@
       <!-- department (Select Box) -->
       <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Départment </mat-label>
+              <mat-label>{{ "DEPARTMENT" | translate }} </mat-label>
               <mat-select formControlName="departmentId" >
                   <mat-option *ngFor="let department of departments | async" [value]="department.id">
                       {{ department.name }}
                   </mat-option>
               </mat-select>
-              <!--        <mat-error *ngIf="interlocutorForm.get('departmentId')?.hasError('required')">-->
-              <!--          Le prospect est obligatoire.-->
-              <!--        </mat-error>-->
           </mat-form-field>
       </div>
 
       <!-- Full Name -->
       <div class="col-lg-6">
           <mat-form-field appearance="outline" class="w-100">
-              <mat-label>Nom complet</mat-label>
+              <mat-label>{{ "FULL_NAME" | translate }} </mat-label>
               <input formControlName="fullName" matInput placeholder="John Doe" required>
               <mat-error *ngIf="interlocutorForm.get('fullName')?.hasError('required')">
                   Le nom complet est obligatoire.
@@ -97,7 +97,7 @@
     <!-- Phone Number -->
     <div class="col-lg-6">
       <mat-form-field appearance="outline" class="w-100">
-        <mat-label>Téléphone</mat-label>
+        <mat-label>{{ "PHONE" | translate }}</mat-label>
         <input formControlName="phoneNumber" matInput placeholder="+212600000000" required>
         <mat-error *ngIf="interlocutorForm.get('phoneNumber')?.hasError('required')">
           Le numéro de téléphone est obligatoire.
@@ -115,10 +115,9 @@
         formControlName="active"
         class="example-margin"
         color="primary"
-        [checked]="interlocutorForm.get('active')?.value === 'Active' "
+        [checked]="interlocutorForm.get('active')?.value === 'Active'"
       >
         {{ interlocutorForm.get('active')?.value ? 'Active' : 'Inactive' }}
-
       </mat-slide-toggle>
     </div>
 
@@ -128,7 +127,7 @@
 <mat-dialog-actions align="end" class="shadow">
   <!-- Cancel Button -->
   <button [color]="'warn'" class="btn py-1" mat-button mat-dialog-close>
-    Annuler
+    {{ "CANCEL" | translate }}
   </button>
 
   <!-- Submit Button -->
@@ -137,8 +136,8 @@
     [disabled]="!interlocutorForm.valid"
     class="btn mat-primary"
     mat-raised-button>
-    <span *ngIf="!interlocutorToUpdate?.id">Créer</span>
-    <span *ngIf="interlocutorToUpdate?.id">Mettre à jour</span>
-    l'interlocuteur
+    <span *ngIf="!interlocutorToUpdate?.id">{{ 'CREATE' | translate }}</span>
+    <span *ngIf="interlocutorToUpdate?.id">{{ 'UPDATE' | translate }}</span>
+    {{ 'CONTACT' | translate }}
   </button>
 </mat-dialog-actions>

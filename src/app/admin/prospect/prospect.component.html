@@ -3,12 +3,12 @@
     <div class="d-flex justify-content-start align-items-center  ">
       <button (click)="router.navigate(['/admin'])" class="text-secondary" mat-button>
         <mat-icon>house</mat-icon>
-        Accueil
+        {{ 'HOME' | translate }}
       </button>
       >
       <button (click)="router.navigate(['/admin'])" mat-button>
         <mat-icon class=" primary-blue-color">domain</mat-icon>
-        Clients
+        {{ 'PROSPECTS' | translate }}
       </button>
     </div>
     <!--  Filters on actions -->
@@ -29,7 +29,7 @@
         <button (click)="openAddProspectDialog()"
                 class="rounded-3 bg-spider  scale-09 " color="primary" mat-button >
           <mat-icon>add</mat-icon>
-          <span>Ajouter</span>
+          <span>{{ 'ADD' | translate }}</span>
         </button>
 
         <div class="dropdown dropstart">
@@ -44,7 +44,7 @@
                 [checked]="isColumnsChecked(col)"
                 type="checkbox"
               />
-              {{ col.label }}
+              {{ col.label.toUpperCase()  | translate}}
             </div>
           </div>
         </div>
@@ -59,19 +59,19 @@
           <button (click)="isShowImportZone.next(true)"
                   class="mat-primary scale-09" mat-menu-item>
             <mat-icon class="p-0 overflow-visible"><i class="bi bi-filetype-csv primary-blue-color"></i></mat-icon>
-            Import
+            {{ 'IMPORT' | translate }}
           </button>
           <button (click)="exportExcelFile()" class="mat-primary scale-09" mat-menu-item>
             <mat-icon><i class="bi bi-cloud-arrow-down primary-blue-color"></i></mat-icon>
-            Export
+            {{ 'EXPORT' | translate }}
           </button>
           <button *ngIf="selectedRows.size > 1" (click)="bulkEdit()" class="scale-09" mat-menu-item>
             <mat-icon class="p-0 overflow-visible"><i class="bi bi-pencil-square primary-blue-color"></i></mat-icon>
-             Modification en masse
+            {{'BULK_EDIT' | translate }}
           </button>
           <button *ngIf="selectedRows.size > 1" (click)="bulkSoftDelete()" class="scale-09" mat-menu-item>
             <mat-icon class="p-0 overflow-visible"><i class="bi bi-trash text-danger"></i></mat-icon>
-            Suppression en masse
+            {{'BULK_DELETE' | translate }}
           </button>
         </mat-menu>
       </div>
@@ -117,56 +117,56 @@
        <form [formGroup]="fieldFilterForm" class="row" >
          <div class="col-8">
            <mat-form-field appearance="outline"  class="scale-09 col-3">
-             <mat-label>Statut</mat-label>
+             <mat-label>{{ 'STATUS' | translate }}</mat-label>
              <mat-select  formControlName="statusIds" multiple>
                <mat-option  *ngFor="let status of customerStatus.getValue()" [value]="status.id" [class]="getChipClass(status.name)">{{status.name}}</mat-option>
              </mat-select>
            </mat-form-field>
 
            <mat-form-field appearance="outline"  class="scale-09 col-3" >
-             <mat-label>Ville</mat-label>
+             <mat-label>{{ 'CITY' | translate }}</mat-label>
              <mat-select  formControlName="cityIds" multiple>
                <mat-option *ngFor="let city of cities.getValue()" [value]="city.id">{{city.name}}</mat-option>
              </mat-select>
            </mat-form-field>
 
            <mat-form-field appearance="outline"  class="scale-09 col-3" >
-             <mat-label>Pays</mat-label>
+             <mat-label>{{ 'COUNTRY' | translate }}</mat-label>
              <mat-select  formControlName="countryIds" multiple>
                <mat-option *ngFor="let country of countries.getValue()" [value]="country.id">{{country.name}}</mat-option>
              </mat-select>
            </mat-form-field>
 
            <mat-form-field appearance="outline"  class="scale-09 col-3" >
-             <mat-label>Industrie</mat-label>
+             <mat-label>{{ 'INDUSTRY' | translate }}</mat-label>
              <mat-select  formControlName="industryIds" multiple>
                <mat-option *ngFor="let Industry of industries.getValue()" [value]="Industry.id">{{Industry.name}}</mat-option>
              </mat-select>
            </mat-form-field>
 
            <mat-form-field appearance="outline"  class="scale-09 col-3" >
-             <mat-label>Taille </mat-label>
+             <mat-label>{{'SIZE' | translate}} </mat-label>
              <mat-select  formControlName="companySizeIds" multiple>
                <mat-option *ngFor="let size of companySizes.getValue()" [value]="size.id">{{size.name}}</mat-option>
              </mat-select>
            </mat-form-field>
 
            <mat-form-field appearance="outline"  class="scale-09 col-3" >
-             <mat-label>Structure </mat-label>
+             <mat-label>{{ 'STRUCTURE' | translate }} </mat-label>
              <mat-select  formControlName="structureIds" multiple>
                <mat-option *ngFor="let structure of proprietaryStructures.getValue()" [value]="structure.id">{{structure.name}}</mat-option>
              </mat-select>
            </mat-form-field>
 
            <mat-form-field appearance="outline"  class="scale-09 col-3" >
-             <mat-label>Statut legal </mat-label>
+             <mat-label>{{ 'LEGAL_STATUS' | translate }} </mat-label>
              <mat-select  formControlName="legalStatusIds" multiple>
                <mat-option *ngFor="let legalStatus of legalStatuses.getValue()" [value]="legalStatus.id">{{legalStatus.name}}</mat-option>
              </mat-select>
            </mat-form-field>
 
            <mat-form-field appearance="outline"  class="scale-09 col-3" >
-             <mat-label>Créé par </mat-label>
+             <mat-label>{{ 'CREATED_BY' | translate}}</mat-label>
              <mat-select  formControlName="createdByIds" multiple>
                <mat-option *ngFor="let user of users.getValue()" [value]="user.id">{{user.name}}</mat-option>
              </mat-select>
@@ -174,7 +174,7 @@
 
            <!-- Date de création (Entre) -->
            <mat-form-field appearance="outline"  class="example-form-field scale-09 col-3">
-             <mat-label>Date de creation</mat-label>
+             <mat-label>{{ 'CREATION_DATE' | translate }}</mat-label>
              <mat-date-range-input
                [rangePicker]="createdDatePickerPicker">
                <input matStartDate placeholder="Start date" formControlName="createdAtStart">
@@ -186,14 +186,14 @@
 
 
            <mat-form-field appearance="outline"  class="scale-09 col-3" >
-             <mat-label>Dernière modification par</mat-label>
+             <mat-label>{{ 'LAST_MODIFIED_BY' | translate }}</mat-label>
              <mat-select  formControlName="updatedByIds" multiple>
                <mat-option *ngFor="let user of users.getValue()" [value]="user.id">{{user.name}}</mat-option>
              </mat-select>
            </mat-form-field>
 
            <mat-form-field appearance="outline"  class="example-form-field scale-09 col-3">
-             <mat-label>Date de modification</mat-label>
+             <mat-label>{{ 'MODIFICATION_DATE' | translate }}</mat-label>
              <mat-date-range-input
                [rangePicker]="updateDatePicker">
                <input matStartDate placeholder="Start date" formControlName="updatedAtStart">
@@ -204,7 +204,7 @@
            </mat-form-field>
 
            <mat-form-field appearance="outline"  class="scale-09 col-3" >
-             <mat-label>Affecté à</mat-label>
+             <mat-label>{{ 'ASSIGNED_TO' | translate }}</mat-label>
              <mat-select  formControlName="affectedToIds" multiple>
                <mat-option *ngFor="let user of users.getValue()" [value]="user.id">{{user.name}}</mat-option>
              </mat-select>
@@ -220,11 +220,11 @@
            <div class="col-12">
              <button (click)="filterProspectsSearchFields()" class="rounded-2 bg-spider" color="primary" mat-button >
                <mat-icon><i class="bi bi-funnel"></i></mat-icon>
-               <span>Filter</span>
+               <span>{{ 'FILTER' | translate }}</span>
              </button>
              <button (click)="restFilterFrom()" class="rounded-2 bg-success-subtle mx-2 text-success"  mat-button>
                <mat-icon>refresh</mat-icon>
-               <span>Rénisialiser</span>
+               <span>{{ 'RESET' | translate }}</span>
              </button>
            </div>
          </div>
@@ -237,33 +237,7 @@
 
   <!--  Start table content -->
   <div class="bg-light rounded-3 mat-elevation-z1 mt-2 w-100">
-<!--    <nav [tabPanel]="tabPanel" class="bg-white mat-elevation-z1 fs-6 my-2 rounded-3 small" mat-tab-nav-bar>-->
-<!--      <a (click)="onFilterCustomersByStatus('')" [active]="activeLink.getValue() == ''" mat-tab-link>-->
-<!--        <small>-->
-<!--          <button [class]="activeLink.getValue() === '' ?' primary-blue-color btn btn-sm d-flex rounded-3 rounded-0':-->
-<!--        'text-secondary d-flex btn btn-sm rounded-0 rounded-3'">-->
-<!--            <mat-icon>all</mat-icon> &lt;!&ndash; Display icon &ndash;&gt;-->
-<!--            <span class="mx-2">Touts</span>-->
-<!--          </button>-->
-<!--        </small>-->
-<!--      </a>-->
-<!--      <ng-container *ngFor="let link of ProspectStatus | keyvalue" class="fs-1 small">-->
-
-<!--        <a (click)="onFilterCustomersByStatus(link.key)" [active]="activeLink.getValue() === link.key" mat-tab-link>-->
-<!--          <small>-->
-<!--            <button [class]="activeLink.getValue() == link.key ?'primary-blue-color btn btn-sm d-flex rounded-3 rounded-0':-->
-<!--        'text-secondary d-flex btn btn-sm rounded-0 rounded-3'">-->
-<!--              <mat-icon>{{ getIcon(link.value) }}</mat-icon> &lt;!&ndash; Display icon &ndash;&gt;-->
-<!--              <span class="mx-2">{{ link.value }}</span>-->
-<!--            </button>-->
-<!--          </small>-->
-<!--        </a>-->
-<!--      </ng-container>-->
-<!--    </nav>-->
-
-
     <div class="table-container border-top-5  border-secondary w-100">
-
       <mat-tab-nav-panel #tabPanel></mat-tab-nav-panel>
       <table [dataSource]="prospects.getValue()" class="table-container text-secondary" mat-table matSort>
         <!-- Id Column -->
@@ -279,13 +253,13 @@
 
         <!-- Name Column -->
         <ng-container [sticky]="true" class="w-100" matColumnDef="name">
-          <th *matHeaderCellDef class="" mat-header-cell mat-sort-header>Raison sociale</th>
+          <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'COMPANY_NAME' | translate }}</th>
           <td *matCellDef="let row" mat-cell  class="full-width-table-celle"> {{ row.name }}</td>
         </ng-container>
 
         <!-- status Column -->
         <ng-container matColumnDef="status">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Statut</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'STATUS' | translate }}</th>
           <td *matCellDef="let row" mat-cell>
             <button [ngClass]="[getChipClass(row.customerStatus.name), 'btn btn-sm p-1 rounded-2 px-3 ']"
                     style="transform:scale(0.8)">
@@ -297,13 +271,13 @@
 
         <!-- Industry Column -->
         <ng-container class="w-100" matColumnDef="industry">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Industrie</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'INDUSTRY' | translate }}</th>
           <td *matCellDef="let row" mat-cell style="white-space: nowrap !important;"> {{ row.industry?.name }}</td>
         </ng-container>
 
         <!-- City Column -->
         <ng-container matColumnDef="city">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Ville</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'CITY' | translate }}</th>
           <td *matCellDef="let row" mat-cell>
             {{ row.city?.name }}
           </td>
@@ -311,7 +285,7 @@
 
 
         <ng-container class="w-100" matColumnDef="description">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Déscription</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'DESCRIPTION' | translate}}</th>
           <td *matCellDef="let row" mat-cell style="white-space: nowrap !important;"
               style="white-space: nowrap !important;">
             {{ row.businessDescription }}
@@ -330,7 +304,7 @@
 
         <!-- Phone Column -->
         <ng-container matColumnDef="phone">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Téléphone</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'PHONE' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
             <a class="text-secondary" href="tel:{{row.phone}}">
               {{ row.phone }}
@@ -349,7 +323,7 @@
 
           <!-- city Column -->
           <ng-container matColumnDef="companySize">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">Taille de l'entreprise</th>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">{{'SIZE' | translate}} de l'entreprise</th>
             <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell class="full-width-table-celle">
                 {{ row.companySize.name }}
             </td>
@@ -357,7 +331,7 @@
 
           <!-- country Column -->
           <ng-container matColumnDef="country">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>Pays</th>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'COUNTRY' | translate }}</th>
             <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
                 {{ row.country.name }}
             </td>
@@ -365,7 +339,7 @@
 
         <!-- headOffice Column -->
         <ng-container matColumnDef="headOffice">
-          <th *matHeaderCellDef mat-header-cell  mat-sort-header class="full-width-table-celle">Siège social</th>
+          <th *matHeaderCellDef mat-header-cell  mat-sort-header class="full-width-table-celle">{{ 'HEAD_OFFICE' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
               {{ row.headOffice }}
           </td>
@@ -373,7 +347,7 @@
 
         <!-- yearOfCreation Column -->
         <ng-container matColumnDef="yearOfCreation">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">Année de création</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">{{'YEAR_OF_CREATION' | translate}}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
             {{ row.yearOfCreation }}
           </td>
@@ -418,14 +392,14 @@
         </ng-container>
         <!-- Court Column -->
         <ng-container matColumnDef="court">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Tribunal</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'COURT' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
             {{ row.court.name }}
           </td>
         </ng-container>
         <!-- legalStatus Column -->
         <ng-container matColumnDef="legalStatus">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Statut juridique</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'LEGAL_STATUS' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
             {{ row.legalStatus.name }}
           </td>
@@ -433,31 +407,31 @@
 
         <!-- Created At Column -->
         <ng-container matColumnDef="createdAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Créé le</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'CREATED_AT' | translate }}</th>
           <td mat-cell *matCellDef="let row" class="full-width-table-celle" > {{ row.createdAt | date:'dd/MM/yyyy hh:mm' }} </td>
         </ng-container>
 
         <!-- Updated At Column -->
         <ng-container matColumnDef="sigle">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class="full-width-table-celle">Sigle</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="full-width-table-celle">{{ 'ACRONYM' | translate }}</th>
           <td mat-cell *matCellDef="let row" class="full-width-table-celle"> {{ row.sigle }} </td>
         </ng-container>
 
         <!-- Updated At Column -->
         <ng-container matColumnDef="updatedAt">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mis à jour le</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'UPDATED_AT' }}</th>
           <td mat-cell *matCellDef="let row" class="full-width-table-celle"> {{ row.updatedAt | date:'dd/MM/yyyy hh:mm'}} </td>
         </ng-container>
 
         <!-- Created By Column -->
         <ng-container matColumnDef="createdBy">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Créé par</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{'CREATED_BY' | translate}}</th>
           <td mat-cell *matCellDef="let row"> {{ row.createdBy }} </td>
         </ng-container>
 
         <!-- Updated By Column -->
         <ng-container matColumnDef="updatedBy">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Mis à jour par</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'UPDATED_BY' | translate }}</th>
           <td mat-cell *matCellDef="let row"> {{ row.updatedBy }} </td>
         </ng-container>
 
@@ -531,4 +505,5 @@
 
   </div>
   <!-- End table content -->
+
 </div>

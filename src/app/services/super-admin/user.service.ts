@@ -18,20 +18,16 @@ export class UserService {
     /**
      * Use Mapper fromDto to convert responseDto to Model
      */
-    getAllUsers(): Observable<UserModel[]> {
-        return this.http.get<UserResponseDto[]>(`${this.baseUrl}`).pipe(
-            map(response => response.map(dto =>UserMapper.fromDto(dto)))
-        );
+    getAllUsers(): Observable<UserResponseDto[]> {
+        return this.http.get<UserResponseDto[]>(`${this.baseUrl}`)
     }
 
     /**
      * Use Mapper fromDto to convert responseDto to Model
      * @param userId
      */
-    getUserById(userId: number): Observable<UserModel> {
-        return this.http.get<UserResponseDto>(`${this.baseUrl}/${userId}`).pipe(
-            map(UserResponseDto => UserMapper.fromDto(UserResponseDto))
-        )
+    getUserById(userId: number): Observable<UserResponseDto> {
+        return this.http.get<UserResponseDto>(`${this.baseUrl}/${userId}`);
     }
 
     /**

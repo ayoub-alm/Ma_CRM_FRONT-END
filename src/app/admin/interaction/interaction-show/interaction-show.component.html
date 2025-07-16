@@ -1,21 +1,22 @@
+<mat-drawer-container>
 <div class="full-height-size container-fluid bg-white vh-75 w-100 rounded-top-4  shadow-sm">
   <p class="rounded-3 p-1  mat-elevation-z0">
     <span class="mx-2 text-secondary">
           <a routerLink="/admin">
              <button mat-button>
                <mat-icon class=" primary-blue-color">home</mat-icon>
-                Accueil
+               {{ "HOME"  | translate}}
              </button>
           </a> >
           <a routerLink="/admin/interactions">
             <button mat-button>
                <mat-icon class=" primary-blue-color">forum</mat-icon>
-              Interactions
+              {{ "INTERACTIONS"  | translate}}
              </button>
           </a> >
           <button mat-button>
                <mat-icon class="primary-blue-color">info</mat-icon>
-              Détails
+            {{ "DETAILS"  | translate}}
           </button>
       </span>
   </p>
@@ -26,12 +27,12 @@
       <p class="d-flex align-baseline col-lg-8 col-10">
       <p class="d-flex align-baseline col-lg-8 col-10">
         <mat-icon class="scale-08 primary-blue-color ">forum</mat-icon>
-        <span class="fs-5 primary-blue-color">Détails de l'interaction</span>
+        <span class="fs-5 primary-blue-color">{{ 'INTERACTION_DETAILS' | translate }}</span>
 
       </p>
         <p class="col-2 col-lg-4 d-flex justify-content-end ">
             <button mat-button (click)="editProspect(interaction)">
-                Modifier
+              {{ "EDIT" | translate }}
                 <mat-icon>edit</mat-icon>
             </button>
         </p>
@@ -41,7 +42,7 @@
       <div class="px-1 col-lg-6 col-12">
         <p>
           <i class="bi bi-building me-2 primary-blue-color"></i>
-          <span class="text-dark">Statut:</span>
+          <span class="text-dark">  {{ "STATUS" | translate }}:</span>
           <button
             style="transform: scale(0.8)"
             [ngClass]="[getChipClass(interaction.getValue().report ?? null), 'btn btn-sm p-1 rounded-2 px-3']"
@@ -51,160 +52,163 @@
         </p>
         <p>
           <i class="bi bi-building me-2 primary-blue-color"></i>
-          <span class="text-dark">Prospect: </span>
+          <span class="text-dark">  {{ "PROSPECT" | translate }}: </span>
           <span class="text-secondary">{{ interaction.getValue().prospectName }}</span>
         </p>
         <p>
           <i class="bi bi-person-fill me-2 primary-blue-color"></i>
-          <span class="text-dark">Interlocuteur: </span>
+          <span class="text-dark">{{ "INTERLOCUTOR" | translate }}: </span>
           <span class="text-secondary">{{ interaction.getValue().interlocutorName }}</span>
         </p>
         <p>
           <i class="bi bi-chat-dots-fill me-2 primary-blue-color"></i>
-          <span class="text-dark">Sujet d'interaction: </span>
+          <span class="text-dark">{{"SUBJECT" | translate}}: </span>
           <span class="text-secondary">{{ interaction.getValue().interactionSubject }}</span>
         </p>
         <p>
           <i class="bi bi-chat-dots-fill me-2 primary-blue-color"></i>
-          <span class="text-dark">Type: </span>
+          <span class="text-dark">{{"TYPE" | translate}}: </span>
           <span class="text-secondary">{{ interaction.getValue().interactionType }}</span>
         </p>
-        <p>
-          <i class="bi bi-calendar-event-fill me-2 primary-blue-color"></i>
-          <span class="text-dark">Date planifiée: </span>
-          <span class="text-secondary">{{ interaction.getValue().planningDate | date:'shortDate' }}</span>
-        </p>
-          <p>
-              <i class="bi bi-geo-alt-fill me-2 primary-blue-color"></i>
-              <span class="text-dark">Adresse: </span>
-              <span class="text-secondary">{{ interaction.getValue().address }}</span>
-          </p>
-          <p >
-              <i class="bi bi-person-badge-fill me-2 primary-blue-color"></i>
-              <span class="text-dark">Agent: </span>
-              <span class="text-secondary">{{ interaction.getValue().agentName }}</span>
-          </p>
+
+<!--          <p >-->
+<!--              <i class="bi bi-person-badge-fill me-2 primary-blue-color"></i>-->
+<!--              <span class="text-dark">Agent: </span>-->
+<!--              <span class="text-secondary">{{ interaction.getValue().agentName }}</span>-->
+<!--          </p>-->
       </div>
       <div class="px-1 col-lg-6 col-12">
 
         <p >
           <i class="bi bi-person-lines-fill me-2 primary-blue-color"></i>
-          <span class="text-dark">Affecté à: </span>
+          <span class="text-dark">{{"ASSIGNED_TO" | translate}}: </span>
           <span class="text-secondary">{{ interaction.getValue().affectedToName }}</span>
         </p>
         <p >
           <i class="bi bi-person-lines-fill me-2 primary-blue-color"></i>
-          <span class="text-dark">Commercial: </span>
+          <span class="text-dark">{{"SALES_AGENT" | translate}}: </span>
           <span class="text-secondary">{{ interaction.getValue().agentName }}</span>
         </p>
 
-          <!-- Created At By - Updated At By -->
-          <p >
-              <i class="bi bi-calendar-event-fill me-2 primary-blue-color"></i>
-              <span class="text-dark">Créé le: </span>
-              <span class="text-secondary">{{ interaction.getValue().createdAt | date:'shortDate' }}</span>
-          </p>
-          <p >
-              <i class="bi bi-person-lines-fill me-2 primary-blue-color"></i>
-              <span class="text-dark">Créé par: </span>
-              <span class="text-secondary">{{ interaction.getValue().createdBy?.name }}</span>
-          </p>
-          <p>
-              <i class="bi bi-calendar-event-fill me-2 primary-blue-color"></i>
-              <span class="text-dark">Mis à jour le: </span>
-              <span class="text-secondary">{{ interaction.getValue().updatedAt | date:'shortDate' }}</span>
-          </p>
-          <p >
-              <i class="bi bi-person-lines-fill me-2 primary-blue-color"></i>
-              <span class="text-dark" >Mis à jour par: </span>
-              <span class="text-secondary">{{ interaction.getValue().updatedBy?.name }}</span>
-          </p>
+        <p>
+          <i class="bi bi-calendar-event-fill me-2 primary-blue-color"></i>
+          <span class="text-dark">{{"PLANNING_DATE" | translate}}: </span>
+          <span class="text-secondary">{{ interaction.getValue().planningDate | date:'shortDate' }}</span>
+        </p>
+        <p>
+          <i class="bi bi-geo-alt-fill me-2 primary-blue-color"></i>
+          <span class="text-dark">{{"ADDRESS" | translate}}: </span>
+          <span class="text-secondary">{{ interaction.getValue().address }}</span>
+        </p>
+        <p>
+          <i class="bi bi-geo-alt-fill me-2 primary-blue-color"></i>
+          <span class="text-dark">{{"CREATED_AT" | translate}}: </span>
+          {{interaction.getValue().interactionDate | date:'yyyy-MM-dd dd:mm'}}
+        </p>
+
       </div>
         </div>
     </mat-card-content>
 
   </mat-card>
 
-    <mat-card  class="mt-1 container bg-white rounded-2 mat-elevation-z2 mt-2  p-3 rounded-2">
-        <mat-card-title class="d-flex justify-content-between" >
-            <p class="d-flex ">
-                <mat-icon class="primary-blue-color scale-08">description</mat-icon>
-                <span class="fs-5 primary-blue-color">Rapport</span>
-            </p>
-        </mat-card-title>
-        <mat-card-content>
-            <form [formGroup]="interactionForm">
-            <div class="px-3">
-                <!-- Report Section -->
-                <section class="d-flex row">
-                  <ng-container class="col-12" *ngIf="interaction.getValue().report; else noReport">
-                    <p>
-                      <span class="text-secondary">{{ interaction.getValue().report }}</span>
-                    </p>
+  <mat-card  class="mt-1 container bg-white rounded-2 mat-elevation-z2 mt-2 p-3">
+      <mat-card-title class="d-flex justify-content-between" >
+          <p class="d-flex ">
+              <mat-icon class="primary-blue-color scale-08">description</mat-icon>
+              <span class="fs-5 primary-blue-color">{{ "REPORT" | translate }}</span>
+          </p>
+      </mat-card-title>
+      <mat-card-content class="row">
+          <form [formGroup]="interactionForm" class="col-lg-8 col-12">
+          <div class="px-3">
+              <!-- Report Section -->
+              <section class="d-flex row">
+                <ng-container class="col-12" *ngIf="interaction.getValue().report; else noReport">
+                  <p>
+                    <span class="text-secondary">{{ interaction.getValue().report }}</span>
+                  </p>
+                </ng-container>
+                <ng-template class="col-12" #noReport>
+                  <p class="text-secondary small">Aucun rapport disponible.</p>
+                </ng-template>
+                <mat-form-field appearance="outline" class="col-lg-12"
+                                *ngIf="interaction.getValue().report == null || interaction.getValue().report ==''">
+                  <mat-label>Rapport</mat-label>
+                  <textarea matInput formControlName="report" placeholder="Commencer le rapport"></textarea>
+                </mat-form-field>
+              </section>
+              <!-- Buttons for Sending Report and File -->
+              <div class="d-flex justify-content-end gap-2 mt-3">
+                  <!-- Modify/Send Report Button -->
+                  <ng-container  *ngIf="interaction.getValue().report == null || interaction.getValue().report ==''">
+                      <button mat-raised-button color="primary" (click)="sendReport()" class="rounded-2">
+                          <i class="bi bi-send me-2"></i>  {{ "ADD" | translate  }} {{ "REPORT" | translate }}
+                      </button>
                   </ng-container>
-                  <ng-template class="col-12" #noReport>
-                    <p class="text-secondary small">Aucun rapport disponible.</p>
-                  </ng-template>
-<!--                  <ng-container class="col-12" *ngIf="interaction.getValue().joinFilePath">-->
-<!--                    <p>-->
-<!--                      <i class="bi bi-file-earmark-text-fill me-2 primary-blue-color"></i>-->
-<!--                      <span class="text-dark">Fichier:</span>-->
-<!--                      <span class="text-secondary">{{ interaction.getValue().joinFilePath }}</span>-->
-<!--                    </p>-->
-<!--                  </ng-container>-->
+              </div>
+          </div>
+          </form>
+          <div class="col-lg-4 col-12">
+            <div *ngIf="!interaction.getValue().joinFilePath"
+              class="drop-zone bg-white rounded-2 text-center p-3 mat-elevation-z2"
+              (dragover)="onDragOver($event)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event)"
+              [class.dragover]="isDragging"
+            >
+              <div *ngIf="!selectedFile">
+                <h3><i class="bi bi-upload primary-blue-color"></i></h3>
+                <p class="text-secondary">Glissez-déposez un fichier ici ou cliquez pour en sélectionner un</p>
 
-                  <!-- Report Textarea -->
-                  <mat-form-field appearance="outline" class="col-lg-12"
-                                  *ngIf="interaction.getValue().report == null || interaction.getValue().report ==''">
-                    <mat-label>Rapport</mat-label>
-                    <textarea matInput formControlName="report" placeholder="Commencer le rapport"></textarea>
-                  </mat-form-field>
+                <input type="file" (change)="onFileSelected($event)" hidden #fileInput />
+                <button mat-button (click)="fileInput.click()">Sélectionner un fichier</button>
+              </div>
 
-                  <!-- File Upload Section -->
-<!--                  <mat-form-field appearance="outline" class="col-lg-12" *ngIf="interaction.getValue().joinFilePath == null">-->
-<!--                    <mat-label>Fichier du Rapport</mat-label>-->
-<!--                    <input matInput placeholder="Selected file path"-->
-<!--                      [value]="selectedFile?.name || ''"-->
-<!--                      readonly formControlName="joinFilePath"-->
-<!--                    />-->
-<!--                    <div class="file-drop-zone d-flex justify-content-between"-->
-<!--                      (dragover)="onDragOver($event)"-->
-<!--                      (dragleave)="onDragLeave($event)"-->
-<!--                      (drop)="onDrop($event)">-->
-
-<!--                      <div>-->
-<!--                          <p *ngIf="!selectedFile">{{ dragHintText }}</p>-->
-<!--                          <p *ngIf="selectedFile">Fichier sélectionné: <strong>{{ selectedFile.name }}</strong></p>-->
-<!--                          <input type="file" hidden (change)="onFileSelected($event)" #fileInput/>-->
-<!--                      </div>-->
-<!--                      <div class="d-flex align-items-start">-->
-<!--                          <button *ngIf="!selectedFile" mat-button (click)="fileInput.click()">Sélectionner un fichier</button>-->
-<!--                          <button *ngIf="selectedFile" mat-button (click)="fileInput.click()">Changer fichier</button>-->
-<!--                          &lt;!&ndash; Add Remove File Button &ndash;&gt;-->
-<!--                          <button *ngIf="selectedFile" mat-icon-button color="warn" (click)="removeFile()" aria-label="Remove File">-->
-<!--                              <mat-icon>delete</mat-icon>-->
-<!--                          </button>-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </mat-form-field>-->
-
-                </section>
-                <!-- Buttons for Sending Report and File -->
-                <div class="d-flex justify-content-end gap-2 mt-3">
-                    <!-- Modify/Send Report Button -->
-                    <ng-container  *ngIf="interaction.getValue().report == null || interaction.getValue().report ==''">
-                        <button mat-raised-button color="primary" (click)="sendReport()" class="rounded-2">
-                            <i class="bi bi-send me-2"></i> Ajouter Rapport
-                        </button>
-                    </ng-container>
-                </div>
+              <div *ngIf="selectedFile">
+                <p class="text-secondary my-2">
+                  Fichier sélectionné: <span class="primary-blue-color">{{ selectedFile.name }}</span>
+                </p>
+                <button mat-stroked-button disabled>Importation en cours...</button>
+              </div>
             </div>
-            </form>
-        </mat-card-content>
-    </mat-card>
+            <div *ngIf="interaction.getValue().joinFilePath" class="text-success mt-2">
+              📎 {{ "REPORT_AVAILABLE" | translate }} <a [href]="'http://localhost:8080'+interaction.getValue().joinFilePath" target="_blank">ici</a>
+            </div>
 
+          </div>
+      </mat-card-content>
+  </mat-card>
+
+  <mat-card class="mb-2 bg-white col-lg-12 rounded-2 mat-elevation-z3 mt-2">
+    <mat-card-content class="w-100 d-flex justify-content-between row text-secondary small text-start">
+      <div class="col-lg-2 col-6 "><span class="text-dark">{{ "CREATED_AT" | translate }}</span>  <br>{{interaction.getValue().createdAt | date:'yyyy-MM-dd dd:mm'}}</div>
+      <div class="col-lg-2 col-6 "><span class="text-dark">{{ "CREATED_BY" | translate }}</span> <br> {{interaction.getValue().createdBy ? interaction.getValue().createdBy.name : ''}}</div>
+      <div class="col-lg-2 col-6 "><span class="text-dark">{{ "UPDATED_AT" | translate }}</span>  <br>{{interaction.getValue().updatedAt | date:'yyyy-MM-dd dd:mm'}}</div>
+      <div class="col-lg-2 col-6 "><span class="text-dark">{{ "UPDATED_BY" | translate }} </span> <br> {{interaction.getValue().updatedBy ? interaction.getValue().updatedBy.name : '' }}</div>
+      <div class="col-lg-4 col-12 d-flex justify-content-lg-end ">
+        <button class="scale-09 bg-light" mat-icon-button (click)="openBottomSheet()">
+          <mat-icon>history</mat-icon>
+        </button>
+        <button class="scale-09 bg-light" mat-icon-button (click)="drawer.toggle()">
+          <mat-icon>message</mat-icon>
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
 
 </div>
 <!--</div>-->
+<!-- Mat Drawer (End Side) -->
+<mat-drawer #drawer mode="side" position="end" class="bg-light px-2 py-1 shadow-sm rounded-0 ">
+  <mat-toolbar class="text-end w-100 d-flex mb-2 justify-content-between bg-spider rounded-2 mat-elevation-z3" >
+    <span class="small">💬{{"COMMENTS" | translate }} </span>
+    <button mat-icon-button (click)="drawer.toggle()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-toolbar>
+  <app-comment [entity]="EntityEnum.INTERACTION" [entityId]="interaction.getValue().id"></app-comment>
+</mat-drawer>
 
-<app-comment  [entity]="EntityEnum.INTERACTION" [entityId]="interaction.getValue().id" ></app-comment>
+</mat-drawer-container>
+

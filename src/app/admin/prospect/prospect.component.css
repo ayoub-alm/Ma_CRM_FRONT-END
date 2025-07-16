@@ -73,48 +73,48 @@
 
 
 .status-new {
-  background-color: #d4edda; /* Soft green for "NEW" */
-  color: #155724; /* Dark green for text */
+  background-color: #b3e0ff; /* Light blue for "NEW" */
+  color: #0056b3; /* Deep blue for contrast */
 }
 
 .status-qualified {
-  background-color: #c3e6cb; /* Light green for "QUALIFIED" */
-  color: #155724; /* Dark green for text */
+  background-color: #a8e6cf; /* Soft green for "QUALIFIED" */
+  color: #007b33; /* Darker green */
 }
 
 .status-interested {
-  background-color: #ffeeba; /* Soft yellow for "INTERESTED" */
-  color: #856404; /* Dark amber for text */
+  background-color: #ffdd94; /* Warm yellow for "INTERESTED" */
+  color: #9c6100; /* Dark amber */
 }
 
 .status-opportunity {
-  background-color: #cde0ff; /* Light blue for "OPPORTUNITY" */
-  color: #004085; /* Dark blue for text */
+  background-color: #87cefa; /* Sky blue for "OPPORTUNITY" */
+  color: #004085; /* Deep blue */
 }
 
 .status-converted {
-  background-color: #d4edda; /* Soft green for "CONVERTED" */
-  color: #155724; /* Dark green for text */
+  background-color: #98fb98; /* Soft green for "CONVERTED" */
+  color: #006400; /* Dark green */
 }
 
 .status-disqualified {
-  background-color: #f8d7da; /* Soft red for "DISQUALIFIED" */
-  color: #721c24; /* Dark red for text */
+  background-color: #ff9999; /* Soft red for "DISQUALIFIED" */
+  color: #8b0000; /* Deep red */
 }
 
 .status-lost {
-  background-color: #e2e3e5; /* Light grey for "LOST" */
-  color: #383d41; /* Dark grey for text */
+  background-color: #dcdcdc; /* Light grey for "LOST" */
+  color: #696969; /* Dark grey */
 }
 
 .status-nrp {
-  background-color: #d6d8db; /* Soft blue-grey for "NRP" */
-  color: #1b1e21; /* Charcoal for text */
+  background-color: #c0c0c0; /* Neutral grey for "NRP" */
+  color: #505050; /* Darker grey */
 }
 
 .status-default {
-  background-color: #f8f9fa; /* Off-white for default */
-  color: #212529; /* Standard black for text */
+  background-color: #f0f0f0; /* Light neutral for default */
+  color: #333333; /* Standard dark text */
 }
 
 

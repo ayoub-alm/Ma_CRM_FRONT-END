@@ -114,119 +114,12 @@ const TREE_DATA: FoodNode[] = [
   selector: 'app-super-admin-index',
   standalone: true,
   imports: [
-    MatButton,
-    MatDivider,
-    MatDrawer,
-    MatDrawerContainer,
-    MatIcon,
-    MatIconButton,
-    MatList,
-    MatListItem,
-    MatToolbar,
-    NgForOf,
-    NgIf,
-    RouterLink,
-    RouterLinkActive,
-    RouterOutlet,
-    MatTreeNode,
-    MatTree,
-    MatTreeNodeDef,
-    MatTreeNodePadding,
-    MatTreeNodeToggle
+    RouterOutlet
   ],
   templateUrl: './super-admin-index.component.html',
   styleUrl: './super-admin-index.component.css'
 })
-export class SuperAdminIndexComponent implements OnInit , AfterViewInit{
-  user: any;
-  currentRoute: string = '';
-  activeRouteParams: any = {};
-  activeQueryParams: any = {};
-  selectedApplication: string = 'prospection';
-  menuItems: MenuItem[] = menuData[this.selectedApplication].items;
-  @ViewChild('rightDrawer') rightDrawer!: MatDrawer;
-  // TreeControl for nested structure
-  treeControl = new NestedTreeControl<FoodNode>((node) => node.children);
-
-  // DataSource for tree
-  dataSource = new MatTreeNestedDataSource<FoodNode>();
-  constructor(
-    private localStorageService: LocalStorageService,
-    private router: Router,
-    private activeRoute: ActivatedRoute,
-  ) {}
-
-
-
-  /**
-   *
-   */
-  ngOnInit(): void {
-    this.currentRoute = this.router.url;
-    // Listen to route changes
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        this.currentRoute = this.router.url;
-        this.updateSelectedApplication();
-      });
-    // Initial setup
-    this.updateSelectedApplication();
-    this.dataSource.data = TREE_DATA;
-  }
-
-  /**
-   *
-   */
-  ngAfterViewInit(): void {
-    // Listen for route changes after view initialization
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe(() => {
-        // Get the active route URL
-        this.currentRoute = this.router.url;
-
-        // Retrieve route params and query params
-        this.activeRouteParams = this.activeRoute.snapshot.firstChild?.params || {};
-        this.activeQueryParams = this.activeRoute.snapshot.queryParams;
-
-        console.log('Active Route:', this.currentRoute);
-        console.log('Route Parameters:', this.activeRouteParams);
-        console.log('Query Parameters:', this.activeQueryParams);
-      });
-  }
-
-  updateSelectedApplication(): void {
-    // Match the active route to an application
-    if (this.currentRoute.includes('/admin/prospection')) {
-      this.selectApplication('prospection');
-    } else if (this.currentRoute.includes('/admin/crm')) {
-      this.selectApplication('crm');
-    } else if (this.currentRoute.includes('/admin/tms')) {
-      this.selectApplication('tms');
-    }
-    else if (this.currentRoute.includes('/admin/super-admin')) {
-      this.selectApplication('admin');
-    } else {
-      this.selectApplication('prospection'); // Default case
-    }
-  }
-
-
-  selectApplication(app: string): void {
-    this.selectedApplication = app;
-    this.menuItems = menuData[app]?.items || [];
-    if (this.rightDrawer) {
-      this.rightDrawer.close();
-    }
-  }
-
-  isActive(route: string): boolean {
-    return this.currentRoute === route;
-  }
-
-  protected readonly menuData = menuData;
-
-  hasChild = (_: number, node: FoodNode) => !!node.children && node.children.length > 0;
+export class SuperAdminIndexComponent{
+  constructor() {}
 }
 
