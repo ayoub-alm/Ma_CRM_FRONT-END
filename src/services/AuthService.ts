@@ -20,7 +20,7 @@ export class AuthService {
   }
 
   login(userDetails: UserLoginRequest): Observable<TokenResponse> {
-    return this.http.post<TokenResponse>(this.baseUrl+ '/auth/login', {email:userDetails.email, password:userDetails.password})
+    return this.http.post<TokenResponse>(this.baseUrl+ '/api/auth/login', {email:userDetails.email, password:userDetails.password})
   }
 
   get currentUserRole(): string{
