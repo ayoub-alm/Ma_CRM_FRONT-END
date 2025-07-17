@@ -18,7 +18,7 @@ import {
 } from '@angular/material/table';
 import {
   BehaviorSubject,
-  catchError,
+  catchError, combineLatest,
   debounceTime,
   distinctUntilChanged,
   EMPTY,
@@ -278,6 +278,20 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
         });
       }
     })
+
+    combineLatest([
+      this.storageOfferForm.get("note1")?.valueChanges,
+      this.storageOfferForm.get("note2")?.valueChanges,
+      this.storageOfferForm.get("note3")?.valueChanges,
+      this.storageOfferForm.get("note4")?.valueChanges,
+      this.storageOfferForm.get("note5")?.valueChanges,
+      this.storageOfferForm.get("note6")?.valueChanges,
+    ]).pipe(tap(() => {
+      // handle combined values here
+      // console.log(note1, note2, note3, note4, note5, note6);
+      //
+    })).subscribe();
+
 
   }
 

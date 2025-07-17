@@ -1,0 +1,95 @@
+<h2  mat-dialog-title class="primary-blue-color">Ajouter un Besoin</h2>
+<mat-dialog-content>
+
+  <section class="my-2">
+    <!-- Form Section -->
+    <form [formGroup]="generalInfoFormGroup" class="rounded-0 row ">
+      <!-- Date de réception -->
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Date de réception</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dateReception" required />
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </div>
+
+      <!-- Entreprise -->
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Client</mat-label>
+          <mat-select formControlName="costumer" required>
+            <mat-option *ngFor="let customer of customers.getValue()" [value]="customer.id">
+              {{ customer.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Interlocuture -->
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Interlocuteurs</mat-label>
+          <mat-select formControlName="interlocutorId" >
+            <mat-option *ngFor="let interlocutor of filteredInterlocutors.getValue()" [value]="interlocutor.id">
+              {{ interlocutor.fullName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Type de produits -->
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Type de produits</mat-label>
+          <input matInput formControlName="typeProduits" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Durée de stockage -->
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Durée de stockage (Mois)</mat-label>
+          <input matInput type="number" formControlName="dureeStockage" required />
+        </mat-form-field>
+      </div>
+
+      <!-- Nombre de SKU -->
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Nombre de SKU</mat-label>
+          <input matInput type="number" formControlName="nombreSku"/>
+        </mat-form-field>
+      </div>
+
+      <!-- Raison de stockage -->
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Raison de stockage</mat-label>
+          <mat-select formControlName="raisonStockage" required>
+            <mat-option *ngFor="let reason of storageReasons" [value]="reason.key">
+              {{ reason.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Livre -->
+      <div class="col-lg-6">
+        <mat-form-field appearance="outline" class="w-100 mb-3">
+          <mat-label>Livre</mat-label>
+          <mat-select formControlName="livre" required>
+            <mat-option *ngFor="let livre of livreStatuses" [value]="livre.key">
+              {{ livre.value }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  </section>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [color]="'warn'" mat-dialog-close class="rounded-2">Annuler</button>
+  <button (click)="createStorageNeed()"
+    mat-button cdkFocusInitial class="bg-primary-blue-color rounded-2 text-white">Ajouter</button>
+</mat-dialog-actions>

@@ -1,0 +1,57 @@
+<div class="shadow-sm bg-light d-flex w-100 justify-content-between pt-2" mat-dialog-title>
+  <div class="text-start col-8 fs-6">
+    <button color="primary" mat-icon-button>
+      <mat-icon>edit</mat-icon>
+    </button>
+    Demande de modification
+  </div>
+  <!-- Reset Button -->
+  <div class="col-4 text-end">
+    <button (click)="requestForm.reset()" class="mx-2" color="primary" mat-icon-button >
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <!-- Close Button -->
+    <button  color="warn" mat-dialog-close mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+
+<mat-dialog-content class="w-100 container-fluid  ">
+  <div class="row p-3">
+    <form [formGroup]="requestForm" >
+
+
+      <!-- init price -->
+      <div class="col-lg-12">
+        <input type="hidden"  formControlName="deliveryNoteId"
+               [value]="data.id">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>Raison de modification </mat-label>
+          <textarea formControlName="note" matInput
+                    placeholder=""
+                    rows="10"
+                    cols="40"
+          ></textarea>
+          <mat-error  *ngIf="requestForm.controls['note'].hasError('required')" >
+            Le raison est obligatoire.
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </form>
+  </div>
+
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end" class="shadow">
+  <!-- Cancel Button -->
+  <button [color]="'warn'" class="btn py-1" mat-button mat-dialog-close>
+    Annuler
+  </button>
+  <!-- Submit Button -->
+  <button (click)="createUpdateRequest()"
+    [disabled]="requestForm.invalid"  class="btn mat-primary" mat-button>
+   Créé
+  </button>
+</mat-dialog-actions>
