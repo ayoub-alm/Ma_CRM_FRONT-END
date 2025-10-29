@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QuoteComponent } from './quote.component';
+import { WmsPaymentShowComponent } from './wms-payment-show.component';
 
-describe('QuoteComponent', () => {
-  let component: QuoteComponent;
-  let fixture: ComponentFixture<QuoteComponent>;
+describe('WmsPaymentShowComponent', () => {
+  let component: WmsPaymentShowComponent;
+  let fixture: ComponentFixture<WmsPaymentShowComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [QuoteComponent]
+      imports: [WmsPaymentShowComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(QuoteComponent);
+    fixture = TestBed.createComponent(WmsPaymentShowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

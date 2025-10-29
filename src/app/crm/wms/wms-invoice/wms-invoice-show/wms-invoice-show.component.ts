@@ -6,8 +6,6 @@ import {MatCard, MatCardContent} from '@angular/material/card';
 import {MatIcon} from '@angular/material/icon';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
 import {BehaviorSubject, tap} from 'rxjs';
-import {StorageDeliveryNoteResponseDto} from '../../../../../dtos/response/crm/storage.delivery.note.response.dto';
-import {StorageDeliveryNoteService} from '../../../../../services/crm/wms/storage.delivery.note.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
 import {StorageInvoiceService, StorageInvoiceUpdateDto} from '../../../../../services/crm/wms/storage.invoice.service';
@@ -16,7 +14,10 @@ import {PrintService} from '../../../../../services/docs/print.service';
 import {MatDialog} from '@angular/material/dialog';
 import {AddUpdatePaymentDialogComponent} from '../add-update-payment-dialog/add-update-payment-dialog.component';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-
+import {StorageInvoicePaymentService} from '../../../../../services/crm/wms/storage.invoice.payment.service';
+import {StorageInvoicePaymentRequestDto} from '../../../../../dtos/request/crm/storage.invoice.payment.request.dto';
+import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {TranslatePipe} from '@ngx-translate/core';
 @Component({
   selector: 'app-wms-invoice-show',
   standalone: true,
@@ -35,7 +36,9 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular
     NgIf,
     MatIconButton,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatSlideToggle,
+    TranslatePipe
   ],
   templateUrl: './wms-invoice-show.component.html',
   styleUrl: './wms-invoice-show.component.css'
@@ -46,7 +49,7 @@ export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
   invoiceForm!:FormGroup;
   constructor(private printService: PrintService,private activeRouter: ActivatedRoute, private dialog: MatDialog,
               public router: Router, private snackBar: MatSnackBar, private storageInvoiceService: StorageInvoiceService,
-              private fb: FormBuilder) {
+              private fb: FormBuilder, private paymentService: StorageInvoicePaymentService) {
   }
 
   ngOnInit() {
@@ -187,5 +190,11 @@ export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
         this.snackBar.open("Erreur lors de la mise à jour.", "OK", { duration: 3000 });
       }
     });
+  }
+
+  onValidatePayment(payment: StorageInvoicePaymentRequestDto) {
+    this.paymentService.validateStorageInvoicePayment(payment.id).pipe(
+      tap(data => this.loadStorageInvoice())
+    ).subscribe({})
   }
 }

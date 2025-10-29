@@ -82,57 +82,95 @@
             <p class="col-lg-6 size"><span
               class="text-secondary"> Référence:</span> {{ storageOffer.getValue().number }}</p>
             <p class="col-lg-6"><span class="text-secondary">Status:</span>
-              <button class="scale-08 btn btn btn-sm p-1 primary-blue-color px-2 rounded-2 bg-info-subtle">
-                {{ storageOffer.getValue().status?.name }}
-              </button>
+              <span [ngClass]="['scale-08 btn btn btn-sm p-1 primary-blue-color px-2 rounded-2', getStatusColor(storageOffer.getValue().status?.id)] ">
+                {{ storageOffer.getValue().status.name }}
+              </span>
             </p>
           </div>
 
           <div class="d-flex justify-content-between row">
-            <p class="col-lg-6"><span class="text-secondary">Raison du Stockage:</span>
-              <button class="scale-08 btn btn btn-sm p-0 px-2 rounded-2 text-warning bg-warning-subtle">
-                {{ getLabelFromStorageReasonEnum(storageOffer.getValue().storageReason) }}
-              </button>
+            <p class="col-lg-6">
+              <span class="text-secondary">Raison du Stockage:</span>
+
+              <ng-container *ngIf="isDisabledEditing.getValue(); else editReason">
+                <button class="scale-08 btn btn-sm p-0 px-2 rounded-2 text-warning bg-warning-subtle">
+                  {{ getLabelFromStorageReasonEnum(storageOffer.getValue().storageReason) }}
+                </button>
+              </ng-container>
+
+              <ng-template #editReason>
+                <select formControlName="storageReason"
+                        class="form-select form-select-sm custom-input w-100">
+                  <option *ngFor="let reason of StorageReasonEnum | keyvalue"
+                          [value]="reason.key">
+                    {{ reason.value }}
+                  </option>
+                </select>
+              </ng-template>
             </p>
-            <p class="col-lg-6"><span class="text-secondary">Livre:</span>
-              <button class="scale-08 btn btn btn-sm p-0 px-2 rounded-2 text-secondary bg-secondary-subtle">
-                {{ storageOffer.getValue()?.liverStatus?.toString() === 'OPEN' ? 'Ouvert' : 'Fermé' }}
-              </button>
+
+            <p class="col-lg-6">
+              <span class="text-secondary">Livre:</span>
+
+              <ng-container *ngIf="isDisabledEditing.getValue(); else editLiver">
+                <button class="scale-08 btn btn-sm p-0 px-2 rounded-2 text-secondary bg-secondary-subtle">
+                  {{ storageOffer.getValue().liverStatus?.toString() === 'OPEN' ? 'Ouvert' : 'Fermé' }}
+                </button>
+              </ng-container>
+
+              <ng-template #editLiver>
+                <select formControlName="liverStatus"
+                        class="form-select form-select-sm custom-input w-100">
+                  <option [value]="'OPEN'">Ouvert</option>
+                  <option [value]="'CLOSE'">Fermé</option>
+                </select>
+              </ng-template>
             </p>
           </div>
 
           <div class="d-flex justify-content-between row">
             <p class="col-lg-6"><span
-              class="text-secondary">Date de réception:</span> {{ storageOffer.getValue().expirationDate | date:'dd-MM-yyyy' }}
+              class="text-secondary">Date:</span> {{ storageOffer.getValue().createdAt | date:'dd-MM-yyyy' }}
             </p>
             <p class="col-lg-6"><span class="text-secondary">Durée (Mois):</span>
-              {{ storageOffer.getValue().duration }}
-              <!--               <input [value]="storageOffer.getValue().duration"-->
-              <!--                      formControlName="duration"-->
-              <!--                      type="number" [disabled]="!isDisabledEditing.getValue()"-->
-              <!--                      class="form-control form-control-sm custom-input"></p>-->
+              <span *ngIf="isDisabledEditing.getValue()">
+                {{ storageOffer.getValue().duration }}
+              </span>
+              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().duration"
+                     class="form-control custom-input form-control-sm"
+                     formControlName="duration">
+            </p>
           </div>
           <div class="d-flex justify-content-between row">
             <p class="col-lg-6">
-              <span class="text-secondary">Nombre de SKU:</span> {{ storageOffer.getValue().numberOfSku }}
+              <span class="text-secondary">Nombre de SKU:</span>
+              <span *ngIf="isDisabledEditing.getValue()">
+                {{ storageOffer.getValue().numberOfSku }}
+              </span>
+              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().numberOfSku"
+                     class="form-control custom-input form-control-sm"
+                     formControlName="numberOfSku" >
             </p>
             <p class="col-lg-6">
               <span class="text-secondary">Type de Produit:</span>
-              {{ storageOffer.getValue().productType }}
-
+              <span *ngIf="isDisabledEditing.getValue()">
+                {{ storageOffer.getValue().productType }}
+              </span>
+              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().productType"
+                     class="form-control custom-input form-control-sm"
+                     formControlName="productType" >
+            </p>
           </div>
 
           <div class="d-flex justify-content-between row">
             <p class="col-lg-6">
               <span class="text-secondary">Facturation minimale assurée:</span>
               {{storageOffer.getValue().minimumBillingGuaranteed.toFixed(2)}}
-<!--              <input [value]=""-->
-<!--                     class="form-control custom-input form-control-sm"-->
-<!--                     formControlName="minimumBillingGuaranteed" (change)="updateMinimalBilling($event)">-->
             </p>
             <p class="col-lg-6">
               <span class="text-secondary">Facturation minimale assurée fixée:</span>
-              <input [value]="storageOffer.getValue().minimumBillingGuaranteedFixed"
+              <span *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().minimumBillingGuaranteedFixed}}</span>
+              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().minimumBillingGuaranteedFixed"
                      class="form-control custom-input form-control-sm"
                      (change)="updateMinimalBilling($event)">
             </p>
@@ -140,13 +178,15 @@
           <div class="d-flex justify-content-between row">
             <p class="col-lg-6">
               <span class="text-secondary">Emplacements palettes réservés:</span>
-              <input [value]="storageOffer.getValue().numberOfReservedPlaces"
+              <span *ngIf="isDisabledEditing.getValue()" >{{storageOffer.getValue().numberOfReservedPlaces}}</span>
+              <input *ngIf="!isDisabledEditing.getValue()"  [value]="storageOffer.getValue().numberOfReservedPlaces"
                      (change)="updateReservedPlaces($event)"
                      class="form-control custom-input form-control-sm">
             </p>
             <p class="col-lg-6">
               <span class="text-secondary">Frais de gestion:</span>
-              <input [value]="storageOffer.getValue().managementFees"
+              <span *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().managementFees}}</span>
+              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().managementFees"
                      class="form-control custom-input form-control-sm"
                      formControlName="managementFees">
             </p>
@@ -175,24 +215,25 @@
         </mat-card-content>
         <mat-card-content class="mt-2">
           <p><span class="text-secondary">Devise:</span>
-            <select formControlName="devise" class="form-select-sm custom-input w-100">
-              <option class="" value="Dirham">Dirham</option>
-              <option class="" value="Dollar">Dollar</option>
-              <option class="" value="Euro">Euro</option>
+            <span *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().devise}}</span>
+            <select *ngIf="!isDisabledEditing.getValue()" formControlName="devise" class="form-select-sm custom-input w-100">
+              <option value="MAD">MAD</option>
+              <option value="USD">$</option>
+              <option value="EUR">€</option>
             </select>
           </p>
         </mat-card-content>
         <mat-card-content class="mt-2">
-          <p><span class="text-secondary">Max remise value %:</span>
-            <input [value]="storageOffer.getValue().maxDisCountValue " formControlName="maxDisCountValue"
+          <p>
+            <span class="text-secondary">Max remise value %:</span>
+            <span *ngIf="isDisabledEditing.getValue()">{{ storageOffer.getValue().maxDisCountValue + '%' }}</span>
+            <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().maxDisCountValue" formControlName="maxDisCountValue"
               type="number" step="1" class="form-control custom-input"/>
           </p>
         </mat-card-content>
       </mat-card>
       <!-- Stocked items   -->
-
     </div>
-
   </section>
 
   <div class="px-2">

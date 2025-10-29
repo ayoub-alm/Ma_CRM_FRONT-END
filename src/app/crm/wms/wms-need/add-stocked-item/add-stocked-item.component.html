@@ -38,7 +38,7 @@
         </mat-form-field>
       </div>
       <!-- Température de stockage -->
-      <div
+      <div *ngIf="itemToStoreFormGroup.get('temperatureId')?.value && itemToStoreFormGroup.get('temperatureId')?.value != 1 "
         class="col-lg-3 col-md-6 col-12" >
         <mat-form-field appearance="outline" class="w-100  ">
           <mat-label>Température C°</mat-label>
@@ -146,18 +146,35 @@
           <mat-icon class="me-2">assignment</mat-icon> Préstations
         </p>
         <div class="col-lg-6">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Prestation</mat-label>
-            <mat-select formControlName="provisions" multiple>
-              <mat-option  *ngFor="let provision of provisions | async" [value]="provision.id">
-                {{ provision.name }}
-              </mat-option>
-            </mat-select>
+<!--          <mat-form-field appearance="outline" class="w-100">-->
+<!--            <mat-label>Prestation</mat-label>-->
+<!--            <mat-select formControlName="provisions" multiple>-->
+<!--              <mat-option  *ngFor="let provision of provisions | async" [value]="provision.id">-->
+<!--                {{ provision.name }}-->
+<!--              </mat-option>-->
+<!--            </mat-select>-->
+<!--          </mat-form-field>-->
+          <mat-form-field appearance="outline" class="example-full-width w-100 scale-09">
+            <mat-label>Préstations</mat-label>
+            <input #input
+                   (focus)="filter()"
+                   (input)="filter()"
+                   (keydown.enter)="$event.preventDefault()"
+                   [formControl]="provisionControl"
+                   [matAutocomplete]="auto"
+                   matInput
+                   placeholder=""
+                   type="text">
+            <mat-autocomplete #auto="matAutocomplete" requireSelection>
+              @for (prv of filteredOptions; track prv) {
+                <mat-option (click)="addProvision(prv)" [value]="prv.name">{{ prv.name }}
+                </mat-option>
+              }
+            </mat-autocomplete>
           </mat-form-field>
         </div>
         <div class="col-lg-12 col-12" >
           <table mat-table [dataSource]="selectedProvisions.getValue()" class="mat-elevation-z1 col-lg-6 col-12">
-
             <!-- Name Column -->
             <ng-container matColumnDef="name">
               <th mat-header-cell *matHeaderCellDef > Désignation </th>
@@ -168,6 +185,13 @@
             <ng-container matColumnDef="unite">
               <th mat-header-cell *matHeaderCellDef > Unité </th>
               <td mat-cell *matCellDef="let element" class="p-2"> {{ element.unitOfMeasurement }} </td>
+            </ng-container>
+
+            <!-- Actions -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef >  </th>
+              <td mat-cell *matCellDef="let element" class="p-2">
+                <mat-icon (click)="romoveProvsion(element)" class="text-danger">close</mat-icon></td>
             </ng-container>
 
             <!-- Header Row -->

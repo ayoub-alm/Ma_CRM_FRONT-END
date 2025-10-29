@@ -44,6 +44,8 @@ export class StorageNeedService {
     return this.http.post<StorageNeedResponseDto>(this.baseUrl, storageNeed);
   }
 
+
+
   /**
    * Update an existing storage need.
    * @param id - ID of the storage need to update.

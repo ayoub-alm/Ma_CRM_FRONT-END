@@ -21,6 +21,14 @@ export class StorageInvoiceService {
   }
 
   /**
+   * this function allows to get invoices by customer id
+   * @param customerId
+   */
+  getAllStorageInvoicesByCustomerId(customerId:number): Observable<StorageInvoiceResponseDto[]>{
+    return this.http.get<StorageInvoiceResponseDto[]>(`${this.baseUrl}/customer/${customerId}`)
+  }
+
+  /**
    * this function allows to get  storage invoices by  id
    * @param invoiceId the id of the current company
    */

@@ -198,7 +198,6 @@ export class WmsDeliveryNoteShowEditComponent implements OnInit {
         return "En attente de traitement";
       case 1:
         return "En cours de traitement";
-        // return "Traitée avec succès";
       case 2:
         return "Traitée avec succès";
       case 3:

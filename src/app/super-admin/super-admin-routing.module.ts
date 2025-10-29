@@ -16,7 +16,7 @@ const routes: Routes = [
     path: '', component:IndexComponent,
     children: [
       { path: 'users', component: UsersComponent },
-      { path: 'users/create', component: UserCreatEditComponent },
+      { path: 'users/create', component:  UserCreatEditComponent },
       { path: 'users/show/:id', component: UserShowComponent},
       { path: 'companies', component: CompaniesComponent },
       { path: 'companies/:id', component: CompanyShowComponent },

@@ -8,12 +8,12 @@
       </button>
       <button (click)="router.navigate(['/admin/crm/wms'])" mat-button>
         <mat-icon class=" primary-blue-color">house</mat-icon>
-        Accueil
+        {{ 'HOME' | translate}}
       </button>
       >
       <button (click)="router.navigate(['/admin/crm/wms/offers'])" mat-button>
-        <mat-icon class=" primary-blue-color">checklist</mat-icon>
-        Bon de livraison
+        <mat-icon class=" primary-blue-color">inventory_2</mat-icon>
+        {{ 'DELIVERY_NOTES' | translate}}
       </button>
 
     </div>
@@ -51,8 +51,6 @@
 <!--      </mat-menu>-->
 <!--    </div>-->
   </div>
-
-
   <section class="  row">
     <div class="col-lg-8 p-1 col-12 d-flex justify-content-start">
       <input
@@ -63,7 +61,6 @@
         matInput
         placeholder="Recherch"
       />
-
     </div>
 
     <div class="col-lg-4 my-auto col-12 d-flex justify-content-lg-end  justify-content-end align-items-center">
@@ -156,14 +153,14 @@
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-            <button mat-menu-item>
-              <mat-icon>edit</mat-icon>
-              Edit
-            </button>
-            <button mat-menu-item>
-              <mat-icon>delete</mat-icon>
-              Delete
-            </button>
+<!--            <button mat-menu-item>-->
+<!--              <mat-icon>edit</mat-icon>-->
+<!--              Edit-->
+<!--            </button>-->
+<!--            <button mat-menu-item>-->
+<!--              <mat-icon>delete</mat-icon>-->
+<!--              Delete-->
+<!--            </button>-->
           </mat-menu>
         </td>
       </ng-container>

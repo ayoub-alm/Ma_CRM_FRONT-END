@@ -11,6 +11,7 @@ import {StockedItemCreateDto} from '../../../dtos/request/crm/stockedItem.create
 import {StockedItemResponseDto} from '../../../dtos/response/crm/stocked.itemresponse.dto';
 import {UnloadingTypeResponseDto} from '../../../dtos/response/crm/unloading.type.response.dto';
 import {RequirementResponseDto} from '../../../dtos/response/crm/requirement.response.dto';
+import {StorageOfferUpdateRequestDto} from '../../../dtos/request/crm/storage.offer.update.request.dto';
 
 
 @Injectable({
@@ -66,8 +67,8 @@ export class StorageOfferService {
    * @param storageOffer - DTO containing updated data.
    * @returns Observable of StorageNeedResponseDto.
    */
-  updateStorageOffer(storageOffer: StorageOfferCreateDto): Observable<StorageOfferResponseDto> {
-    return this.http.put<StorageOfferResponseDto>(`${this.baseUrl}/update`, storageOffer);
+  updateStorageOffer(offerId: number,storageOffer: StorageOfferUpdateRequestDto): Observable<StorageOfferResponseDto> {
+    return this.http.put<StorageOfferResponseDto>(`${this.baseUrl}/update/${offerId}`, storageOffer);
   }
 
   /**

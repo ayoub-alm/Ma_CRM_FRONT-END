@@ -81,6 +81,26 @@
           <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.phone}}</td>
         </ng-container>
 
+        <ng-container matColumnDef="actions">
+          <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header></th>
+          <td *matCellDef="let row" [width]="50" mat-cell style="white-space: nowrap !important;">
+            <button (click)="$event.stopPropagation()" [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu" class="mat-dark"
+                    color="'primary'" mat-icon-button>
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu" class="bg-light" xPosition="before">
+              <button  class="text-secondary" mat-menu-item>
+                <mat-icon class="text-secondary">edit</mat-icon>
+                <span>Modifier</span>
+              </button>
+              <button class="text-danger " mat-menu-item>
+                <mat-icon class="text-danger">delete</mat-icon>
+                <span>Supprimer</span>
+              </button>
+            </mat-menu>
+          </td>
+        </ng-container>
+
         <tr *matHeaderRowDef="displayedColumns"
             class="primary-blue-color  fixed-header bg-light rounded-3  custom-header-row p-0 "
             mat-header-row></tr>

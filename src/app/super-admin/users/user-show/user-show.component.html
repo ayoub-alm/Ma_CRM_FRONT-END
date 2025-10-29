@@ -69,7 +69,7 @@
                     <p class="col-lg-6"><span class="text-secondary">
                         <i class="primary-blue-color bi bi-exclamation-circle"></i> Rôle :
                         </span>
-                        <span class="mx-2 my-3"></span>
+                        <span class="mx-2 my-3">{{ user.getValue().role }}</span>
                     </p>
                 </div>
                 <div class="d-flex justify-content-between row">
@@ -93,4 +93,14 @@
         </div>
     </mat-card>
     <mat-divider class="my-2"></mat-divider>
+  <mat-card>
+    <mat-card-title>
+      les driots
+    </mat-card-title>
+    <mat-card-content>
+      <div class="p-5 shadow-sm rounded bg-white">
+        <p class="fs-3"> role </p>
+      </div>
+    </mat-card-content>
+  </mat-card>
 </div>

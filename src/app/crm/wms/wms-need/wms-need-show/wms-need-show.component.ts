@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, inject, OnInit} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
 import {StorageNeedService} from '../../../../../services/crm/wms/storage.need.service';
-import {BehaviorSubject, catchError, EMPTY, map, of, tap, throwError} from 'rxjs';
+import {BehaviorSubject, catchError, concatMap, EMPTY, of, tap, throwError} from 'rxjs';
 import {StorageNeedResponseDto} from '../../../../../dtos/response/crm/storage.need.response.dto';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -22,12 +22,11 @@ import {
 import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 
 import {getLabelFromStorageReasonEnum} from '../../../../../enums/crm/storage.reason.enum';
-import {CommentComponent} from '../../../../utils/comment/comment.component';
 import {EntityEnum} from '../../../../../enums/entity.enum';
 import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
 
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatOption, MatRipple} from '@angular/material/core';
+import {MatOption} from '@angular/material/core';
 import {ProvisionResponseDto} from '../../../../../dtos/response/crm/provision.response.dto';
 import {SupportService} from '../../../../../services/crm/wms/support.service';
 import {StructureService} from '../../../../../services/crm/wms/structure.service';
@@ -49,12 +48,11 @@ import {RequirementService} from '../../../../../services/crm/wms/requirement.se
 import {UnloadingTypeResponseDto} from '../../../../../dtos/response/crm/unloading.type.response.dto';
 import {UnloadingTypeService} from '../../../../../services/crm/wms/unloading.type.service';
 import {TrackingLogComponent} from '../../../../utils/tracking-log/tracking-log.component';
-import {MatBottomSheet, MatBottomSheetModule, MatBottomSheetRef} from '@angular/material/bottom-sheet';
-import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav';
-import {MatToolbar} from '@angular/material/toolbar';
+import {MatBottomSheet, MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import {GeneralInfosComponent} from '../../../../utils/general-infos/general-infos.component';
 import {LivreEnum} from '../../../../../enums/crm/livre.enum';
 import {StorageOfferService} from '../../../../../services/crm/wms/storage.offer.service';
+import {WmsNeedCreateComponent} from '../wms-need-create/wms-need-create.component';
 
 @Component({
   selector: 'app-wms-need-show',
@@ -66,7 +64,8 @@ import {StorageOfferService} from '../../../../../services/crm/wms/storage.offer
     MatHeaderCellDef, NgClass, AsyncPipe, MatFormField, MatLabel, MatOption, MatSelect, GeneralInfosComponent
   ],
   templateUrl: './wms-need-show.component.html',
-  styleUrl: './wms-need-show.component.css'
+  styleUrl: './wms-need-show.component.css',
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   storageNeed:BehaviorSubject<StorageNeedResponseDto> = new BehaviorSubject<StorageNeedResponseDto>({} as StorageNeedResponseDto);
@@ -98,7 +97,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   constructor(private storageNeedService: StorageNeedService, public router: Router,private activeRouter: ActivatedRoute,
               private snackBar: MatSnackBar, private fb: FormBuilder,private supportService: SupportService, private structureService: StructureService,
               private temperatureServices: TemperatureService, private localStorageService: LocalStorageService, private provisionService: ProvisionService,
-              private dialog: MatDialog, private printService: PrintService, private requirementService: RequirementService,
+              private dialog: MatDialog, private cdRef: ChangeDetectorRef, private requirementService: RequirementService,
               private unloadingTypeService: UnloadingTypeService, private storageOfferService: StorageOfferService) {
   }
 
@@ -127,8 +126,9 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
         this.snackBar.open("Erreur de téléchargement de données", "ok", {duration: 3000})
         return of(null);}
       )).subscribe({
-      next:()=> {
-        console.log(this.storageNeed.getValue());
+      next:(data:StorageNeedResponseDto | null)=> {
+        if (data) this.storageNeed.next(data);
+        this.cdRef.detectChanges();
       }
     })
   }
@@ -545,4 +545,22 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   }
 
   protected readonly LivreEnum = LivreEnum;
+
+  /**
+   * This function allows to update the storage need
+   * Close the dialog and reload data
+   */
+  onUpdateStorageNeed() {
+    const dialogRef = this.dialog.open(WmsNeedCreateComponent, {
+      maxWidth: '900px',
+      data: this.storageNeed.getValue()
+    });
+
+    dialogRef.afterClosed().pipe(
+      tap(() => {
+        this.loadStorageNeed(this.storageNeed.getValue().id);
+      })
+    ).subscribe();
+  }
+
 }

@@ -6,6 +6,7 @@ import {UnloadingTypeResponseDto} from '../../response/crm/unloading.type.respon
 import {RequirementResponseDto} from '../../response/crm/requirement.response.dto';
 
 export class StorageNeedCreateDto {
+  id:number | null;
   ref: string; // UUID reference for the storage need
   storageReason: StorageReasonEnum; // Reason for storage (TEMPORARY, PERMANENT, etc.)
   status: NeedStatusEnum; // Status of the need (CREATED, NEGOTIATION, CANCELED)
@@ -22,6 +23,7 @@ export class StorageNeedCreateDto {
   requirements: RequirementResponseDto[]; // List of requirement IDs
 
   constructor(
+    id:number | null,
     ref: string,
     storageReason: StorageReasonEnum,
     status: NeedStatusEnum,
@@ -37,6 +39,7 @@ export class StorageNeedCreateDto {
     requirements: RequirementResponseDto[] = [],
     interlocutorId:number
   ) {
+    this.id = id;
     this.ref = ref;
     this.storageReason = storageReason;
     this.status = status;

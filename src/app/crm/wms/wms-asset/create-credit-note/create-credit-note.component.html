@@ -1,0 +1,88 @@
+<div class="shadow-sm bg-light d-flex w-100 justify-content-between pt-2" mat-dialog-title>
+  <div class="text-start col-8 fs-6">
+    <button color="primary" mat-icon-button>
+      <mat-icon>inventory_2</mat-icon>
+    </button>
+    Crée un avoire
+  </div>
+  <!-- Reset Button -->
+  <div class="col-4 text-end">
+    <button class="mx-2" color="primary" mat-icon-button >
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <!-- Close Button -->
+    <button class="" color="warn" mat-dialog-close mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+
+<mat-dialog-content class=" w-100 container-fluid">
+  <div class="row p-5" >
+    <form [formGroup]="storageCreditNoteForm" class="d-flex justify-content-center row" >
+      <div *ngIf="!selectedCustomer.getValue()" class="w-100 col-12 ">
+        <mat-form-field appearance="outline" class="w-100" >
+          <mat-label>Client</mat-label>
+          <input #input
+                 type="text"
+                 placeholder=""
+                 matInput
+                 formControlName="customer"
+                 [matAutocomplete]="auto"
+                 (input)="onFilterCustomer($event)"
+                 (keydown.enter)="$event.preventDefault()"
+                 (focus)="onFilterCustomer($event)">
+          <mat-autocomplete requireSelection #auto="matAutocomplete">
+            @for (customer of filteredCustomers.getValue(); track customer) {
+              <mat-option (click)="onSelectCustomer(customer)" [value]="customer.name">{{customer.name}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+      <div *ngIf="selectedCustomer.getValue()" class="col-12 d-flex  justify-content-start align-baseline">
+        <h5 class="text-secondary m-auto">{{ "CLIENT" | translate}}: <span class="text-dark">{{ selectedCustomer.getValue()?.name}}</span>
+        </h5>
+        <button (click)="onRestSelectCustomer()"
+                mat-icon-button class="text-secondary"><mat-icon class="scale-08">close</mat-icon></button>
+      </div>
+      <div  class="w-100 ">
+        <mat-form-field appearance="outline" class="w-100" >
+          <mat-label>Facture</mat-label>
+          <input #input2
+                 type="text"
+                 placeholder=""
+                 matInput
+                 formControlName="invoice"
+                 [matAutocomplete]="auto"
+                 (input)="onFilterInvoices($event)"
+                 (keydown.enter)="$event.preventDefault()"
+                 (focus)="onFilterInvoices($event)">
+          <mat-autocomplete requireSelection #auto="matAutocomplete">
+            @for (invoice of invoices.getValue(); track invoice) {
+              <mat-option (click)="onSelectInvoice(invoice)" [value]="invoice.number">{{invoice.number}}</mat-option>
+            }
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Total Ht</mat-label>
+        <input formControlName="amountHt" matInput type="number" step="0.01">
+      </mat-form-field>
+    </form>
+  </div>
+
+</mat-dialog-content>
+
+
+<mat-dialog-actions align="end" class="shadow">
+  <!-- Cancel Button -->
+  <button [color]="'warn'" class="btn py-1" mat-button mat-dialog-close>
+    {{ "CANCEL" | translate }}
+  </button>
+  <!-- Submit Button -->
+  <button (click)="OnAddNewCreditNote()" [disabled]="!storageCreditNoteForm.valid"
+          class="btn mat-primary" mat-raised-button>
+    {{ "ADD" | translate }}
+  </button>
+</mat-dialog-actions>

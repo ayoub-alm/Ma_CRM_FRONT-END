@@ -177,7 +177,7 @@ export class InterlocutorShowComponent implements OnInit{
   }
 
   getStatusLabel(report: string | null): string {
-    return report && report.trim() !== '' ? 'Complété' : 'En attente';
+    return report && report.trim() !== '' ? 'Terminé' : 'En attente';
   }
 
   getChipClass2(report: string | null): string {

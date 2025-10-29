@@ -1,4 +1,4 @@
-import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
 import {
@@ -14,7 +14,7 @@ import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
 import {PaginatorModule} from "primeng/paginator";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {
   MatCell,
   MatCellDef,
@@ -42,6 +42,8 @@ import {LocalStorageService} from '../../../../../services/local.storage.service
 import {ProvisionService} from '../../../../../services/crm/wms/provision.service.dto';
 import {StockedItemCreateDto} from '../../../../../dtos/request/crm/stockedItem.create.dto';
 import {StorageOfferService} from '../../../../../services/crm/wms/storage.offer.service';
+import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import {StockedItemResponseDto} from '../../../../../dtos/response/crm/stocked.itemresponse.dto';
 
 @Component({
   selector: 'app-add-stocked-item',
@@ -72,7 +74,10 @@ import {StorageOfferService} from '../../../../../services/crm/wms/storage.offer
     MatRowDef,
     MatSlideToggle,
     MatTable,
-    MatHeaderCellDef
+    MatHeaderCellDef,
+    NgIf,
+    MatAutocomplete,
+    MatAutocompleteTrigger
   ],
   templateUrl: './add-stocked-item.component.html',
   styleUrl: './add-stocked-item.component.css'
@@ -81,9 +86,12 @@ export class AddStockedItemComponent implements OnInit , OnDestroy {
   private destroy$ = new Subject<void>();
   itemToStoreFormGroup!: FormGroup;
   provisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
+  filteredOptions: ProvisionResponseDto[] =  [];
+  provisionControl = new FormControl('');
   selectedProvisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
-  provisionsDisplayedColumns: string[] = ['name',"unite"];
+  provisionsDisplayedColumns: string[] = ['name',"unite", "actions"];
 
+  @ViewChild('input') input!: ElementRef<HTMLInputElement> ;
   supports: BehaviorSubject<SupportResponseDto[]> = new BehaviorSubject<SupportResponseDto[]>([]);
   structures: BehaviorSubject<StructureResponseDto[]> = new BehaviorSubject<StructureResponseDto[]>([]);
   temperatures: BehaviorSubject<TemperatureResponseDto[]> = new BehaviorSubject<TemperatureResponseDto[]>([]);
@@ -275,5 +283,30 @@ export class AddStockedItemComponent implements OnInit , OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   *
+   */
+  filter(): void {
+    const filterValue = this.input.nativeElement.value.toLowerCase();
+    this.filteredOptions = this.provisions.getValue()
+      .filter(provision =>
+      !this.selectedProvisions.getValue().map(provision => provision.id).includes(provision.id))
+      .filter(o => o.name.toLowerCase().includes(filterValue));
+  }
+
+  /**
+   *
+   * @param prv
+   */
+  addProvision(prv: ProvisionResponseDto) {
+    this.selectedProvisions.next([... this.selectedProvisions.getValue(), prv])
+    this.provisionControl.reset()
+  }
+
+  romoveProvsion(prvToRemove: ProvisionResponseDto): void {
+    this.selectedProvisions.next([...
+      this.selectedProvisions.getValue().filter(prv => prv.id != prvToRemove.id)])
   }
 }

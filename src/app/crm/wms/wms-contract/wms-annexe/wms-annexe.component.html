@@ -71,6 +71,7 @@
               <tr>
                 <th scope="col" class="bg-light primary-blue-color fw-light">Préstations</th>
                 <th scope="col" class="bg-light primary-blue-color fw-light">Unité</th>
+                <th scope="col" class="bg-light primary-blue-color fw-light">Prix</th>
               </tr>
               </thead>
               <tbody>
@@ -79,19 +80,21 @@
                 <tr *ngFor="let prv of item.provisionResponseDto" >
                   <td>{{  prv.name +" "+ item.supportName+" "+ item.structureName }}</td>
                   <td>{{ prv.unitOfMeasurement }}</td>
+                  <td>{{ prv.salesPrice }}</td>
                 </tr>
               </ng-container>
               <p class="primary-blue-color fw-bold text-decoration-underline m-2">Dépotages</p>
               <tr  class="p-0"  *ngFor="let item of annexe.getValue().unloadingTypes">
                 <td>{{  item.name }}</td>
                 <td>{{ item.unitOfMeasurement }}</td> <!-- Uncommented & Fixed -->
-                <!--                <td>{{  prv.salesPrice }}</td>-->
+                <td>{{  item.salesPrice }}</td>
                 <td>
               </tr>
               <p class="primary-blue-color fw-bold text-decoration-underline m-2">Services </p>
               <tr  class="p-0"  *ngFor="let item of annexe.getValue().requirements">
                 <td>{{  item.name }}</td>
                 <td>{{ item.unitOfMeasurement }}</td>
+                <td>{{ item.salesPrice }}</td>
               </tr>
               </tbody>
             </table>

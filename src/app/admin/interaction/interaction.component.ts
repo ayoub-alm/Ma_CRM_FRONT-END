@@ -305,7 +305,7 @@ export class InteractionComponent implements OnInit, AfterViewInit {
   }
 
   getStatusLabel(report: string | null): string {
-    return report !== null && report !== '' ? 'Complet' : 'Pas complet';
+    return report !== null && report !== '' ? 'Terminé' : '\'En attente\'';
   }
 
   /**

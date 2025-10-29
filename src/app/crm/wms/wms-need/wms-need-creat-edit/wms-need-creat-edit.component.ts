@@ -417,6 +417,7 @@ export class WmsNeedCreatEditComponent implements OnInit, AfterViewInit, OnDestr
       const requirements = this.selectedRequirements.getValue();
       // Create StorageNeedCreateDto
       const newNeedRequestDto = new StorageNeedCreateDto(
+        null,
         this.generateUUID(),
         generalInfo.raisonStockage,
         generalInfo.statut,

@@ -19,6 +19,7 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { getLabelFromStorageReasonEnum } from '../../../../enums/crm/storage.reason.enum';
 import { StorageDeliveryNoteService } from '../../../../services/crm/wms/storage.delivery.note.service';
 import { StorageDeliveryNoteResponseDto } from '../../../../dtos/response/crm/storage.delivery.note.response.dto';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wms-delivry-note',
@@ -27,7 +28,7 @@ import { StorageDeliveryNoteResponseDto } from '../../../../dtos/response/crm/st
     MatButton, MatIcon, MatMenu, MatMenuItem, MatMenuTrigger, MatIconButton,
     MatInput, DatePipe, MatCell, MatCellDef, MatColumnDef, MatHeaderCell,
     MatHeaderRow, MatHeaderRowDef, MatPaginator, MatRow, MatRowDef,
-    MatSort, MatSortHeader, MatTable, MatNoDataRow, MatHeaderCellDef
+    MatSort, MatSortHeader, MatTable, MatNoDataRow, MatHeaderCellDef, TranslatePipe
   ],
   templateUrl: './wms-delivery-note.component.html',
   styleUrl: './wms-delivery-note.component.css'

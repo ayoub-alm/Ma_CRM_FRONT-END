@@ -53,6 +53,8 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
       {name: 'CONTRACTS', icon: 'assignment', route: '/admin/crm/wms/contracts'},
       {name: 'DELIVERY_NOTES', icon: 'assignment', route: '/admin/crm/wms/delivery-note'},
       {name: 'INVOICES', icon: 'receipt_long', route: '/admin/crm/wms/invoice'},
+      {name: 'ASSETS', icon: 'inventory_2', route: '/admin/crm/wms/credit-notes'},
+      {name: 'PAYMENTS', icon: 'euro', route: '/admin/crm/wms/payments'},
       {name: 'PRICING_BASE', icon: 'price_change', route: '/admin/crm/wms/pricing'},
       // {name: 'Grille tarifaire', icon: 'price_change', route: '/admin/crm/wms/pricing'},
     ],
@@ -70,6 +72,8 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
       {name: 'Contrats', icon: 'assignment', route: '/admin/crm/wms/contracts'},
       {name: 'Bon de livraison', icon: 'assignment', route: '/admin/crm/wms/delivery-note'},
       {name: 'Factures', icon: 'receipt_long', route: '/admin/crm/wms/invoice'},
+      {name: 'ASSETS', icon: 'inventory_2', route: '/admin/crm/wms/credit-notes'},
+      {name: 'PAYMENTS', icon: 'euro', route: '/admin/crm/wms/payments'},
     ],
   },
   workspace: {

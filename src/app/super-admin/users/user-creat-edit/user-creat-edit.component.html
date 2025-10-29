@@ -1,139 +1,98 @@
-<div class="container-fluid bg-body row rounded-top-4">
-    <!-- Header Section -->
-    <div class="d-flex justify-content-between align-items-center row rounded-3 p-3">
-        <div class="col-lg-6 col-12 text-start">
-            <!-- Disabled button for adding a user -->
-            <button class="fs-6" mat-button disabled>
-                <mat-icon class="me-2 text-dark">add_circle</mat-icon> Ajouter un utilisateur
-            </button>
-        </div>
-        <div class="col-lg-6 col-12 d-flex justify-content-end align-items-center gap-2">
-            <!-- Save button -->
-            <button mat-button class="rounded-3 bg-primary-blue-color text-white mat-elevation-z1 px-3" (click)="createOrEditUser()">
-                <mat-icon>save</mat-icon> Sauvegarder
-            </button>
-            <!-- Filter button -->
-            <button mat-icon-button class="rounded-3 bg-white mat-elevation-z4" aria-label="Filter">
-                <mat-icon>filter_alt</mat-icon>
-            </button>
-            <!-- More options button -->
-            <button mat-icon-button class="rounded-3 bg-white mat-elevation-z4" aria-label="More options">
-                <mat-icon>more_vert</mat-icon>
-            </button>
-        </div>
-    </div>
-
-    <!-- User Profile and Info Section -->
-    <div class="row p-4 d-flex flex-column rounded-0 align-items-center p-lg-3 mat-elevation-z2 bg-white mx-1">
-        <p class="col-12 primary-blue-color fs-6 d-flex">
-            <mat-icon class="me-2">person</mat-icon> Détails de l'utilisateur
-        </p>
-        <!-- Profile Picture (Centered with form inputs) -->
-        <div class="col-lg-3 text-center mb-3">
-            <img src="https://placehold.co/150" alt="User" class="rounded-circle img-fluid">
-        </div>
-
-        <!-- User Details -->
-        <div class="col-lg-9 mt-3">
-            <form [formGroup]="userForm" class="row g-3">
-                <div class="col-md-6">
-                    <!-- Email Field -->
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Matricule</mat-label>
-                        <input matInput formControlName="matricule" required>
-                        <mat-error>Un Matricule valide est requis.</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                    <!-- First Name Field -->
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>name</mat-label>
-                        <input matInput formControlName="name" required>
-                        <mat-error>Le name est requis.</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                    <!-- Last Name Field -->
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>last name</mat-label>
-                        <input matInput formControlName="lastName" required>
-                        <mat-error>Le name est requis.</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                    <!-- Email Field -->
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Email</mat-label>
-                        <input matInput formControlName="email" type="email" required>
-                        <mat-error>Le email est requis.</mat-error>
-                    </mat-form-field>
-                </div>
-
-                <div class="col-md-6">
-                    <!-- Phone Field -->
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Phone</mat-label>
-                        <input matInput formControlName="phone" required>
-                        <mat-error>Le phone est requis.</mat-error>
-                    </mat-form-field>
-                </div>
-
-                <div class="col-md-6">
-                    <!-- Password Field -->
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Password</mat-label>
-                        <input matInput formControlName="password" required>
-                        <mat-error>Le password est requis.</mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="col-md-6">
-                    <!-- Confirmation Password Field -->
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Password</mat-label>
-                        <input matInput formControlName="password" required>
-                        <mat-error>Le password est requis.</mat-error>
-                    </mat-form-field>
-                </div>
-
-                <!-- Role Selection -->
-                <div class="col-md-6">
-                    <mat-form-field appearance="outline" class="w-100">
-                        <mat-label>Rôle</mat-label>
-                        <mat-select formControlName="role" (selectionChange)="onRoleSelect($event)">
-                            <mat-option *ngFor="let role of roles | async" [value]="role">{{ role.name }}</mat-option>
-                            <mat-option><button mat-button class="text-primary" >+ Créer un rôle</button></mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-
-                <!-- Rights Selection -->
-                <div class="col-md-6 position-relative">
-                    <button mat-button (click)="toggleRightsPanel()"
-                            class="rounded-3 bg-primary-blue-color text-white mat-elevation-z1 px-3">
-                        + Ajouter des droits</button>
-
-                    <!-- Rights Selection Panel (Hidden by Default, Appears Behind Button) -->
-                    <div *ngIf="showRightsPanel" class="rights-panel position-absolute bg-white shadow-sm p-2 border rounded w-100 z-1"
-                         style="top: 0; left: 0; transform: translateY(-100%);">
-                        <div *ngFor="let right of rights | async" class="d-flex justify-content-between align-items-center p-1">
-                            <span>{{ right.name }} - {{ right.description }}</span>
-                            <button mat-icon-button (click)="addRight(right)">
-                                <mat-icon>add</mat-icon>
-                            </button>
-                        </div>
-                        <button mat-button class="text-primary mt-2" >+ Créer un droit</button>
-                    </div>
-                    <!-- Selected Rights Display -->
-                    <div class="selected-rights mt-2">
-                        <mat-chip-listbox>
-                            <mat-chip *ngFor="let selectedRight of selectedRights" (removed)="removeRight(selectedRight)" removable>
-                                {{ selectedRight.name }}
-                                <mat-icon matChipRemove>cancel</mat-icon>
-                            </mat-chip>
-                        </mat-chip-listbox>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
+<div class="shadow-sm bg-light d-flex w-100 justify-content-between pt-2" mat-dialog-title>
+  <div class="text-start col-8 fs-6">
+    <button color="primary" mat-icon-button>
+      <mat-icon>attach_money</mat-icon>
+    </button>
+    Ajouter un paiement
+  </div>
+  <!-- Reset Button -->
+  <div class="col-4 text-end">
+    <button (click)="userForm.reset()" class="mx-2" color="primary" mat-icon-button >
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <!-- Close Button -->
+    <button class="" color="warn" mat-dialog-close mat-icon-button>
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
 </div>
+
+<mat-dialog-content>
+  <div class="row">
+    <form [formGroup]="userForm" >
+      <!-- Amount -->
+      <div class="col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>NAME</mat-label>
+          <input formControlName="name"  matInput >
+          <mat-error *ngIf="userForm.controls['name'].hasError('required')">
+            le prénom est obligatoire.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>LASTNAME</mat-label>
+          <input formControlName="lastName"  matInput >
+          <mat-error *ngIf="userForm.controls['lastName'].hasError('required')">
+            le nom est obligatoire.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>EMAIL</mat-label>
+          <input formControlName="email"  matInput >
+          <mat-error *ngIf="userForm.controls['email'].hasError('required')">
+            l'email est obligatoire.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>PHONE</mat-label>
+          <input formControlName="phone"  matInput >
+          <mat-error *ngIf="userForm.controls['phone'].hasError('required')">
+            le télephone est obligatoire.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>PASSWORD</mat-label>
+          <input formControlName="password"  matInput >
+          <mat-error *ngIf="userForm.controls['password'].hasError('required')">
+            le mot de pass est obligatoire.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="col-lg-12">
+        <mat-form-field appearance="outline" class="w-100">
+          <mat-label>PASSWORD_CONFIRM</mat-label>
+          <input formControlName="passwordConfirm"  matInput >
+          <mat-error *ngIf="userForm.controls['passwordConfirm'].hasError('required')">
+            le télephone est obligatoire.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+    </form>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <!-- Cancel Button -->
+  <button [color]="'warn'" class="btn text-danger py-1" mat-button mat-dialog-close>
+    Annuler
+  </button>
+  <!-- Submit Button -->
+  <button (click)="addPayment()"
+          class="btn mat-primary" mat-raised-button>
+    Ajouter
+  </button>
+</mat-dialog-actions>

@@ -118,5 +118,8 @@
   "COMMENTS": "Commenti",
   "HISTORY": "Storico",
   "EDIT_INTERACTION": "Modifica interazione",
-  "ADD_INTERACTION": "Aggiungi interazione"
+  "ADD_INTERACTION": "Aggiungi interazione",
+  "ASSETS": "Avoirs",
+  "CLIENT": "Clienti",
+  "PAYMENTS" : "Pagamenti"
 }

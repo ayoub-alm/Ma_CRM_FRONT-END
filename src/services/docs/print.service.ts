@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {ContractDTO} from './contract.dto';
 import {environment} from '../../environments/environment';
+import {MatSnackBar} from '@angular/material/snack-bar';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ import {environment} from '../../environments/environment';
 export class PrintService {
   private apiUrl = environment.baseUrl+'/api/print';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) { }
 
   generateContractById(contractId: number) {
     this.http.get(`${this.apiUrl}/generate-contract/${contractId}`, { responseType: 'blob' }).subscribe(blob => {
@@ -62,13 +63,23 @@ export class PrintService {
   generateContractAnnexe(contractAnnexeId: number): void {
     const url = `${this.apiUrl}/contract-annexe/${contractAnnexeId}`;
     this.http.get(url, { responseType: 'blob' }).subscribe(blob => {
-      this.downloadFile(blob, 'contract.docx');
+      this.downloadFile(blob, 'Annexe.docx');
+    }, error => {
+      console.error('Error downloading DOCX:', error);
+    });
+  }
+
+  generateStorageCreditNote(creditNoteId: number): void {
+    const url = `${this.apiUrl}/credit-note/${creditNoteId}`;
+    this.http.get(url, { responseType: 'blob' }).subscribe(blob => {
+      this.downloadFile(blob, 'Avoire.docx');
     }, error => {
       console.error('Error downloading DOCX:', error);
     });
   }
 
   private downloadFile(blob: Blob, fileName: string) {
+    this.snackBar.open("Le téléchargement va commencer dans quelques secondes...", "ok", {duration:3000})
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;

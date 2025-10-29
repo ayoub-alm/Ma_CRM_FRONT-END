@@ -25,7 +25,7 @@
         Actions <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu" class="bg-spider scale-09">
-        <button mat-menu-item (click)="onValidateFinances()" >
+        <button mat-menu-item (click)="onValidateSales()" >
           <mat-icon>add</mat-icon>
           Valider par C
         </button>
@@ -46,7 +46,7 @@
 <section class="container-fluid px-2">
   <div class="row p-2">
     <ng-container  class="col-12 row " >
-      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-4">
+      <mat-card class="mt-2 rounded-0 bg-white mat-elevation-z0  border border-start border-secondary-subtle border-1 col-4">
         <mat-card-content>
           <p class="fs-6 align-items-center d-flex primary-blue-color">
             <mat-icon class="scale-08">business</mat-icon>
@@ -66,12 +66,11 @@
             ></p>
         </mat-card-content>
       </mat-card>
-
-      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-4">
+      <mat-card class="mt-2 rounded-0 bg-white mat-elevation-z0  border border-start border-secondary-subtle border-1 col-4">
         <mat-card-content>
           <p class="fs-6 align-items-center d-flex primary-blue-color">
-            <mat-icon class="scale-08">euro</mat-icon>
-            Informations de Paiement
+<!--            <mat-icon class="scale-08">euro</mat-icon>-->
+<!--            Informations de Paiement-->
           </p>
           <p>Statut de paiement :
             <button [class]="getPaymentStatusClass()">{{getPaymentStatus() }}</button></p>
@@ -89,156 +88,37 @@
           <p>Facturation minimale assurée {{invoice.getValue().storageContract.minimumBillingGuaranteed.toFixed(2)}}</p>
         </mat-card-content>
       </mat-card>
-
-<!--      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-4">-->
-<!--        <mat-card-content>-->
-<!--          <p class="fs-6 align-items-center d-flex primary-blue-color">-->
-<!--            <mat-icon class="scale-08">business</mat-icon>-->
-<!--            Informations du Client-->
-<!--          </p>-->
-<!--          <p><span class="text-secondary">Client:</span> {{ invoice.getValue().storageContract?.customer?.name }}</p>-->
-<!--          &lt;!&ndash;              <p><span class="text-secondary">Interlocuteur:</span> {{ deliveryNote.getValue().interlocutor.fullName }}</p>&ndash;&gt;-->
-<!--          <p><span class="text-secondary">Contrat:</span>-->
-<!--            <a [href]="'/admin/crm/wms/contracts/show/'+invoice.getValue().storageContract?.id" target="_blank">-->
-<!--              {{invoice.getValue().storageContract?.number }}</a>-->
-<!--          </p>-->
-<!--          <p><span class="text-secondary">BL:</span>-->
-<!--            <a [href]="'/admin/crm/wms/delivery-note/show/'+invoice.getValue().storageDeliveryNote.id" target="_blank">-->
-<!--              {{invoice.getValue().storageDeliveryNote.number }}</a-->
-<!--            ></p>-->
-<!--        </mat-card-content>-->
-<!--      </mat-card>-->
-    </ng-container>
-
-    <ng-container class="col-12 row " >
-        <!-- Colonne 1 -->
-          <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-4">
-            <mat-card-content>
-              <p class="fs-6 align-items-center d-flex primary-blue-color">
-                <mat-icon class="scale-08">attach_money</mat-icon>
-                Modalité de Paiement
-              </p>
-              <p>Méthod: {{ invoice.getValue().storageContract.paymentType.name }}</p>
-              <p>Échience: {{ invoice.getValue().storageContract.paymentDeadline }}</p>
-              <p>Date de Facture :<br>
-                <input formControlName="invoiceDate"
-                  type="date" [value]="invoice.getValue().invoiceDate" class="form-control form-control-sm "></p>
-              <p>Date d'Échience: <br>
-                <input formControlName="dueDate"
-                  type="date" [value]="invoice.getValue().dueDate" class="form-control form-control-sm ">
-                </p>
-
-            </mat-card-content>
-          </mat-card>
-          <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-6">
-            <mat-card-content>
-              <div class="row d-flex justify-content-between">
-                <p class="col-9 fs-6 align-items-center d-flex primary-blue-color">
-                  <mat-icon class="scale-08">attach_money</mat-icon>
-                  Paiements
-                </p>
-                <p class="col-3">
-                  <button *ngIf="(invoice.getValue().totalTtc - getSumOfPayments()) > 0" (click)="OnAddPayment()"
-                    mat-icon-button class="btn "><mat-icon>add</mat-icon></button>
-                </p>
-              </div>
-              <table *ngIf="invoice.getValue().storageInvoicePaymentRequestDtos.length" class="table table-sm table-bordered">
-                <thead class="table-primary text-light">
-                <tr>
-                  <th class="fw-light">Montant</th>
-                  <th class="fw-light">Référence</th>
-                  <th class="fw-light">Moyen de paiement</th>
-                  <th class="fw-light">Date</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let payment of invoice.getValue().storageInvoicePaymentRequestDtos">
-                  <td class="">{{ payment.amount }}</td>
-                  <td class="">{{ payment.ref }}</td>
-                  <td class="">{{ payment.paymentMethod }}</td>
-                  <td class="">{{ payment.createdAt | date:'yyyy-MM-dd hh:mm' }}</td>
-                </tr>
-                <tr >
-                  <td class=""></td>
-                  <td><strong>Total</strong></td>
-                  <td>
-                    {{ getSumOfPayments()}}
-                  </td>
-                </tr>
-                </tbody>
-              </table>
-              <p><span class="text-secondary">Reste à payer: </span> {{invoice.getValue().totalTtc - getSumOfPayments()}}</p>
-              <br>
-            </mat-card-content>
-          </mat-card>
-      <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-6">
+      <mat-card class="mt-2 rounded-0 bg-white mat-elevation-z0  border border-start border-secondary-subtle border-1 col-4">
         <mat-card-content>
           <p class="fs-6 align-items-center d-flex primary-blue-color">
-            <mat-icon class="scale-08">edit</mat-icon>
-            Mise à jour Envoi & Retour
+<!--            <mat-icon class="scale-08">attach_money</mat-icon>-->
+<!--            Modalité de Paiement-->
           </p>
-          <div class="row d-flex justify-content-around">
-            <div class="col-md-6">
-              <label for="sendDate" class="form-label">Date d'envoi</label>
-              <input
-                type="date"
-                id="sendDate"
-                formControlName="sendDate"
-                class="form-control form-control-sm"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label for="sendStatus" class="form-label">Status d'envoi</label>
-              <select
-                id="sendStatus"
-                formControlName="sendStatus"
-                class="form-select form-select-sm"
-              >
-                <option [ngValue]="null">Choisir...</option>
-                <option value="SENT">Envoyé</option>
-                <option value="PENDING">En attente</option>
-                <option value="CANCELLED">Annulé</option>
-              </select>
-            </div>
-
-            <div class="col-md-6">
-              <label for="returnDate" class="form-label">Date de retour</label>
-              <input
-                type="date"
-                id="returnDate"
-                formControlName="returnDate"
-                class="form-control form-control-sm"
-              />
-            </div>
-
-            <div class="col-md-6">
-              <label for="returnStatus" class="form-label">Status de retour</label>
-              <select
-                id="returnStatus"
-                formControlName="returnStatus"
-                class="form-select form-select-sm"
-              >
-                <option [ngValue]="null">Choisir...</option>
-                <option value="RETURNED">Retourné</option>
-                <option value="PENDING">En attente</option>
-                <option value="CANCELLED">Annulé</option>
-              </select>
-            </div>
-          </div>
-
-          <!--      <div class="col-12 mt-2 text-end">-->
-          <!--        <button (click)="onUpdateInvoice()" mat-raised-button color="primary" type="submit">-->
-          <!--          Mettre à jour-->
-          <!--        </button>-->
-          <!--      </div>-->
+          <p>Méthod: {{ invoice.getValue().storageContract.paymentType.name }}</p>
+          <p>Échience: {{ invoice.getValue().storageContract.paymentDeadline }}</p>
+          <p>Date de Facture :<br>
+            <input formControlName="invoiceDate"
+                   type="date" [value]="invoice.getValue().invoiceDate" class="form-control form-control-sm "></p>
+          <p>Date d'Échience: <br>
+            <input formControlName="dueDate"
+                   type="date" [value]="invoice.getValue().dueDate" class="form-control form-control-sm ">
+          </p>
         </mat-card-content>
       </mat-card>
     </ng-container>
+
+
+
+
+
     <ng-container  class="col-12" >
       <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1">
         <mat-card-content>
           <div class="card-body">
+            <p class="fs-6 align-items-center d-flex primary-blue-color">
+              <mat-icon class="scale-08">build</mat-icon>
+              Services
+            </p>
             <table  class="table small border-secondary">
               <thead class=" fw-light">
               <tr>
@@ -291,6 +171,114 @@
         </mat-card-content>
       </mat-card>
     </ng-container>
+
+    <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-12">
+      <mat-card-content>
+        <div class="row d-flex justify-content-between">
+          <p class="fs-6 align-items-center d-flex primary-blue-color col-11">
+            <mat-icon class="scale-08">attach_money</mat-icon>Paiements
+          </p>
+          <p class="col-1">
+            <button *ngIf="(invoice.getValue().totalTtc - getSumOfPayments()) > 0" (click)="OnAddPayment()"
+                    mat-button class="btn rounded-2 "><mat-icon>add</mat-icon> {{"ADD" |  translate}}</button>
+          </p>
+        </div>
+        <p><span class="text-secondary">Total: </span> {{ getSumOfPayments()}}</p>
+        <p><span class="text-secondary">Reste à payer: </span> {{invoice.getValue().totalTtc - getSumOfPayments()}}</p>
+
+        <table *ngIf="invoice.getValue().storageInvoicePaymentRequestDtos.length" class="table table-sm table-bordered">
+          <thead class="table-primary text-light">
+          <tr>
+            <th class="fw-light">Montant</th>
+            <th class="fw-light">Référence</th>
+            <th class="fw-light">Moyen de paiement</th>
+            <th class="fw-light">Date de recéption</th>
+            <th class="fw-light">Date de validation</th>
+            <th class="fw-light">Statut de validation</th>
+            <th class="fw-light">Date</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let payment of invoice.getValue().storageInvoicePaymentRequestDtos">
+            <td class="">{{ payment.amount }}</td>
+            <td class="">{{ payment.ref }}</td>
+            <td class="">{{ payment.paymentMethod }}</td>
+            <td class="">{{ payment.receptionDate | date:'yyyy-MM-dd hh:mm' }}</td>
+            <td class="">{{ payment.validationDate | date:'yyyy-MM-dd hh:mm' }}</td>
+            <td>
+              <mat-slide-toggle
+                class="example-margin scale-08"
+                [checked]="payment.validationStatus"
+                (change)="onValidatePayment(payment)"
+                [disabled]="payment.validationStatus">
+                <span *ngIf="payment.validationStatus" class="text-success">Validé</span>
+              </mat-slide-toggle>
+            </td>
+
+            <td class="">{{ payment.createdAt | date:'yyyy-MM-dd hh:mm' }}</td>
+          </tr>
+          </tbody>
+        </table>
+
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-12">
+      <mat-card-content>
+        <p class="fs-6 align-items-center d-flex primary-blue-color">
+          <mat-icon class="scale-08">edit</mat-icon>
+          Mise à jour Envoi & Retour
+        </p>
+        <div class="row d-flex justify-content-around">
+          <div class="col-md-6">
+            <label for="sendDate" class="form-label">Date d'envoi</label>
+            <input
+              type="date"
+              id="sendDate"
+              formControlName="sendDate"
+              class="form-control form-control-sm"
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label for="sendStatus" class="form-label">Status d'envoi</label>
+            <select
+              id="sendStatus"
+              formControlName="sendStatus"
+              class="form-select form-select-sm"
+            >
+              <option [ngValue]="null">Choisir...</option>
+              <option value="SENT">Envoyé</option>
+              <option value="PENDING">En attente</option>
+              <option value="CANCELLED">Annulé</option>
+            </select>
+          </div>
+
+          <div class="col-md-6">
+            <label for="returnDate" class="form-label">Date de retour</label>
+            <input
+              type="date"
+              id="returnDate"
+              formControlName="returnDate"
+              class="form-control form-control-sm"
+            />
+          </div>
+
+          <div class="col-md-6">
+            <label for="returnStatus" class="form-label">Status de retour</label>
+            <select
+              id="returnStatus"
+              formControlName="returnStatus"
+              class="form-select form-select-sm"
+            >
+              <option [ngValue]="null">Choisir...</option>
+              <option value="RETURNED">Retourné</option>
+              <option value="PENDING">En attente</option>
+              <option value="CANCELLED">Annulé</option>
+            </select>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </section>
 <!-- update invoices send date and accusation infos  -->

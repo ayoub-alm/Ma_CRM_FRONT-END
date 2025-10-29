@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DatePipe, NgForOf, NgIf} from '@angular/common';
+import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {MatButton, MatIconButton} from '@angular/material/button';
 import {
   MatCell,
@@ -56,7 +56,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     NgForOf,
     MatMenuTrigger,
     MatHeaderCellDef,
-    MatNoDataRow, MatProgressSpinnerModule, NgIf
+    MatNoDataRow, MatProgressSpinnerModule, NgIf, NgClass
   ],
   templateUrl: './wms-offer.component.html',
   styleUrl: './wms-offer.component.css'
@@ -168,4 +168,15 @@ export class WmsOfferComponent implements OnInit, AfterViewInit{
   }
 
   protected readonly getLabelFromStorageReasonEnum = getLabelFromStorageReasonEnum;
+
+
+  getStatusColor(statusId: number | undefined): string {
+    switch (statusId) {
+      case 1: return 'bg-info-subtle text-dark';
+      case 2: return 'bg-warning-subtle text-dark';
+      case 3: return 'bg-success-subtle  text-dark';
+      default: return 'bg-secondary-subtle text-dark';
+    }
+  }
+
 }

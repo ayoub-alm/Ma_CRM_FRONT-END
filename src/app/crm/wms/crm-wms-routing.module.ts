@@ -22,6 +22,10 @@ import {
 import {WmsInvoiceShowComponent} from './wms-invoice/wms-invoice-show/wms-invoice-show.component';
 import {WmsInvoiceComponent} from './wms-invoice/wms-invoice.component';
 import {WmsAnnexeComponent} from './wms-contract/wms-annexe/wms-annexe.component';
+import {WmsAssetComponent} from './wms-asset/wms-asset.component';
+import {WmsCreditNoteShowComponent} from './wms-asset/wms-credit-note-show/wms-credit-note-show.component';
+import {WmsPaymentComponent} from './wms-payment/wms-payment.component';
+import {WmsPaymentShowComponent} from './wms-payment/wms-payment-show/wms-payment-show.component';
 
 
 
@@ -45,6 +49,10 @@ const routes: Routes = [
       {path:'invoice', component: WmsInvoiceComponent },
       {path:'invoice/create', component: WmsInvoiceCreateComponent },
       {path:'invoice/show/:id', component: WmsInvoiceShowComponent},
+      {path:'credit-notes', component: WmsAssetComponent},
+      {path:'credit-notes/show/:id', component: WmsCreditNoteShowComponent},
+      {path:'payments', component: WmsPaymentComponent},
+      {path:'payments/show/:id', component: WmsPaymentShowComponent},
     ]},
 
 ];

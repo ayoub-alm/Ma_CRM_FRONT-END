@@ -33,6 +33,7 @@ import {LivreEnum} from "../../../../../enums/crm/livre.enum";
 import {PaymentMethodResponseDto} from '../../../../../dtos/init_data/response/paymentMethodResponseDto';
 import {PaymentMethodService} from '../../../../../services/data/payemet.method.service';
 import {MatSlideToggle} from '@angular/material/slide-toggle';
+import {TranslatePipe} from '@ngx-translate/core';
 @Component({
   selector: 'app-wms-contract-show',
   standalone: true,
@@ -55,7 +56,7 @@ import {MatSlideToggle} from '@angular/material/slide-toggle';
     NgForOf,
     MatIconButton,
     MatMenu, MatMenuItem, MatMenuTrigger, CurrencyPipe, ReactiveFormsModule, GeneralInfosComponent
-    , MatFormField, MatInput, MatLabel, UploadFileComponent, MatSlideToggle
+    , MatFormField, MatInput, MatLabel, UploadFileComponent, MatSlideToggle, TranslatePipe
   ],
   templateUrl: './wms-contract-show.component.html',
   styleUrl: './wms-contract-show.component.css'

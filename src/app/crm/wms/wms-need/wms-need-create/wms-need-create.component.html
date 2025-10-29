@@ -89,7 +89,9 @@
   </section>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [color]="'warn'" mat-dialog-close class="rounded-2">Annuler</button>
-  <button (click)="createStorageNeed()"
-    mat-button cdkFocusInitial class="bg-primary-blue-color rounded-2 text-white">Ajouter</button>
+  <button mat-button [color]="'warn'" mat-dialog-close class="rounded-2"> {{"CANCEL" | translate}}</button>
+  <button (click)="onCreateUpdateStorageNeed()"
+    mat-button cdkFocusInitial class="bg-primary-blue-color rounded-2 text-white">
+    {{ ((data && data.id) ? "UPDATE" : 'ADD') | translate}}
+  </button>
 </mat-dialog-actions>

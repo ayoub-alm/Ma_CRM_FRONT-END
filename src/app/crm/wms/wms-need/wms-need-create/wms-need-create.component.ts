@@ -32,6 +32,8 @@ import {RequirementRequestDto} from '../../../../../dtos/init_data/request/requi
 import {UnloadingTypeResponseDto} from '../../../../../dtos/response/crm/unloading.type.response.dto';
 import {RequirementResponseDto} from '../../../../../dtos/response/crm/requirement.response.dto';
 import {StorageNeedService} from '../../../../../services/crm/wms/storage.need.service';
+import {StorageNeedResponseDto} from '../../../../../dtos/response/crm/storage.need.response.dto';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wms-need-create',
@@ -53,7 +55,8 @@ import {StorageNeedService} from '../../../../../services/crm/wms/storage.need.s
     ReactiveFormsModule,
     MatButton,
     MatDialogActions,
-    MatDialogClose
+    MatDialogClose,
+    TranslatePipe
   ],
   templateUrl: './wms-need-create.component.html',
   styleUrl: './wms-need-create.component.css',
@@ -67,19 +70,19 @@ export class WmsNeedCreateComponent implements OnInit{
   storageReasons: { key: string; value: string }[] = [];
   livreStatuses: { key: string; value: string }[] = [];
   constructor( public dialogRef: MatDialogRef<WmsNeedCreateComponent>,private fb: FormBuilder,private customerService:ProspectService,
-                  @Inject(MAT_DIALOG_DATA) public data: Set<number>,private interlocutorService: InterlocutorService,
+                  @Inject(MAT_DIALOG_DATA) public data: StorageNeedResponseDto,private interlocutorService: InterlocutorService,
                private localStorageService: LocalStorageService, private snackBar: MatSnackBar, private storageNeedService: StorageNeedService) {
 
     this.generalInfoFormGroup = this.fb.group({
       // statut: ['', Validators.required],
       dateReception: [ new Date(), Validators.required],
-      costumer: ['', Validators.required],
-      interlocutorId: [''],
-      typeProduits: ['', Validators.required],
-      dureeStockage: [12, [Validators.required, Validators.min(1)]],
-      nombreSku: ['', Validators.required],
-      raisonStockage: ['', Validators.required],
-      livre: ['', Validators.required],
+      costumer: [this.data?.customer?.id, Validators.required],
+      interlocutorId: [this.data?.interlocutor.id],
+      typeProduits: [this.data?.productType, Validators.required],
+      dureeStockage: [this.data?.duration | 12, [Validators.required, Validators.min(1)]],
+      nombreSku: [this.data?.numberOfSku, Validators.required],
+      raisonStockage: [this.data?.storageReason, Validators.required],
+      livre: [this.data?.liverStatus, Validators.required],
     });
   }
 
@@ -89,6 +92,9 @@ export class WmsNeedCreateComponent implements OnInit{
     this.loadStorageReasons();
     this.loadLivreStatuses();
     this.filterInterlocutorsBySelectedCustomer();
+    if (this.data){
+
+    }
   }
 
 
@@ -154,22 +160,48 @@ export class WmsNeedCreateComponent implements OnInit{
   /**
    *
    */
-  createStorageNeed(){
+  onCreateUpdateStorageNeed(){
     const storageNeedTOCreate = this.createNewNeedRequestDto();
-    if (storageNeedTOCreate){
-      this.storageNeedService.createStorageNeed(storageNeedTOCreate).pipe(
-        tap(data => {
-          this.snackBar.open("Les besoins du client ont été bien créés. ✅","OK", {duration:3000})
-        }),
-        catchError(err => {
-          return of(null)
+    // update storage offer if storage Need exist
+    if(this.data && this.data.id){
+      if (storageNeedTOCreate){
+        this.storageNeedService.updateStorageNeed(this.data.id, storageNeedTOCreate).pipe(
+          tap(data => {
+            this.snackBar.open("Le besoin a été bien modifié.  ✅","OK", {duration:3000})
+          }),
+          catchError(err => {
+            this.snackBar.open("❌ Une erreur est survenue lors de la modification du besoin.","OK", {
+              duration: 3000
+            });
+            return of(null)
+          })
+        ).subscribe({
+          next: data => {
+            this.dialogRef.close();
+          }
         })
-      ).subscribe({
-        next: data => {
-          this.dialogRef.close();
-        }
-      })
+      }
+    }else {
+      // Create a new Storage need
+      if (storageNeedTOCreate){
+        this.storageNeedService.createStorageNeed(storageNeedTOCreate).pipe(
+          tap(data => {
+            this.snackBar.open("Les besoins du client ont été bien créés. ✅","OK", {duration:3000})
+          }),
+          catchError(err => {
+            this.snackBar.open("❌ Une erreur est survenue lors de l'ajout du besoin.","OK", {
+              duration: 3000
+            });
+            return of(null)
+          })
+        ).subscribe({
+          next: data => {
+            this.dialogRef.close();
+          }
+        })
+      }
     }
+
   }
 
   /**
@@ -189,6 +221,7 @@ export class WmsNeedCreateComponent implements OnInit{
       const requirements: RequirementResponseDto[] = [];
       // Create StorageNeedCreateDto
       const newNeedRequestDto = new StorageNeedCreateDto(
+        null,
         this.generateUUID(),
         generalInfo.raisonStockage,
         generalInfo.statut,

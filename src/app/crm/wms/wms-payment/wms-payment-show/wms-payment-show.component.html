@@ -1,0 +1,85 @@
+<div class="container-fluid bg-body row d-flex justify-content-center w-100">
+  <!-- Page Header -->
+  <!-- Actions -->
+  <div class="d-flex justify-content-between row" >
+    <div class="col-8">
+      <button (click)="router.navigate(['/admin/crm/wms/wms/credit-notes'])" color="primary"  mat-button>
+        <mat-icon>arrow_back</mat-icon>
+      </button>
+      <button mat-button (click)="router.navigate(['/admin/crm/wms'])"  >
+        <mat-icon class=" primary-blue-color">house</mat-icon>
+        {{ "HOME" | translate }}
+      </button>
+      >
+      <button mat-button (click)="router.navigate(['/admin/crm/wms/wms/credit-notes'])">
+        <mat-icon class=" primary-blue-color">checklist</mat-icon>
+        Payments
+      </button>
+      >
+      <button mat-button>
+        <mat-icon class=" primary-blue-color">details</mat-icon>
+        {{ "DETAILS" | translate }}
+      </button>
+    </div>
+    <div class="col-2 d-flex justify-content-end">
+      <button [matMenuTriggerFor]="menu"  class="bg-spider scale-08 primary-blue-color fw-bold rounded-2" aria-label="Actions" mat-raised-button>
+        Actions <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu" class="bg-spider scale-09">
+        <button mat-menu-item >
+          <mat-icon>add</mat-icon>
+          Valider
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+  <hr>
+</div>
+<form >
+  <section class="container-fluid px-2">
+    <div class="row p-2">
+      <ng-container  class="col-12 row " >
+        <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-6">
+          <mat-card-content>
+            <p class="fs-6 align-items-center d-flex primary-blue-color">
+              <mat-icon class="scale-08">business</mat-icon>
+              Informations General
+            </p>
+            <p><span class="text-secondary">Référence:</span> {{ payment.getValue().ref }}</p>
+            <p><span class="text-secondary">Status:</span>
+              <button  [ngClass]="['btn', 'btn-sm',  payment.getValue().validationStatus  ? 'bg-success-subtle':'bg-warning-subtle']">
+                {{ payment.getValue().validationStatus ? 'Validé' : 'Nouvelle' }}</button>
+              <mat-slide-toggle
+                class="example-margin scale-08"
+                [checked]="payment.getValue().validationStatus"
+                (change)="onValidatePayment()"
+                [disabled]="payment.getValue().validationStatus">
+              </mat-slide-toggle>
+            </p>
+            <p><span class="text-secondary">Date:</span> {{ payment.getValue().createdAt | date:'dd/MM/YYYY HH:mm' }}</p>
+            <p><span class="text-secondary">Date de récéption:</span> {{ payment.getValue().receptionDate | date:'dd/MM/YYYY HH:mm' }}</p>
+            <p><span class="text-secondary">Date de validation:</span> {{ payment.getValue().validationDate | date:'dd/MM/YYYY HH:mm' }}</p>
+          </mat-card-content>
+        </mat-card>
+        <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z2 border border-secondary-subtle border-1 col-6">
+          <mat-card-content>
+            <p class="fs-6 align-items-center d-flex primary-blue-color">
+              <mat-icon class="scale-08">business</mat-icon>
+              Informations du Client
+            </p>
+            <p><span class="text-secondary">Client:</span> {{ payment.getValue().storageInvoices[0].storageContract?.customer?.name }}</p>
+            <p>
+              <span class="text-secondary">Factures:</span>
+              <span *ngFor="let invoice of payment.getValue().storageInvoices" > {{ invoice.number }}</span>
+            </p>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </div>
+  </section>
+</form>
+
+<app-general-infos
+  [createdBy]="payment.getValue().createdBy" [createdAt]="payment.getValue().createdAt"
+  [updatedBy]="payment.getValue().updatedBy" [updatedAt]="payment.getValue().updatedAt"
+></app-general-infos>

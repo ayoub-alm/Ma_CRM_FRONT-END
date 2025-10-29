@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {MatButton, MatIconButton} from "@angular/material/button";
 import {MatCard, MatCardContent} from "@angular/material/card";
 import {MatIcon} from "@angular/material/icon";
@@ -61,6 +61,7 @@ import {
   CreateStorageContractDialogComponent
 } from '../../../../utils/create-storage-contract-dailog/create-storage-contract-dailog.component';
 import {PaymentMethodResponseDto} from '../../../../../dtos/init_data/response/paymentMethodResponseDto';
+import {StorageOfferUpdateRequestDto} from '../../../../../dtos/request/crm/storage.offer.update.request.dto';
 
 @Component({
   selector: 'app-wms-offer-show',
@@ -83,7 +84,7 @@ import {PaymentMethodResponseDto} from '../../../../../dtos/init_data/response/p
     MatTable, MatFormFieldModule,
     NgForOf, MatLabel, MatIconButton, MatSidenavModule,
     DatePipe, MatMenu, MatMenuItem, MatMenuTrigger, ReactiveFormsModule, GeneralInfosComponent, MatFormField,
-    MatOption, MatInput, MatAutocompleteTrigger, MatAutocomplete, MatTooltip, MatSelect, AsyncPipe,
+    MatOption, MatInput, MatAutocompleteTrigger, MatAutocomplete, MatTooltip, MatSelect, AsyncPipe, KeyValuePipe, NgClass,
   ],
   templateUrl: './wms-offer-show.component.html',
   styleUrl: './wms-offer-show.component.css'
@@ -217,7 +218,7 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       debounceTime(500), // Prevent excessive API calls
       distinctUntilChanged(),
     ).subscribe(data => {
-      if (data != 0 && data != "" && data != this.storageOffer.getValue().managementFees){
+      if (data != "" && data != this.storageOffer.getValue().managementFees){
         this.storageOfferService.updateManagementFees(this.storageOffer.getValue().id, data).subscribe({
           next:(storageOffer:StorageOfferResponseDto)=> {
             this.storageOffer.next(storageOffer);
@@ -280,19 +281,25 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
     })
 
     combineLatest([
-      this.storageOfferForm.get("note1")?.valueChanges,
-      this.storageOfferForm.get("note2")?.valueChanges,
-      this.storageOfferForm.get("note3")?.valueChanges,
-      this.storageOfferForm.get("note4")?.valueChanges,
-      this.storageOfferForm.get("note5")?.valueChanges,
-      this.storageOfferForm.get("note6")?.valueChanges,
-    ]).pipe(tap(() => {
-      // handle combined values here
-      // console.log(note1, note2, note3, note4, note5, note6);
-      //
-    })).subscribe();
-
-
+      this.storageOfferForm.get("productType")!.valueChanges.pipe(distinctUntilChanged()),
+      this.storageOfferForm.get("duration")!.valueChanges.pipe(distinctUntilChanged()),
+      this.storageOfferForm.get("numberOfSku")!.valueChanges.pipe(distinctUntilChanged()),
+      this.storageOfferForm.get("storageReason")!.valueChanges.pipe(distinctUntilChanged()),
+      this.storageOfferForm.get("liverStatus")!.valueChanges.pipe(distinctUntilChanged())
+    ])
+      .pipe(
+        debounceTime(300),
+        tap(([productType, duration, numberOfSku, storageReason, liverStatus]) => {
+          console.log({ productType, duration, numberOfSku, storageReason, liverStatus });
+          const requestData = new StorageOfferUpdateRequestDto({productType, duration, numberOfSku, storageReason, liverStatus })
+          this.storageOfferService.updateStorageOffer(this.storageOffer.getValue().id, requestData).pipe(
+            tap((data: StorageOfferResponseDto)=>{
+              this.storageOffer.next(data);
+              this.snackBar.open("Storage Offer updated successfully ", "OK", {duration:3000})
+            })
+          ).subscribe()
+        })
+      ).subscribe();
   }
 
   loadUnloadingTypes(): void{
@@ -484,6 +491,10 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       next: (updatedOffer) => {
         this.storageOffer.next(updatedOffer);
         this.snackBar.open("L'offre a été envoyée pour validation", "OK", { duration: 3000 });
+        const currentUrl = this.router.url;
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate([currentUrl]);
+        });
       },
       error: (error) => {
         console.error(error);
@@ -498,6 +509,10 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       next: (updatedOffer) => {
         this.storageOffer.next(updatedOffer);
         this.snackBar.open("L'offre a été validée", "OK", { duration: 3000 });
+        const currentUrl = this.router.url;
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+          this.router.navigate([currentUrl]);
+        });
       },
       error: (error) => {
         console.error(error);
@@ -670,6 +685,7 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
     }else {
       prv.salesPrice = prv.initPrice; // Keep original price if invalid input
     }
+    this.loadStorageOffer()
   }
   addIncreaseValueForProvision(prv: ProvisionResponseDto,item: StockedItemResponseDto, $event: Event) {
     const increaseValue = parseFloat(($event.target as HTMLInputElement).value); // Convert input value to a number
@@ -688,13 +704,14 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
         stockedItem: item,
         stockedItemId: item.id
       })
+      this.loadStorageOffer();
     }
   }
   updateStockedItemProvision(stockedItemProvisionId: number, stockedItemProvision: StockedItemProvision): void{
     this.stockedItemProvisionService.update(stockedItemProvisionId, stockedItemProvision, stockedItemProvision.stockedItemId ).subscribe({
       next:() => {
         this.snackBar.open("Prestation modifier avec succès", "ok",{duration:3000});
-        this.loadStorageOffer();
+        // this.loadStorageOffer();
       },
       error:(error)=>{
         if(error.status != 200){
@@ -969,7 +986,6 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
   updateMinimalBilling($event: Event) {
     const input = $event.target as HTMLInputElement;
     const value = parseFloat(input.value);
-    alert(value)
     if (!isNaN(value)) {
       this.storageOfferService.updateMinimalBillingAmount(this.storageOffer.getValue().id,value).subscribe((data) => {
         this.snackBar.open("Facturation minimale assurée à éte mis à jour avec succès", "ok", {duration:3000})
@@ -984,7 +1000,6 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
   updateReservedPlaces($event: Event) {
     const input = $event.target as HTMLInputElement;
     const value = parseFloat(input.value);
-    alert(value)
     if (!isNaN(value)) {
       this.storageOfferService.updateReservedPlaces(this.storageOffer.getValue().id,value).subscribe((data) => {
         this.snackBar.open("number des places résérvé à éte mis à jour avec succès", "ok", {duration:3000})
@@ -1020,6 +1035,16 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       })).subscribe();
   }
 
+  getStatusColor(statusId: number | undefined): string {
+    switch (statusId) {
+      case 1: return 'bg-info-subtle text-white';
+      case 2: return 'bg-warning-subtle text-dark';
+      case 3: return 'bg-success-subtle  text-dark';
+      default: return 'bg-secondary-subtle text-dark';
+    }
+  }
+
+  protected readonly StorageReasonEnum = StorageReasonEnum;
 }
 
 // src/app/utils/price-calculator.util.ts

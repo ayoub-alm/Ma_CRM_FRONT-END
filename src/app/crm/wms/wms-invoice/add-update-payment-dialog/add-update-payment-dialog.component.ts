@@ -10,9 +10,9 @@ import {StorageInvoicePaymentService} from '../../../../../services/crm/wms/stor
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatIcon} from '@angular/material/icon';
 import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatError, MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
-import {MatOption} from '@angular/material/core';
+import {MatOption, provideNativeDateAdapter} from '@angular/material/core';
 import {MatSelect} from '@angular/material/select';
 import {NgForOf, NgIf} from '@angular/common';
 import {BehaviorSubject, tap} from 'rxjs';
@@ -20,6 +20,8 @@ import {PaymentMethodService} from '../../../../../services/data/payemet.method.
 import {PaymentMethodResponseDto} from '../../../../../dtos/init_data/response/paymentMethodResponseDto';
 import {StorageInvoicePaymentRequestDto} from '../../../../../dtos/request/crm/storage.invoice.payment.request.dto';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from '@angular/material/datepicker';
+import {TranslatePipe} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-update-payment-dialog',
@@ -40,10 +42,16 @@ import {MatSnackBar} from '@angular/material/snack-bar';
     MatSelect,
     NgForOf,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatDatepicker,
+    MatDatepickerInput,
+    MatDatepickerToggle,
+    MatSuffix,
+    TranslatePipe
   ],
   templateUrl: './add-update-payment-dialog.component.html',
-  styleUrl: './add-update-payment-dialog.component.css'
+  styleUrl: './add-update-payment-dialog.component.css',
+  providers: [provideNativeDateAdapter()],
 })
 export class AddUpdatePaymentDialogComponent implements OnInit{
   public paymentForm!: FormGroup;
@@ -56,6 +64,7 @@ export class AddUpdatePaymentDialogComponent implements OnInit{
        ref: ["", Validators.required],
        amount:["", Validators.required],
        invoiceId:["", Validators.required],
+       receptionDate:["", Validators.required],
      })
    }
 

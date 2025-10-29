@@ -9,7 +9,7 @@ import {StorageDeliveryNoteResponseDto} from './storage.delivery.note.response.d
 import {StorageInvoicePaymentRequestDto} from '../../request/crm/storage.invoice.payment.request.dto';
 
 export class StorageInvoiceResponseDto {
-  id!: number;
+  id: number;
   number:string;
   status:StorageDeliveryNoteStatus;
   stockedItemResponseDtos:StockedItemResponseDtoInDeliveryNoteResponseDto[];

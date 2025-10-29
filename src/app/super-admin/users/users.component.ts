@@ -22,39 +22,43 @@ import {UserModel} from "../../models/super-admin/user.model";
 import {UserService} from "../../services/super-admin/user.service";
 import {BehaviorSubject} from "rxjs";
 import {UserResponseDto} from '../../dtos/response/super-admin-responseDtos/user.response.dto';
+import {UserCreatEditComponent} from './user-creat-edit/user-creat-edit.component';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-    imports: [
-        MatDialogModule,
-        MatButton,
-        MatCell,
-        MatCellDef,
-        MatColumnDef,
-        MatHeaderCell,
-        MatHeaderRow,
-        MatHeaderRowDef,
-        MatIcon,
-        MatIconButton,
-        MatInput,
-        MatPaginator,
-        MatRow,
-        MatRowDef,
-        MatSort,
-        MatSortHeader,
-        MatTable,
-        NgForOf,
-        RouterLink,
-        MatHeaderCellDef,
-        MatNoDataRow
-    ],
+  imports: [
+    MatDialogModule,
+    MatButton,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatIcon,
+    MatIconButton,
+    MatInput,
+    MatPaginator,
+    MatRow,
+    MatRowDef,
+    MatSort,
+    MatSortHeader,
+    MatTable,
+    NgForOf,
+    RouterLink,
+    MatHeaderCellDef,
+    MatNoDataRow,
+    MatMenu,
+    MatMenuItem,
+    MatMenuTrigger
+  ],
   templateUrl: './users.component.html',
   styleUrl: './users.component.css'
 })
 export class UsersComponent implements OnInit, AfterViewInit{
 
-    displayedColumns: string[] = ['select', 'matricule', 'name', 'role', 'email', 'phone', 'status'];
+    displayedColumns: string[] = ['select', 'matricule', 'name', 'role', 'email', 'phone', 'status', 'actions'];
     dataSource: MatTableDataSource<UserResponseDto> = new MatTableDataSource();
     users: BehaviorSubject<UserResponseDto[]> = new BehaviorSubject<UserResponseDto[]>([]);
     isAllSelected = false;
@@ -88,7 +92,7 @@ export class UsersComponent implements OnInit, AfterViewInit{
     }
 
     createEditUser(): void {
-        this.router.navigateByUrl('/admin/super-admin/users/create').then(value => {return;});
+        this.dialog.open(UserCreatEditComponent, { width: '600px', maxWidth: '600px', data:null})
     }
 
     applyFilter(event: Event): void {
