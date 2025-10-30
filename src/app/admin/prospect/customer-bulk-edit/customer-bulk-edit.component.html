@@ -66,6 +66,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button color="warn" mat-dialog-close>Annulée</button>
-  <button mat-button  (click)="submitBulkEdit()" [color]="'primary'" [mat-dialog-close]="true" cdkFocusInitial>Modifier</button>
+  <button mat-button color="warn" mat-dialog-close>{{ 'CANCEL' | translate }}</button>
+  <button mat-button  (click)="submitBulkEdit()" [color]="'primary'" [mat-dialog-close]="true" cdkFocusInitial>{{ 'UPDATE' | translate }}</button>
 </mat-dialog-actions>

@@ -7,12 +7,12 @@
       <img  src="/not_found.webp" class="img-fluid img-not-found" alt="not-found"/>
       <!-- Error Message -->
 <!--      <h1 class="display-4 mt-3">404 - Page Not Found</h1>-->
-      <p class="lead">Oups ! La page que vous recherchez n'existe pas.</p>
+      <p class="lead">{{ 'NOT_FOUND.MESSAGE' | translate }}</p>
 
       <!-- Button to Navigate to Admin -->
       <button mat-raised-button color="primary" (click)="navigateToAdmin()">
         <mat-icon class="primary-blue-color">house</mat-icon>
-        Aller à l'accueil
+        {{ 'NOT_FOUND.GO_HOME' | translate }}
       </button>
     </div>
   </div>

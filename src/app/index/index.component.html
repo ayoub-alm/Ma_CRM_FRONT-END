@@ -61,7 +61,7 @@
   >
     <div class="container-fluid side-nav simple-bg-2 ">
       <mat-toolbar >
-        <span class="m-auto">Applications</span>
+        <span class="m-auto">{{ 'APPLICATIONS' | translate }}</span>
         <button mat-icon-button (click)="rightDrawer.toggle()">
           <mat-icon>close</mat-icon>
         </button>
@@ -165,7 +165,7 @@
       >
         <div class="container-fluid side-nav bg-white ">
           <mat-toolbar class="text-end d-flex justify-content-between bg-spider rounded-2 mat-elevation-z2" >
-            <span>💬 AI Assistant</span>
+            <span>{{ 'AI_ASSISTANT' | translate }}</span>
             <button mat-icon-button (click)="aiDrawer.toggle()">
               <mat-icon>close</mat-icon>
             </button>

@@ -6,27 +6,27 @@
         <div class="text-center">
          <h1 class="display-3 primary-blue-color" >Spider <span class="small text-secondary" style="font-size:0.9rem; position:relative;bottom:30px;right: 7px;" >ERP</span></h1>
         </div>
-        <h6 class="mb-4 text-secondary fw-normal text-center">Veuillez vous connecter</h6>
+        <h6 class="mb-4 text-secondary fw-normal text-center">{{ 'LOGIN.PLEASE_LOGIN' | translate }}</h6>
 
         <mat-form-field appearance="outline" class="w-100 mb-3">
-          <mat-label>Email</mat-label>
+          <mat-label>{{ 'LOGIN.EMAIL_LABEL' | translate }}</mat-label>
           <input matInput
                  type="email"
                  formControlName="email"
-                 placeholder="name@example.com">
+                 placeholder="{{ 'LOGIN.EMAIL_PLACEHOLDER' | translate }}">
           <mat-error *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.hasError('required')">
-            Veuillez entrer une adresse e-mail valide.
+            {{ 'LOGIN.EMAIL_ERROR' | translate }}
           </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="w-100 mb-2">
-          <mat-label>Mot de passe</mat-label>
+          <mat-label>{{ 'LOGIN.PASSWORD_LABEL' | translate }}</mat-label>
           <input matInput
                  type="password"
                  formControlName="password"
-                 placeholder="Password">
+                 placeholder="{{ 'LOGIN.PASSWORD_PLACEHOLDER' | translate }}">
           <mat-error *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')">
-            Veuillez entrer un mot de passe valide.
+            {{ 'LOGIN.PASSWORD_ERROR' | translate }}
           </mat-error>
         </mat-form-field>
 
@@ -36,7 +36,7 @@
                   (click)="login()"
                   [disabled]="!loginForm.valid"
                   >
-            Se connecter
+            {{ 'LOGIN.LOGIN_BUTTON' | translate }}
           </button>
         </div>
 

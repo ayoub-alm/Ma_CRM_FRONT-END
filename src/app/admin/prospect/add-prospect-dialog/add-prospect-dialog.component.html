@@ -118,7 +118,7 @@
 
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Capital</mat-label>
+            <mat-label>{{ 'CAPITAL' | translate }}</mat-label>
             <input formControlName="capital" matInput placeholder="1000000" type="number">
           </mat-form-field>
         </div>
@@ -211,7 +211,7 @@
         </div>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Patente</mat-label>
+            <mat-label>{{ 'PATENT' | translate }}</mat-label>
             <input formControlName="patent" matInput placeholder="PAT123456">
           </mat-form-field>
         </div>
@@ -223,7 +223,7 @@
         </div>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Certification</mat-label>
+            <mat-label>{{ 'CERTIFICATION' | translate }}</mat-label>
             <input formControlName="certificationText" matInput placeholder="ISO 9001">
           </mat-form-field>
         </div>
@@ -238,7 +238,7 @@
       <form [formGroup]="contactInfoFormGroup" class="row">
         <ng-template matStepLabel>{{ 'CONTACT_INFORMATION' | translate }}</ng-template>
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Email</mat-label>
+          <mat-label>{{ 'EMAIL' | translate }}</mat-label>
           <input formControlName="email" matInput placeholder="contact@exemple.com"  type="email">
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
@@ -246,30 +246,29 @@
           <input formControlName="phone" matInput placeholder="+12345672890" >
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>Fax</mat-label>
+          <mat-label>{{ 'FAX' | translate }}</mat-label>
           <input formControlName="fax" matInput placeholder="+1234567891">
         </mat-form-field>
         <mat-form-field appearance="outline" class="w-100">
-          <mat-label>WhatsApp</mat-label>
+          <mat-label>{{ 'WHATSAPP' | translate }}</mat-label>
           <input formControlName="whatsapp" matInput placeholder="+12345678922">
         </mat-form-field>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Site Web</mat-label>
+            <mat-label>{{ 'WEBSITE' | translate }}</mat-label>
             <input formControlName="website" id="website" matInput placeholder="https://exemple.com">
             <mat-error>
-              <small *ngIf="website?.invalid && contactInfoFormGroup.get('website')?.touched">Invalid URL format</small>
-              <small *ngIf="website?.invalid && (contactInfoFormGroup.get('website')?.touched || false)">Invalid URL
-                format</small>
+              <small *ngIf="website?.invalid && contactInfoFormGroup.get('website')?.touched">{{ 'INVALID_URL_FORMAT' | translate }}</small>
+              <small *ngIf="website?.invalid && (contactInfoFormGroup.get('website')?.touched || false)">{{ 'INVALID_URL_FORMAT' | translate }}</small>
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-6">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>Linkedin</mat-label>
+            <mat-label>{{ 'LINKEDIN' | translate }}</mat-label>
             <input formControlName="linkedin" matInput placeholder="https://linkedin.com/company-name">
             <mat-error>
-              <small *ngIf="linkedin?.invalid">Invalid URL format</small>
+              <small *ngIf="linkedin?.invalid">{{ 'INVALID_URL_FORMAT' | translate }}</small>
             </mat-error>
           </mat-form-field>
         </div>
@@ -281,7 +280,7 @@
 
     <!-- Step 5: Business Description -->
     <mat-step>
-      <ng-template matStepLabel>Description</ng-template>
+      <ng-template matStepLabel>{{ 'DESCRIPTION' | translate }}</ng-template>
       <form [formGroup]="businessDescriptionFormGroup">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ 'DESCRIPTION' | translate }}</mat-label>

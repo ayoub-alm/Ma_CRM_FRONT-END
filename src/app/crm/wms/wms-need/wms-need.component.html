@@ -5,12 +5,12 @@
     </button>
     <button mat-button class="text-secondary" (click)="router.navigate(['/admin/crm/wms'])"  >
       <mat-icon >house</mat-icon>
-      Accueil
+      {{ 'HOME' | translate }}
     </button>
     >
     <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
       <mat-icon class=" primary-blue-color">checklist</mat-icon>
-      Besoins
+      {{ 'NEEDS' | translate }}
     </button>
   </div>
 <!--  Filters on actions -->
@@ -22,7 +22,7 @@
         autofocus
         class=" rounded-2 mat-elevation-z1  bg-light search-input"
         matInput
-        placeholder="Recherch"
+        placeholder="{{ 'SEARCH' | translate }}"
       />
 
     </div>
@@ -31,7 +31,7 @@
       <button (click)="createEditWmsNeed()"
               class="rounded-3 bg-spider scale-09" color="primary" mat-button>
         <mat-icon>add</mat-icon>
-        <span>Ajouter</span>
+        <span>{{ 'ADD' | translate }}</span>
       </button>
 <!--      <button aria-label="Filter" class="rounded-3 bg-light my-auto scale-09" mat-icon-button>-->
 <!--        <mat-icon><i class="bi bi-funnel"></i></mat-icon>-->
@@ -57,20 +57,20 @@
       </ng-container>
       <!-- Columns: Fields -->
       <ng-container matColumnDef="ref">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Référence</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'REFERENCE' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.number }}</td>
       </ng-container>
       <ng-container matColumnDef="customer" sticky>
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Client</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'CLIENT' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.customer?.name }}</td>
       </ng-container>
       <ng-container matColumnDef="productType">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Type de produit</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'PRODUCT_TYPE' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.productType }}</td>
       </ng-container>
 
       <ng-container matColumnDef="stockedItem">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Element a stocker</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'STORED_ITEM' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>
           <small>
             <ng-container *ngFor="let item of row.stockedItems; let i = index" class="d-flex justify-content-start">
@@ -86,7 +86,7 @@
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header >Statut</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header >{{ 'STATUS' | translate }}</th>
         <td *matCellDef="let row" mat-cell class="full-width-table-celle">
           <small>
             <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-info-subtle">
@@ -96,7 +96,7 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="date">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Date</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'DATE' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle"
             mat-cell>{{ row.expirationDate | date:"dd-MM-yyyy hh:mm" }}
         </td>

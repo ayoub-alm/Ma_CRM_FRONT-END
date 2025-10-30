@@ -5,12 +5,12 @@
     </button>
     <button class="text-secondary" mat-button routerLink="/admin">
       <mat-icon>house</mat-icon>
-      Admin
+      {{ 'ADMIN' | translate }}
     </button>
     >
     <button mat-button routerLink="/super-admin/users">
       <mat-icon class=" primary-blue-color">checklist</mat-icon>
-      utilisateurs
+      {{ 'USERS' | translate }}
     </button>
   </div>
   <!--  Filters on actions -->
@@ -18,7 +18,7 @@
     <div class="col-lg-8 p-1 col-12 d-flex justify-content-start">
       <input #input (keyup)="applyFilter($event)" autofocus
              class=" rounded-2 mat-elevation-z1  bg-light search-input"
-             matInput placeholder="Recherch"
+             matInput placeholder="{{ 'SEARCH' | translate }}"
       />
 
     </div>
@@ -27,7 +27,7 @@
       <button (click)="createEditUser()" class="rounded-3 bg-light  mat-elevation-z2 " color="primary" mat-button
               style="transform:scale(0.9)">
         <mat-icon>add</mat-icon>
-        <span>Ajouter</span>
+        <span>{{ 'ADD' | translate }}</span>
       </button>
       <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button
               style="transform:scale(0.9)">
@@ -53,27 +53,27 @@
         </ng-container>
         <!-- Columns: Fields -->
         <ng-container matColumnDef="matricule">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>matricule</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'MATRICULE' | translate }}</th>
           <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.matrucle}}</td>
         </ng-container>
         <ng-container matColumnDef="name" sticky>
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Nom complete</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'COMPLETE_NAME' | translate }}</th>
           <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.name +' '+row.lastName}}</td>
         </ng-container>
         <ng-container matColumnDef="status">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>statut</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'STATUT' | translate }}</th>
           <td *matCellDef="let row" mat-cell>
             <small>
-              <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-4 bg-info-subtle">Active</button>
+              <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-4 bg-info-subtle">{{ 'ACTIVE' | translate }}</button>
             </small>
           </td>
         </ng-container>
         <ng-container matColumnDef="email">
-          <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Email</th>
+          <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'EMAIL' | translate }}</th>
           <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.email}}</td>
         </ng-container>
         <ng-container matColumnDef="role">
-          <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Role</th>
+          <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'ROLE' | translate }}</th>
           <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.role}}</td>
         </ng-container>
         <ng-container matColumnDef="phone">
@@ -91,11 +91,11 @@
             <mat-menu #menu="matMenu" class="bg-light" xPosition="before">
               <button  class="text-secondary" mat-menu-item>
                 <mat-icon class="text-secondary">edit</mat-icon>
-                <span>Modifier</span>
+                <span>{{ 'UPDATE' | translate }}</span>
               </button>
               <button class="text-danger " mat-menu-item>
                 <mat-icon class="text-danger">delete</mat-icon>
-                <span>Supprimer</span>
+                <span>{{ 'DELETE' | translate }}</span>
               </button>
             </mat-menu>
           </td>
