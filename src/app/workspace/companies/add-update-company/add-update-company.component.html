@@ -402,18 +402,18 @@
     </mat-stepper>
 </mat-dialog-content>
 <mat-dialog-actions align="end" class="shadow mat-">
-    <button [color]="'warn'" class="btn py-1" mat-button mat-dialog-close>Annuler</button>
-    <button (click)="stepper.previous()" class="text-secondary" mat-button>Précédent</button>
+    <button [color]="'warn'" class="btn py-1" mat-button mat-dialog-close>{{ 'CANCEL' | translate }}</button>
+    <button (click)="stepper.previous()" class="text-secondary" mat-button>{{ 'PREVIOUS' | translate }}</button>
     <button (click)="stepper.next()"
             class="" color="'primary'"
             mat-button>
-        suivant
+        {{ 'NEXT' | translate }}
     </button>
     <button (click)="createOrUpdateCompany()" [disabled]="!isEnabledToCreateCompany()"
             class="btn mat-primary" mat-raised-button>
-        <span *ngIf="!company?.id"> Créer </span>
-        <span *ngIf="company?.id"> Mettre à jour </span>
-        l'entreprise
+        <span *ngIf="!company?.id"> {{ 'CREATE' | translate }} </span>
+        <span *ngIf="company?.id"> {{ 'UPDATE' | translate }} </span>
+        {{ 'COMPANY' | translate }}
     </button>
 
 </mat-dialog-actions>

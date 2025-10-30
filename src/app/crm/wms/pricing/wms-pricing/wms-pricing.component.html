@@ -6,12 +6,12 @@
       </button>
       <button mat-button (click)="router.navigate(['/admin/crm/wms'])"  >
         <mat-icon class=" primary-blue-color">house</mat-icon>
-        Accueil
+        {{ 'HOME' | translate }}
       </button>
       >
       <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
         <mat-icon class=" primary-blue-color">checklist</mat-icon>
-        Tarifs
+        {{ 'PRICING_BASE' | translate }}
       </button>
     </div>
   </div>
@@ -44,7 +44,7 @@
                         matInput
                         class="rounded-2 mat-elevation-z2 bg-light search-input"
                         (keyup)="applyFilter($event, tab.data)"
-                        placeholder="Recherch"
+                        placeholder="{{ 'SEARCH' | translate }}"
                         autofocus
                         #input
                       />
@@ -57,7 +57,7 @@
                         mat-button color="primary" class="rounded-3 bg-spider "  style="transform:scale(0.9)"
                         (click)="openAddNewPricing(tab.type)">
                         <mat-icon>add</mat-icon>
-                        <span>Ajouter</span>
+                        <span>{{ 'ADD' | translate }}</span>
                       </button>
                       <button mat-icon-button class="rounded-3  my-auto  bg-light  "   style="transform:scale(0.9)" aria-label="Filter">
                         <mat-icon><i class="bi bi-funnel"></i></mat-icon>

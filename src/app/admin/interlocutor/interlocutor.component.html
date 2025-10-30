@@ -20,7 +20,7 @@
           autofocus
           class=" rounded-2 mat-elevation-z1  bg-light search-input"
           matInput
-          placeholder="Recherch"
+          placeholder="{{ 'SEARCH' | translate }}"
         />
 
       </div>
@@ -90,16 +90,16 @@
          (drop)="onDrop($event)">
       <div *ngIf="!selectedFile?.name">
         <h1 class="display-1"><i class="bi bi-filetype-csv primary-blue-color"></i></h1>
-        <p class="text-secondary">Faites glisser et déposez un fichier ici ou cliquez pour sélectionner</p>
+        <p class="text-secondary">{{ 'DRAG_DROP_FILE' | translate }}</p>
         <input type="file" (change)="onFileSelected($event)" hidden #fileInput />
-        <button mat-button (click)="fileInput.click()" class="mx-2 shadow-sm">Sélectionnez le fichier Excel</button><br>
-        <button mat-button (click)="downloadFile()" class="mx-2">Télécharge le modèle</button><br>
+        <button mat-button (click)="fileInput.click()" class="mx-2 shadow-sm">{{ 'SELECT_EXCEL_FILE' | translate }}</button><br>
+        <button mat-button (click)="downloadFile()" class="mx-2">{{ 'DOWNLOAD_TEMPLATE' | translate }}</button><br>
 
-        <button mat-button [color]="'warn'" (click)="closeImportZone()" class="mx-2">Annuler</button>
+        <button mat-button [color]="'warn'" (click)="closeImportZone()" class="mx-2">{{ 'CANCEL' | translate }}</button>
       </div>
       <div *ngIf="selectedFile">
-        <p class="text-secondary my-3">Fichier sélectionné: <span class="primary-blue-color">{{ selectedFile.name }}</span></p>
-        <button mat-stroked-button (click)="uploadFile()">Importer le fichier</button>
+        <p class="text-secondary my-3">{{ 'FILE_SELECTED' | translate }}: <span class="primary-blue-color">{{ selectedFile.name }}</span></p>
+        <button mat-stroked-button (click)="uploadFile()">{{ 'IMPORT_FILE' | translate }}</button>
       </div>
     </div>
   </div>
@@ -170,13 +170,13 @@
         </mat-form-field>
 
         <mat-radio-group formControlName="filterType" aria-label="Select an option" class="scale-08 col-4 mx-2">
-          <mat-radio-button [color]="'primary'" [value]="'AND'">ET</mat-radio-button>
-          <mat-radio-button [color]="'primary'" [value]="'OR'">OU</mat-radio-button>
+          <mat-radio-button [color]="'primary'" [value]="'AND'">{{ 'AND' | translate }}</mat-radio-button>
+          <mat-radio-button [color]="'primary'" [value]="'OR'">{{ 'OR' | translate }}</mat-radio-button>
         </mat-radio-group>
 
         <button (click)="filterInterlocutorsBySearchFields()" class="rounded-2 bg-spider" color="primary" mat-button >
           <mat-icon><i class="bi bi-funnel"></i></mat-icon>
-          <span>Filter</span>
+          <span>{{ 'FILTER' | translate }}</span>
         </button>
         <button (click)="restFilterFrom()" class="rounded-2 bg-success-subtle mx-2 text-success"  mat-button>
           <mat-icon>refresh</mat-icon>
@@ -227,7 +227,7 @@
 
         <!-- Email Column -->
         <ng-container matColumnDef="email"  class="w-100">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >Email</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class=""  >{{ 'EMAIL' | translate }}</th>
           <td mat-cell *matCellDef="let row" style="white-space: nowrap !important;" > {{row.emailAddress?.address }} </td>
         </ng-container>
 
@@ -273,7 +273,7 @@
             style="font-size:0.8rem !important;"></tr>
         <!-- Row shown when there is no matching data. -->
         <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell" colspan="4">Aucune donnée ne correspond au filtre "{{input.value}}"</td>
+          <td class="mat-cell" colspan="4">{{ 'NO_DATA_MATCH_FILTER' | translate }} "{{input.value}}"</td>
         </tr>
       </table>
 

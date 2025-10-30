@@ -8,12 +8,12 @@
       </button>
       <button (click)="router.navigate(['/admin/crm/wms'])" mat-button>
         <mat-icon class=" primary-blue-color">house</mat-icon>
-        Accueil
+        {{ 'HOME' | translate }}
       </button>
       >
       <button (click)="router.navigate(['/admin/crm/wms/offers'])" mat-button>
         <mat-icon class=" primary-blue-color">checklist</mat-icon>
-        Factures
+        {{ 'INVOICES' | translate }}
       </button>
     </div>
   </div>
@@ -26,7 +26,7 @@
         autofocus
         class=" rounded-2 mat-elevation-z1  bg-light search-input"
         matInput
-        placeholder="Recherch"
+        placeholder="{{ 'SEARCH' | translate }}"
       />
 
     </div>
@@ -60,15 +60,15 @@
       </ng-container>
       <!-- Columns: Fields -->
       <ng-container matColumnDef="ref">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Référence</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'REFERENCE' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.number }}</td>
       </ng-container>
       <ng-container matColumnDef="customer" sticky>
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Client</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'CLIENT' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.storageContract.customer?.name }}</td>
       </ng-container>
       <ng-container matColumnDef="contract">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Contrat</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'CONTRACT' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.storageContract.number }}</td>
       </ng-container>
 

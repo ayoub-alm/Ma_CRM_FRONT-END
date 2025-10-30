@@ -1,4 +1,4 @@
-<h4  mat-dialog-title class="primary-blue-color">Ajouter un Articles à stocker </h4>
+<h4  mat-dialog-title class="primary-blue-color">{{ 'ADD' | translate }} un Articles à stocker </h4>
 <mat-dialog-content>
 
   <section class="my-2">
@@ -205,7 +205,7 @@
   </section>
 </mat-dialog-content>
 <mat-dialog-actions>
-  <button mat-button [color]="'warn'" mat-dialog-close class="rounded-2">Annuler</button>
+  <button mat-button [color]="'warn'" mat-dialog-close class="rounded-2">{{ 'CANCEL' | translate }}</button>
   <button (click)="createNewStockedItem()"
-    mat-button [color]="'primary'"  cdkFocusInitial class="rounded-2">Ajouter</button>
+    mat-button [color]="'primary'"  cdkFocusInitial class="rounded-2">{{ 'ADD' | translate }}</button>
 </mat-dialog-actions>

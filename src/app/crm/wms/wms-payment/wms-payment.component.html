@@ -28,7 +28,7 @@
         autofocus
         class=" rounded-2 mat-elevation-z1  bg-light search-input"
         matInput
-        placeholder="Recherch"
+        placeholder="{{ 'SEARCH' | translate }}"
       />
 
     </div>
@@ -56,7 +56,7 @@
       </ng-container>
       <!-- Columns: Fields -->
       <ng-container matColumnDef="ref">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Référence</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'REFERENCE' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.ref }}</td>
       </ng-container>
 <!--      <ng-container matColumnDef="customer" sticky>-->
@@ -65,7 +65,7 @@
 <!--      </ng-container>-->
 
       <ng-container matColumnDef="invoice">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Facture</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'INVOICE' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>
           <span *ngFor="let invoice of row.storageInvoices" class="me-2">{{invoice.number}}</span>
         </td>

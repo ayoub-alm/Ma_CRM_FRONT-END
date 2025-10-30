@@ -8,7 +8,7 @@
         </button>
         <button mat-button (click)="router.navigate(['/admin/crm/wms'])"  >
           <mat-icon class=" primary-blue-color">house</mat-icon>
-          Accueil
+          {{ 'HOME' | translate }}
         </button>
         >
         <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
@@ -28,7 +28,7 @@
         <mat-menu #menu="matMenu" class="bg-spider scale-09">
           <button mat-menu-item (click)="onUpdateStorageNeed()">
             <mat-icon>update</mat-icon>
-            Modifier
+            {{ 'UPDATE' | translate }}
           </button>
           <button mat-menu-item (click)="createOfferFromNeed()">
             <mat-icon>add</mat-icon>
@@ -36,7 +36,7 @@
           </button>
           <button mat-menu-item (click)="onSoftDeleteStorageNeed()">
             <mat-icon>delete</mat-icon>
-            Supprimer
+            {{ 'DELETE' | translate }}
           </button>
         </mat-menu>
       </div>
@@ -108,7 +108,7 @@
          </div>
 
          <button (click)="onAddNewStockedItem()"
-                 mat-button class="rounded-2 my-2 primary-blue-color bg-spider scale-08"><mat-icon>add</mat-icon>Ajouter</button>
+                 mat-button class="rounded-2 my-2 primary-blue-color bg-spider scale-08"><mat-icon>add</mat-icon>{{ 'ADD' | translate }}</button>
        </div>
 
        <div class="table-container" >

@@ -59,7 +59,7 @@
         autofocus
         class=" rounded-2 mat-elevation-z1  bg-light search-input"
         matInput
-        placeholder="Recherch"
+        placeholder="{{ 'SEARCH' | translate }}"
       />
     </div>
 
@@ -67,7 +67,7 @@
             <button (click)="onCreateDeliveryNote()"
                     class="rounded-3 bg-spider scale-09" color="primary" mat-button>
               <mat-icon>add</mat-icon>
-              <span>Ajouter</span>
+              <span>{{ 'ADD' | translate }}</span>
             </button>
 <!--      <button aria-label="Filter" class="rounded-3 bg-light my-auto scale-09" mat-icon-button>-->
 <!--        <mat-icon><i class="bi bi-funnel"></i></mat-icon>-->
