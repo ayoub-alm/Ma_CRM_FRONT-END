@@ -181,7 +181,7 @@
               <div class="d-flex mt-3 p-4">
                 <div class="col-lg-6">
                   <p>
-                    <span class="text-secondary"><i class="bi bi-envelope-fill primary-blue-color"></i> Email :</span>
+                    <span class="text-secondary"><i class="bi bi-envelope-fill primary-blue-color"></i> {{ 'EMAIL' | translate }} :</span>
                     <span class="mx-2"><a href="mailto:{{ customer.getValue().email }}">{{ customer.getValue().email }}</a></span>
                   </p>
                   <p>
@@ -189,23 +189,23 @@
                     <span class="mx-2"><a href="tel:{{ customer.getValue().phone }}">{{ customer.getValue().phone }}</a></span>
                   </p>
                   <p>
-                    <span class="text-secondary"><i class="bi bi-printer-fill primary-blue-color"></i> Fax :</span>
+                    <span class="text-secondary"><i class="bi bi-printer-fill primary-blue-color"></i> {{ 'FAX' | translate }} :</span>
                     <span class="mx-2">{{ customer.getValue().fax }}</span>
                   </p>
                 </div>
                 <div class="col-lg-6">
                   <p>
-                    <span class="text-secondary"><i class="bi bi-chat-dots-fill primary-blue-color"></i> WhatsApp :</span>
+                    <span class="text-secondary"><i class="bi bi-chat-dots-fill primary-blue-color"></i> {{ 'WHATSAPP' | translate }} :</span>
                     <span class="mx-2">
               <a href="https://wa.me/{{ customer.getValue().whatsapp }}" target="_blank" class="text-success"> {{customer.getValue().whatsapp}} </a>
             </span>
                   </p>
                   <p>
-                    <span class="text-secondary"><i class="bi bi-globe primary-blue-color"></i> Site Web :</span>
+                    <span class="text-secondary"><i class="bi bi-globe primary-blue-color"></i> {{ 'WEBSITE' | translate }} :</span>
                     <span class="mx-2"><a target="_blank" href="{{ customer.getValue().website }}">{{ customer.getValue().website }}</a></span>
                   </p>
                   <p>
-                    <span class="text-secondary"><i class="bi bi-linkedin primary-blue-color"></i> LinkedIn :</span>
+                    <span class="text-secondary"><i class="bi bi-linkedin primary-blue-color"></i> {{ 'LINKEDIN' | translate }} :</span>
                     <span class="mx-2">{{ customer.getValue().linkedin }}</span>
                   </p>
                 </div>
@@ -213,7 +213,7 @@
             </mat-tab>
 
             <!-- Informations légales Tab -->
-            <mat-tab label="Informations légales">
+            <mat-tab label="{{ 'LEGAL_INFORMATION' | translate }}">
               <ng-template mat-tab-label>
                 <i class="bi bi-bank primary-blue-color mx-2"></i>
                 {{ 'LEGAL_INFORMATION' | translate }}
@@ -234,7 +234,7 @@
                   </p>
                 </div>
                 <div class="col-lg-6">
-                  <p><span class="text-secondary"><i class="bi bi-card-checklist primary-blue-color"></i> Certificat :</span>
+                  <p><span class="text-secondary"><i class="bi bi-card-checklist primary-blue-color"></i> {{ 'CERTIFICATION' | translate }} :</span>
                     <span class="mx-2">{{ customer.getValue().certificationText }}</span>
                   </p>
                   <p><span class="text-secondary"><i class="bi bi-file-earmark-code-fill primary-blue-color"></i> ICE :</span>
@@ -257,7 +257,7 @@
         <div class="">
           <p class="d-flex align-baseline my-2">
             <mat-icon class="example-tab-icon mx-2 primary-blue-color">check_list</mat-icon>
-            <span class="fs-4 primary-blue-color">Les intérêts</span>
+            <span class="fs-4 primary-blue-color">{{ 'INTERESTS' | translate }}</span>
           </p>
 <!--            <ng-container *ngFor="let interest of customer.getValue().interest">-->
 <!--                <button  mat-button class="scale-09 rounded-1"-->
@@ -316,19 +316,19 @@
             <div class="px-3">
               <p>
                 <i class="bi bi-envelope-fill me-2 primary-blue-color"></i>
-                <span>Email :</span> <span class="text-dark">{{ interlocutor.emailAddress.address }}</span>
+                <span>{{ 'EMAIL' | translate }} :</span> <span class="text-dark">{{ interlocutor.emailAddress.address }}</span>
               </p>
               <p>
                 <i class="bi bi-telephone-fill me-2 primary-blue-color"></i>
-                <span>Téléphone :</span> <span class="text-dark">{{ interlocutor.phoneNumber.number }}</span>
+                <span>{{ 'PHONE' | translate }} :</span> <span class="text-dark">{{ interlocutor.phoneNumber.number }}</span>
               </p>
               <p>
                 <i class="bi bi-building me-2 primary-blue-color"></i>
-                <span>Département :</span> <span class="text-dark">{{ interlocutor.department.name }}</span>
+                <span>{{ 'DEPARTMENT' | translate }} :</span> <span class="text-dark">{{ interlocutor.department.name }}</span>
               </p>
               <p>
                 <i class="bi bi-briefcase-fill me-2 primary-blue-color"></i>
-                <span>Titre de poste :</span> <span class="text-dark">{{ interlocutor.jobTitle }}</span>
+                <span>{{ 'TITRE_DE_POSTE' | translate }} :</span> <span class="text-dark">{{ interlocutor.jobTitle }}</span>
               </p>
             </div>
           </mat-expansion-panel>
@@ -383,7 +383,7 @@
 <!-- Mat Drawer (End Side) -->
 <mat-drawer #drawer mode="side" position="end" class="bg-light px-2 py-1 shadow-sm rounded-0 ">
   <mat-toolbar class="text-end w-100 d-flex mb-2 justify-content-between bg-spider rounded-2 mat-elevation-z3" >
-    <span class="small">💬 Commentaires </span>
+    <span class="small">💬 {{ 'COMMENTS' | translate }} </span>
     <button mat-icon-button (click)="drawer.toggle()">
       <mat-icon>close</mat-icon>
     </button>

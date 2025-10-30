@@ -20,7 +20,7 @@
            (keyup)="applyFilter($event)"
            autofocus
            class=" rounded-2 mat-elevation-z1  bg-light search-input"
-           placeholder="Recherch"
+           placeholder="{{ 'SEARCH' | translate }}"
          />
        </form>
       </div>
@@ -93,19 +93,19 @@
          class="drop-zone bg-white rounded-2 text-center h-75 ">
       <div *ngIf="!selectedFile?.name">
         <h1 class="display-1"><i class="bi bi-filetype-csv primary-blue-color"></i></h1>
-        <p class="text-secondary">Faites glisser et déposez un fichier ici ou cliquez pour sélectionner</p>
+        <p class="text-secondary">{{ 'DRAG_DROP_OR_CLICK' | translate }}</p>
         <input #fileInput (change)="onFileSelected($event)" hidden type="file"/>
-        <button (click)="fileInput.click()" class="mx-2 shadow-sm" mat-button>Sélectionnez le fichier Excel</button>
+        <button (click)="fileInput.click()" class="mx-2 shadow-sm" mat-button>{{ 'SELECT_EXCEL_FILE' | translate }}</button>
         <br>
-        <button (click)="downloadFile()" class="mx-2" mat-button>Télécharge le modèle</button>
+        <button (click)="downloadFile()" class="mx-2" mat-button>{{ 'DOWNLOAD_TEMPLATE' | translate }}</button>
         <br>
 
-        <button (click)="closeImportZone()" [color]="'warn'" class="mx-2" mat-button>Annuler</button>
+        <button (click)="closeImportZone()" [color]="'warn'" class="mx-2" mat-button>{{ 'CANCEL' | translate }}</button>
       </div>
       <div *ngIf="selectedFile">
-        <p class="text-secondary my-3">Fichier sélectionné: <span
+        <p class="text-secondary my-3">{{ 'FILE_SELECTED' | translate }}: <span
           class="primary-blue-color">{{ selectedFile.name }}</span></p>
-        <button (click)="uploadFile()" mat-stroked-button>Importer le fichier</button>
+        <button (click)="uploadFile()" mat-stroked-button>{{ 'UPLOAD_FILE' | translate }}</button>
       </div>
     </div>
   </div>
@@ -177,8 +177,8 @@
              <mat-label>{{ 'CREATION_DATE' | translate }}</mat-label>
              <mat-date-range-input
                [rangePicker]="createdDatePickerPicker">
-               <input matStartDate placeholder="Start date" formControlName="createdAtStart">
-               <input matEndDate placeholder="End date" formControlName="createdAtEnd">
+              <input matStartDate placeholder="{{ 'START_DATE' | translate }}" formControlName="createdAtStart">
+              <input matEndDate placeholder="{{ 'END_DATE' | translate }}" formControlName="createdAtEnd">
              </mat-date-range-input>
              <mat-datepicker-toggle matIconSuffix [for]="createdDatePickerPicker"></mat-datepicker-toggle>
              <mat-date-range-picker #createdDatePickerPicker></mat-date-range-picker>
@@ -196,8 +196,8 @@
              <mat-label>{{ 'MODIFICATION_DATE' | translate }}</mat-label>
              <mat-date-range-input
                [rangePicker]="updateDatePicker">
-               <input matStartDate placeholder="Start date" formControlName="updatedAtStart">
-               <input matEndDate placeholder="End date" formControlName="updatedAtEnd">
+              <input matStartDate placeholder="{{ 'START_DATE' | translate }}" formControlName="updatedAtStart">
+              <input matEndDate placeholder="{{ 'END_DATE' | translate }}" formControlName="updatedAtEnd">
              </mat-date-range-input>
              <mat-datepicker-toggle matIconSuffix [for]="updateDatePicker"></mat-datepicker-toggle>
              <mat-date-range-picker #updateDatePicker></mat-date-range-picker>
@@ -214,8 +214,8 @@
          </div>
          <div class="col-4 px-2 row ">
            <mat-radio-group formControlName="filterType" aria-label="Select an option" class="col-12 mx-2 px-3">
-             <mat-radio-button [color]="'primary'" [value]="'AND'">ET</mat-radio-button>
-             <mat-radio-button [color]="'primary'" [value]="'OR'">OU</mat-radio-button>
+            <mat-radio-button [color]="'primary'" [value]="'AND'">{{ 'AND' | translate }}</mat-radio-button>
+            <mat-radio-button [color]="'primary'" [value]="'OR'">{{ 'OR' | translate }}</mat-radio-button>
            </mat-radio-group>
            <div class="col-12">
              <button (click)="filterProspectsSearchFields()" class="rounded-2 bg-spider" color="primary" mat-button >
@@ -294,7 +294,7 @@
 
         <!-- Email Column -->
         <ng-container matColumnDef="email">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Email</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'EMAIL' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
             <a class="text-secondary" href="mailto:{{row.email}}">
               {{ row.email }}
@@ -315,7 +315,7 @@
 
         <!-- capital Column -->
         <ng-container matColumnDef="capital">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Capital</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'CAPITAL' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
               {{ row.capital }}
           </td>
@@ -323,7 +323,7 @@
 
           <!-- city Column -->
           <ng-container matColumnDef="companySize">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">{{'SIZE' | translate}} de l'entreprise</th>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">{{ 'COMPANY_SIZE' | translate }}</th>
             <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell class="full-width-table-celle">
                 {{ row.companySize.name }}
             </td>
@@ -355,21 +355,21 @@
 
         <!-- ice Column -->
         <ng-container matColumnDef="ice">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>ICE</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'ICE' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
             {{ row.ice }}
           </td>
         </ng-container>
         <!-- rc Column -->
         <ng-container matColumnDef="rc">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>RC</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'RC' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
             {{ row.rc }}
           </td>
         </ng-container>
         <!-- IFM Column -->
         <ng-container matColumnDef="ifm">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>IF</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'IF' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
             {{ row.ifm }}
           </td>
@@ -377,7 +377,7 @@
 
         <!-- patent Column -->
         <ng-container matColumnDef="patent">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Patent</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'PATENT' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
             {{ row.patent }}
           </td>
@@ -385,7 +385,7 @@
 
         <!-- IFM Column -->
         <ng-container matColumnDef="cnss">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header>Cnss</th>
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'CNSS' | translate }}</th>
           <td (click)="$event.stopPropagation()" *matCellDef="let row" mat-cell>
             {{ row.cnss }}
           </td>
@@ -437,13 +437,13 @@
 
         <!-- Fix Column -->
         <ng-container matColumnDef="fix">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fixe</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'LANDLINE' | translate }}</th>
           <td mat-cell *matCellDef="let row"> {{ row.fix }} </td>
         </ng-container>
 
         <!-- WhatsApp Column -->
         <ng-container matColumnDef="whatsapp">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>WhatsApp</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'WHATSAPP' | translate }}</th>
           <td mat-cell *matCellDef="let row">
             <a href="https://wa.me/{{ row.whatsapp }}" target="_blank"> {{ row.whatsapp }} </a>
           </td>
@@ -451,7 +451,7 @@
 
         <!-- LinkedIn Column -->
         <ng-container matColumnDef="linkedin">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>LinkedIn</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'LINKEDIN' | translate }}</th>
           <td mat-cell *matCellDef="let row">
             <a [href]="row.linkedin" target="_blank"> {{ row.linkedin }} </a>
           </td>
@@ -459,7 +459,7 @@
 
         <!-- Website Column -->
         <ng-container matColumnDef="website">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Site Web</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>{{ 'WEBSITE' | translate }}</th>
           <td mat-cell *matCellDef="let row">
             <a [href]="row.website" target="_blank"> {{ row.website }} </a>
           </td>
@@ -477,11 +477,11 @@
             <mat-menu #menu="matMenu" class="bg-light" xPosition="before">
               <button (click)="editProspect(row)" class="text-secondary" mat-menu-item>
                 <mat-icon class="text-secondary">edit</mat-icon>
-                <span>Modifier</span>
+                <span>{{ 'EDIT' | translate }}</span>
               </button>
               <button (click)="deleteProspect(row)" class="text-danger " mat-menu-item>
                 <mat-icon class="text-danger">delete</mat-icon>
-                <span>Supprimer</span>
+                <span>{{ 'DELETE' | translate }}</span>
               </button>
             </mat-menu>
           </td>
@@ -494,7 +494,7 @@
 
         <!-- Row shown when there is no matching data. -->
         <tr *matNoDataRow class="mat-row">
-          <td class="mat-cell" colspan="4">Aucune donnée ne correspond au filtre "{{ input.value }}"</td>
+          <td class="mat-cell" colspan="4">{{ 'NO_DATA_MATCHES_FILTER' | translate: { value: input.value } }}</td>
         </tr>
       </table>
 

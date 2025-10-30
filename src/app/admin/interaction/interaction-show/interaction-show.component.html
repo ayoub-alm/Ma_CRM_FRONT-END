@@ -159,21 +159,21 @@
             >
               <div *ngIf="!selectedFile">
                 <h3><i class="bi bi-upload primary-blue-color"></i></h3>
-                <p class="text-secondary">Glissez-déposez un fichier ici ou cliquez pour en sélectionner un</p>
+                <p class="text-secondary">{{ 'DRAG_DROP_OR_CLICK' | translate }}</p>
 
                 <input type="file" (change)="onFileSelected($event)" hidden #fileInput />
-                <button mat-button (click)="fileInput.click()">Sélectionner un fichier</button>
+                <button mat-button (click)="fileInput.click()">{{ 'SELECT_FILE' | translate }}</button>
               </div>
 
               <div *ngIf="selectedFile">
                 <p class="text-secondary my-2">
-                  Fichier sélectionné: <span class="primary-blue-color">{{ selectedFile.name }}</span>
+                  {{ 'FILE_SELECTED' | translate }}: <span class="primary-blue-color">{{ selectedFile.name }}</span>
                 </p>
-                <button mat-stroked-button disabled>Importation en cours...</button>
+                <button mat-stroked-button disabled>{{ 'FILE_UPLOADING' | translate }}</button>
               </div>
             </div>
             <div *ngIf="interaction.getValue().joinFilePath" class="text-success mt-2">
-              📎 {{ "REPORT_AVAILABLE" | translate }} <a [href]="'http://localhost:8080'+interaction.getValue().joinFilePath" target="_blank">ici</a>
+              📎 {{ "REPORT_AVAILABLE" | translate }} <a [href]="'http://localhost:8080'+interaction.getValue().joinFilePath" target="_blank">{{ 'HERE' | translate }}</a>
             </div>
 
           </div>

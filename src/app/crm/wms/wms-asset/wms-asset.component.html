@@ -28,7 +28,7 @@
         autofocus
         class=" rounded-2 mat-elevation-z1  bg-light search-input"
         matInput
-        placeholder="Recherch"
+        placeholder="{{ 'SEARCH' | translate }}"
       />
 
     </div>
@@ -56,21 +56,21 @@
       </ng-container>
       <!-- Columns: Fields -->
       <ng-container matColumnDef="ref">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Référence</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'REFERENCE' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.number }}</td>
       </ng-container>
       <ng-container matColumnDef="customer" sticky>
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Client</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'CLIENT' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.storageInvoice.storageContract.customer.name }}</td>
       </ng-container>
 
       <ng-container matColumnDef="invoice">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Facture</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'INVOICE' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.storageInvoice.number }}</td>
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Statut</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'STATUS' | translate }}</th>
         <td *matCellDef="let row" mat-cell>
           <small>
             <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-info-subtle">{{ row.status.name }}
@@ -79,18 +79,18 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="date">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">Date de création</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">{{ 'CREATED_AT' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle"
             mat-cell>{{ row.createdAt  | date:'yyyy-MM-dd hh:mm' }}
         </td>
       </ng-container>
       <ng-container matColumnDef="totalHt">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">Total HT</th>
+        <th *matHeaderCellDef mat-headerCellDef mat-sort-header class="full-width-table-celle">{{ 'TOTAL_EXCL_TAX' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.totalHt  }}
         </td>
       </ng-container>
       <ng-container matColumnDef="createdBy">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">Crée par</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header class="full-width-table-celle">{{ 'CREATED_BY' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.createdBy.name  }}
         </td>
       </ng-container>
@@ -117,7 +117,7 @@
       <tr *matRowDef="let row; columns: displayedColumns;" (click)="showBLDetails(row)" class="bg-white text-secondary" mat-row></tr>
       <!-- Row shown when there is no matching data. -->
       <tr *matNoDataRow class="mat-row text-center d-flex w-100 justify-content-center flex-column ">
-        <td class="mat-cell  "  colspan="4">Aucune donnée ne correspond au filtre "{{ input.value }}"
+        <td class="mat-cell  "  colspan="4">{{ 'NO_DATA_MATCHES_FILTER' | translate:{ value: input.value } }}
           <p class="text-center w-100 d-flex justify-content-center"><img src="/no-data.jpg" class="img-fluid" /></p>
         </td>
       </tr>

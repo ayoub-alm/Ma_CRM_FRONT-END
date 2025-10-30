@@ -1,60 +1,60 @@
-<h2  mat-dialog-title class="primary-blue-color"><mat-icon class="text-dark mx-2">edit</mat-icon>Modification en masse</h2>
+<h2  mat-dialog-title class="primary-blue-color"><mat-icon class="text-dark mx-2">edit</mat-icon>{{ 'BULK_EDIT' | translate }}</h2>
 <mat-dialog-content class="rounded-2">
   <section  class="container-fluid" >
     <div class="d-flex justify-content-center flex-wrap w-100 my-2 rounded-1 px-2">
       <form [formGroup]="fieldFilterForm" >
-        <h6>{{ data.size }} Clients à modifier</h6>
+        <h6>{{ 'CLIENTS_TO_EDIT' | translate:{ count: data.size } }}</h6>
         <mat-form-field appearance="outline" class="scale-08 col-4">
-          <mat-label>Statut</mat-label>
+          <mat-label>{{ 'STATUS' | translate }}</mat-label>
           <mat-select  formControlName="statusIds" >
             <mat-option *ngFor="let status of customersStatus.getValue() " [value]="status.id">{{status.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="scale-08 col-4" >
-          <mat-label>Ville</mat-label>
+          <mat-label>{{ 'CITY' | translate }}</mat-label>
           <mat-select  formControlName="cityId" >
             <mat-option *ngFor="let city of cities.getValue()" [value]="city.id">{{city.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="scale-08 col-4" >
-          <mat-label>Pays</mat-label>
+          <mat-label>{{ 'COUNTRY' | translate }}</mat-label>
           <mat-select  formControlName="countryId" >
             <mat-option *ngFor="let country of countries.getValue()" [value]="country.id">{{country.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="scale-08 col-4" >
-          <mat-label>Industrie</mat-label>
+          <mat-label>{{ 'INDUSTRY' | translate }}</mat-label>
           <mat-select  formControlName="industryId" >
             <mat-option *ngFor="let Industry of industries.getValue()" [value]="Industry.id">{{Industry.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="scale-08 col-4" >
-          <mat-label>Taille </mat-label>
+          <mat-label>{{ 'COMPANY_SIZE' | translate }} </mat-label>
           <mat-select  formControlName="companySizeId" >
             <mat-option *ngFor="let size of companySizes.getValue()" [value]="size.id">{{size.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="scale-08 col-4" >
-          <mat-label>Structure </mat-label>
+          <mat-label>{{ 'STRUCTURE' | translate }} </mat-label>
           <mat-select  formControlName="structureId" >
             <mat-option *ngFor="let structure of proprietaryStructures.getValue()" [value]="structure.id">{{structure.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="scale-08 col-4" >
-          <mat-label>Statut legal </mat-label>
+          <mat-label>{{ 'LEGAL_STATUS' | translate }} </mat-label>
           <mat-select  formControlName="legalStatusId" >
             <mat-option *ngFor="let legalStatus of legalStatuses.getValue()" [value]="legalStatus.id">{{legalStatus.name}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="scale-08 col-4" >
-          <mat-label>Affecté à</mat-label>
+          <mat-label>{{ 'ASSIGNED_TO' | translate }}</mat-label>
           <mat-select  formControlName="affectedToId" >
             <mat-option *ngFor="let user of users.getValue()" [value]="user.id">{{user.name}}</mat-option>
           </mat-select>
@@ -66,6 +66,6 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button color="warn" mat-dialog-close>Annulée</button>
-  <button mat-button  (click)="submitBulkEdit()" [color]="'primary'" [mat-dialog-close]="true" cdkFocusInitial>Modifier</button>
+  <button mat-button color="warn" mat-dialog-close>{{ 'CANCEL' | translate }}</button>
+  <button mat-button  (click)="submitBulkEdit()" [color]="'primary'" [mat-dialog-close]="true" cdkFocusInitial>{{ 'UPDATE' | translate }}</button>
 </mat-dialog-actions>
