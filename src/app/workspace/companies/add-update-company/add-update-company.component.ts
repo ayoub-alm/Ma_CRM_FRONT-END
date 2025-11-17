@@ -27,7 +27,6 @@ import {CountryService} from "../../../../services/data/country.service";
 import {IndustryService} from "../../../../services/data/industry.service";
 import {CourtService} from "../../../../services/data/court.service";
 import {LegalStatusService} from "../../../../services/data/legal.status.service.dto";
-import {ProspectService} from "../../../../services/Leads/prospect.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {BehaviorSubject, catchError, map, Observable, of, tap, throwError} from "rxjs";
 import {BreakpointObserver} from "@angular/cdk/layout";
@@ -205,8 +204,19 @@ export class AddUpdateCompanyComponent implements OnInit, AfterViewInit {
         const contactInfo = this.contactInfoFormGroup.value;
         const businessDescription = this.businessDescriptionFormGroup.value;
 
+        // Get the actual model instances from BehaviorSubjects based on form values
+        const companySize = companyDetails.companySize ? this.companySizes.getValue().find(size => size.id === companyDetails.companySize) : null;
+        const city = companyDetails.city ? this.cities.getValue().find(c => c.id === companyDetails.city) : null;
+        const country = companyDetails.country ? this.countries.getValue().find(c => c.id === companyDetails.country) : null;
+        const industry = companyDetails.industry ? this.industries.getValue().find(i => i.id === companyDetails.industry) : null;
+        const proprietaryStructure = companyDetails.proprietaryStructure ? this.proprietaryStructures.getValue().find(ps => ps.id === companyDetails.proprietaryStructure) : null;
+        const legalStatus = legalInfo.legalStatus ? this.legalStatuses.getValue().find(ls => ls.id === legalInfo.legalStatus) : null;
+        const court = legalInfo.court ? this.courts.getValue().find(c => c.id === legalInfo.court) : null;
+        const title = legalInfo.legalRepresentativeTitle ? this.titles.getValue().find(t => t.id === legalInfo.legalRepresentativeTitle) : null;
+        const reprosentaveJobTitle = legalInfo.legalRepresentativeJobTitle ? this.jobTitles.getValue().find(jt => jt.id === legalInfo.legalRepresentativeJobTitle) : null;
+
         const newCompany: CompanyModel = new CompanyModel({
-            id: this.company.id?this.company.id:null,
+            id: this.company?.id || null,
             createdAt: new Date(),
             updatedAt: null,
             deletedAt: null,
@@ -217,8 +227,8 @@ export class AddUpdateCompanyComponent implements OnInit, AfterViewInit {
             capital: companyDetails.capital,
             headOffice: companyDetails.headOffice,
             legalRepresentative: legalInfo.legalRepresentative,
-            yearOfCreation: companyDetails.yearOfCreation,
-            dateOfRegistration: new Date().toISOString(), // Utilisation d'une date spécifique si nécessaire
+            yearOfCreation: companyDetails.yearOfCreation ? String(companyDetails.yearOfCreation) : '',
+            dateOfRegistration: new Date().toISOString(),
             email: contactInfo.email,
             phone: contactInfo.phone,
             fax: contactInfo.fax,
@@ -231,15 +241,15 @@ export class AddUpdateCompanyComponent implements OnInit, AfterViewInit {
             patent: legalInfo.patent,
             cnss: legalInfo.cnss,
             businessDescription: businessDescription.businessDescription,
-            legalStatus: this.company.legalStatus,
-            city: this.company.city,
-            court: this.company.court,
-            companySize: this.company.companySize,
-            industry: this.company.industry,
-            country: this.company.country,
-            proprietaryStructure: this.company.proprietaryStructure,
-            title: this.company.title,
-            reprosentaveJobTitle: this.company.reprosentaveJobTitle,
+            legalStatus: legalStatus,
+            city: city,
+            court: court,
+            companySize: companySize,
+            industry: industry,
+            country: country,
+            proprietaryStructure: proprietaryStructure,
+            title: title,
+            reprosentaveJobTitle: reprosentaveJobTitle,
             certificationText: legalInfo.certificationText,
         });
 

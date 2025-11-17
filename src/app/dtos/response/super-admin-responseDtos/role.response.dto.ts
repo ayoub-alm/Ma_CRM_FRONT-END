@@ -1,13 +1,13 @@
-import {RightsResponseDto} from "./rights.response.dto";
-
 export class RoleResponseDto {
-    id!: number
-    name!: string;
-    rights!: RightsResponseDto[];
+    id!: number;
+    role: string;
+    description: string;
+    companyId!: number | null;
 
     constructor(data: any) {
         this.id = data.id;
-        this.name = data.name;
-        this.rights = data?.rights ? data.rights.map((right: any) => new RightsResponseDto(right)) : [];
+        this.role = data.role || '';
+        this.description = data.description || '';
+        this.companyId = data.companyId || null;
     }
 }

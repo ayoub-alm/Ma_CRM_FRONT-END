@@ -23,6 +23,7 @@ import {UserService} from "../../services/super-admin/user.service";
 import {BehaviorSubject} from "rxjs";
 import {UserResponseDto} from '../../dtos/response/super-admin-responseDtos/user.response.dto';
 import {UserCreatEditComponent} from './user-creat-edit/user-creat-edit.component';
+import {UserMapper} from '../../mappers/super-admin_mappers/user.mapper';
 
 @Component({
   selector: 'app-users',
@@ -76,11 +77,11 @@ export class UsersComponent implements OnInit, AfterViewInit{
                 this.users.next(data);
                 this.dataSource.data = data;
                 this.dataSource.filterPredicate = (data: any, filter): boolean=>{
-                    return data.name.toLowerCase().includes(filter) ||
-                        data.lastName.toLowerCase().includes(filter) ||
-                        data.email.toLowerCase().includes(filter) ||
-                        data.phone.toLowerCase().includes(filter) ||
-                        data.role.toLowerCase().includes(filter)
+                    return (data.name?.toLowerCase().includes(filter) || false) ||
+                        (data.email?.toLowerCase().includes(filter) || false) ||
+                        (data.phone?.toLowerCase().includes(filter) || false) ||
+                        (data.role?.role?.toLowerCase().includes(filter) || false) ||
+                        (data.matriculate?.toLowerCase().includes(filter) || false)
                 }
             }
         })
@@ -92,7 +93,36 @@ export class UsersComponent implements OnInit, AfterViewInit{
     }
 
     createEditUser(): void {
-        this.dialog.open(UserCreatEditComponent, { width: '600px', maxWidth: '600px', data:null})
+        this.dialog.open(UserCreatEditComponent, { 
+            width: '800px', 
+            maxWidth: '90vw', 
+            data: null
+        }).afterClosed().subscribe(result => {
+            if (result) {
+                // Reload users after successful create/edit
+                this.ngOnInit();
+            }
+        });
+    }
+
+    editUser(user: UserResponseDto): void {
+        // Convert UserResponseDto to UserModel using mapper
+        const userModel = UserMapper.fromDto(user);
+        this.dialog.open(UserCreatEditComponent, { 
+            width: '800px', 
+            maxWidth: '90vw', 
+            data: userModel
+        }).afterClosed().subscribe(result => {
+            if (result) {
+                // Reload users after successful edit
+                this.ngOnInit();
+            }
+        });
+    }
+
+    deleteUser(user: UserResponseDto): void {
+        // TODO: Implement delete confirmation dialog and delete logic
+        console.log('Delete user:', user);
     }
 
     applyFilter(event: Event): void {

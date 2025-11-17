@@ -17,7 +17,7 @@ export class CompanyResponseDto {
   logo: string;
   name: string;
   sigle: string;
-  capital: string;
+  capital: number;
   headOffice: string;
   legalRepresentative: string;
   yearOfCreation: string;
@@ -71,15 +71,15 @@ export class CompanyResponseDto {
     this.patent = data.patent;
     this.cnss = data.cnss;
     this.businessDescription = data.businessDescription;
-    this.legalStatus = new LegalStatusDto(data.legalStatus);
-    this.city = new CityResponseDto(data.city);
-    this.court = new CourtResponseDto(data.court);
-    this.companySize = new CompanySizeResponseDto(data.companySize);
-    this.industry = new IndustryResponseDto(data.industry);
-    this.country = new CountryResponseDto(data.country);
-    this.proprietaryStructure = new ProprietaryStructureDto(data.proprietaryStructure);
-    this.title = new TitleResponseDto(data.title);
-    this.reprosentaveJobTitle = new JobTitleResponseDto(data.reprosentaveJobTitle);
+    this.legalStatus = data.legalStatus ? new LegalStatusDto(data.legalStatus) : null as any;
+    this.city = data.city ? new CityResponseDto(data.city) : null as any;
+    this.court = data.court ? new CourtResponseDto(data.court) : null as any;
+    this.companySize = data.companySize ? new CompanySizeResponseDto(data.companySize) : null as any;
+    this.industry = data.industry ? new IndustryResponseDto(data.industry) : null as any;
+    this.country = data.country ? new CountryResponseDto(data.country) : null as any;
+    this.proprietaryStructure = data.proprietaryStructure ? new ProprietaryStructureDto(data.proprietaryStructure) : null as any;
+    this.title = data.title ? new TitleResponseDto(data.title) : null as any;
+    this.reprosentaveJobTitle = data.reprosentaveJobTitle ? new JobTitleResponseDto(data.reprosentaveJobTitle) : null as any;
     this.certificationText = data.certificationText;
   }
 }

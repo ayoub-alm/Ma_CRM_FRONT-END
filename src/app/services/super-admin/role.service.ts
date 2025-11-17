@@ -11,14 +11,14 @@ import {RoleRequestDto} from "../../dtos/request/super-admin-requestDtos/role.re
     providedIn: 'root'
 })
 export class RoleService {
-    private readonly baseUrl: string = environment.baseUrl = '/api/roles';
+    private readonly baseUrl: string = environment.baseUrl + '/api/roles';
     constructor(private http: HttpClient) {}
 
     /**
      *
      */
     getAllRoles(): Observable<RoleModel[]> {
-        return this.http.get<RoleResponseDto[]>(`${environment.baseUrl}`).pipe(
+        return this.http.get<RoleResponseDto[]>(`${this.baseUrl}`).pipe(
             map(response => response.map(dto => RoleMapper.fromDto(dto)))
         )
     }
@@ -28,7 +28,7 @@ export class RoleService {
      * @param roleId
      */
     getRoleById(roleId: number): Observable<RoleModel> {
-        return this.http.get<RoleResponseDto>(`${environment.baseUrl}/${roleId}`).pipe(
+        return this.http.get<RoleResponseDto>(`${this.baseUrl}/${roleId}`).pipe(
             map(RoleResponseDto => RoleMapper.fromDto(RoleResponseDto))
         )
     }
@@ -37,9 +37,9 @@ export class RoleService {
      * Use Mapper toDto to convert Model to requestDto
      * @param newRole
      */
-    createRole(newRole: RoleModel): Observable<RoleRequestDto> {
+    createRole(newRole: RoleModel): Observable<RoleResponseDto> {
         const role = RoleMapper.toDto(newRole);
-        return this.http.post<RoleModel>(`${environment.baseUrl}`, role);
+        return this.http.post<RoleResponseDto>(`${this.baseUrl}`, role);
     }
 
     /**
@@ -47,9 +47,9 @@ export class RoleService {
      * @param roleId
      * @param newRole
      */
-    updateRole(roleId: number, newRole: RoleModel): Observable<RoleRequestDto> {
+    updateRole(roleId: number, newRole: RoleModel): Observable<RoleResponseDto> {
         const role = RoleMapper.toDto(newRole);
-        return this.http.put<RoleModel>(`${environment.baseUrl}/${roleId}`, role);
+        return this.http.put<RoleResponseDto>(`${this.baseUrl}/${roleId}`, role);
     }
 
     /**
@@ -57,6 +57,6 @@ export class RoleService {
      * @param roleId
      */
     softDeleteRole(roleId: number): Observable<void> {
-        return this.http.delete<void>(`${environment.baseUrl}/soft-delete=${roleId}`);
+        return this.http.delete<void>(`${this.baseUrl}/soft-delete/${roleId}`);
     }
 }

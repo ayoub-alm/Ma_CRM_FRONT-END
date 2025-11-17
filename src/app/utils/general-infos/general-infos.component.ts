@@ -23,16 +23,18 @@ import { EventEmitter } from '@angular/core';
   styleUrl: './general-infos.component.css'
 })
 export class GeneralInfosComponent {
-  @Input() updatedBy!: UserDto;
-  @Input() updatedAt!: Date;
-  @Input() createdBy!: UserDto;
-  @Input() createdAt!: Date;
+  @Input() updatedBy?: UserDto;
+  @Input() updatedAt?: Date;
+  @Input() createdBy?: UserDto;
+  @Input() createdAt?: Date;
 
   @Output() onClickOnComment: EventEmitter<any> =  new EventEmitter<any>();
+  @Output() onClickOnTrackingLog: EventEmitter<any> =  new EventEmitter<any>();
+  
   constructor(private snackBar: MatSnackBar) {
   }
   openBottomSheet() {
-
+    this.onClickOnTrackingLog.emit();
   }
 
 

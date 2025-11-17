@@ -1,35 +1,28 @@
-import {RoleRequestDto} from "./role.request.dto";
-import {RightsRequestDto} from "./rights.request.dto";
-
 export class UserRequestDto {
-    image!: string;
-    matricule!: string;
+    logo!: string;
+    matriculate!: string;
     name!: string;
-    lastName!: string;
-    departementId!: number;
     email!: string;
     password!: string;
     aboutMe!: string;
     phone!: string;
-    companyId!: number;
 
-    // Foreign keys assuming you have these objects with ID
-    role!: RoleRequestDto;
-    rights!: RightsRequestDto[];
+    // Foreign keys - using IDs instead of full objects
+    roleId!: number | null;
+    rightIds!: number[];
+    companyIds!: number[];
 
-    constructor(image: string,matricule: string, name: string, lastName: string, departementId: number, email: string, password: string, aboutMe: string, phone: string, companyId: number,
-                role: RoleRequestDto, rights: RightsRequestDto[] = []) {
-        this.image = image;
-        this.matricule = matricule;
+    constructor(logo: string, matriculate: string, name: string, email: string, password: string, aboutMe: string, phone: string,
+                roleId: number | null, rightIds: number[] = [], companyIds: number[] = []) {
+        this.logo = logo;
+        this.matriculate = matriculate;
         this.name = name;
-        this.lastName = lastName;
-        this.departementId = departementId;
-        this.password = password;
         this.email = email;
+        this.password = password;
         this.aboutMe = aboutMe;
         this.phone = phone;
-        this.companyId = companyId;
-        this.role = role;
-        this.rights = rights;
+        this.roleId = roleId;
+        this.rightIds = rightIds;
+        this.companyIds = companyIds;
     }
 }

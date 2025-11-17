@@ -7,8 +7,9 @@ export class RightsMapper {
     static fromDto(dto: RightsResponseDto): RightsModel {
         return new RightsModel({
             id: dto.id,
-            description: dto.description,
             name: dto.name,
+            description: dto.description,
+            companyId: dto.companyId
         });
     }
 
@@ -16,7 +17,7 @@ export class RightsMapper {
         return new RightsRequestDto(
             model.name,
             model.description,
-            model.companyId,
+            model.companyId
         );
     }
 }

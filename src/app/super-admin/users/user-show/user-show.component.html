@@ -1,106 +1,295 @@
-<div class="container-fluid bg-body row rounded-top-4">
-    <!-- Page Header -->
-    <!-- Actions -->
-    <div class="d-flex justify-content-between" >
-        <div class="col-8">
-            <button color="primary"  mat-button>
-                <mat-icon>arrow_back</mat-icon>
-            </button>
-            <button mat-button >
-                <mat-icon class=" primary-blue-color">house</mat-icon>
-                Accueil
-            </button>
-            >
-            <button mat-button >
-                <mat-icon class=" primary-blue-color">checklist</mat-icon>
-                Utilisateur
-            </button>
-            > détails
-        </div>
-<!--        <div class="col-1 mx-3">-->
-<!--            <button [matMenuTriggerFor]="menu" class="bg-primary-blue-color scale-09 rounded-2 text-white" aria-label="Actions" mat-button>-->
-<!--                Actions <mat-icon>more_vert</mat-icon>-->
-<!--            </button>-->
-<!--            <mat-menu #menu="matMenu" class="bg-spider">-->
-<!--                <button mat-menu-item  (click)="createEditUser()">-->
-<!--                    <mat-icon>edit</mat-icon>-->
-<!--                    Edit-->
-<!--                </button>-->
-<!--            </mat-menu>-->
-<!--        </div>-->
-    </div>
-    <hr>
-    <!--  </mat-card>-->
+<mat-drawer-container>
+  <div class="container-fluid bg-white vh-100 w-100 rounded-4 mat-elevation-z2 overflow-y-scroll">
+    <!-- Breadcrumb Navigation -->
+    <p class="rounded-3 p-1 bg-white">
+      <span class="mx-2 text-secondary">
+        <a routerLink="/admin">
+          <button mat-button>
+            <mat-icon class="primary-blue-color">home</mat-icon>
+            Accueil
+          </button>
+        </a> >
+        <a routerLink="/admin/super-admin/users">
+          <button mat-button>
+            <mat-icon class="primary-blue-color">people</mat-icon>
+            Utilisateurs
+          </button>
+        </a> >
+        <button mat-button>
+          <mat-icon class="primary-blue-color">info</mat-icon>
+          Détails
+        </button>
+      </span>
+    </p>
 
-    <mat-card class="p-3 bg-white details-card rounded-3 shadow-sm">
-        <mat-card-title class="d-flex align-items-center">
-            <mat-icon class="me-2 primary-blue-color">person</mat-icon>
-            <span class="fs-5">Détails de l'utilisateur</span>
-        </mat-card-title>
-
-        <div class="row align-items-center">
-            <!-- Profile Picture -->
-<!--            <div class="col-lg-3 text-center">-->
-<!--                <img src="https://placehold.co/150" alt="User" class="rounded-circle img-fluid">-->
-<!--            </div>-->
-
-            <div class="col-lg-8">
-            <mat-card-content>
-                <div class="d-flex justify-content-between row">
-                    <!-- Matricule -->
-                    <p>
-                      <span class="text-secondary">
-                        <mat-icon class=" primary-blue-color">info</mat-icon> Immatricule :
-                      </span>
-                        <span class="mx-2 my-3">{{ user.getValue().matricule }}</span>
-                    </p>
-                </div>
-                <div class="d-flex justify-content-between row">
-                    <!-- Name -->
-                    <p class="col-lg-6">
-                    <span class="text-secondary">
-                    <i class="primary-blue-color bi bi-briefcase-fill"></i> Nom :
-                    </span>
-                        <span class="mx-2 my-3">{{ user.getValue().name }}</span>
-                    </p>
-                </div>
-                <div class="d-flex justify-content-between row">
-                <!-- Country -->
-                    <p class="col-lg-6"><span class="text-secondary">
-                        <i class="primary-blue-color bi bi-exclamation-circle"></i> Rôle :
-                        </span>
-                        <span class="mx-2 my-3">{{ user.getValue().role }}</span>
-                    </p>
-                </div>
-                <div class="d-flex justify-content-between row">
-                    <!-- Email -->
-                    <p class="col-lg-6"><span class="text-secondary">
-                        <i class="bi bi-envelope-fill primary-blue-color"></i> Email :
-                        </span>
-                        <span class="mx-2 my-3">{{ user.getValue().email }}</span>
-                    </p>
-                </div>
-                <div class="d-flex justify-content-between row">
-                    <!-- City -->
-                    <p class="col-lg-6"><span class="text-secondary">
-                        <i class="bi bi-telephone-fill primary-blue-color"></i> Téléphone :
-                        </span>
-                        <span class="mx-2 my-3">{{ user.getValue().phone }}</span>
-                    </p>
-                </div>
-            </mat-card-content>
-            </div>
-        </div>
-    </mat-card>
-    <mat-divider class="my-2"></mat-divider>
-  <mat-card>
-    <mat-card-title>
-      les driots
-    </mat-card-title>
-    <mat-card-content>
-      <div class="p-5 shadow-sm rounded bg-white">
-        <p class="fs-3"> role </p>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center" style="min-height: 400px;">
+      <div class="text-center">
+        <mat-icon class="spinner">refresh</mat-icon>
+        <p class="mt-3 text-secondary">Chargement des données...</p>
       </div>
-    </mat-card-content>
-  </mat-card>
-</div>
+    </div>
+
+    <!-- User Details -->
+    <div *ngIf="!isLoading">
+      <ng-container *ngIf="user | async as userData">
+        <div class="container-fluid tab-container p-1 mat-elevation-z2 rounded-3">
+          <section class="mt-1">
+            <mat-card-title class="d-flex justify-content-between align-items-center">
+              <p class="d-flex align-baseline">
+                <mat-icon class="example-tab-icon mx-2 primary-blue-color">person</mat-icon>
+                <span class="fs-5">Détails de l'utilisateur</span>
+              </p>
+              <p>
+                <button mat-button (click)="editUser()">
+                  Modifier
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </p>
+            </mat-card-title>
+            <mat-card-content>
+              <div class="justify-content-around">
+                <div class="d-flex justify-content-around row">
+                  <!-- User Information Section -->
+                  <div class="col-lg-12 row d-flex justify-content-start">
+                    <!-- Profile Picture -->
+                    <div class="col-lg-3 col-12 text-center mb-3 mb-lg-0">
+                      <div class="position-relative d-inline-block">
+                        <img [src]="getLogoUrl()" 
+                             [alt]="userData.name" 
+                             class="rounded-circle img-fluid border border-3 border-primary"
+                             style="width: 150px; height: 150px; object-fit: cover;">
+                        <div *ngIf="userData.role" class="position-absolute bottom-0 end-0 bg-primary text-white rounded-circle p-2" 
+                             style="transform: translate(10px, 10px);" 
+                             [matTooltip]="userData.role?.role || 'Rôle'">
+                          <mat-icon style="font-size: 20px; width: 20px; height: 20px;">badge</mat-icon>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-4 col-12">
+                      <!-- Name -->
+                      <p>
+                        <span class="text-secondary">
+                          <i class="primary-blue-color bi bi-person-fill"></i> Nom :
+                        </span>
+                        <span class="mx-2 my-3">{{ userData.name }}</span>
+                      </p>
+
+                      <!-- Matriculate -->
+                      <p>
+                        <span class="text-secondary">
+                          <i class="primary-blue-color bi bi-info-circle-fill"></i> Immatricule :
+                        </span>
+                        <span class="mx-2 my-3">{{ userData.matriculate || 'N/A' }}</span>
+                      </p>
+
+                      <!-- Email -->
+                      <p>
+                        <span class="text-secondary">
+                          <i class="primary-blue-color bi bi-envelope-fill"></i> Email :
+                        </span>
+                        <span class="mx-2 my-3">
+                          <a [href]="'mailto:' + userData.email" class="text-decoration-none">{{ userData.email }}</a>
+                        </span>
+                      </p>
+
+                      <!-- Phone -->
+                      <p>
+                        <span class="text-secondary">
+                          <i class="primary-blue-color bi bi-telephone-fill"></i> Téléphone :
+                        </span>
+                        <span class="mx-2 my-3">
+                          <a [href]="'tel:' + userData.phone" class="text-decoration-none">{{ userData.phone || 'N/A' }}</a>
+                        </span>
+                      </p>
+                    </div>
+
+                    <div class="col-lg-4 col-12 border-start border-secondary-subtle px-3">
+                      <!-- Role -->
+                      <p>
+                        <span class="text-secondary">
+                          <i class="primary-blue-color bi bi-badge-fill"></i> Rôle :
+                        </span>
+                        <span class="mx-2 my-3">{{ userData.role?.role || 'N/A' }}</span>
+                      </p>
+
+                       <!-- Rights Count -->
+                       <p>
+                        <span class="text-secondary">
+                          <i class="primary-blue-color bi bi-shield-check"></i> Droits :
+                        </span>
+                        <span class="mx-2 my-3">{{ userData.rights?.length || 0 }} droit(s)</span>
+                      </p>
+
+                      <!-- Companies Count -->
+                      <p>
+                        <span class="text-secondary">
+                          <i class="primary-blue-color bi bi-building"></i> Entreprises :
+                        </span>
+                        <span class="mx-2 my-3">{{ userData.companies?.length || 0 }} entreprise(s)</span>
+                      </p>
+
+                      <!-- Role Description -->
+                     
+
+                      <!-- About Me -->
+                      <p *ngIf="userData.aboutMe">
+                        <span class="text-secondary">
+                          <i class="primary-blue-color bi bi-person-badge-fill"></i> À propos :
+                        </span>
+                        <span class="mx-2 my-3">{{ userData.aboutMe }}</span>
+                      </p>
+                    </div>
+
+                    <!-- Rights and Companies Summary -->
+                    <div class="col-lg-4 col-12 border-start border-secondary-subtle px-3">
+                     
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-card-content>
+          </section>
+        </div>
+
+        <!-- Tabs Section -->
+        <section class="container-fluid mt-3">
+          <div class="row d-flex justify-content-around">
+            <mat-card class="bg-white col-lg-9 rounded-2">
+              <section class="d-flex row">
+                <mat-tab-group class="rounded-2" mat-align-tabs="start" mat-stretch-tabs="true">
+                  <!-- Role & Rights Tab -->
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      <i class="bi bi-shield-check mx-2 primary-blue-color"></i>
+                      Rôle et Droits
+                    </ng-template>
+                    <div class="d-flex mt-3 p-4">
+                      <!-- Role Information -->
+                      <div class="col-lg-6">
+                        <h6 class="mb-3 d-flex align-items-center">
+                          <mat-icon class="primary-blue-color me-2">badge</mat-icon>
+                          <span>Rôle</span>
+                        </h6>
+                        <div *ngIf="userData.role; else noRole">
+                          <p class="mb-2">
+                            <span class="text-secondary">Nom du rôle :</span>
+                            <span class="ms-2 fw-semibold">{{ userData.role?.role || 'N/A' }}</span>
+                          </p>
+                          <p class="mb-2" *ngIf="userData.role?.description">
+                            <span class="text-secondary">Description :</span>
+                            <span class="ms-2">{{ userData.role.description }}</span>
+                          </p>
+                        </div>
+                        <ng-template #noRole>
+                          <p class="text-muted">Aucun rôle assigné</p>
+                        </ng-template>
+                      </div>
+
+                      <!-- Rights Information -->
+                      <div class="col-lg-6">
+                        <h6 class="mb-3 d-flex align-items-center">
+                          <mat-icon class="primary-blue-color me-2">verified_user</mat-icon>
+                          <span>Droits ({{ userData.rights?.length || 0 }})</span>
+                        </h6>
+                        <div *ngIf="userData.rights && userData.rights.length > 0; else noRights">
+                          <!-- Group rights by company if they have companyId -->
+                          <div *ngIf="hasCompanyRights(userData.rights); else allRights">
+                            <!-- Rights with Company -->
+                            <div class="mb-4" *ngFor="let companyGroup of groupRightsByCompany(userData.rights)">
+                              <h6 class="mb-2 small d-flex align-items-center">
+                                <mat-icon class="primary-blue-color me-1" style="font-size: 16px;">business</mat-icon>
+                                <span>{{ companyGroup.companyName }}</span>
+                              </h6>
+                              <div class="d-flex flex-wrap gap-2 mb-3">
+                                <mat-chip *ngFor="let right of companyGroup.rights" class="custom-chip">
+                                  <mat-icon class="me-1" style="font-size: 18px;">check_circle</mat-icon>
+                                  <span class="fw-semibold">{{ right.name }}</span>
+                                  <span *ngIf="right.description" class="ms-2 text-muted small">- {{ right.description }}</span>
+                                </mat-chip>
+                              </div>
+                            </div>
+                            
+                            <!-- Rights without Company (Global) -->
+                            <div *ngIf="getGlobalRights(userData.rights).length > 0" class="mb-4">
+                              <h6 class="mb-2 small d-flex align-items-center">
+                                <mat-icon class="primary-blue-color me-1" style="font-size: 16px;">public</mat-icon>
+                                <span>Droits globaux</span>
+                              </h6>
+                              <div class="d-flex flex-wrap gap-2">
+                                <mat-chip *ngFor="let right of getGlobalRights(userData.rights)" class="custom-chip">
+                                  <mat-icon class="me-1" style="font-size: 18px;">check_circle</mat-icon>
+                                  <span class="fw-semibold">{{ right.name }}</span>
+                                  <span *ngIf="right.description" class="ms-2 text-muted small">- {{ right.description }}</span>
+                                </mat-chip>
+                              </div>
+                            </div>
+                          </div>
+                          
+                          <!-- All Rights (if no company grouping needed) -->
+                          <ng-template #allRights>
+                            <div class="d-flex flex-wrap gap-2">
+                              <mat-chip *ngFor="let right of userData.rights" class="custom-chip">
+                                <mat-icon class="me-1" style="font-size: 18px;">check_circle</mat-icon>
+                                <span class="fw-semibold">{{ right.name }}</span>
+                                <span *ngIf="right.description" class="ms-2 text-muted small">- {{ right.description }}</span>
+                              </mat-chip>
+                            </div>
+                          </ng-template>
+                        </div>
+                        <ng-template #noRights>
+                          <p class="text-muted">Aucun droit assigné</p>
+                        </ng-template>
+                      </div>
+                    </div>
+                  </mat-tab>
+
+                  <!-- Companies Tab -->
+                  <mat-tab>
+                    <ng-template mat-tab-label>
+                      <i class="bi bi-building mx-2 primary-blue-color"></i>
+                      Entreprises ({{ userData.companies?.length || 0 }})
+                    </ng-template>
+                    <div class="d-flex mt-3 p-4">
+                      <div class="col-lg-12">
+                        <div *ngIf="userData.companies && userData.companies.length > 0; else noCompanies">
+                          <div class="row">
+                            <div class="col-md-6 col-lg-4 mb-3" *ngFor="let company of userData.companies">
+                              <div class="border rounded p-3 h-100 shadow-sm d-flex align-items-center">
+                                <mat-icon class="primary-blue-color me-3" style="font-size: 32px;">business</mat-icon>
+                                <div class="flex-grow-1">
+                                  <h6 class="mb-1 fw-semibold">{{ company.name }}</h6>
+                                  <a [routerLink]="['/super-admin/companies/', company.id]" 
+                                     class="text-decoration-none text-primary small">
+                                    Voir les détails <mat-icon style="vertical-align: middle; font-size: 16px;">arrow_forward</mat-icon>
+                                  </a>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <ng-template #noCompanies>
+                          <p class="text-muted">Aucune entreprise associée</p>
+                        </ng-template>
+                      </div>
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>
+              </section>
+            </mat-card>
+          </div>
+        </section>
+      </ng-container>
+    </div>
+    
+    <!-- General Info Card with Tracking Log -->
+    <app-general-infos
+      [createdBy]="(user | async)?.createdBy" 
+      [createdAt]="(user | async)?.createdAt"
+      [updatedBy]="(user | async)?.updatedBy" 
+      [updatedAt]="(user | async)?.updatedAt"
+      (onClickOnTrackingLog)="openTrackingLog()"
+    ></app-general-infos>
+  </div>
+</mat-drawer-container>

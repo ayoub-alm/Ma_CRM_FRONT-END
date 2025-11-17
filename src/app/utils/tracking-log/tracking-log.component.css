@@ -1,0 +1,73 @@
+.spinner {
+  animation: spin 1s linear infinite;
+  font-size: 48px;
+  color: #0ea5e9;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.text-success {
+  color: #28a745;
+}
+
+.text-primary {
+  color: #0ea5e9;
+}
+
+.text-danger {
+  color: #dc3545;
+}
+
+.text-secondary {
+  color: #6c757d;
+}
+
+.text-muted {
+  color: #6c757d;
+}
+
+.alert {
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+}
+
+.alert-danger {
+  color: #721c24;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #dee2e6;
+}
+
+.bg-light {
+  background-color: #f8f9fa;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.small {
+  font-size: 0.875rem;
+}
+
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+

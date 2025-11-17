@@ -8,8 +8,14 @@ export interface TrackingLog {
   id?: number;
   actionType: string; // e.g., CREATE, UPDATE, DELETE, VIEW
   timestamp: string; // ISO string
-  user?: { id: number }; // Reference to the user
+  entityType?: string; // Fully qualified class name
+  entityId?: number; // ID of the entity
+  user?: { id: number; name?: string }; // Reference to the user
   details?: string; // Additional details about the action
+  changes?: string; // JSON string of changes
+  endpoint?: string; // HTTP endpoint
+  ipAddress?: string; // IP address
+  httpMethod?: string; // HTTP method
   prospect?: { id: number }; // Reference to the prospect
   interaction?: { id: number }; // Reference to the interaction
   interlocutor?: { id: number }; // Reference to the interlocutor
@@ -68,5 +74,15 @@ export class TrackingLogService {
    */
   restoreLog(id: number): Observable<TrackingLog> {
     return this.http.patch<TrackingLog>(`${this.apiUrl}/restore/${id}`, {});
+  }
+
+  /**
+   * Fetch tracking logs for a specific entity by entity type and entity ID.
+   * @param entityType The fully qualified class name of the entity (e.g., "com.sales_scout.entity.UserEntity")
+   * @param entityId The ID of the entity
+   * @returns An observable of the list of tracking logs for the entity.
+   */
+  getLogsForEntity(entityType: string, entityId: number): Observable<TrackingLog[]> {
+    return this.http.get<TrackingLog[]>(`${this.apiUrl}/entity/${encodeURIComponent(entityType)}/${entityId}`);
   }
 }

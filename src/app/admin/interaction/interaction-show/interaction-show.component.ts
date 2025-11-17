@@ -136,7 +136,11 @@ export class InteractionShowComponent implements OnInit{
   }
   private _bottomSheet = inject(MatBottomSheet);
   openBottomSheet() {
-      this._bottomSheet.open(TrackingLogComponent);
+      const entityType = 'com.sales_scout.entity.leads.Interaction';
+      const entityId = this.interaction.getValue().id;
+      this._bottomSheet.open(TrackingLogComponent, {
+          data: { entityType, entityId }
+      });
   }
 
 

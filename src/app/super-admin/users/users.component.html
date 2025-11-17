@@ -54,11 +54,11 @@
         <!-- Columns: Fields -->
         <ng-container matColumnDef="matricule">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>matricule</th>
-          <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.matrucle}}</td>
+          <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.matriculate}}</td>
         </ng-container>
         <ng-container matColumnDef="name" sticky>
           <th *matHeaderCellDef mat-header-cell mat-sort-header>Nom complete</th>
-          <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.name +' '+row.lastName}}</td>
+          <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.name }}</td>
         </ng-container>
         <ng-container matColumnDef="status">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>statut</th>
@@ -74,7 +74,7 @@
         </ng-container>
         <ng-container matColumnDef="role">
           <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Role</th>
-          <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.role}}</td>
+          <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{row.role?.role || 'N/A'}}</td>
         </ng-container>
         <ng-container matColumnDef="phone">
           <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Phone</th>
@@ -89,11 +89,11 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu" class="bg-light" xPosition="before">
-              <button  class="text-secondary" mat-menu-item>
+              <button (click)="$event.stopPropagation(); editUser(row)" class="text-secondary" mat-menu-item>
                 <mat-icon class="text-secondary">edit</mat-icon>
                 <span>Modifier</span>
               </button>
-              <button class="text-danger " mat-menu-item>
+              <button (click)="$event.stopPropagation(); deleteUser(row)" class="text-danger" mat-menu-item>
                 <mat-icon class="text-danger">delete</mat-icon>
                 <span>Supprimer</span>
               </button>

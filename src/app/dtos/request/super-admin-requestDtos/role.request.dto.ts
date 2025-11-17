@@ -1,13 +1,11 @@
-import {RightsRequestDto} from "./rights.request.dto";
-
 export class RoleRequestDto {
-    name!: string;
-    companyId!: number;
-    rights!: RightsRequestDto[];
+    role!: string;
+    description!: string;
+    companyId!: number | null;
 
-    constructor(name: string, companyId: number, rights: RightsRequestDto[] = []) {
-        this.name = name;
+    constructor(role: string, description: string, companyId: number | null = null) {
+        this.role = role;
+        this.description = description;
         this.companyId = companyId;
-        this.rights = rights;
     }
 }

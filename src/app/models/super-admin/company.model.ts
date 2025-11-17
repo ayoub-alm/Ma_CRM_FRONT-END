@@ -22,7 +22,7 @@ export class CompanyModel {
     capital: number;
     headOffice: string;
     legalRepresentative: string;
-    yearOfCreation: number;
+    yearOfCreation: string;
     dateOfRegistration: string;
     email: string;
     phone: string;
@@ -73,15 +73,15 @@ export class CompanyModel {
         this.patent = data.patent;
         this.cnss = data.cnss;
         this.businessDescription = data.businessDescription;
-        this.legalStatus = new LegalStatusModel(data.legalStatus);
-        this.city = new CityModel(data.city);
-        this.court = new CourtModel(data.court);
-        this.companySize = new CompanySizeModel(data.companySize);
-        this.industry = new IndustryModel(data.industry);
-        this.country = new CountryModel(data.country);
-        this.proprietaryStructure = new ProprietaryStructureModel(data.proprietaryStructure);
-        this.title = new TitleModel(data.title);
-        this.reprosentaveJobTitle = new JobTitleModel(data.reprosentaveJobTitle);
+        this.legalStatus = data.legalStatus ? (data.legalStatus instanceof LegalStatusModel ? data.legalStatus : new LegalStatusModel(data.legalStatus)) : null as any;
+        this.city = data.city ? (data.city instanceof CityModel ? data.city : new CityModel(data.city)) : null as any;
+        this.court = data.court ? (data.court instanceof CourtModel ? data.court : new CourtModel(data.court)) : null as any;
+        this.companySize = data.companySize ? (data.companySize instanceof CompanySizeModel ? data.companySize : new CompanySizeModel(data.companySize)) : null as any;
+        this.industry = data.industry ? (data.industry instanceof IndustryModel ? data.industry : new IndustryModel(data.industry)) : null as any;
+        this.country = data.country ? (data.country instanceof CountryModel ? data.country : new CountryModel(data.country)) : null as any;
+        this.proprietaryStructure = data.proprietaryStructure ? (data.proprietaryStructure instanceof ProprietaryStructureModel ? data.proprietaryStructure : new ProprietaryStructureModel(data.proprietaryStructure)) : null as any;
+        this.title = data.title ? (data.title instanceof TitleModel ? data.title : new TitleModel(data.title)) : null as any;
+        this.reprosentaveJobTitle = data.reprosentaveJobTitle ? (data.reprosentaveJobTitle instanceof JobTitleModel ? data.reprosentaveJobTitle : new JobTitleModel(data.reprosentaveJobTitle)) : null as any;
         this.certificationText = data.certificationText;
         this.updatedBy = data.updatedBy;
     }

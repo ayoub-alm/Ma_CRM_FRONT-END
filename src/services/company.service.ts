@@ -20,9 +20,11 @@ export class CompanyService {
    * Use Mapper toDto to convert Model to requestDto
    * @param newCompany
    */
-  createCompany(newCompany: CompanyModel): Observable<CreateCompanyRequest> {
+  createCompany(newCompany: CompanyModel): Observable<CompanyResponseDto> {
     const company = CompanyMapper.toDto(newCompany);
-    return this.http.post<CreateCompanyRequest>(`${this.baseUrl}`, company)
+    return this.http.post<CompanyResponseDto>(`${this.baseUrl}`, company).pipe(
+      map(response => new CompanyResponseDto(response))
+    )
   }
 
   /**
@@ -30,9 +32,11 @@ export class CompanyService {
    * @param companyId
    * @param newCompany
    */
-  updateCompany(companyId: number ,newCompany: CompanyModel): Observable<CreateCompanyRequest> {
+  updateCompany(companyId: number ,newCompany: CompanyModel): Observable<CompanyResponseDto> {
     const company = CompanyMapper.toDto(newCompany);
-    return this.http.put<CreateCompanyRequest>(`${this.baseUrl}/${companyId}`, company)
+    return this.http.put<CompanyResponseDto>(`${this.baseUrl}/${companyId}`, company).pipe(
+      map(response => new CompanyResponseDto(response))
+    )
   }
 
   getAllCompanies(): Observable<CompanyResponseDto[]> {

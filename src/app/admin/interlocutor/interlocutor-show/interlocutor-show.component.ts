@@ -28,6 +28,8 @@ import {GeneralInfosComponent} from "../../../utils/general-infos/general-infos.
 import {
   AddEditInteractionDialogComponent
 } from '../../interaction/add-edit-interaction-dialog/add-edit-interaction-dialog.component';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {TrackingLogComponent} from '../../../utils/tracking-log/tracking-log.component';
 import {MatDrawer, MatDrawerContainer} from "@angular/material/sidenav";
 import {MatToolbar} from "@angular/material/toolbar";
 import {TranslatePipe} from '@ngx-translate/core';
@@ -69,8 +71,13 @@ export class InterlocutorShowComponent implements OnInit{
   events: NgxTimelineEvent[];
   selectedInteraction: BehaviorSubject<InteractionResponseDto> =  new BehaviorSubject({} as InteractionResponseDto)
   @ViewChild('leftDrawer') leftDrawer: MatDrawer | undefined;
-  constructor(private interlocutorService: InterlocutorService, private activeRouter: ActivatedRoute,
-              private dialog: MatDialog, private interactionsService: InteractionService) {
+  constructor(
+    private interlocutorService: InterlocutorService,
+    private activeRouter: ActivatedRoute,
+    private dialog: MatDialog,
+    private interactionsService: InteractionService,
+    private bottomSheet: MatBottomSheet
+  ) {
     this.events =  [
       {
         timestamp: new Date('2024-01-01T12:00:00'),
@@ -186,4 +193,14 @@ export class InterlocutorShowComponent implements OnInit{
       : 'bg-warning text-dark';
   }
 
+  openTrackingLog(): void {
+    const interlocutorData = this.interlocutor.getValue();
+    if (interlocutorData && interlocutorData.id) {
+      const entityType = 'com.sales_scout.entity.leads.Interlocutor';
+      const entityId = interlocutorData.id;
+      this.bottomSheet.open(TrackingLogComponent, {
+        data: { entityType, entityId }
+      });
+    }
+  }
 }

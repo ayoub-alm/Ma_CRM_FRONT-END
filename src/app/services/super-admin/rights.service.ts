@@ -11,7 +11,7 @@ import {Injectable} from "@angular/core";
     providedIn: 'root'
 })
 export class RightsService {
-    private readonly baseUrl: string = environment.baseUrl ='/api/rights';
+    private readonly baseUrl: string = environment.baseUrl + '/api/rights';
     constructor(private http: HttpClient) {}
 
     /**
@@ -28,7 +28,7 @@ export class RightsService {
      * @param rightId
      */
     getRightById(rightId: number): Observable<RightsModel> {
-        return this.http.get<RightsResponseDto>(`${this.baseUrl}`).pipe(
+        return this.http.get<RightsResponseDto>(`${this.baseUrl}/${rightId}`).pipe(
             map(RightsResponseDto => RightsMapper.fromDto(RightsResponseDto))
         )
     }
@@ -37,9 +37,9 @@ export class RightsService {
      * Use Mapper toDto to convert Model to requestDto
      * @param newRight
      */
-    createRight(newRight: RightsModel): Observable<RightsRequestDto> {
+    createRight(newRight: RightsModel): Observable<RightsResponseDto> {
         const right = RightsMapper.toDto(newRight);
-        return this.http.post<RightsModel>(`${this.baseUrl}`, right)
+        return this.http.post<RightsResponseDto>(`${this.baseUrl}`, right)
     }
 
     /**
@@ -47,9 +47,9 @@ export class RightsService {
      * @param rightId
      * @param newRight
      */
-    updateRight(rightId: number, newRight: RightsModel): Observable<RightsRequestDto> {
+    updateRight(rightId: number, newRight: RightsModel): Observable<RightsResponseDto> {
         const right = RightsMapper.toDto(newRight);
-        return this.http.put<RightsModel>(`${this.baseUrl}/${rightId}`, right)
+        return this.http.put<RightsResponseDto>(`${this.baseUrl}/${rightId}`, right)
     }
 
     /**
@@ -57,6 +57,6 @@ export class RightsService {
      * @param rightId
      */
     softDeleteRight(rightId: number): Observable<void> {
-        return this.http.delete<void>(`${this.baseUrl}/soft-delete=${rightId}`);
+        return this.http.delete<void>(`${this.baseUrl}/soft-delete/${rightId}`);
     }
 }

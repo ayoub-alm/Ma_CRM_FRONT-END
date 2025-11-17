@@ -1,34 +1,31 @@
 import {RoleModel} from "./role.model";
 import {RightsModel} from "./rights.model";
+import {CompanyModel} from "./company.model";
 
 export class UserModel {
     id!: number;
-    image!: string;
+    logo!: string;
     name!: string;
-    lastName!: string;
-    departementId!: number;
-    matricule!: string;
+    matriculate!: string;
     email!: string;
     password!: string;
     aboutMe!: string;
     phone!: string;
-    companyId!: number;
-    role!: RoleModel;
+    role!: RoleModel | null;
     rights!: RightsModel[];
+    companies!: CompanyModel[];
 
     constructor(data: any) {
         this.id = data.id;
-        this.image = data.image;
-        this.matricule = data.matricule;
-        this.name = data.name;
-        this.lastName = data.lastName;
-        this.departementId = data.departementId;
-        this.email = data.email;
-        this.password = data.password;
-        this.aboutMe = data.aboutMe;
-        this.phone = data.phone;
-        this.companyId = data.companyId;
-        this.role = new RoleModel(data.role);
+        this.logo = data.logo || '';
+        this.matriculate = data.matriculate || '';
+        this.name = data.name || '';
+        this.email = data.email || '';
+        this.password = data.password || '';
+        this.aboutMe = data.aboutMe || '';
+        this.phone = data.phone || '';
+        this.role = data.role ? new RoleModel(data.role) : null;
         this.rights = data?.rights ? data.rights.map((right: any) => new RightsModel(right)) : [];
+        this.companies = data?.companies ? data.companies.map((company: any) => new CompanyModel(company)) : [];
     }
 }

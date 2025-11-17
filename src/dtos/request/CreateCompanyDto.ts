@@ -15,7 +15,7 @@ export class CreateCompanyRequest {
   capital!: number;
   headOffice!: string;
   legalRepresentative!: string;
-  yearOfCreation!: number;
+  yearOfCreation!: string;
   dateOfRegistration!: string;
   email!: string;
   phone!: string;
@@ -42,7 +42,7 @@ export class CreateCompanyRequest {
   title!: TitleResponseDto;
   reprosentaveJobTitle!: JobTitleResponseDto;
 
-  constructor(logo: string, name: string, sigle: string, capital: number, headOffice: string, legalRepresentative: string, yearOfCreation: number, dateOfRegistration: string, email: string, phone: string, fax: string, whatsapp: string, website: string, linkedin: string, ice: string, rc: string, ifm: string, patent: string, cnss: string, certificationText: string, businessDescription: string, legalStatus: LegalStatusDto, city: CityResponseDto, court: CourtResponseDto, companySize: CompanySizeResponseDto, industry: IndustryResponseDto, country: CountryResponseDto, proprietaryStructure: ProprietaryStructureDto, title: TitleResponseDto, reprosentaveJobTitle: JobTitleResponseDto) {
+  constructor(logo: string, name: string, sigle: string, capital: number, headOffice: string, legalRepresentative: string, yearOfCreation: string, dateOfRegistration: string, email: string, phone: string, fax: string, whatsapp: string, website: string, linkedin: string, ice: string, rc: string, ifm: string, patent: string, cnss: string, certificationText: string, businessDescription: string, legalStatus: LegalStatusDto, city: CityResponseDto, court: CourtResponseDto, companySize: CompanySizeResponseDto, industry: IndustryResponseDto, country: CountryResponseDto, proprietaryStructure: ProprietaryStructureDto, title: TitleResponseDto, reprosentaveJobTitle: JobTitleResponseDto) {
     this.logo = logo;
     this.name = name;
     this.sigle = sigle;

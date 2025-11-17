@@ -1,15 +1,13 @@
-import {RightsModel} from "./rights.model";
-
 export class RoleModel {
     id!: number;
-    name!: string;
-    companyId!: number;
-    rights!: RightsModel[];
+    role!: string;
+    description!: string;
+    companyId!: number | null;
 
     constructor(data: any) {
         this.id = data.id;
-        this.name = data.name;
-        this.companyId = data.companyId;
-        this.rights = data?.rights ? data.rights.map((right: any) => new RightsModel(right)) : [];
+        this.role = data.role || '';
+        this.description = data.description || '';
+        this.companyId = data.companyId || null;
     }
 }

@@ -20,6 +20,8 @@ import {CompanyService} from '../../../../services/company.service';
 import {CompanyResponseDto} from '../../../../dtos/response/CompanyResponseDto';
 import {CompanyModel} from '../../../models/super-admin/company.model';
 import {MatSnackBar} from '@angular/material/snack-bar';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {TrackingLogComponent} from '../../../utils/tracking-log/tracking-log.component';
 
 @Component({
   selector: 'app-company-show',
@@ -57,7 +59,12 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class CompanyShowComponent implements OnInit{
   company: BehaviorSubject<CompanyModel> = new BehaviorSubject({} as CompanyModel);
   protected readonly EntityEnum = EntityEnum;
-  constructor(private activatedRoute: ActivatedRoute, private companyService: CompanyService, private snackBar: MatSnackBar) {
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private companyService: CompanyService,
+    private snackBar: MatSnackBar,
+    private bottomSheet: MatBottomSheet
+  ) {
   }
 
   ngOnInit() {
@@ -74,5 +81,16 @@ export class CompanyShowComponent implements OnInit{
         return EMPTY; // Ensures the observable completes
       })).subscribe();
      }
+  }
+
+  openTrackingLog(): void {
+    const companyData = this.company.getValue();
+    if (companyData && companyData.id) {
+      const entityType = 'com.sales_scout.entity.Company';
+      const entityId = companyData.id;
+      this.bottomSheet.open(TrackingLogComponent, {
+        data: { entityType, entityId }
+      });
+    }
   }
 }

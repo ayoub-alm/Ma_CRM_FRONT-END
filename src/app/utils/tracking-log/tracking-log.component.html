@@ -1,9 +1,70 @@
-<div class="vw-100">
-  <ul>
-    <li>1</li>
-    <li>1</li>
-    <li>1</li>
-    <li>1</li>
-    <li>1</li>
-  </ul>
+<div class="p-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h5 class="mb-0">Historique des modifications</h5>
+    <button mat-icon-button (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center py-4">
+    <mat-icon class="spinner">refresh</mat-icon>
+    <p class="text-secondary mt-2">Chargement...</p>
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!isLoading && !error">
+    <div *ngIf="logs.length === 0" class="text-center py-4">
+      <mat-icon class="text-muted" style="font-size: 48px; width: 48px; height: 48px;">history</mat-icon>
+      <p class="text-muted mt-2">Aucun historique disponible</p>
+    </div>
+
+    <div *ngIf="logs.length > 0" class="list-container">
+      <div *ngFor="let log of logs" class="mb-3 p-3 border-bottom">
+        <div class="w-100 py-2">
+          <div class="d-flex align-items-start">
+            <mat-icon [class]="getActionColor(log.actionType)" class="me-2">
+              {{ getActionIcon(log.actionType) }}
+            </mat-icon>
+            <div class="flex-grow-1">
+              <div class="d-flex justify-content-between align-items-start">
+                <div>
+                  <strong [class]="getActionColor(log.actionType)">
+                    {{ log.actionType }}
+                  </strong>
+                  <span class="text-secondary ms-2" *ngIf="log.user">
+                    par {{ log.user.name || 'Utilisateur inconnu' }}
+                  </span>
+                </div>
+                <span class="text-secondary small">
+                  {{ log.timestamp | date:'short' }}
+                </span>
+              </div>
+              <p class="text-secondary small mb-1 mt-1" *ngIf="log.details">
+                {{ log.details }}
+              </p>
+              <div *ngIf="log.changes" class="mt-2">
+                <details class="small">
+                  <summary class="text-primary cursor-pointer">Voir les changements</summary>
+                  <pre class="mt-2 p-2 bg-light rounded small">{{ log.changes | json }}</pre>
+                </details>
+              </div>
+              <div class="d-flex gap-2 mt-2 small text-muted" *ngIf="log.endpoint || log.ipAddress">
+                <span *ngIf="log.endpoint">
+                  <mat-icon style="font-size: 14px; width: 14px; height: 14px;">link</mat-icon>
+                  {{ log.endpoint }}
+                </span>
+                <span *ngIf="log.ipAddress">
+                  <mat-icon style="font-size: 14px; width: 14px; height: 14px;">computer</mat-icon>
+                  {{ log.ipAddress }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

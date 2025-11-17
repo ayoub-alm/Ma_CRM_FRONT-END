@@ -8,12 +8,22 @@ export class CompanySizeModel {
     active: boolean;
 
     constructor(data: any) {
-        this.createdAt = new Date(data.createdAt);
+        if (!data) {
+            this.createdAt = new Date();
+            this.updatedAt = null;
+            this.deletedAt = null;
+            this.createdBy = '';
+            this.id = 0;
+            this.name = '';
+            this.active = false;
+            return;
+        }
+        this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
         this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : null;
         this.deletedAt = data.deletedAt ? new Date(data.deletedAt) : null;
-        this.createdBy = data.createdBy;
-        this.id = data.id;
-        this.name = data.name;
-        this.active = data.active;
+        this.createdBy = data.createdBy || '';
+        this.id = data.id || 0;
+        this.name = data.name || '';
+        this.active = data.active ?? false;
     }
 }

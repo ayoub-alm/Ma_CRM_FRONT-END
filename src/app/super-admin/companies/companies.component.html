@@ -278,7 +278,7 @@
       </div>
       <!-- Action Buttons -->
       <div class="col-lg-4 my-auto col-12 d-flex justify-content-lg-end  justify-content-end align-items-center">
-        <button (click)="openAddProspectDialog()"
+        <button (click)="openAddCompanyDialog()"
                 class="rounded-3 bg-spider  scale-09 " color="primary" mat-button >
           <mat-icon>add</mat-icon>
           <span>{{ 'ADD' | translate }}</span>
@@ -519,11 +519,11 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu" class="bg-light" xPosition="before">
-              <button (click)="editProspect(row)" class="text-secondary" mat-menu-item>
+              <button (click)="editCompany(row)" class="text-secondary" mat-menu-item>
                 <mat-icon class="text-secondary">edit</mat-icon>
                 <span>Modifier</span>
               </button>
-              <button (click)="deleteProspect(row)" class="text-danger " mat-menu-item>
+              <button (click)="deleteCompany(row)" class="text-danger " mat-menu-item>
                 <mat-icon class="text-danger">delete</mat-icon>
                 <span>Supprimer</span>
               </button>
@@ -532,7 +532,7 @@
         </ng-container>
 
         <tr *matHeaderRowDef="getDisplayColumnsTable" class="primary-blue-color fixed-header bg-light rounded-3  custom-header-row p-0 position-sticky " mat-header-row></tr>
-        <tr (click)="showProspectDetails(row)" *matRowDef="let row; columns: getDisplayColumnsTable;" class="bg-white text-secondary "
+        <tr (click)="showCompanyDetails(row)" *matRowDef="let row; columns: getDisplayColumnsTable;" class="bg-white text-secondary "
             mat-row
             style="font-size:0.8rem !important;"></tr>
 

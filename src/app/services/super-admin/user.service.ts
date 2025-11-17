@@ -12,7 +12,7 @@ import {UserRequestDto} from "../../dtos/request/super-admin-requestDtos/user.re
 })
 
 export class UserService {
-    private readonly baseUrl: string = environment.baseUrl ='/api/users';
+    private readonly baseUrl: string = environment.baseUrl + '/api/users';
     constructor(private http: HttpClient) {}
 
     /**
@@ -34,9 +34,9 @@ export class UserService {
      * Use Mapper toDto to convert Model to requestDto
      * @param newUser
      */
-    createUser(newUser: UserModel): Observable<UserRequestDto> {
+    createUser(newUser: UserModel): Observable<UserResponseDto> {
         const user = UserMapper.toDto(newUser);
-        return this.http.post<UserRequestDto>(`${this.baseUrl}`, user)
+        return this.http.post<UserResponseDto>(`${this.baseUrl}/create-user`, user)
     }
 
     /**
@@ -44,16 +44,16 @@ export class UserService {
      * @param userId
      * @param newUser
      */
-    updateUser(userId: number, newUser: UserModel): Observable<UserRequestDto> {
+    updateUser(userId: number, newUser: UserModel): Observable<UserResponseDto> {
         const user = UserMapper.toDto(newUser);
-        return this.http.put<UserRequestDto>(`${this.baseUrl}/${userId}`, user)
+        return this.http.put<UserResponseDto>(`${this.baseUrl}/update-user/${userId}`, user)
     }
 
     /**
      *
      * @param userId
      */
-    softDeleteUser(userId: number): Observable<void> {
-        return this.http.delete<void>(`${this.baseUrl}/soft-delete=${userId}`);
+    softDeleteUser(userId: number): Observable<boolean> {
+        return this.http.delete<boolean>(`${this.baseUrl}/soft-delete/${userId}`);
     }
 }

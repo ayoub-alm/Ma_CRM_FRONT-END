@@ -1,6 +1,5 @@
 import {RoleResponseDto} from "../../dtos/response/super-admin-responseDtos/role.response.dto";
 import {RoleModel} from "../../models/super-admin/role.model";
-import {RightsMapper} from "./rights.mapper";
 import {RoleRequestDto} from "../../dtos/request/super-admin-requestDtos/role.request.dto";
 
 export class RoleMapper {
@@ -9,17 +8,18 @@ export class RoleMapper {
     static fromDto(dto: RoleResponseDto): RoleModel {
         return new RoleModel({
             id: dto.id,
-            name: dto.name,
-            rights: dto.rights.map(RightsMapper.fromDto), // Mapping rights array
+            role: dto.role,
+            description: dto.description,
+            companyId: dto.companyId
         });
     }
 
     // Map from RoleModel to RoleRequestDto
     static toDto(model: RoleModel): RoleRequestDto {
         return new RoleRequestDto(
-            model.name,
-            model.companyId,
-            model.rights.map(RightsMapper.toDto), // Mapping rights array
-        )
+            model.role,
+            model.description,
+            model.companyId
+        );
     }
 }

@@ -471,7 +471,14 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
 
 
   openBottomSheet(): void {
-    this._bottomSheet.open(TrackingLogComponent);
+    const storageNeed = this.storageNeed.getValue();
+    if (storageNeed && storageNeed.id) {
+      const entityType = 'com.sales_scout.entity.crm.wms.need.StorageNeed';
+      const entityId = storageNeed.id;
+      this._bottomSheet.open(TrackingLogComponent, {
+        data: { entityType, entityId }
+      });
+    }
   }
 
 

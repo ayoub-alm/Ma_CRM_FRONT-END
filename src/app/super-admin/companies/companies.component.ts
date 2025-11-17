@@ -49,9 +49,6 @@ import {MultiSelectModule} from 'primeng/multiselect';
 import { DisplayColumnsInterface } from '../../utils/spider.table';
 import { CompanySizeResponseDto } from '../../../dtos/init_data/response/company.size.response.dt';
 import { LocalStorageService } from '../../../services/local.storage.service';
-import {ProspectService} from '../../../services/Leads/prospect.service';
-import {ProspectResponseDto} from '../../../dtos/response/prospect.response.dto';
-import {AddProspectDialogComponent} from '../../admin/prospect/add-prospect-dialog/add-prospect-dialog.component';
 import {ConfirmationDialogComponent} from '../../utils/confirmation-dialog/confirmation-dialog.component';
 
 @Component({
@@ -175,11 +172,14 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * This function allows to open dialog to add new prospect
+   * This function allows to open dialog to add new company
    */
-  openAddProspectDialog(): void {
-    const dialogRef = this.dialog.open(AddProspectDialogComponent, {
-      maxWidth: '900px', maxHeight: '100vh'
+  openAddCompanyDialog(): void {
+    const dialogRef = this.dialog.open(AddUpdateCompanyComponent, {
+      width: '90vw',
+      maxWidth: '1200px',
+      maxHeight: '100vh',
+      data: null // Pass null for new company
     });
 
     dialogRef.afterClosed().pipe(tap(response => {
@@ -191,31 +191,32 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * This function allows to edit prospect
+   * This function allows to edit company
    * @param row
    */
-  editProspect(row: any): void {
-    // Open dialog for editing the prospect
-    const dialogRef = this.dialog.open(AddProspectDialogComponent, {
-      maxWidth: '900px', data: {...row}  // Pass the prospect data to the dialog for editing
+  editCompany(row: CompanyResponseDto): void {
+    // Convert CompanyResponseDto to CompanyModel for the dialog
+    const companyModel = new CompanyModel(row);
+    
+    // Open dialog for editing the company
+    const dialogRef = this.dialog.open(AddUpdateCompanyComponent, {
+      width: '90vw',
+      maxWidth: '1200px',
+      maxHeight: '100vh',
+      data: companyModel  // Pass the company data to the dialog for editing
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Handle the result, update the prospect if necessary
-        // const index = this.dataSource.data.findIndex(p => p.id === row.id);
-        // if (index !== -1) {
-        //   this.dataSource.data[index] = result;
-        // }
         this.loadCustomers();
       }
     });
   }
 
   /**
-   * This function show import zone
+   * This function show company details
    * @param row
    */
-  showProspectDetails(row: ProspectResponseDto) {
+  showCompanyDetails(row: CompanyResponseDto) {
     this.router.navigateByUrl(`/super-admin/companies/${row.id}`)
   }
 
@@ -329,16 +330,28 @@ export class CompaniesComponent implements OnInit, AfterViewInit {
 
 
   /**
-   * This function allows to delete prospect
+   * This function allows to delete company
    * @param row
    */
-  deleteProspect(row: any): void {
-    const dialogRef = ConfirmationDialogComponent.open(this.dialog, {
+  deleteCompany(row: CompanyResponseDto): void {
+    ConfirmationDialogComponent.open(this.dialog, {
       title: 'Confirmer la suppression',
-      message: 'Êtes-vous sûr de vouloir supprimer cet prospect ?',
+      message: 'Êtes-vous sûr de vouloir supprimer cette entreprise ?',
       confirmText: 'Confirmer',
       cancelText: 'Annuler',
       confirmButtonColor: 'warn'
+    }).subscribe(result => {
+      if (result) {
+        this.companyService.deleteCompanyById(row.id).subscribe({
+          next: () => {
+            this.snackBar.open('Entreprise supprimée avec succès ✅', 'Ok', { duration: 3000 });
+            this.loadCustomers();
+          },
+          error: (error) => {
+            this.snackBar.open(`Erreur lors de la suppression: ${error.message} ⛔`, 'Ok', { duration: 3000 });
+          }
+        });
+      }
     });
   }
 

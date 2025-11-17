@@ -26,6 +26,8 @@ import {LocalStorageService} from "../../../../services/local.storage.service";
 import {CustomerStatusService} from '../../../../services/Leads/customer.status.service';
 import {GeneralInfosComponent} from "../../../utils/general-infos/general-infos.component";
 import {CustomerStatus} from '../../../../dtos/response/cutomer.status.dto';
+import {MatBottomSheet} from '@angular/material/bottom-sheet';
+import {TrackingLogComponent} from '../../../utils/tracking-log/tracking-log.component';
 import {
   AddUpdateInterlocutorComponent
 } from '../../interlocutor/add-update-interlocutor/add-update-interlocutor.component';
@@ -69,9 +71,17 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
 
   protected readonly EntityEnum = EntityEnum;
 
-  constructor(private fb: FormBuilder, private activatedRoute: ActivatedRoute, private prospectService: ProspectService,
-              private snackBar: MatSnackBar, private dialog: MatDialog, private interlocutorsService: InterlocutorService,
-              private localStorageService: LocalStorageService, private customerStatusService: CustomerStatusService) {
+  constructor(
+    private fb: FormBuilder,
+    private activatedRoute: ActivatedRoute,
+    private prospectService: ProspectService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
+    private interlocutorsService: InterlocutorService,
+    private localStorageService: LocalStorageService,
+    private customerStatusService: CustomerStatusService,
+    private bottomSheet: MatBottomSheet
+  ) {
     const blankCompany: ProspectResponseDto = {} as ProspectResponseDto;
     this.customer = new BehaviorSubject<ProspectResponseDto>(blankCompany);
 
@@ -316,6 +326,17 @@ export class ShowProspectComponent implements AfterViewInit, OnInit, OnDestroy {
 
   showChangeStatusForm() {
     this.isEditStatus = true;
+  }
+
+  openTrackingLog(): void {
+    const customerData = this.customer.getValue();
+    if (customerData && customerData.id) {
+      const entityType = 'com.sales_scout.entity.leads.Customer';
+      const entityId = customerData.id;
+      this.bottomSheet.open(TrackingLogComponent, {
+        data: { entityType, entityId }
+      });
+    }
   }
 
   onAddNewContacts() {
