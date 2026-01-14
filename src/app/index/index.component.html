@@ -1,44 +1,34 @@
 <mat-drawer-container class="example-container vh-100">
   <!-- Left Drawer -->
-  <mat-drawer
-    #leftDrawer
-    class="example-sidenav rounded-0 custom-drawer-width bg-light"
-    mode="side"
-    position="start"
-    [opened]="true"
-  >
+  <mat-drawer #leftDrawer class="example-sidenav rounded-0 custom-drawer-width bg-light" mode="side" position="start"
+    [opened]="true">
     <div class="container-fluid side-nav  simple-bg h-100">
       <mat-toolbar class="rounded-3 mat-elevation-z2">
         <button mat-icon-button (click)="rightDrawer.toggle()">
           <mat-icon>menu</mat-icon>
         </button>
-        <p class="primary-blue-color m-auto" style="" >Spider <span class="small text-secondary" style="font-size:0.5rem; position:relative;bottom:10px;right: 2px;" >ERP</span></p>
+        <p class="primary-blue-color m-auto" style="">Spider <span class="small text-secondary"
+            style="font-size:0.5rem; position:relative;bottom:10px;right: 2px;">ERP</span>
+        </p>
       </mat-toolbar>
 
       <!-- Dynamic Left Menu -->
       <mat-list>
-        <a *ngFor="let item of menuItems" [routerLink]="item.route"  routerLinkActive="active-link"  [routerLinkActiveOptions]="{exact:false}" class="text-decoration-none">
+        <a *ngFor="let item of menuItems" [routerLink]="item.route" routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{exact:false}" class="text-decoration-none">
           <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button
-              mat-button
-              [class]="'text-start d-flex justify-content-start text-secondary rounded-1' "
-              aria-label="PMS"
-              style="width: 100%;"
-            >
+            <button mat-button [class]="'text-start d-flex justify-content-start text-secondary rounded-1' "
+              aria-label="PMS" style="width: 100%;">
               {{ item.name | translate}}
               <mat-icon class="">{{ item.icon }}</mat-icon>
             </button>
           </mat-list-item>
           <mat-list *ngIf="item.children && item.children.length > 0" class="mx-2">
-            <a *ngFor="let child of item?.children"
-               [routerLink]="child"  routerLinkActive="active"  class="text-decoration-none">
+            <a *ngFor="let child of item?.children" [routerLink]="child" routerLinkActive="active"
+              class="text-decoration-none">
               <mat-list-item class="d-flex justify-content-start align-items-center">
-                <button
-                  mat-button
-                  [class]="'text-start d-flex justify-content-start text-secondary rounded-1' "
-                  aria-label="PMS"
-                  style="width: 100%;"
-                >
+                <button mat-button [class]="'text-start d-flex justify-content-start text-secondary rounded-1' "
+                  aria-label="PMS" style="width: 100%;">
                   {{ child }}
                   <mat-icon>{{ 'settings' }}</mat-icon>
                 </button>
@@ -52,15 +42,10 @@
   </mat-drawer>
 
   <!-- Right Drawer -->
-  <mat-drawer
-    #rightDrawer
-    class="example-sidenav custom-drawer-width shadow-sm bg-white "
-    mode="over"
-    position="end"
-    [opened]="false"
-  >
+  <mat-drawer #rightDrawer class="example-sidenav custom-drawer-width shadow-sm bg-white " mode="over" position="end"
+    [opened]="false">
     <div class="container-fluid side-nav simple-bg-2 ">
-      <mat-toolbar >
+      <mat-toolbar>
         <span class="m-auto">Applications</span>
         <button mat-icon-button (click)="rightDrawer.toggle()">
           <mat-icon>close</mat-icon>
@@ -70,20 +55,12 @@
 
       <!-- Right Menu for Application Selection -->
       <mat-list>
-        <a  *ngFor="let app of [{name:'prospection',route:'/admin/dashboard'},
-                                {name:'crm',route:'/admin/crm/dashboard'},
-                                {name:'tms',route:'tms'},
-                                {name:'finances',route:'/admin/crm/wms/invoice'},
-                                {name:'admin',route:'/super-admin/companies'},
-                                ]"
-           routerLinkActive="active" [routerLink]="app.route"  class="text-decoration-none">
+        <a *ngFor="let app of getFilteredApplications()" routerLinkActive="active" [routerLink]="app.route"
+          class="text-decoration-none">
           <mat-list-item class="d-flex justify-content-start align-items-center">
-            <button   (click)="selectApplication(app.name)"
-              mat-button
-              [class]="'text-start d-flex justify-content-start text-secondary rounded-1' "
-              aria-label="PMS"
-              style="width: 100%;"
-            >
+            <button (click)="selectApplication(app.name)" mat-button
+              [class]="'text-start d-flex justify-content-start text-secondary rounded-1' " aria-label="PMS"
+              style="width: 100%;">
               {{ app.name.toUpperCase() | translate}}
               <mat-icon>{{ menuData[app.name].icon }}</mat-icon>
             </button>
@@ -99,33 +76,32 @@
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
     <mat-toolbar class="bg-light sticky-top">
-      <button mat-icon-button (click)="leftDrawer.toggle()" class="text-secondary mat-elevation-z1 bg-white scale-08" >
-        <mat-icon  [@rotateIcon]="leftDrawer.opened ? 'open' : 'closed'">keyboard_double_arrow_right</mat-icon>
+      <button mat-icon-button (click)="leftDrawer.toggle()" class="text-secondary mat-elevation-z1 bg-white scale-08">
+        <mat-icon [@rotateIcon]="leftDrawer.opened ? 'open' : 'closed'">keyboard_double_arrow_right</mat-icon>
       </button>
-      <p  *ngIf="!leftDrawer.opened" class="primary-blue-color m-auto p-1 mt-3" style="" >Spider <span class="small text-secondary" style="font-size:0.5rem; position:relative;bottom:10px;right: 2px;" >ERP</span></p>
+      <p *ngIf="!leftDrawer.opened" class="primary-blue-color m-auto p-1 mt-3" style="">Spider <span
+          class="small text-secondary" style="font-size:0.5rem; position:relative;bottom:10px;right: 2px;">ERP</span>
+      </p>
       <span class="example-spacer"></span>
-      <button mat-button class="mat-dark bg-spider  rounded-3 mx-1 bg-white border border-1 border-secondary-subtle shadow-sm"
-              [color]="'primary'"
-              [matMenuTriggerFor]="menu_action"
-              style="transform:scale(0.9)"
-              aria-label="Example icon-button with a menu">
+      <button mat-button
+        class="mat-dark bg-spider  rounded-3 mx-1 bg-white border border-1 border-secondary-subtle shadow-sm"
+        [color]="'primary'" [matMenuTriggerFor]="menu_action" style="transform:scale(0.9)"
+        aria-label="Example icon-button with a menu">
         <mat-icon>domain</mat-icon>
         <span class="d-none d-md-block">{{selectedCompany.getValue()}}</span>
       </button>
       <mat-menu #menu_action="matMenu" xPosition="before" class="bg-spider">
         <ng-container *ngFor="let company of userCompanies | async">
-          <button (click)="selectCompany(company)"
-            mat-menu-item class="mat-primary">
+          <button (click)="selectCompany(company)" mat-menu-item class="mat-primary">
             <mat-icon>domain</mat-icon>
             {{ company.name }}
           </button>
         </ng-container>
       </mat-menu>
       <!-- Language Selector Button -->
-      <button mat-button class="mat-dark bg-spider rounded-3 mx-1 bg-white border border-1 border-secondary-subtle shadow-sm"
-              [matMenuTriggerFor]="menu_lang"
-              style="transform:scale(0.9)"
-              aria-label="Language switcher">
+      <button mat-button
+        class="mat-dark bg-spider rounded-3 mx-1 bg-white border border-1 border-secondary-subtle shadow-sm"
+        [matMenuTriggerFor]="menu_lang" style="transform:scale(0.9)" aria-label="Language switcher">
         <mat-icon>language</mat-icon>
         <span class="d-none d-md-block">{{ currentLanguage | uppercase }}</span>
       </button>
@@ -148,7 +124,7 @@
       </a>
 
       <button mat-icon-button>
-        <mat-icon matBadge="3" matBadgeColor="warn">notifications</mat-icon>
+        <mat-icon matBadge="3" matBadgeColor="warn" aria-hidden="false">notifications</mat-icon>
       </button>
 
       <button mat-icon-button (click)="rightDrawer.toggle()">
@@ -156,41 +132,30 @@
       </button>
     </mat-toolbar>
     <mat-drawer-container class="content-container container-fluid p-0 bg-light ">
-      <mat-drawer
-        #aiDrawer
-        class="example-sidenav bg-light rounded-2 ai-container-width  p-2"
-        mode="side"
-        position="end"
-        [opened]="false"
-      >
+      <mat-drawer #aiDrawer class="example-sidenav bg-light rounded-2 ai-container-width  p-2" mode="side"
+        position="end" [opened]="false">
         <div class="container-fluid side-nav bg-white ">
-          <mat-toolbar class="text-end d-flex justify-content-between bg-spider rounded-2 mat-elevation-z2" >
+          <mat-toolbar class="text-end d-flex justify-content-between bg-spider rounded-2 mat-elevation-z2">
             <span>💬 AI Assistant</span>
             <button mat-icon-button (click)="aiDrawer.toggle()">
               <mat-icon>close</mat-icon>
             </button>
           </mat-toolbar>
-<!--          <p class="m-auto h-100 w-100 text-center">Comment puis-je <br> vous aider ?</p>-->
+          <!--          <p class="m-auto h-100 w-100 text-center">Comment puis-je <br> vous aider ?</p>-->
           <!-- Right Menu for Application Selection -->
           <app-ai-chat class="bg-white"></app-ai-chat>
         </div>
       </mat-drawer>
-      <mat-drawer
-        #leftSmallMenuDrawer
-        class="shadow-sm bg-light rounded-2 bg-light small-left-menu-with"
-        mode="side"
-        position="start"
-        [opened]="!leftDrawer.opened"
-      >
+      <mat-drawer #leftSmallMenuDrawer class="shadow-sm bg-light rounded-2 bg-light small-left-menu-with" mode="side"
+        position="start" [opened]="!leftDrawer.opened">
         <div class="bg-light">
           <div class="text-center list-group d-flex flex-column mt-5">
-            <a *ngFor="let item of menuItems" [routerLink]="item.route"  routerLinkActive="active-link"
-               [routerLinkActiveOptions]="{exact:false}" class="text-decoration-none text-center rounded-2">
+            <a *ngFor="let item of menuItems" [routerLink]="item.route" routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{exact:false}" class="text-decoration-none text-center rounded-2">
               <li class="d-flex justify-content-center align-items-center scale-08">
-                <button class="rounded-2"  [matTooltip]="item.name | translate"
-                          [matTooltipPosition]="'right'"
-                          mat-icon-button>
-<!--                  {{ item.name }}-->
+                <button class="rounded-2" [matTooltip]="item.name | translate" [matTooltipPosition]="'right'"
+                  mat-icon-button>
+                  <!--                  {{ item.name }}-->
                   <mat-icon class="text-secondary ">{{ item.icon }}</mat-icon>
                 </button>
               </li>
@@ -198,8 +163,7 @@
           </div>
         </div>
       </mat-drawer>
-      <button (click)="aiDrawer.toggle()" mat-icon-button
-              class="ai-btn bg-spider primary-blue-color  text-center">
+      <button (click)="aiDrawer.toggle()" mat-icon-button class="ai-btn bg-spider primary-blue-color  text-center">
         <i class="bi bi-robot fs-4"></i>
       </button>
 
@@ -209,10 +173,9 @@
     </mat-drawer-container>
     <!-- Right Drawer -->
 
-    <div >
+    <div>
 
 
     </div>
   </div>
 </mat-drawer-container>
-

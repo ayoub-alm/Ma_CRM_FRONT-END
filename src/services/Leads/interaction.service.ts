@@ -18,8 +18,10 @@ export class InteractionService {
    * Get all interactions.
    * @returns Observable list of InteractionResponseDto.
    */
-  getAllInteractions(companyId:number, searchValue: string = ""): Observable<InteractionResponseDto[]> {
-    const params = new HttpParams().set('companyId', companyId).set('searchValue', searchValue);
+  getAllInteractions(companyId:number, searchValue: string = "", page?: number, pageSize?: number): Observable<InteractionResponseDto[]> {
+    let params = new HttpParams().set('companyId', companyId).set('searchValue', searchValue);
+    if (page !== undefined) params = params.set('page', page);
+    if (pageSize !== undefined) params = params.set('pageSize', pageSize);
     return this.http.get<InteractionResponseDto[]>(`${this.baseUrl}`, {params}).pipe(
       tap(data => {
         data.map(value => {
@@ -33,8 +35,11 @@ export class InteractionService {
    * Get all interactions by interlocutor ID.
    * @returns Observable list of InteractionResponseDto.
    */
-  getAllInteractionsByInterlocutorId(interlocutorId: number): Observable<InteractionResponseDto[]> {
-    return this.http.get<InteractionResponseDto[]>(`${this.baseUrl}/interlocutor/${interlocutorId}`).pipe(tap(data => {
+  getAllInteractionsByInterlocutorId(interlocutorId: number, page?: number, pageSize?: number): Observable<InteractionResponseDto[]> {
+    let params = new HttpParams();
+    if (page !== undefined) params = params.set('page', page);
+    if (pageSize !== undefined) params = params.set('pageSize', pageSize);
+    return this.http.get<InteractionResponseDto[]>(`${this.baseUrl}/interlocutor/${interlocutorId}`, { params }).pipe(tap(data => {
       data.map(value => {
         new InteractionResponseDto(value)
       })

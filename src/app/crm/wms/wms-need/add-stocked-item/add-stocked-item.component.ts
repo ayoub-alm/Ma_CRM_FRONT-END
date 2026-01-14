@@ -1,6 +1,6 @@
-import {Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatDatepicker, MatDatepickerInput, MatDatepickerToggle} from "@angular/material/datepicker";
+import { Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatDatepicker, MatDatepickerInput, MatDatepickerToggle } from "@angular/material/datepicker";
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -8,13 +8,13 @@ import {
   MatDialogContent, MatDialogRef,
   MatDialogTitle
 } from "@angular/material/dialog";
-import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
-import {MatOption} from "@angular/material/core";
-import {MatSelect} from "@angular/material/select";
-import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {PaginatorModule} from "primeng/paginator";
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import { MatFormField, MatLabel, MatSuffix } from "@angular/material/form-field";
+import { MatInput } from "@angular/material/input";
+import { MatOption } from "@angular/material/core";
+import { MatSelect } from "@angular/material/select";
+import { AsyncPipe, NgForOf, NgIf } from "@angular/common";
+import { PaginatorModule } from "primeng/paginator";
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
   MatCell,
   MatCellDef,
@@ -24,26 +24,26 @@ import {
   MatHeaderRowDef,
   MatRow, MatRowDef, MatTable
 } from '@angular/material/table';
-import {MatIcon} from '@angular/material/icon';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {BehaviorSubject, catchError, combineLatest, filter, of, Subject, takeUntil, tap} from 'rxjs';
-import {ProvisionResponseDto} from '../../../../../dtos/response/crm/provision.response.dto';
-import {SupportResponseDto} from '../../../../../dtos/response/crm/support.response.dto';
-import {StructureResponseDto} from '../../../../../dtos/response/crm/structure.response.dto';
-import {TemperatureResponseDto} from '../../../../../dtos/response/crm/temperature.response.dto';
-import {StorageNeedService} from '../../../../../services/crm/wms/storage.need.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {SupportService} from '../../../../../services/crm/wms/support.service';
-import {StructureService} from '../../../../../services/crm/wms/structure.service';
-import {TemperatureService} from '../../../../../services/crm/wms/temperature.service';
-import {LocalStorageService} from '../../../../../services/local.storage.service';
-import {ProvisionService} from '../../../../../services/crm/wms/provision.service.dto';
-import {StockedItemCreateDto} from '../../../../../dtos/request/crm/stockedItem.create.dto';
-import {StorageOfferService} from '../../../../../services/crm/wms/storage.offer.service';
-import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
-import {StockedItemResponseDto} from '../../../../../dtos/response/crm/stocked.itemresponse.dto';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { BehaviorSubject, catchError, combineLatest, filter, of, Subject, takeUntil, tap } from 'rxjs';
+import { ProvisionResponseDto } from '../../../../../dtos/response/crm/provision.response.dto';
+import { SupportResponseDto } from '../../../../../dtos/response/crm/support.response.dto';
+import { StructureResponseDto } from '../../../../../dtos/response/crm/structure.response.dto';
+import { TemperatureResponseDto } from '../../../../../dtos/response/crm/temperature.response.dto';
+import { StorageNeedService } from '../../../../../services/crm/wms/storage.need.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SupportService } from '../../../../../services/crm/wms/support.service';
+import { StructureService } from '../../../../../services/crm/wms/structure.service';
+import { TemperatureService } from '../../../../../services/crm/wms/temperature.service';
+import { LocalStorageService } from '../../../../../services/local.storage.service';
+import { ProvisionService } from '../../../../../services/crm/wms/provision.service.dto';
+import { StockedItemCreateDto } from '../../../../../dtos/request/crm/stockedItem.create.dto';
+import { StorageOfferService } from '../../../../../services/crm/wms/storage.offer.service';
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { StockedItemResponseDto } from '../../../../../dtos/response/crm/stocked.itemresponse.dto';
 
 @Component({
   selector: 'app-add-stocked-item',
@@ -82,24 +82,24 @@ import {StockedItemResponseDto} from '../../../../../dtos/response/crm/stocked.i
   templateUrl: './add-stocked-item.component.html',
   styleUrl: './add-stocked-item.component.css'
 })
-export class AddStockedItemComponent implements OnInit , OnDestroy {
+export class AddStockedItemComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   itemToStoreFormGroup!: FormGroup;
-  provisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
-  filteredOptions: ProvisionResponseDto[] =  [];
+  provisions: BehaviorSubject<ProvisionResponseDto[]> = new BehaviorSubject<ProvisionResponseDto[]>([])
+  filteredOptions: ProvisionResponseDto[] = [];
   provisionControl = new FormControl('');
-  selectedProvisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
-  provisionsDisplayedColumns: string[] = ['name',"unite", "actions"];
+  selectedProvisions: BehaviorSubject<ProvisionResponseDto[]> = new BehaviorSubject<ProvisionResponseDto[]>([])
+  provisionsDisplayedColumns: string[] = ['name', "unite", "actions"];
 
-  @ViewChild('input') input!: ElementRef<HTMLInputElement> ;
+  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
   supports: BehaviorSubject<SupportResponseDto[]> = new BehaviorSubject<SupportResponseDto[]>([]);
   structures: BehaviorSubject<StructureResponseDto[]> = new BehaviorSubject<StructureResponseDto[]>([]);
   temperatures: BehaviorSubject<TemperatureResponseDto[]> = new BehaviorSubject<TemperatureResponseDto[]>([]);
-  itemsToStore: BehaviorSubject<StockedItemCreateDto> =  new BehaviorSubject<StockedItemCreateDto>({} as StockedItemCreateDto )
-  constructor(@Inject(MAT_DIALOG_DATA) public data:any ,private matDialogRef: MatDialogRef<AddStockedItemComponent>, private storageNeedService: StorageNeedService,
-              public router: Router,private activeRouter: ActivatedRoute, private snackBar: MatSnackBar, private fb: FormBuilder,private supportService: SupportService, private structureService: StructureService,
-              private temperatureServices: TemperatureService, private localStorageService: LocalStorageService, private provisionService: ProvisionService,
-              private storageOfferService: StorageOfferService ) {
+  itemsToStore: BehaviorSubject<StockedItemCreateDto> = new BehaviorSubject<StockedItemCreateDto>({} as StockedItemCreateDto)
+  constructor(@Inject(MAT_DIALOG_DATA) public data: any, private matDialogRef: MatDialogRef<AddStockedItemComponent>, private storageNeedService: StorageNeedService,
+    public router: Router, private activeRouter: ActivatedRoute, private snackBar: MatSnackBar, private fb: FormBuilder, private supportService: SupportService, private structureService: StructureService,
+    private temperatureServices: TemperatureService, private localStorageService: LocalStorageService, private provisionService: ProvisionService,
+    private storageOfferService: StorageOfferService) {
   }
 
   ngOnInit() {
@@ -132,7 +132,7 @@ export class AddStockedItemComponent implements OnInit , OnDestroy {
     this.itemToStoreFormGroup.get("provisions")?.valueChanges.pipe(
       tap((selectedProvisionIds: number[]) => {
         // Filter provisions based on selected IDs
-        const  filteredProvisions = this.provisions.getValue()
+        const filteredProvisions = this.provisions.getValue()
           .filter(provision => selectedProvisionIds.includes(provision.id));
         this.selectedProvisions.next(filteredProvisions);
       }),
@@ -146,7 +146,7 @@ export class AddStockedItemComponent implements OnInit , OnDestroy {
   /**
    *
    */
-  loadProvisions(): void{
+  loadProvisions(): void {
     this.provisionService.getAllProvisionsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
       tap(data => {
         this.provisions.next(data); // Perform the side effect of updating provisions
@@ -161,9 +161,9 @@ export class AddStockedItemComponent implements OnInit , OnDestroy {
   /**
    * this function allows to load support
    */
-  loadSupport(): void{
+  loadSupport(): void {
     this.supportService.getAllSupportsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
-      tap((response: SupportResponseDto[])=>{
+      tap((response: SupportResponseDto[]) => {
         this.supports.next(response);
       }),
       catchError((err) => {
@@ -176,9 +176,9 @@ export class AddStockedItemComponent implements OnInit , OnDestroy {
   /**
    * this function allows to load structures by company ID
    */
-  loadStructures(): void{
+  loadStructures(): void {
     this.structureService.getAllStructuresByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
-      tap((response: StructureResponseDto[])=>{
+      tap((response: StructureResponseDto[]) => {
         this.structures.next(response);
       }),
       catchError((err) => {
@@ -191,9 +191,9 @@ export class AddStockedItemComponent implements OnInit , OnDestroy {
   /**
    * this function allows to load structures by company ID
    */
-  loadTemperatures(): void{
+  loadTemperatures(): void {
     this.temperatureServices.getAllTemperaturesByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
-      tap((response: TemperatureResponseDto[])=>{
+      tap((response: TemperatureResponseDto[]) => {
         this.temperatures.next(response);
       }),
       catchError((err) => {
@@ -206,7 +206,7 @@ export class AddStockedItemComponent implements OnInit , OnDestroy {
   /**
    *
    */
-  fileDimensionsBySelectedSupport():void{
+  fileDimensionsBySelectedSupport(): void {
     this.itemToStoreFormGroup.get('supportId')?.valueChanges
       .pipe(
         filter(Boolean), // Ensures supportId is not null/undefined
@@ -247,36 +247,36 @@ export class AddStockedItemComponent implements OnInit , OnDestroy {
   createNewStockedItem() {
     this.itemToStoreFormGroup.markAllAsTouched();
 
-      const item: StockedItemCreateDto = this.itemToStoreFormGroup.value;
+    const item: StockedItemCreateDto = this.itemToStoreFormGroup.value;
     console.log(item);
     item.provisions = this.selectedProvisions.getValue();
-      const storageNeedId = this.data.storageNeedId; // Assuming storageNeedId is passed via dialog data
-      if (storageNeedId != null){
-        this.storageNeedService.addStockedItemToStorageNeed(storageNeedId, item)
-          .subscribe({
-            next: (response) => {
-              this.snackBar.open('Stocked item added successfully!', 'Close', { duration: 3000 });
-              this.matDialogRef.close(response);
-            },
-            error: (error) => {
-              console.error('Error adding stocked item:', error);
-              this.snackBar.open('Failed to add stocked item. Please try again.', 'Close', { duration: 3000 });
-            }
-          });
-      } else {
-        const storageOfferId = this.data.storageOfferId;
-        this.storageOfferService.addStockedItemToStorageOffer(storageOfferId, item)
-          .subscribe({
-            next: (response) => {
-              this.snackBar.open('Stocked item added successfully!', 'Close', { duration: 3000 });
-              this.matDialogRef.close(response);
-            },
-            error: (error) => {
-              console.error('Error adding stocked item:', error);
-              this.snackBar.open('Failed to add stocked item. Please try again.', 'Close', { duration: 3000 });
-            }
-          });
-      }
+    const storageNeedId = this.data.storageNeedId; // Assuming storageNeedId is passed via dialog data
+    if (storageNeedId != null) {
+      this.storageNeedService.addStockedItemToStorageNeed(storageNeedId, item)
+        .subscribe({
+          next: (response) => {
+            this.snackBar.open('Stocked item added successfully!', 'Close', { duration: 3000 });
+            this.matDialogRef.close(response);
+          },
+          error: (error) => {
+            console.error('Error adding stocked item:', error);
+            this.snackBar.open('Failed to add stocked item. Please try again.', 'Close', { duration: 3000 });
+          }
+        });
+    } else {
+      const storageOfferId = this.data.storageOfferId;
+      this.storageOfferService.addStockedItemToStorageOffer(storageOfferId, item)
+        .subscribe({
+          next: (response) => {
+            this.snackBar.open('Stocked item added successfully!', 'Close', { duration: 3000 });
+            this.matDialogRef.close(response);
+          },
+          error: (error) => {
+            console.error('Error adding stocked item:', error);
+            this.snackBar.open('Failed to add stocked item. Please try again.', 'Close', { duration: 3000 });
+          }
+        });
+    }
 
   }
 
@@ -292,7 +292,7 @@ export class AddStockedItemComponent implements OnInit , OnDestroy {
     const filterValue = this.input.nativeElement.value.toLowerCase();
     this.filteredOptions = this.provisions.getValue()
       .filter(provision =>
-      !this.selectedProvisions.getValue().map(provision => provision.id).includes(provision.id))
+        !this.selectedProvisions.getValue().map(provision => provision.id).includes(provision.id))
       .filter(o => o.name.toLowerCase().includes(filterValue));
   }
 

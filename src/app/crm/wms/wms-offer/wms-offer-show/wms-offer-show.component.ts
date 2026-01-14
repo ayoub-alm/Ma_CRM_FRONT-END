@@ -1,9 +1,9 @@
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf} from "@angular/common";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatCard, MatCardContent} from "@angular/material/card";
-import {MatIcon} from "@angular/material/icon";
-import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf } from "@angular/common";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatCard, MatCardContent } from "@angular/material/card";
+import { MatIcon } from "@angular/material/icon";
+import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
 import {
   MatCell,
   MatCellDef,
@@ -27,41 +27,44 @@ import {
   tap,
   throwError
 } from 'rxjs';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {StorageOfferResponseDto} from '../../../../../dtos/response/crm/storage.offer.response.dto';
-import {StorageOfferService} from '../../../../../services/crm/wms/storage.offer.service';
-import {EntityEnum} from '../../../../../enums/entity.enum';
-import {getLabelFromStorageReasonEnum, StorageReasonEnum} from '../../../../../enums/crm/storage.reason.enum';
-import {DiscountTypeEnum} from '../../../../../enums/discount.type.enum';
-import {FormBuilder, FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {PrintService} from '../../../../../services/docs/print.service';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {GeneralInfosComponent} from '../../../../utils/general-infos/general-infos.component';
-import {StorageContractService} from '../../../../../services/crm/wms/storage.contract.service';
-import {RequirementResponseDto} from '../../../../../dtos/response/crm/requirement.response.dto';
-import {UnloadingTypeResponseDto} from '../../../../../dtos/response/crm/unloading.type.response.dto';
-import {StockedItemResponseDto} from '../../../../../dtos/response/crm/stocked.itemresponse.dto';
-import {ProvisionResponseDto} from '../../../../../dtos/response/crm/provision.response.dto';
-import {StockedItemProvisionService} from '../../../../../services/crm/wms/stocked.item.provision.service';
-import {ProvisionService} from '../../../../../services/crm/wms/provision.service.dto';
-import {LocalStorageService} from '../../../../../services/local.storage.service';
-import {MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatInput} from '@angular/material/input';
-import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
-import {StockedItemProvision} from '../../../../../models/stocked.item.provision.dto';
-import {AddStockedItemComponent} from '../../wms-need/add-stocked-item/add-stocked-item.component';
-import {MatDialog} from '@angular/material/dialog';
-import {MatTooltip} from '@angular/material/tooltip';
-import {UnloadingTypeService} from '../../../../../services/crm/wms/unloading.type.service';
-import {RequirementService} from '../../../../../services/crm/wms/requirement.service';
-import {LivreEnum} from '../../../../../enums/crm/livre.enum';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { StorageOfferResponseDto } from '../../../../../dtos/response/crm/storage.offer.response.dto';
+import { StorageOfferService } from '../../../../../services/crm/wms/storage.offer.service';
+import { EntityEnum } from '../../../../../enums/entity.enum';
+import { getLabelFromStorageReasonEnum, StorageReasonEnum } from '../../../../../enums/crm/storage.reason.enum';
+import { DiscountTypeEnum } from '../../../../../enums/discount.type.enum';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { PrintService } from '../../../../../services/docs/print.service';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { GeneralInfosComponent } from '../../../../utils/general-infos/general-infos.component';
+import { StorageContractService } from '../../../../../services/crm/wms/storage.contract.service';
+import { RequirementResponseDto } from '../../../../../dtos/response/crm/requirement.response.dto';
+import { UnloadingTypeResponseDto } from '../../../../../dtos/response/crm/unloading.type.response.dto';
+import { StockedItemResponseDto } from '../../../../../dtos/response/crm/stocked.itemresponse.dto';
+import { ProvisionResponseDto } from '../../../../../dtos/response/crm/provision.response.dto';
+import { StockedItemProvisionService } from '../../../../../services/crm/wms/stocked.item.provision.service';
+import { ProvisionService } from '../../../../../services/crm/wms/provision.service.dto';
+import { LocalStorageService } from '../../../../../services/local.storage.service';
+import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { StockedItemProvision } from '../../../../../models/stocked.item.provision.dto';
+import { AddStockedItemComponent } from '../../wms-need/add-stocked-item/add-stocked-item.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTooltip } from '@angular/material/tooltip';
+import { UnloadingTypeService } from '../../../../../services/crm/wms/unloading.type.service';
+import { RequirementService } from '../../../../../services/crm/wms/requirement.service';
+import { LivreEnum } from '../../../../../enums/crm/livre.enum';
 import {
   CreateStorageContractDialogComponent
 } from '../../../../utils/create-storage-contract-dailog/create-storage-contract-dailog.component';
-import {PaymentMethodResponseDto} from '../../../../../dtos/init_data/response/paymentMethodResponseDto';
-import {StorageOfferUpdateRequestDto} from '../../../../../dtos/request/crm/storage.offer.update.request.dto';
+import { PaymentMethodResponseDto } from '../../../../../dtos/init_data/response/paymentMethodResponseDto';
+import { StorageOfferUpdateRequestDto } from '../../../../../dtos/request/crm/storage.offer.update.request.dto';
+import { RbacService, Permissions } from '../../../../../services/rbac.service';
+import { HasPermissionDirective } from '../../../../directives/has-permission.directive';
+
 
 @Component({
   selector: 'app-wms-offer-show',
@@ -85,25 +88,27 @@ import {StorageOfferUpdateRequestDto} from '../../../../../dtos/request/crm/stor
     NgForOf, MatLabel, MatIconButton, MatSidenavModule,
     DatePipe, MatMenu, MatMenuItem, MatMenuTrigger, ReactiveFormsModule, GeneralInfosComponent, MatFormField,
     MatOption, MatInput, MatAutocompleteTrigger, MatAutocomplete, MatTooltip, MatSelect, AsyncPipe, KeyValuePipe, NgClass,
+    HasPermissionDirective
   ],
   templateUrl: './wms-offer-show.component.html',
   styleUrl: './wms-offer-show.component.css'
 })
-export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
+export class WmsOfferShowComponent implements OnInit, AfterViewInit {
   protected readonly EntityEnum = EntityEnum;
   protected readonly getLabelFromStorageReasonEnum = getLabelFromStorageReasonEnum;
   protected readonly DiscountTypeEnum = DiscountTypeEnum;
-  requirementsColumns: string[] = [ 'name', "unite","price","system_price", "remise", "remiseValue","increaseValue",
+  protected readonly Permissions = Permissions;
+  requirementsColumns: string[] = ['name', "unite", "price", "system_price", "remise", "remiseValue", "increaseValue",
     "finalPrice", "delete"];
-  storageOffer:BehaviorSubject<StorageOfferResponseDto> = new BehaviorSubject<StorageOfferResponseDto>({} as StorageOfferResponseDto);
+  storageOffer: BehaviorSubject<StorageOfferResponseDto> = new BehaviorSubject<StorageOfferResponseDto>({} as StorageOfferResponseDto);
   isDisabledEditing: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
   provisions: BehaviorSubject<ProvisionResponseDto[]> = new BehaviorSubject<ProvisionResponseDto[]>([])
-  unloadingDisplayedColumns: string[] =  [ 'name', "unite","price","system_price", "remise", "remiseValue",
-    "increaseValue","finalPrice", "delete"];
+  unloadingDisplayedColumns: string[] = ['name', "unite", "price", "system_price", "remise", "remiseValue",
+    "increaseValue", "finalPrice", "delete"];
 
 
-  @ViewChild('input') input!: ElementRef<HTMLInputElement> ;
-  @ViewChild('input2') input2!: ElementRef<HTMLInputElement> ;
+  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
+  @ViewChild('input2') input2!: ElementRef<HTMLInputElement>;
   myControl = new FormControl('');
   addNewUnloadingControl = new FormControl('');
   filteredOptions!: ProvisionResponseDto[];
@@ -112,12 +117,12 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
   unloadingTypes: BehaviorSubject<UnloadingTypeResponseDto[]> = new BehaviorSubject<UnloadingTypeResponseDto[]>([]);
   requirementForm!: FormGroup;
   requirements: BehaviorSubject<RequirementResponseDto[]> = new BehaviorSubject<RequirementResponseDto[]>([]);
-  storageOfferForm!:FormGroup;
-  constructor(private storageOfferService: StorageOfferService, public router: Router,private activeRouter: ActivatedRoute,
-              private snackBar: MatSnackBar, private docService: PrintService, private storageContractService: StorageContractService
-              ,private stockedItemProvisionService: StockedItemProvisionService, private provisionService: ProvisionService,
-              private localStorageService: LocalStorageService, private dialog: MatDialog, private unloadingTypeService: UnloadingTypeService,
-              private fb: FormBuilder, private requirementService: RequirementService) {
+  storageOfferForm!: FormGroup;
+  constructor(private storageOfferService: StorageOfferService, public router: Router, private activeRouter: ActivatedRoute,
+    private snackBar: MatSnackBar, private docService: PrintService, private storageContractService: StorageContractService
+    , private stockedItemProvisionService: StockedItemProvisionService, private provisionService: ProvisionService,
+    private localStorageService: LocalStorageService, private dialog: MatDialog, private unloadingTypeService: UnloadingTypeService,
+    private fb: FormBuilder, private requirementService: RequirementService, public rbacService: RbacService) {
   }
 
   ngOnInit() {
@@ -143,32 +148,47 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
     if (this.storageOffer.getValue()) {
       this.storageOfferForm.patchValue(this.storageOffer.getValue());
     }
-        this.unloadForm.get("unload")?.setValue(
-        this.storageOffer.getValue().unloadingTypes.map(unloadType => { return unloadType.id}));
+    this.unloadForm.get("unload")?.setValue(
+      this.storageOffer.getValue().unloadingTypes.map(unloadType => { return unloadType.id }));
 
-      this.requirementForm.get("requirement")?.setValue(
-        this.storageOffer.getValue().requirements.map(requirement => { return requirement.id}));
-    }
+    this.requirementForm.get("requirement")?.setValue(
+      this.storageOffer.getValue().requirements.map(requirement => { return requirement.id }));
+  }
 
 
 
   /**
    * this function allows to loadStorage need by id
    */
-  loadStorageOffer():void{
-    const storageNeedId:number = this.activeRouter.snapshot.params['id'];
+  loadStorageOffer(): void {
+    const storageNeedId: number = this.activeRouter.snapshot.params['id'];
     this.storageOfferService.getStorageOfferById(storageNeedId).pipe(
       tap(data => {
         this.storageOffer.next(data)
         this.storageOfferForm.patchValue(data);
+        this.updateEditingState(data);
       }),
       catchError((err) => {
-        this.snackBar.open("Erreur de téléchargement de données", "ok", {duration: 3000})
-        return of(null);}
-      )).subscribe({
-      next:()=> {
+        this.snackBar.open("Erreur de téléchargement de données", "ok", { duration: 3000 })
+        return of(null);
       }
-    })
+      )).subscribe({
+        next: () => {
+        }
+      })
+  }
+
+  private updateEditingState(offer: StorageOfferResponseDto): void {
+    const isAccepted = offer.status?.id === 5;
+    const hasContract = offer.hasContract; // Assuming this field exists in DTO if we added it to backend DTO
+
+    // If accepted or has contract, only Admin/SuperAdmin can edit if we want to follow the backend rule
+    // But frontend usually just disables everything if it's "Locked"
+    if (isAccepted || hasContract) {
+      if (!this.rbacService.canEditAfterValidation()) {
+        this.isDisabledEditing.next(true);
+      }
+    }
   }
 
 
@@ -179,7 +199,7 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
    * this function allows to load provisions
    */
 
-  loadProvisions():void{
+  loadProvisions(): void {
     this.provisionService.getAllProvisionsByCompanyId(this.localStorageService.getCurrentCompanyId()).pipe(tap(data => {
       this.provisions.next(data);
     })).subscribe()
@@ -218,13 +238,13 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       debounceTime(500), // Prevent excessive API calls
       distinctUntilChanged(),
     ).subscribe(data => {
-      if (data != "" && data != this.storageOffer.getValue().managementFees){
+      if (data != "" && data != this.storageOffer.getValue().managementFees) {
         this.storageOfferService.updateManagementFees(this.storageOffer.getValue().id, data).subscribe({
-          next:(storageOffer:StorageOfferResponseDto)=> {
+          next: (storageOffer: StorageOfferResponseDto) => {
             this.storageOffer.next(storageOffer);
           },
-          error:(err)=>{
-             this.snackBar.open("Erreur lors de la mise à jour", "Ok", {duration:3000})
+          error: (err) => {
+            this.snackBar.open("Erreur lors de la mise à jour", "Ok", { duration: 3000 })
           }
         });
       }
@@ -234,13 +254,13 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       debounceTime(500), // Prevent excessive API calls
       distinctUntilChanged(),
     ).subscribe(data => {
-      if (data != 0 && data != "" && data != this.storageOffer.getValue().managementFees){
+      if (data != 0 && data != "" && data != this.storageOffer.getValue().managementFees) {
         this.storageOfferService.updateMaxDiscountValue(this.storageOffer.getValue().id, data).subscribe({
-          next:(storageOffer:StorageOfferResponseDto)=> {
+          next: (storageOffer: StorageOfferResponseDto) => {
             this.storageOffer.next(storageOffer);
           },
-          error:(err)=>{
-             this.snackBar.open("Erreur lors de la mise à jour", "Ok", {duration:3000})
+          error: (err) => {
+            this.snackBar.open("Erreur lors de la mise à jour", "Ok", { duration: 3000 })
           }
         });
       }
@@ -251,13 +271,13 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       debounceTime(500), // Prevent excessive API calls
       distinctUntilChanged(),
     ).subscribe(data => {
-      if (data != 0 && data != "" && data != this.storageOffer.getValue().note){
+      if (data != 0 && data != "" && data != this.storageOffer.getValue().note) {
         this.storageOfferService.updateNote(this.storageOffer.getValue().id, data).subscribe({
-          next:(storageOffer:StorageOfferResponseDto)=> {
+          next: (storageOffer: StorageOfferResponseDto) => {
             this.storageOffer.next(storageOffer);
           },
-          error:(err)=>{
-            this.snackBar.open("Erreur lors de la mise à jour", "Ok", {duration:3000})
+          error: (err) => {
+            this.snackBar.open("Erreur lors de la mise à jour", "Ok", { duration: 3000 })
           }
         });
       }
@@ -268,13 +288,13 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       debounceTime(500), // Prevent excessive API calls
       distinctUntilChanged(),
     ).subscribe(data => {
-      if (data != 0 && data != "" && data != this.storageOffer.getValue().note){
+      if (data != 0 && data != "" && data != this.storageOffer.getValue().note) {
         this.storageOfferService.updateDevise(this.storageOffer.getValue().id, data).subscribe({
-          next:(storageOffer:StorageOfferResponseDto)=> {
+          next: (storageOffer: StorageOfferResponseDto) => {
             this.storageOffer.next(storageOffer);
           },
-          error:(err)=>{
-            this.snackBar.open("Erreur lors de la mise à jour", "Ok", {duration:3000})
+          error: (err) => {
+            this.snackBar.open("Erreur lors de la mise à jour", "Ok", { duration: 3000 })
           }
         });
       }
@@ -291,18 +311,18 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
         debounceTime(300),
         tap(([productType, duration, numberOfSku, storageReason, liverStatus]) => {
           console.log({ productType, duration, numberOfSku, storageReason, liverStatus });
-          const requestData = new StorageOfferUpdateRequestDto({productType, duration, numberOfSku, storageReason, liverStatus })
+          const requestData = new StorageOfferUpdateRequestDto({ productType, duration, numberOfSku, storageReason, liverStatus })
           this.storageOfferService.updateStorageOffer(this.storageOffer.getValue().id, requestData).pipe(
-            tap((data: StorageOfferResponseDto)=>{
+            tap((data: StorageOfferResponseDto) => {
               this.storageOffer.next(data);
-              this.snackBar.open("Storage Offer updated successfully ", "OK", {duration:3000})
+              this.snackBar.open("Storage Offer updated successfully ", "OK", { duration: 3000 })
             })
           ).subscribe()
         })
       ).subscribe();
   }
 
-  loadUnloadingTypes(): void{
+  loadUnloadingTypes(): void {
     // get unloading types and fill the select box by pushing data in unloading variable
     this.unloadingTypeService.getUnloadingTypeByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
       tap(unloadingTypes => {
@@ -314,7 +334,7 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
   /**
    *
    */
-  initializeUnloadForm():void {
+  initializeUnloadForm(): void {
     this.unloadForm = this.fb.group({
       unload: [[]],
     })
@@ -334,7 +354,7 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
           if (!exists) {
             // Ajouter le nouvel unloading type
             this.storageOfferService.addUnloadingType(storageOffer.id, selectedType.id).subscribe({
-              next:  updatedStorageOffer => {
+              next: updatedStorageOffer => {
                 this.storageOffer.next(updatedStorageOffer);
                 this.snackBar.open('Déchargement  ajouté avec succès.', 'OK', { duration: 3000 });
               }
@@ -403,7 +423,7 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
   /**
    *
    */
-  loadRequirements(){
+  loadRequirements() {
     this.requirementService.getRequirementsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
       tap(data => {
         this.requirements.next(data);
@@ -430,7 +450,7 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
 
     this.storageContractService.checkIfCustomerHasActiveContract(this.storageOffer.getValue().customer.id).subscribe({
       next: (hasActiveContract) => {
-        if (hasActiveContract){
+        if (hasActiveContract) {
           const dialogRef = this.dialog.open(CreateStorageContractDialogComponent, {
             data: {
               title: 'Un contrat existe déjà',
@@ -438,9 +458,9 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
               confirmText: 'Nouveau contrat',
               cancelText: 'Créer un annexe',
               confirmButtonColor: 'primary',
-              hasActiveContract:true,
-              customerId:this.storageOffer.getValue().customer.id,
-              offerId:this.storageOffer.getValue().id
+              hasActiveContract: true,
+              customerId: this.storageOffer.getValue().customer.id,
+              offerId: this.storageOffer.getValue().id
             }
           });
           dialogRef.afterClosed().subscribe(result => {
@@ -459,12 +479,12 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
                   return throwError(() => error);
                 })
               ).subscribe();
-            }else{
+            } else {
               // in case of create annexe
               alert("should select contract for annexe ")
             }
           })
-        }else{
+        } else {
           this.storageContractService.createStorageContractFromOffer(offerId).pipe(
             tap(storageContract => {
               this.snackBar.open("Contrat créé avec succès", "Ok", { duration: 3000 });
@@ -564,8 +584,8 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
   }
 
 
-  toggleEditing(): void{
-    this.isDisabledEditing.next( !this.isDisabledEditing.getValue())
+  toggleEditing(): void {
+    this.isDisabledEditing.next(!this.isDisabledEditing.getValue())
   }
 
   selectDiscountTypeForRequirement(element: RequirementResponseDto, event: Event) {
@@ -606,7 +626,7 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
     if (DiscountTypeEnum[selectedValue]) {
       prv.discountType = DiscountTypeEnum[selectedValue];
       // update the stocked item provision in back-end
-      this.updateStockedItemProvision(prv.stockedItemProvisionId,{
+      this.updateStockedItemProvision(prv.stockedItemProvisionId, {
         discountType: DiscountTypeEnum[selectedValue],
         discountValue: prv.discountValue,
         increaseValue: prv.increaseValue,
@@ -638,21 +658,22 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       return;
     }
 
+    // Store the absolute discount value
     prv.discountValue = value;
     prv.salesPrice = prv.initPrice - value;
 
-      // update the stocked item provision in back-end
-      this.updateStockedItemProvision(prv.stockedItemProvisionId,{
-        discountType: prv.discountType,
-        discountValue: prv.discountValue,
-        increaseValue: prv.increaseValue,
-        initPrice: prv.initPrice,
-        provision: prv,
-        ref: '',
-        salesPrice: prv.salesPrice,
-        stockedItem: item,
-        stockedItemId: item.id
-      })
+    // update the stocked item provision in back-end
+    this.updateStockedItemProvision(prv.stockedItemProvisionId, {
+      discountType: prv.discountType,
+      discountValue: prv.discountValue,
+      increaseValue: prv.increaseValue,
+      initPrice: prv.initPrice,
+      provision: prv,
+      ref: '',
+      salesPrice: prv.salesPrice,
+      stockedItem: item,
+      stockedItemId: item.id
+    })
   }
   /**
    *
@@ -661,17 +682,18 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
    * @param $event
    */
   addDiscountRateForProvision(item: StockedItemResponseDto, prv: ProvisionResponseDto, $event: Event) {
-    const discountValue = parseFloat(($event.target as HTMLInputElement).value);
+    const discountRate = parseFloat(($event.target as HTMLInputElement).value);
     const maxDiscount = this.storageOffer.getValue().maxDisCountValue ?? 0;
 
-    if (!isNaN(discountValue) && discountValue >= 0 && discountValue <= 100) {
-      if (discountValue > maxDiscount) {
+    if (!isNaN(discountRate) && discountRate >= 0 && discountRate <= 100) {
+      if (discountRate > maxDiscount) {
         this.snackBar.open(`Le pourcentage de remise ne peut pas dépasser ${maxDiscount}%`, 'OK', { duration: 3000 });
         return;
       }
-      prv.discountValue = discountValue;
-      prv.salesPrice = prv.initPrice - (prv.initPrice * (discountValue / 100));
-      this.updateStockedItemProvision(prv.stockedItemProvisionId,{
+      // Store the percentage rate in discountValue
+      prv.discountValue = discountRate;
+      prv.salesPrice = prv.initPrice - (prv.initPrice * (discountRate / 100));
+      this.updateStockedItemProvision(prv.stockedItemProvisionId, {
         discountType: prv.discountType,
         discountValue: prv.discountValue,
         increaseValue: prv.increaseValue,
@@ -682,18 +704,18 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
         stockedItem: item,
         stockedItemId: item.id
       })
-    }else {
+    } else {
       prv.salesPrice = prv.initPrice; // Keep original price if invalid input
     }
     this.loadStorageOffer()
   }
-  addIncreaseValueForProvision(prv: ProvisionResponseDto,item: StockedItemResponseDto, $event: Event) {
+  addIncreaseValueForProvision(prv: ProvisionResponseDto, item: StockedItemResponseDto, $event: Event) {
     const increaseValue = parseFloat(($event.target as HTMLInputElement).value); // Convert input value to a number
     if (!isNaN(increaseValue)) {
       prv.increaseValue = increaseValue;
       prv.salesPrice += increaseValue;
       // update the stocked item provision in back-end
-      this.updateStockedItemProvision(prv.stockedItemProvisionId,{
+      this.updateStockedItemProvision(prv.stockedItemProvisionId, {
         discountType: prv.discountType,
         discountValue: prv.discountValue,
         increaseValue: increaseValue,
@@ -707,15 +729,15 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       this.loadStorageOffer();
     }
   }
-  updateStockedItemProvision(stockedItemProvisionId: number, stockedItemProvision: StockedItemProvision): void{
-    this.stockedItemProvisionService.update(stockedItemProvisionId, stockedItemProvision, stockedItemProvision.stockedItemId ).subscribe({
-      next:() => {
-        this.snackBar.open("Prestation modifier avec succès", "ok",{duration:3000});
+  updateStockedItemProvision(stockedItemProvisionId: number, stockedItemProvision: StockedItemProvision): void {
+    this.stockedItemProvisionService.update(stockedItemProvisionId, stockedItemProvision, stockedItemProvision.stockedItemId).subscribe({
+      next: () => {
+        this.snackBar.open("Prestation modifier avec succès", "ok", { duration: 3000 });
         // this.loadStorageOffer();
       },
-      error:(error)=>{
-        if(error.status != 200){
-          this.snackBar.open("Error lors de modification", "ok",{duration:3000});
+      error: (error) => {
+        if (error.status != 200) {
+          this.snackBar.open("Error lors de modification", "ok", { duration: 3000 });
           console.error(error)
         }
       }
@@ -732,45 +754,47 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       return;
     }
 
+    // Store the absolute discount value
     element.discountValue = value;
     element.salesPrice = element.initPrice - value;
     this.updateStorageOfferRequirement(element);
   }
   addDiscountRateForRequirement(element: RequirementResponseDto, $event: Event) {
-    const discountValue = parseFloat(($event.target as HTMLInputElement).value);
+    const discountRate = parseFloat(($event.target as HTMLInputElement).value);
     const maxDiscount = this.storageOffer.getValue().maxDisCountValue ?? 0;
 
-    if (!isNaN(discountValue) && discountValue >= 0 && discountValue <= 100) {
-      if (discountValue > maxDiscount) {
+    if (!isNaN(discountRate) && discountRate >= 0 && discountRate <= 100) {
+      if (discountRate > maxDiscount) {
         this.snackBar.open(`Le pourcentage de remise ne peut pas dépasser ${maxDiscount}%`, 'OK', { duration: 3000 });
         return;
       }
 
-      element.discountValue = discountValue;
-      element.salesPrice = element.initPrice - (element.initPrice * (discountValue / 100));
+      // Store the percentage rate in discountValue
+      element.discountValue = discountRate;
+      element.salesPrice = element.initPrice - (element.initPrice * (discountRate / 100));
       this.updateStorageOfferRequirement(element);
     } else {
       element.salesPrice = element.initPrice;
     }
   }
-  addIncreaseValueForRequirement(element:RequirementResponseDto, $event: Event) {
+  addIncreaseValueForRequirement(element: RequirementResponseDto, $event: Event) {
     const increaseValue = parseFloat(($event.target as HTMLInputElement).value);
     element.increaseValue = increaseValue;
     element.salesPrice += increaseValue;
     this.updateStorageOfferRequirement(element);
   }
   updateStorageOfferRequirement(element: RequirementResponseDto) {
-    this.storageOfferService.updateStorageOfferRequirement(element.id, element).pipe(
+    this.storageOfferService.updateStorageOfferRequirement(element.storageOfferRequirementId, element).pipe(
       tap(isUpdated => {
         if (isUpdated) {
-          this.snackBar.open('Exigence à été bien modifier ', 'ok', {duration: 3000});
+          this.snackBar.open('Exigence à été bien modifier ', 'ok', { duration: 3000 });
           this.loadStorageOffer();
-        }else {
-          this.snackBar.open(`Error lors de modification `, 'ok', {duration:3000});
+        } else {
+          this.snackBar.open(`Error lors de modification `, 'ok', { duration: 3000 });
         }
       }),
       catchError(err => {
-        this.snackBar.open(`Error lors de modification ${err.message} `, 'ok', {duration:3000});
+        this.snackBar.open(`Error lors de modification ${err.message} `, 'ok', { duration: 3000 });
         return EMPTY;
       })
     ).subscribe()
@@ -808,46 +832,48 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       return;
     }
 
+    // Store the absolute discount value
     element.discountValue = value;
     element.salesPrice = element.initPrice - value;
     this.updateStorageOfferUnloadType(element);
   }
   addDiscountRateForUnloading(element: UnloadingTypeResponseDto, $event: Event) {
-    const discountValue = parseFloat(($event.target as HTMLInputElement).value);
+    const discountRate = parseFloat(($event.target as HTMLInputElement).value);
     const maxDiscount = this.storageOffer.getValue().maxDisCountValue ?? 0;
 
-    if (!isNaN(discountValue) && discountValue >= 0 && discountValue <= 100) {
-      if (discountValue > maxDiscount) {
+    if (!isNaN(discountRate) && discountRate >= 0 && discountRate <= 100) {
+      if (discountRate > maxDiscount) {
         this.snackBar.open(`Le pourcentage de remise ne peut pas dépasser ${maxDiscount}%`, 'OK', { duration: 3000 });
         return;
       }
 
-      element.discountValue = discountValue;
-      element.salesPrice = element.initPrice - (element.initPrice * (discountValue / 100));
+      // Store the percentage rate in discountValue
+      element.discountValue = discountRate;
+      element.salesPrice = element.initPrice - (element.initPrice * (discountRate / 100));
       this.updateStorageOfferUnloadType(element);
     } else {
       element.salesPrice = element.initPrice;
       this.updateStorageOfferUnloadType(element);
     }
   }
-  addIncreaseValueForUnloadingType(element:UnloadingTypeResponseDto, $event: Event) {
+  addIncreaseValueForUnloadingType(element: UnloadingTypeResponseDto, $event: Event) {
     const increaseValue = parseFloat(($event.target as HTMLInputElement).value);
     element.increaseValue = increaseValue;
     element.salesPrice += increaseValue;
     this.updateStorageOfferUnloadType(element);
   }
-  updateStorageOfferUnloadType(element: UnloadingTypeResponseDto): void{
+  updateStorageOfferUnloadType(element: UnloadingTypeResponseDto): void {
     this.storageOfferService.updateStorageOfferUnloadingType(element.storageOfferUnloadTypeId, element).pipe(
       tap(isUpdated => {
         if (isUpdated) {
-          this.snackBar.open('Dépatage à été bien modifier ', 'ok', {duration: 3000});
+          this.snackBar.open('Dépatage à été bien modifier ', 'ok', { duration: 3000 });
           this.loadStorageOffer();
-        }else {
-          this.snackBar.open(`Error lors de modification `, 'ok', {duration:3000});
+        } else {
+          this.snackBar.open(`Error lors de modification `, 'ok', { duration: 3000 });
         }
       }),
       catchError(err => {
-        this.snackBar.open(`Error lors de modification ${err.message} `, 'ok', {duration:3000});
+        this.snackBar.open(`Error lors de modification ${err.message} `, 'ok', { duration: 3000 });
         return EMPTY;
       })
     ).subscribe();
@@ -858,9 +884,9 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
    * @param prv
    * @param item
    */
-  deleteProvision(prv:ProvisionResponseDto, item: StockedItemResponseDto ):void{
+  deleteProvision(prv: ProvisionResponseDto, item: StockedItemResponseDto): void {
     this.stockedItemProvisionService.delete(prv.stockedItemProvisionId).pipe(tap(data => {
-      this.snackBar.open("préstastion a été bien supprimé", "OK", {duration:3000})
+      this.snackBar.open("préstastion a été bien supprimé", "OK", { duration: 3000 })
       this.loadStorageOffer()
     })).subscribe();
   }
@@ -899,7 +925,7 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
       stockedItemId: item.id
     };
     this.stockedItemProvisionService.create(stockedItemProvison).pipe(tap(data => {
-      this.snackBar.open("La prestation a été  bien ajouté", "OK", {duration:3000})
+      this.snackBar.open("La prestation a été  bien ajouté", "OK", { duration: 3000 })
       this.myControl.reset()
       this.loadStorageOffer();
     })).subscribe()
@@ -910,16 +936,16 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
    * this function allows to open add new stocked item and refresh data after add a new item
    */
   onAddNewStockedItem() {
-    const dialogRef = this.dialog.open(AddStockedItemComponent,{
-      maxWidth: '900px', data:{
+    const dialogRef = this.dialog.open(AddStockedItemComponent, {
+      maxWidth: '900px', data: {
         storageOfferId: this.storageOffer.getValue().id,
         storageNeedId: null
       }
     })
 
     dialogRef.afterClosed().pipe(
-      tap((data:StockedItemResponseDto) => {
-        if (data){
+      tap((data: StockedItemResponseDto) => {
+        if (data) {
           this.loadStorageOffer()
         }
       })
@@ -933,13 +959,13 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
    */
   deleteItemToStoreFromStorageOffer(stockedItemId: number) {
     this.storageOfferService.deleteStockedItemFromOffer(this.storageOffer.getValue().id, stockedItemId).subscribe({
-      next:(data)=> {
-              this.snackBar.open("Support supprimé avec success", "OK", {duration:3000});
-          this.loadStorageOffer();
+      next: (data) => {
+        this.snackBar.open("Support supprimé avec success", "OK", { duration: 3000 });
+        this.loadStorageOffer();
 
       },
       error: error => {
-        this.snackBar.open(error.message, 'OK', {duration:3000});
+        this.snackBar.open(error.message, 'OK', { duration: 3000 });
       }
     })
   }
@@ -949,23 +975,23 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
     this.storageOffer.getValue().stockedItems.forEach(item => {
       numberOfPlaces += item.quantity;
     });
-    return  Math.round(numberOfPlaces * 0.2);
+    return Math.round(numberOfPlaces * 0.2);
   }
 
   protected readonly LivreEnum = LivreEnum;
 
 
   updateSelectPaymentMethod(method: PaymentMethodResponseDto) {
-      this.storageOfferService.updateSelectedPaymentMethod(this.storageOffer.getValue().id, method.id)
-        .pipe(tap(data => {
-          this.storageOffer.next(data)
-          this.snackBar.open("La method à été bien séléctionner ", "OK", {duration:3000})
-        }))
-        .subscribe({
-          error: err => {
-            this.snackBar.open("Erreur lors de la mise à jour", "Ok", {duration:3000})
-          }
-        })
+    this.storageOfferService.updateSelectedPaymentMethod(this.storageOffer.getValue().id, method.id)
+      .pipe(tap(data => {
+        this.storageOffer.next(data)
+        this.snackBar.open("La method à été bien séléctionner ", "OK", { duration: 3000 })
+      }))
+      .subscribe({
+        error: err => {
+          this.snackBar.open("Erreur lors de la mise à jour", "Ok", { duration: 3000 })
+        }
+      })
   }
 
   calculateStoragePrice(item: any): number {
@@ -987,8 +1013,8 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
     const input = $event.target as HTMLInputElement;
     const value = parseFloat(input.value);
     if (!isNaN(value)) {
-      this.storageOfferService.updateMinimalBillingAmount(this.storageOffer.getValue().id,value).subscribe((data) => {
-        this.snackBar.open("Facturation minimale assurée à éte mis à jour avec succès", "ok", {duration:3000})
+      this.storageOfferService.updateMinimalBillingAmount(this.storageOffer.getValue().id, value).subscribe((data) => {
+        this.snackBar.open("Facturation minimale assurée à éte mis à jour avec succès", "ok", { duration: 3000 })
       });
     }
   }
@@ -1001,8 +1027,8 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
     const input = $event.target as HTMLInputElement;
     const value = parseFloat(input.value);
     if (!isNaN(value)) {
-      this.storageOfferService.updateReservedPlaces(this.storageOffer.getValue().id,value).subscribe((data) => {
-        this.snackBar.open("number des places résérvé à éte mis à jour avec succès", "ok", {duration:3000})
+      this.storageOfferService.updateReservedPlaces(this.storageOffer.getValue().id, value).subscribe((data) => {
+        this.snackBar.open("number des places résérvé à éte mis à jour avec succès", "ok", { duration: 3000 })
       });
     }
   }
@@ -1019,7 +1045,7 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
   addNewUnloadingType(unloadingType: UnloadingTypeResponseDto): void {
     this.addNewUnloadingControl.setValue(unloadingType.name)
     this.storageOfferService.addUnloadingType(this.storageOffer.getValue().id, unloadingType.id).subscribe({
-      next:  updatedStorageOffer => {
+      next: updatedStorageOffer => {
         this.storageOffer.next(updatedStorageOffer);
         this.snackBar.open('Déchargement  ajouté avec succès.', 'OK', { duration: 3000 });
         this.addNewUnloadingControl.reset();
@@ -1037,15 +1063,21 @@ export class WmsOfferShowComponent  implements OnInit, AfterViewInit{
 
   getStatusColor(statusId: number | undefined): string {
     switch (statusId) {
-      case 1: return 'bg-info-subtle text-white';
-      case 2: return 'bg-warning-subtle text-dark';
-      case 3: return 'bg-success-subtle  text-dark';
+      case 1: return 'bg-info-subtle text-white';        // Brouillon
+      case 2: return 'bg-warning-subtle text-dark';      // En attente de validation
+      case 3: return 'bg-success-subtle text-dark';      // Validée
+      case 4: return 'bg-primary-subtle text-dark';      // Envoyée au client
+      case 5: return 'bg-success text-white';            // Acceptée
+      case 6: return 'bg-danger-subtle text-dark';       // Refusée
       default: return 'bg-secondary-subtle text-dark';
     }
   }
 
   protected readonly StorageReasonEnum = StorageReasonEnum;
+
 }
+
+
 
 // src/app/utils/price-calculator.util.ts
 export interface StorageInput {

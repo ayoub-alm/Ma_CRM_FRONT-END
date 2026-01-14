@@ -1,20 +1,20 @@
 import { LivreEnum } from '../../../enums/crm/livre.enum';
 import { NeedStatusEnum } from '../../../enums/crm/need.status.enum';
 import { StorageReasonEnum } from '../../../enums/crm/storage.reason.enum';
-import {StockedItemCreateDto} from '../../request/crm/stockedItem.create.dto';
-import {StockedItemResponseDto} from './stocked.itemresponse.dto';
-import {UnloadingTypeResponseDto} from './unloading.type.response.dto';
-import {RequirementResponseDto} from './requirement.response.dto';
-import {InterlocutorResDto} from '../interlocutor.dto';
-import {PaymentMethodResponseDto} from '../../init_data/response/paymentMethodResponseDto';
-import {UserDto} from '../usersResponseDto';
-import {StorageOfferStatus} from './storage.offer.status';
-import {StorageNeedResponseDto} from './storage.need.response.dto';
+import { StockedItemCreateDto } from '../../request/crm/stockedItem.create.dto';
+import { StockedItemResponseDto } from './stocked.itemresponse.dto';
+import { UnloadingTypeResponseDto } from './unloading.type.response.dto';
+import { RequirementResponseDto } from './requirement.response.dto';
+import { InterlocutorResDto } from '../interlocutor.dto';
+import { PaymentMethodResponseDto } from '../../init_data/response/paymentMethodResponseDto';
+import { UserDto } from '../usersResponseDto';
+import { StorageOfferStatus } from './storage.offer.status';
+import { StorageNeedResponseDto } from './storage.need.response.dto';
 
 export class StorageOfferResponseDto {
   id!: number; // ID of the storage need
   ref!: string; // UUID reference of the storage need
-  number:string;
+  number: string;
   liverStatus!: LivreEnum; // OPEN or CLOSE
   storageReason!: StorageReasonEnum; // TEMPORARY, PERMANENT, SEASONAL
   status!: StorageOfferStatus; // CREATED, NEGOTIATION, CANCELED, etc.
@@ -22,26 +22,27 @@ export class StorageOfferResponseDto {
   duration!: number; // Duration of the storage in days or units
   numberOfSku!: number; // Number of SKUs involved in the storage
   productType!: string; // Type of product being stored
-  customer!: {id:number,name:string}; // Name of the associated customer
+  customer!: { id: number, name: string }; // Name of the associated customer
   companyName!: string; // Name of the associated company
   stockedItems: StockedItemResponseDto[];
   unloadingTypes: UnloadingTypeResponseDto[];
   requirements: RequirementResponseDto[];
-  interlocutor:InterlocutorResDto;
+  interlocutor: InterlocutorResDto;
   paymentTypes: PaymentMethodResponseDto[];
-  storageNeed:StorageNeedResponseDto;
-  paymentDeadline:number;
-  note:string;
-  numberOfReservedPlaces:number;
-  managementFees:number;
-  minimumBillingGuaranteed:number;
-  minimumBillingGuaranteedFixed:number;
-  maxDisCountValue:number;
-  devise:string;
+  storageNeed: StorageNeedResponseDto;
+  paymentDeadline: number;
+  note: string;
+  numberOfReservedPlaces: number;
+  managementFees: number;
+  minimumBillingGuaranteed: number;
+  minimumBillingGuaranteedFixed: number;
+  maxDisCountValue: number;
+  devise: string;
   createdAt: Date;
   updatedAt: Date;
   createdBy: UserDto;
   updatedBy: UserDto;
+  hasContract: boolean;
 
   constructor(data: any) {
     this.id = data.id;
@@ -75,5 +76,6 @@ export class StorageOfferResponseDto {
     this.updatedBy = data.updatedBy;
     this.maxDisCountValue = data.maxDisCountValue;
     this.devise = data.devise;
+    this.hasContract = data.hasContract;
   }
 }

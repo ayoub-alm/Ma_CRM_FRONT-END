@@ -21,8 +21,10 @@ export class InterlocutorService {
    * @param {string} [searchValue] - Optional search term to filter the interlocutors by. Defaults to an empty string.
    * @return {Observable<InterlocutorResDto[]>} An observable that emits a list of InterlocutorResDto objects.
    */
-  getAllInterlocutorsByCompanyId(companyId:number, searchValue: string = ""): Observable<InterlocutorResDto[]>{
-    const params = new HttpParams().set('companyId', companyId.toString()).set('searchValue', searchValue.toString());
+  getAllInterlocutorsByCompanyId(companyId:number, searchValue: string = "", page?: number, pageSize?: number): Observable<InterlocutorResDto[]>{
+    let params = new HttpParams().set('companyId', companyId.toString()).set('searchValue', searchValue.toString());
+    if (page !== undefined) params = params.set('page', page);
+    if (pageSize !== undefined) params = params.set('pageSize', pageSize);
     return this.http.get<InterlocutorResDto[]>(`${this.baseUrl}/api/interlocutors`, {params}).pipe(
       tap((interlocutors: InterlocutorResDto[]) => {
       interlocutors.map((interlocutor: InterlocutorResDto) => {
@@ -37,8 +39,11 @@ export class InterlocutorService {
    * @param {number} prospectId - The unique identifier of the prospect.
    * @return {Observable<InterlocutorResDto[]>} An observable that emits an array of InterlocutorResDto objects.
    */
-  getInterlocutorsByProspectId(prospectId: number): Observable<InterlocutorResDto[]>{
-    return this.http.get<InterlocutorResDto[]>(`${this.baseUrl}/api/interlocutors/prospect/${prospectId}`).pipe(tap((interlocutors: InterlocutorResDto[]) => {
+  getInterlocutorsByProspectId(prospectId: number, page?: number, pageSize?: number): Observable<InterlocutorResDto[]>{
+    let params = new HttpParams();
+    if (page !== undefined) params = params.set('page', page);
+    if (pageSize !== undefined) params = params.set('pageSize', pageSize);
+    return this.http.get<InterlocutorResDto[]>(`${this.baseUrl}/api/interlocutors/prospect/${prospectId}`, { params }).pipe(tap((interlocutors: InterlocutorResDto[]) => {
       interlocutors.map((interlocutor: InterlocutorResDto) => {
         new InterlocutorResDto(interlocutor)
       })

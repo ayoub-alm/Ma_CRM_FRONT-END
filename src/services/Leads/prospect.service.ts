@@ -31,8 +31,10 @@ export class ProspectService {
    * @param companyId the id of the current company
    * @return Observable<ProspectResponseDto[]> list of costumers
    */
-  getAllCustomers(companyId:number): Observable<ProspectResponseDto[]> {
-    const params = new HttpParams().set('companyId', companyId);
+  getAllCustomers(companyId:number, page?: number, pageSize?: number): Observable<ProspectResponseDto[]> {
+    let params = new HttpParams().set('companyId', companyId);
+    if (page !== undefined) params = params.set('page', page);
+    if (pageSize !== undefined) params = params.set('pageSize', pageSize);
     return this.http.get<ProspectResponseDto[]>(`${this.baseUrl}` , {params}).pipe(
       tap(ProspectResponseDtos => {
         ProspectResponseDtos.map(prospectResponseDto => {new ProspectResponseDto(ProspectResponseDto)});
@@ -164,8 +166,10 @@ export class ProspectService {
    * @param searchKeyword the search Keyword
    * @param companyId the id of the current company
    */
-  getCustomerBySearchValueAndCompanyId(searchKeyword: string, companyId: number): Observable<ProspectResponseDto[]>{
+  getCustomerBySearchValueAndCompanyId(searchKeyword: string, companyId: number, page?: number, pageSize?: number): Observable<ProspectResponseDto[]>{
     let params = new HttpParams().set('companyId', companyId).set('q', searchKeyword);
+    if (page !== undefined) params = params.set('page', page);
+    if (pageSize !== undefined) params = params.set('pageSize', pageSize);
     return this.http.get<ProspectResponseDto[]>(`${this.baseUrl}/search`, { params });
   }
 

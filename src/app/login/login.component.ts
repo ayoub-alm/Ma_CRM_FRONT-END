@@ -29,7 +29,7 @@ import { UserModel } from '../../models/user.model';
   styleUrls: ['./login.component.css'], // Note: Changed `styleUrl` to `styleUrls` for array
   providers: [AuthService],
 })
-export class LoginComponent  {
+export class LoginComponent {
   loginForm: FormGroup;
 
   constructor(
@@ -58,12 +58,47 @@ export class LoginComponent  {
       this.authService
         .login(loginRequest)
         .pipe(
-          tap((response: TokenResponse) => {
+          tap((response: any) => {
             // Save token and user data
             this.localStorageService.setUser(response.user);
             localStorage.setItem('authToken', response.token);
-            // Navigate to the admin dashboard
-            window.location.href = "/admin/dashboard"
+
+            // Extract role and permissions
+            // Handle both object and string format for role to be safe
+            const roleName = typeof response.user.role === 'object' ? response.user.role.role : response.user.role;
+
+            // Map rights to permissions strings
+            const permissionsList = response.user.rights ? response.user.rights.map((r: any) => r.name) : [];
+
+            // Save user permissions for RBAC Service
+            this.localStorageService.setItem('user_permissions', {
+              roles: [roleName],
+              permissions: permissionsList
+            });
+
+            // Determine redirect URL based on role
+            let redirectUrl = '/admin/dashboard';
+            switch (roleName) {
+              case 'SUPER_ADMIN':
+              case 'ADMIN':
+              case 'SALES_MANAGER':
+              case 'SALES_AGENT':
+                redirectUrl = '/admin/dashboard';
+                break;
+              case 'WAREHOUSE_MANAGER':
+              case 'WAREHOUSE_AGENT':
+                redirectUrl = '/admin/crm/dashboard';
+                break;
+              case 'FINANCE_MANAGER':
+                redirectUrl = '/admin/crm/wms/invoice';
+                break;
+              default:
+                redirectUrl = '/admin/dashboard';
+                break;
+            }
+
+            // Navigate to the determined dashboard
+            window.location.href = redirectUrl;
           }),
           catchError((err) => {
             this.showErrorMessage('Authentication failed. Please check your credentials.');
@@ -93,5 +128,5 @@ export class LoginComponent  {
  * Represents the structure of a TokenResponse returned by the API
  */
 export class TokenResponse {
-  constructor(public token: string, public user: UserModel) {}
+  constructor(public token: string, public user: UserModel) { }
 }
