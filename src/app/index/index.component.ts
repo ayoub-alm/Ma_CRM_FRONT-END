@@ -99,8 +99,8 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
   admin: {
     icon: 'admin_panel_settings',
     items: [
-      { name: ' Entreprises', icon: 'domain', route: '/super-admin/companies', requiredRole: Roles.ADMIN },
-      { name: 'Utilisateur', icon: 'person', route: '/super-admin/users', requiredRole: Roles.ADMIN },
+      { name: ' Entreprises', icon: 'domain', route: '/super-admin/companies', requiredRole: Roles.SUPER_ADMIN || Roles.ADMIN },
+      { name: 'Utilisateur', icon: 'person', route: '/super-admin/users', requiredRole: Roles.SUPER_ADMIN || Roles.ADMIN },
     ],
   },
 };
