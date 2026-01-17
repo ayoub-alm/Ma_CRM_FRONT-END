@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DatePipe} from '@angular/common';
-import {MatButton, MatIconButton} from '@angular/material/button';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import {
   MatCell,
   MatCellDef,
@@ -10,21 +10,21 @@ import {
   MatHeaderRowDef, MatNoDataRow,
   MatRow, MatRowDef, MatTable, MatTableDataSource
 } from '@angular/material/table';
-import {MatIcon} from '@angular/material/icon';
-import {MatInput} from '@angular/material/input';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, MatSortHeader} from '@angular/material/sort';
-import {StorageDeliveryNoteResponseDto} from '../../../../dtos/response/crm/storage.delivery.note.response.dto';
-import {BehaviorSubject, tap} from 'rxjs';
-import {ProspectResponseDto} from '../../../../dtos/response/prospect.response.dto';
-import {ProspectService} from '../../../../services/Leads/prospect.service';
-import {LocalStorageService} from '../../../../services/local.storage.service';
-import {Router} from '@angular/router';
-import {StorageDeliveryNoteService} from '../../../../services/crm/wms/storage.delivery.note.service';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { StorageDeliveryNoteResponseDto } from '../../../../dtos/response/crm/storage.delivery.note.response.dto';
+import { BehaviorSubject, tap } from 'rxjs';
+import { ProspectResponseDto } from '../../../../dtos/response/prospect.response.dto';
+import { ProspectService } from '../../../../services/Leads/prospect.service';
+import { LocalStorageService } from '../../../../services/local.storage.service';
+import { Router } from '@angular/router';
+import { StorageDeliveryNoteService } from '../../../../services/crm/wms/storage.delivery.note.service';
 import { getLabelFromStorageReasonEnum } from '../../../../enums/crm/storage.reason.enum';
-import {StorageInvoiceService} from '../../../../services/crm/wms/storage.invoice.service';
-import {StorageInvoiceResponseDto} from '../../../../dtos/response/crm/storage.invoice.response.dto';
+import { StorageInvoiceService } from '../../../../services/crm/wms/storage.invoice.service';
+import { StorageInvoiceResponseDto } from '../../../../dtos/response/crm/storage.invoice.response.dto';
 
 @Component({
   selector: 'app-wms-invoice',
@@ -60,6 +60,8 @@ export class WmsInvoiceComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     const companyId = this.localStorageService.getCurrentCompanyId();
 
+    this.setupFilterPredicate();
+
     this.storageInvoiceService.getAllStorageInvoicesByCompanyId(companyId).pipe(
       tap(storageDeliveryNotes => {
         this.storageInvoices.data = storageDeliveryNotes.sort((a, b) => b.id - a.id);
@@ -71,6 +73,21 @@ export class WmsInvoiceComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.storageInvoices.paginator = this.paginator;
     this.storageInvoices.sort = this.sort;
+  }
+
+  setupFilterPredicate(): void {
+    this.storageInvoices.filterPredicate = (data: StorageInvoiceResponseDto, filter: string) => {
+      const searchTerms = filter.toLowerCase();
+      const ref = (data.number || '').toLowerCase();
+      const customer = (data.storageContract?.customer?.name || '').toLowerCase();
+      const contract = (data.storageContract?.number || '').toLowerCase();
+      const status = (data.status?.name || '').toLowerCase();
+
+      return ref.includes(searchTerms) ||
+        customer.includes(searchTerms) ||
+        contract.includes(searchTerms) ||
+        status.includes(searchTerms);
+    };
   }
 
   /**
@@ -93,6 +110,9 @@ export class WmsInvoiceComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.storageInvoices.filter = filterValue;
+    if (this.storageInvoices.paginator) {
+      this.storageInvoices.paginator.firstPage();
+    }
   }
 
   toggleRowSelection(rowId: number): void {

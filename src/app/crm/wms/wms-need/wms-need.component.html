@@ -1,10 +1,10 @@
 <div class="row d-flex justify-content-start px-2">
   <div class="d-flex justify-content-start align-items-center">
-    <button (click)="router.navigate(['/admin/crm/wms/needs'])" color="primary"  mat-button>
+    <button (click)="router.navigate(['/admin/crm/wms/needs'])" color="primary" mat-button>
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <button mat-button class="text-secondary" (click)="router.navigate(['/admin/crm/wms'])"  >
-      <mat-icon >house</mat-icon>
+    <button mat-button class="text-secondary" (click)="router.navigate(['/admin/crm/wms'])">
+      <mat-icon>house</mat-icon>
       Accueil
     </button>
     >
@@ -13,46 +13,88 @@
       Besoins
     </button>
   </div>
-<!--  Filters on actions -->
+  <!--  Filters on actions -->
   <section class="  row">
     <div class="col-lg-8 p-1 col-12 d-flex justify-content-start">
-      <input
-        #input
-        (keyup)="applyFilter($event)"
-        autofocus
-        class=" rounded-2 mat-elevation-z1  bg-light search-input"
-        matInput
-        placeholder="Recherch"
-      />
+      <input #input (keyup)="applyFilter($event)" autofocus class=" rounded-2 mat-elevation-z1  bg-light search-input"
+        matInput placeholder="Recherch" />
 
     </div>
     <!-- Action Buttons -->
     <div class="col-lg-4 my-auto col-12 d-flex justify-content-lg-end  justify-content-end align-items-center">
-      <button (click)="createEditWmsNeed()"
-              class="rounded-3 bg-spider scale-09" color="primary" mat-button>
+      <button (click)="createEditWmsNeed()" class="rounded-3 bg-spider scale-09" color="primary" mat-button>
         <mat-icon>add</mat-icon>
         <span>Ajouter</span>
       </button>
-<!--      <button aria-label="Filter" class="rounded-3 bg-light my-auto scale-09" mat-icon-button>-->
-<!--        <mat-icon><i class="bi bi-funnel"></i></mat-icon>-->
-<!--      </button>-->
-<!--      <button aria-label="Filter" class="rounded-3 bg-light my-auto scale-09" mat-icon-button>-->
-<!--        <mat-icon>more_vert</mat-icon>-->
-<!--      </button>-->
+      <button (click)="toggleFilters()" aria-label="Filter" class="rounded-3 bg-light my-auto scale-09" mat-icon-button>
+        <mat-icon><i class="bi bi-funnel"></i></mat-icon>
+      </button>
     </div>
   </section>
+
+  <!-- Start Filters Zone -->
+  <section *ngIf="isFiltersVisible | async" class="container-fluid mat-elevation-z1 my-2">
+    <div class="d-flex justify-content-center flex-wrap w-100 rounded-1 px-2">
+      <form [formGroup]="fieldFilterForm" class="row w-100">
+        <div class="col-9">
+          <mat-form-field appearance="outline" class="scale-09 col-4">
+            <mat-label>Client</mat-label>
+            <mat-select formControlName="customerIds" multiple>
+              <mat-option *ngFor="let customer of (customers | async)" [value]="customer.id">
+                {{customer.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="scale-09 col-4">
+            <mat-label>Type de produit</mat-label>
+            <input matInput formControlName="productType" placeholder="Type de produit">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="scale-09 col-4">
+            <mat-label>Raison de stockage</mat-label>
+            <input matInput formControlName="storageReason" placeholder="Raison">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="example-form-field scale-09 col-6">
+            <mat-label>Date de création</mat-label>
+            <mat-date-range-input [rangePicker]="createdDatePicker">
+              <input matStartDate placeholder="Date début" formControlName="createdAtStart">
+              <input matEndDate placeholder="Date fin" formControlName="createdAtEnd">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="createdDatePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #createdDatePicker></mat-date-range-picker>
+          </mat-form-field>
+        </div>
+
+        <div class="col-3 px-2 row">
+          <mat-radio-group formControlName="filterType" aria-label="Select an option" class="col-12 mx-2 px-3">
+            <mat-radio-button [color]="'primary'" [value]="'AND'">ET</mat-radio-button>
+            <mat-radio-button [color]="'primary'" [value]="'OR'">OU</mat-radio-button>
+          </mat-radio-group>
+          <div class="col-12">
+            <button (click)="resetFilters()" class="rounded-2 bg-success-subtle mx-2 text-success" mat-button>
+              <mat-icon>refresh</mat-icon>
+              <span>Réinitialiser</span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+  <!-- End Filters Zone -->
 
 </div>
 <div class="bg-light mt-2 rounded-3  w-100">
   <div class="table-container  border-top-5 border-secondary w-100">
     <table [dataSource]="dataSource" class="text-secondary" mat-table matSort>
       <!-- Columns: Select -->
-      <ng-container matColumnDef="select" >
+      <ng-container matColumnDef="select">
         <th *matHeaderCellDef mat-header-cell>
-          <input (change)="toggleSelectAll()" [checked]="isAllSelected" type="checkbox"/>
+          <input (change)="toggleSelectAll()" [checked]="isAllSelected" type="checkbox" />
         </th>
         <td *matCellDef="let row" mat-cell (click)="$event.stopPropagation()">
-          <input (change)="toggleRowSelection(row.id)" [checked]="isRowSelected(row.id)" type="checkbox"/>
+          <input (change)="toggleRowSelection(row.id)" [checked]="isRowSelected(row.id)" type="checkbox" />
         </td>
       </ng-container>
       <!-- Columns: Fields -->
@@ -75,8 +117,8 @@
           <small>
             <ng-container *ngFor="let item of row.stockedItems; let i = index" class="d-flex justify-content-start">
               <small>
-                <button
-                  class="btn btn btn-sm scale-09 p-1 px-1  rounded-1 bg-secondary-subtle">{{ item.supportName + " " + item.structureName + " " + item.temperatureName }}
+                <button class="btn btn btn-sm scale-09 p-1 px-1  rounded-1 bg-secondary-subtle">{{ item.supportName + "
+                  " + item.structureName + " " + item.temperatureName }}
                 </button>
               </small>
               <!--             <button class="btn btn-sm"> {{ item.supportName + ""+item.structureName+" "+ item.temperatureName }} </button><br>-->
@@ -86,7 +128,7 @@
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header >Statut</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>Statut</th>
         <td *matCellDef="let row" mat-cell class="full-width-table-celle">
           <small>
             <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-info-subtle">
@@ -97,8 +139,8 @@
       </ng-container>
       <ng-container matColumnDef="date">
         <th *matHeaderCellDef mat-header-cell mat-sort-header>Date</th>
-        <td *matCellDef="let row" class="full-width-table-celle"
-            mat-cell>{{ row.expirationDate | date:"dd-MM-yyyy hh:mm" }}
+        <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.expirationDate | date:"dd-MM-yyyy
+          hh:mm" }}
         </td>
       </ng-container>
 
@@ -106,37 +148,38 @@
         <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Raison de stockage</th>
         <td *matCellDef="let row" mat-cell>
           <small>
-            <button
-              class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-warning-subtle">{{ getLabelFromStorageReasonEnum(row.storageReason) }}
+            <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-warning-subtle">{{
+              getLabelFromStorageReasonEnum(row.storageReason) }}
             </button>
           </small>
         </td>
       </ng-container>
       <ng-container matColumnDef="actions" stickyEnd>
         <th *matHeaderCellDef mat-header-cell></th>
-        <td *matCellDef="let row" mat-cell  (click)="$event.stopPropagation()">
+        <td *matCellDef="let row" mat-cell (click)="$event.stopPropagation()">
           <button [matMenuTriggerFor]="menu" aria-label="Actions" mat-icon-button>
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-<!--            <button mat-menu-item>-->
-<!--              <mat-icon>edit</mat-icon>-->
-<!--              Edit-->
-<!--            </button>-->
-<!--            <button mat-menu-item>-->
-<!--              <mat-icon>delete</mat-icon>-->
-<!--              Delete-->
-<!--            </button>-->
+            <!--            <button mat-menu-item>-->
+            <!--              <mat-icon>edit</mat-icon>-->
+            <!--              Edit-->
+            <!--            </button>-->
+            <!--            <button mat-menu-item>-->
+            <!--              <mat-icon>delete</mat-icon>-->
+            <!--              Delete-->
+            <!--            </button>-->
           </mat-menu>
         </td>
       </ng-container>
-      <tr *matHeaderRowDef="displayedColumns" class="primary-blue-color  fixed-header bg-light rounded-3  custom-header-row p-0 "
-          mat-header-row></tr>
-      <tr *matRowDef="let row; columns: displayedColumns;" (click)="showNeedDetails(row)" class="bg-white text-secondary"  mat-row></tr>
+      <tr *matHeaderRowDef="displayedColumns"
+        class="primary-blue-color  fixed-header bg-light rounded-3  custom-header-row p-0 " mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" (click)="showNeedDetails(row)"
+        class="bg-white text-secondary" mat-row></tr>
       <!-- Row shown when there is no matching data. -->
       <tr *matNoDataRow class="mat-row text-center d-flex w-100 justify-content-center flex-column ">
-        <td class="mat-cell  "  colspan="4">Aucune donnée ne correspond au filtre "{{ input.value }}"
-         <p class="text-center w-100 d-flex justify-content-center"><img src="/no-data.jpg" class="img-fluid" /></p>
+        <td class="mat-cell  " colspan="4">Aucune donnée ne correspond au filtre "{{ input.value }}"
+          <p class="text-center w-100 d-flex justify-content-center"><img src="/no-data.jpg" class="img-fluid" /></p>
         </td>
       </tr>
     </table>

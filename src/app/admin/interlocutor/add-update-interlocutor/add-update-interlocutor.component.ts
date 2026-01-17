@@ -91,7 +91,7 @@ export class AddUpdateInterlocutorComponent implements OnInit{
       prospectId: new FormControl("", [Validators.required]),
       emailAddress: new FormControl("", [Validators.required, Validators.email]),
       jobTitle: new FormControl("", []),
-      active: new FormControl(this.interlocutorToUpdate?.active === 'ACTIVE')
+      active: new FormControl(this.interlocutorToUpdate.active ? this.interlocutorToUpdate?.active === 'ACTIVE' : true)
     });
   }
 

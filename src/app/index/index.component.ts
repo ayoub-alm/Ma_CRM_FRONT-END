@@ -65,7 +65,7 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
       { name: 'CONTRACTS', icon: 'assignment', route: '/admin/crm/wms/contracts' },
       { name: 'DELIVERY_NOTES', icon: 'assignment', route: '/admin/crm/wms/delivery-note' },
       { name: 'INVOICES', icon: 'receipt_long', route: '/admin/crm/wms/invoice' },
-      { name: 'ASSETS', icon: 'inventory_2', route: '/admin/crm/wms/credit-notes' },
+      { name: 'ASSETS', icon: 'inventory_2', route: '/admin/crm/wms/assets' },
       { name: 'PAYMENTS', icon: 'euro', route: '/admin/crm/wms/payments' },
       { name: 'PRICING_BASE', icon: 'price_change', route: '/admin/crm/wms/pricing' },
     ],
@@ -83,7 +83,7 @@ const menuData: { [key: string]: { icon: string; items: MenuItem[] } } = {
       { name: 'Contrats', icon: 'assignment', route: '/admin/crm/wms/contracts' },
       { name: 'Bon de livraison', icon: 'assignment', route: '/admin/crm/wms/delivery-note' },
       { name: 'Factures', icon: 'receipt_long', route: '/admin/crm/wms/invoice' },
-      { name: 'ASSETS', icon: 'inventory_2', route: '/admin/crm/wms/credit-notes' },
+      { name: 'ASSETS', icon: 'inventory_2', route: '/admin/crm/wms/assets' },
       { name: 'PAYMENTS', icon: 'euro', route: '/admin/crm/wms/payments' },
     ],
   },
@@ -164,7 +164,7 @@ export class IndexComponent implements OnInit, AfterViewInit {
     },
     {
       name: 'crm',
-      route: '/admin/crm/dashboard',
+      route: '/admin/crm/wms/dashboard',
       allowedRoles: [Roles.SUPER_ADMIN, Roles.ADMIN, Roles.SALES_MANAGER, Roles.SALES_AGENT, Roles.WAREHOUSE_MANAGER, Roles.WAREHOUSE_AGENT]
     },
     // { name: 'tms', route: 'tms', allowedRoles: [] }, // Disabled
@@ -327,7 +327,16 @@ export class IndexComponent implements OnInit, AfterViewInit {
   }
 
   selectApplication(app: string): void {
-    this.selectedApplication = app;
+    if (this.selectedApplication !== app) {
+      this.selectedApplication = app;
+
+      // Auto-redirect to the application's main route
+      const appConfig = this.applications.find(a => a.name === app);
+      if (appConfig) {
+        this.router.navigate([appConfig.route]);
+      }
+    }
+
     const rawItems = menuData[app]?.items || [];
     this.menuItems = this.getFilteredMenuItems(rawItems);
     if (this.rightDrawer) {

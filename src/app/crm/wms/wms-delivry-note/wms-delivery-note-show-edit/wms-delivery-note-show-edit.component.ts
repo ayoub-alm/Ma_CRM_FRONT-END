@@ -1,19 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {StorageDeliveryNoteService} from '../../../../../services/crm/wms/storage.delivery.note.service';
-import {BehaviorSubject, finalize, tap} from 'rxjs';
-import {StorageDeliveryNoteResponseDto} from '../../../../../dtos/response/crm/storage.delivery.note.response.dto';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatIcon} from '@angular/material/icon';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatCard, MatCardContent} from '@angular/material/card';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {UploadFileComponent} from '../../../../utils/upload-file/upload-file.component';
-import {GeneralInfosComponent} from '../../../../utils/general-infos/general-infos.component';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {StorageInvoiceService} from '../../../../../services/crm/wms/storage.invoice.service';
-import {MatDialog} from '@angular/material/dialog';
-import {ModificationRequestDialogComponent} from '../modification-request-dialog/modification-request-dialog.component';
+import { Component, OnInit } from '@angular/core';
+import { StorageDeliveryNoteService } from '../../../../../services/crm/wms/storage.delivery.note.service';
+import { BehaviorSubject, finalize, tap } from 'rxjs';
+import { StorageDeliveryNoteResponseDto } from '../../../../../dtos/response/crm/storage.delivery.note.response.dto';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { DatePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { UploadFileComponent } from '../../../../utils/upload-file/upload-file.component';
+import { GeneralInfosComponent } from '../../../../utils/general-infos/general-infos.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { StorageInvoiceService } from '../../../../../services/crm/wms/storage.invoice.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ModificationRequestDialogComponent } from '../modification-request-dialog/modification-request-dialog.component';
 
 @Component({
   selector: 'app-wms-delivery-note-show-edit',
@@ -41,8 +41,8 @@ export class WmsDeliveryNoteShowEditComponent implements OnInit {
   deliveryNote: BehaviorSubject<StorageDeliveryNoteResponseDto> = new BehaviorSubject<StorageDeliveryNoteResponseDto>({} as StorageDeliveryNoteResponseDto);
 
   constructor(private deliveryNoteService: StorageDeliveryNoteService, private activeRouter: ActivatedRoute,
-              public router: Router, private snackBar: MatSnackBar, private storageInvoiceService: StorageInvoiceService,
-              private dialog: MatDialog,) {
+    public router: Router, private snackBar: MatSnackBar, private storageInvoiceService: StorageInvoiceService,
+    private dialog: MatDialog,) {
   }
 
   ngOnInit() {
@@ -53,11 +53,22 @@ export class WmsDeliveryNoteShowEditComponent implements OnInit {
     const storageDeliveryNoteId: number = this.activeRouter.snapshot.params['id'];
     this.deliveryNoteService.getStorageDeliveryNoteById(storageDeliveryNoteId).pipe(tap(storageDeliveryNote => {
       this.deliveryNote.next(storageDeliveryNote);
-    })).subscribe()
 
-    if (this.deliveryNote.getValue().status && this.deliveryNote.getValue().status.id > 1) {
-      this.isEditing.next(false);
-    }
+      // Check for invoice presence
+      const hasInvoice = storageDeliveryNote.storageInvoiceResponseDtos && storageDeliveryNote.storageInvoiceResponseDtos.length > 0;
+      const statusId = storageDeliveryNote.status?.id;
+
+      // Enable editing if:
+      // 1. Status is 'En cours de modification' (7) - This handles "change request after creating invoice"
+      // 2. OR Status is 'Draft' (1) and No Invoice - This handles "if it dont have invoice"
+      // Otherwise disable editing (e.g. Validated, Delivered, Invoiced without active request)
+      if (statusId === 7 || (statusId === 1 && !hasInvoice)) {
+        this.isEditing.next(true);
+      } else {
+        this.isEditing.next(false);
+      }
+
+    })).subscribe()
   }
 
 
@@ -70,11 +81,21 @@ export class WmsDeliveryNoteShowEditComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.deliveryNote.next(res); // Update local state
-          this.snackBar.open('Quantité de prestation mise à jour ✅', 'Fermer', {duration: 3000});
+          this.snackBar.open('Quantité de prestation mise à jour ✅', 'Fermer', { duration: 3000 });
         },
         error: (err) => {
           console.error('Error updating provision quantity', err);
-          this.snackBar.open('Erreur lors de la mise à jour de la prestation ❌', 'Fermer', {duration: 3000});
+          // Check if error is due to invoiced delivery note
+          if (err.error?.message?.includes('invoiced') || err.error?.message?.includes('facturé')) {
+            this.snackBar.open('❌ Bon de livraison facturé. Veuillez créer une demande de modification.', 'Fermer', {
+              duration: 5000,
+              panelClass: ['snackbar-warning']
+            });
+          } else {
+            this.snackBar.open('Erreur lors de la mise à jour de la prestation ❌', 'Fermer', { duration: 3000 });
+          }
+          // Reset input value to original
+          inputElement.value = item.quantity.toString();
         }
       });
   }
@@ -88,11 +109,21 @@ export class WmsDeliveryNoteShowEditComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.deliveryNote.next(res);
-          this.snackBar.open('Quantité de dépotage mise à jour ✅', 'Fermer', {duration: 3000});
+          this.snackBar.open('Quantité de dépotage mise à jour ✅', 'Fermer', { duration: 3000 });
         },
         error: (err) => {
           console.error('Error updating unloading quantity', err);
-          this.snackBar.open('Erreur lors de la mise à jour du dépotage ❌', 'Fermer', {duration: 3000});
+          // Check if error is due to invoiced delivery note
+          if (err.error?.message?.includes('invoiced') || err.error?.message?.includes('facturé')) {
+            this.snackBar.open('❌ Bon de livraison facturé. Veuillez créer une demande de modification.', 'Fermer', {
+              duration: 5000,
+              panelClass: ['snackbar-warning']
+            });
+          } else {
+            this.snackBar.open('Erreur lors de la mise à jour du dépotage ❌', 'Fermer', { duration: 3000 });
+          }
+          // Reset input value to original
+          inputElement.value = item.quantity.toString();
         }
       });
   }
@@ -106,11 +137,21 @@ export class WmsDeliveryNoteShowEditComponent implements OnInit {
       .subscribe({
         next: (res) => {
           this.deliveryNote.next(res);
-          this.snackBar.open('Quantité de service mise à jour ✅', 'Fermer', {duration: 3000});
+          this.snackBar.open('Quantité de service mise à jour ✅', 'Fermer', { duration: 3000 });
         },
         error: (err) => {
           console.error('Error updating requirement quantity', err);
-          this.snackBar.open('Erreur lors de la mise à jour du service ❌', 'Fermer', {duration: 3000});
+          // Check if error is due to invoiced delivery note
+          if (err.error?.message?.includes('invoiced') || err.error?.message?.includes('facturé')) {
+            this.snackBar.open('❌ Bon de livraison facturé. Veuillez créer une demande de modification.', 'Fermer', {
+              duration: 5000,
+              panelClass: ['snackbar-warning']
+            });
+          } else {
+            this.snackBar.open('Erreur lors de la mise à jour du service ❌', 'Fermer', { duration: 3000 });
+          }
+          // Reset input value to original
+          inputElement.value = item.quantity.toString();
         }
       });
   }
@@ -123,12 +164,12 @@ export class WmsDeliveryNoteShowEditComponent implements OnInit {
     this.storageInvoiceService.createStorageInvoiceByDeliveryNoteId(this.deliveryNote.getValue().id)
       .pipe(
         tap(storageInvoice => {
-          this.snackBar.open('Facture Créé avec success ✅', 'Fermer', {duration: 3000});
+          this.snackBar.open('Facture Créé avec success ✅', 'Fermer', { duration: 3000 });
         }))
       .subscribe({
         error: (err) => {
           console.error('Error updating requirement quantity', err);
-          this.snackBar.open('Erreur lors de la mise à jour du service ❌', 'Fermer', {duration: 3000});
+          this.snackBar.open('Erreur lors de la mise à jour du service ❌', 'Fermer', { duration: 3000 });
         }
       })
   }
@@ -151,45 +192,33 @@ export class WmsDeliveryNoteShowEditComponent implements OnInit {
   }
 
   /**
-   *
-   * @param requestId
-   * @constructor
+   * Validates an update request and synchronizes the associated invoice
+   * @param requestId the update request ID
    */
   OnValidateUpdateRequest(requestId: number) {
-    const deliveryNote = this.deliveryNote.getValue();
-    const invoiceId = deliveryNote.storageInvoiceResponseDtos?.[0]?.id;
-    const deliveryNoteId = deliveryNote?.id;
-
-    if (deliveryNoteId && invoiceId) {
-      this.storageInvoiceService
-        .updateStorageInvoiceFromDeliveryNoteUpdateRequest(invoiceId, deliveryNoteId, requestId)
-        .pipe(
-          finalize(() => {
-            // You can stop a loading spinner here if used
-          })
-        )
-        .subscribe({
-          next: () => {
-            this.snackBar.open('Facture mise à jour avec succès.', 'Fermer', {
-              duration: 3000,
-              panelClass: ['snackbar-success']
-            });
-            this.loadDeliveryNote();
-          },
-          error: () => {
-            this.snackBar.open('Erreur lors de la mise à jour de la facture.', 'Fermer', {
-              duration: 3000,
-              panelClass: ['snackbar-error']
-            });
-          }
-        });
-    } else {
-      this.snackBar.open('Informations de la facture ou du bon de livraison manquantes.', 'Fermer', {
-        duration: 3000,
-        panelClass: ['snackbar-warning']
+    this.deliveryNoteService
+      .validateUpdateRequest(requestId)
+      .pipe(
+        finalize(() => {
+          // You can stop a loading spinner here if used
+        })
+      )
+      .subscribe({
+        next: () => {
+          this.snackBar.open('✅ Demande validée et facture synchronisée avec succès.', 'Fermer', {
+            duration: 4000,
+            panelClass: ['snackbar-success']
+          });
+          this.loadDeliveryNote();
+        },
+        error: (err) => {
+          console.error('Error validating update request', err);
+          this.snackBar.open('❌ Erreur lors de la validation de la demande.', 'Fermer', {
+            duration: 3000,
+            panelClass: ['snackbar-error']
+          });
+        }
       });
-    }
-
   }
 
   getRequestStatus(itemStatus: number): string {

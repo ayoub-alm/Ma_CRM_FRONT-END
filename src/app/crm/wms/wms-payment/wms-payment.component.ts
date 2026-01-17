@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DatePipe, NgForOf} from '@angular/common';
-import {MatButton, MatIconButton} from '@angular/material/button';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { DatePipe, NgForOf } from '@angular/common';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import {
   MatCell,
   MatCellDef,
@@ -10,24 +10,24 @@ import {
   MatHeaderRowDef, MatNoDataRow,
   MatRow, MatRowDef, MatTable, MatTableDataSource
 } from '@angular/material/table';
-import {MatIcon} from '@angular/material/icon';
-import {MatInput} from '@angular/material/input';
-import {MatMenu, MatMenuTrigger} from '@angular/material/menu';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, MatSortHeader} from '@angular/material/sort';
-import {TranslatePipe} from '@ngx-translate/core';
-import {StorageCreditNoteResponseDto} from '../../../../dtos/response/crm/storage.credit.note.response.dto';
-import {BehaviorSubject, tap} from 'rxjs';
-import {ProspectResponseDto} from '../../../../dtos/response/prospect.response.dto';
-import {ProspectService} from '../../../../services/Leads/prospect.service';
-import {LocalStorageService} from '../../../../services/local.storage.service';
-import {Router} from '@angular/router';
-import {StorageCreditNoteService} from '../../../../services/crm/wms/storage.credit.note.service';
-import {MatDialog} from '@angular/material/dialog';
-import {CreateCreditNoteComponent} from '../wms-asset/create-credit-note/create-credit-note.component';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { TranslatePipe } from '@ngx-translate/core';
+import { StorageCreditNoteResponseDto } from '../../../../dtos/response/crm/storage.credit.note.response.dto';
+import { BehaviorSubject, tap } from 'rxjs';
+import { ProspectResponseDto } from '../../../../dtos/response/prospect.response.dto';
+import { ProspectService } from '../../../../services/Leads/prospect.service';
+import { LocalStorageService } from '../../../../services/local.storage.service';
+import { Router } from '@angular/router';
+import { StorageCreditNoteService } from '../../../../services/crm/wms/storage.credit.note.service';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateCreditNoteComponent } from '../wms-asset/create-credit-note/create-credit-note.component';
 import { getLabelFromStorageReasonEnum } from '../../../../enums/crm/storage.reason.enum';
-import {StorageInvoicePaymentResponseDto} from '../../../../dtos/response/crm/storage.invoice.payment.response.dto';
-import {StorageInvoicePaymentService} from '../../../../services/crm/wms/storage.invoice.payment.service';
+import { StorageInvoicePaymentResponseDto } from '../../../../dtos/response/crm/storage.invoice.payment.response.dto';
+import { StorageInvoicePaymentService } from '../../../../services/crm/wms/storage.invoice.payment.service';
 
 @Component({
   selector: 'app-wms-payment',
@@ -62,7 +62,7 @@ import {StorageInvoicePaymentService} from '../../../../services/crm/wms/storage
 })
 export class WmsPaymentComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['select','ref', 'invoice', 'date','amount','createdBy', 'actions'];
+  displayedColumns: string[] = ['select', 'ref', 'invoice', 'date', 'amount', 'createdBy', 'actions'];
 
   storageInvoicePayments: MatTableDataSource<StorageInvoicePaymentResponseDto> = new MatTableDataSource<StorageInvoicePaymentResponseDto>();
   isAllSelected = false;
@@ -72,8 +72,8 @@ export class WmsPaymentComponent implements OnInit, AfterViewInit {
   customers: BehaviorSubject<ProspectResponseDto[]> = new BehaviorSubject<ProspectResponseDto[]>([]);
 
   constructor(private customersService: ProspectService, private localStorageService: LocalStorageService,
-              public router: Router, private storagePaymentService: StorageInvoicePaymentService,
-              private dialog: MatDialog) { }
+    public router: Router, private storagePaymentService: StorageInvoicePaymentService,
+    private dialog: MatDialog) { }
 
   ngOnInit() {
     const companyId = this.localStorageService.getCurrentCompanyId();
@@ -84,6 +84,7 @@ export class WmsPaymentComponent implements OnInit, AfterViewInit {
       })
     ).subscribe();
 
+    this.setupFilterPredicate();
 
   }
 
@@ -91,13 +92,27 @@ export class WmsPaymentComponent implements OnInit, AfterViewInit {
     this.loadStoragesPayments();
     this.storageInvoicePayments.paginator = this.paginator;
     this.storageInvoicePayments.sort = this.sort;
-    console.log(this.storageInvoicePayments.data);
+  }
+
+  setupFilterPredicate(): void {
+    this.storageInvoicePayments.filterPredicate = (data: StorageInvoicePaymentResponseDto, filter: string) => {
+      const searchTerms = filter.toLowerCase();
+      const ref = (data.ref || '').toLowerCase();
+      const createdBy = (data.createdBy?.name || '').toLowerCase();
+      const amount = (data.amount || '').toString().toLowerCase();
+      const invoices = data.storageInvoices?.map(inv => inv.number.toLowerCase()).join(' ') || '';
+
+      return ref.includes(searchTerms) ||
+        createdBy.includes(searchTerms) ||
+        amount.includes(searchTerms) ||
+        invoices.includes(searchTerms);
+    };
   }
 
   /**
    *
    */
-  loadStoragesPayments(){
+  loadStoragesPayments() {
     const companyId = this.localStorageService.getCurrentCompanyId();
     this.storagePaymentService.getAllStoragePaymentByCompanyId(companyId).pipe(
       tap(storageCreditNotes => {
@@ -113,11 +128,11 @@ export class WmsPaymentComponent implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(CreateCreditNoteComponent, {
       width: '1000px',
       maxHeight: '100vh',
-      data:{}
+      data: {}
     })
     // close the dialog and update the data in the tables
     dialogRef.afterClosed().subscribe(result => {
-      if (result){
+      if (result) {
         this.loadStoragesPayments();
       }
     })
@@ -135,6 +150,9 @@ export class WmsPaymentComponent implements OnInit, AfterViewInit {
 
   applyFilter(event: Event): void {
     this.storageInvoicePayments.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    if (this.storageInvoicePayments.paginator) {
+      this.storageInvoicePayments.paginator.firstPage();
+    }
   }
 
   toggleRowSelection(rowId: number): void {

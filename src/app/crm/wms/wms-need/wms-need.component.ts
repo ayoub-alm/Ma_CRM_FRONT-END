@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {DatePipe, NgForOf} from '@angular/common';
-import {MatButton, MatIconButton} from '@angular/material/button';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { DatePipe, NgForOf, NgIf, AsyncPipe } from '@angular/common';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import {
   MatCell,
   MatCellDef,
@@ -10,32 +10,37 @@ import {
   MatHeaderRowDef, MatNoDataRow,
   MatRow, MatRowDef, MatTable, MatTableDataSource
 } from '@angular/material/table';
-import {MatIcon} from '@angular/material/icon';
-import {MatInput} from '@angular/material/input';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, MatSortHeader} from '@angular/material/sort';
-import {InteractionResponseDto} from '../../../../dtos/response/interaction.response.dto';
-import {FormControl} from '@angular/forms';
-import {InteractionService} from '../../../../services/Leads/interaction.service';
-import {LocalStorageService} from '../../../../services/local.storage.service';
-import {MatDialog} from '@angular/material/dialog';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {Router} from '@angular/router';
-import {CrmTypeEnum} from '../../../../enums/crm/crm.type.enum';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { InteractionResponseDto } from '../../../../dtos/response/interaction.response.dto';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { InteractionService } from '../../../../services/Leads/interaction.service';
+import { LocalStorageService } from '../../../../services/local.storage.service';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { CrmTypeEnum } from '../../../../enums/crm/crm.type.enum';
 import {
   AddEditInteractionDialogComponent
 } from '../../../admin/interaction/add-edit-interaction-dialog/add-edit-interaction-dialog.component';
-import {WmsNeedCreatEditComponent} from './wms-need-creat-edit/wms-need-creat-edit.component';
-import {InputTextModule} from 'primeng/inputtext';
-
-import {StorageNeedResponseDto} from '../../../../dtos/response/crm/storage.need.response.dto';
-import {StorageNeedService} from '../../../../services/crm/wms/storage.need.service';
-import {LivreEnum} from '../../../../enums/crm/livre.enum';
-import {getLabelFromStorageReasonEnum, StorageReasonEnum} from '../../../../enums/crm/storage.reason.enum';
-import {provideNativeDateAdapter} from '@angular/material/core';
-import {WmsNeedCreateComponent} from './wms-need-create/wms-need-create.component';
-import {tap} from 'rxjs';
+import { WmsNeedCreatEditComponent } from './wms-need-creat-edit/wms-need-creat-edit.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { StorageNeedResponseDto } from '../../../../dtos/response/crm/storage.need.response.dto';
+import { StorageNeedService } from '../../../../services/crm/wms/storage.need.service';
+import { LivreEnum } from '../../../../enums/crm/livre.enum';
+import { getLabelFromStorageReasonEnum, StorageReasonEnum } from '../../../../enums/crm/storage.reason.enum';
+import { MatOption, provideNativeDateAdapter } from '@angular/material/core';
+import { WmsNeedCreateComponent } from './wms-need-create/wms-need-create.component';
+import { BehaviorSubject, tap } from 'rxjs';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { ProspectService } from '../../../../services/Leads/prospect.service';
+import { ProspectResponseDto } from '../../../../dtos/response/prospect.response.dto';
 
 
 @Component({
@@ -65,16 +70,26 @@ import {tap} from 'rxjs';
     MatHeaderCellDef,
     MatMenuTrigger,
     InputTextModule,
-    NgForOf
+    NgForOf,
+    NgIf,
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatSelect,
+    MatOption,
+    MatRadioGroup,
+    MatRadioButton,
+    MatDatepickerModule,
+    AsyncPipe
   ],
   templateUrl: './wms-need.component.html',
   styleUrl: './wms-need.component.css',
   providers: [provideNativeDateAdapter()],
 })
-export class WmsNeedComponent implements OnInit, AfterViewInit{
+export class WmsNeedComponent implements OnInit, AfterViewInit {
 
-  displayedColumns: string[] = ['select', 'ref', 'customer','status', 'productType',
-    'date','storageReason','stockedItem', 'actions'];
+  displayedColumns: string[] = ['select', 'ref', 'customer', 'status', 'productType',
+    'date', 'storageReason', 'stockedItem', 'actions'];
 
   dataSource: MatTableDataSource<StorageNeedResponseDto> = new MatTableDataSource();
   isAllSelected = false;
@@ -84,16 +99,77 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
   @ViewChild(MatSort) sort!: MatSort;
 
   crmType = new FormControl('');
-  constructor(private storageNeedService: StorageNeedService, private localStorageService: LocalStorageService, private dialog: MatDialog, private snackBar: MatSnackBar,
-              protected router: Router) {}
+  isFiltersVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+  fieldFilterForm!: FormGroup;
+  customers: BehaviorSubject<ProspectResponseDto[]> = new BehaviorSubject<ProspectResponseDto[]>([]);
+
+  constructor(
+    private storageNeedService: StorageNeedService,
+    private localStorageService: LocalStorageService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    protected router: Router,
+    private fb: FormBuilder,
+    private prospectService: ProspectService
+  ) {
+    this.fieldFilterForm = fb.group({
+      customerIds: [[]],
+      productType: [''],
+      storageReason: [''],
+      createdAtStart: [null],
+      createdAtEnd: [null],
+      filterType: ['OR']
+    });
+  }
 
   ngOnInit(): void {
+    this.setupFilterPredicate();
     this.loadNeedBasedOnSelectedType();
+    this.loadFilterData();
+  }
+
+  loadFilterData(): void {
+    const companyId = this.localStorageService.getCurrentCompanyId();
+    this.prospectService.getAllCustomers(companyId).pipe(
+      tap(customers => this.customers.next(customers))
+    ).subscribe();
+  }
+
+  toggleFilters(): void {
+    setTimeout(() => {
+      this.isFiltersVisible.next(!this.isFiltersVisible.getValue());
+    }, 0);
+  }
+
+  resetFilters(): void {
+    this.fieldFilterForm.reset({ filterType: 'OR' });
+    this.dataSource.filter = '';
   }
 
   ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+  }
+
+  setupFilterPredicate(): void {
+    this.dataSource.filterPredicate = (data: StorageNeedResponseDto, filter: string) => {
+      const searchTerms = filter.toLowerCase();
+      const ref = data.number?.toLowerCase() || '';
+      const customer = data.customer?.name?.toLowerCase() || '';
+      const productType = data.productType?.toLowerCase() || '';
+      const status = data.status?.name?.toLowerCase() || '';
+      const reason = data.storageReason ? getLabelFromStorageReasonEnum(data.storageReason!)?.toLowerCase() || '' : '';
+      const items = data.stockedItems?.map(item =>
+        `${item.supportName} ${item.structureName} ${item.temperatureName}`.toLowerCase()
+      ).join(' ') || '';
+
+      return ref.includes(searchTerms) ||
+        customer.includes(searchTerms) ||
+        productType.includes(searchTerms) ||
+        status.includes(searchTerms) ||
+        reason.includes(searchTerms) ||
+        items.includes(searchTerms);
+    };
   }
 
   loadNeedBasedOnSelectedType(): void {
@@ -102,10 +178,10 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
 
         break;
       case CrmTypeEnum.TMS:
-        this.router.navigateByUrl('/admin/crm/need/tms/show').then(r => {return;});
+        this.router.navigateByUrl('/admin/crm/need/tms/show').then(r => { return; });
         break;
       case CrmTypeEnum.TMSI:
-        this.router.navigateByUrl('/admin/crm/need/show').then(r => {return;});
+        this.router.navigateByUrl('/admin/crm/need/show').then(r => { return; });
         break;
     }
     const selectedCompanyId = parseInt(this.localStorageService.getItem("selected_company_id"));
@@ -121,6 +197,9 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
 
   applyFilter(event: Event): void {
     this.dataSource.filter = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
   }
 
 
@@ -166,17 +245,17 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
 
 
   getNeedStatus(status: string): string {
-   switch (status){
-     case 'CREATION':
-       return "Crée"
-     default:
-     return "N/A"
-   }
+    switch (status) {
+      case 'CREATION':
+        return "Crée"
+      default:
+        return "N/A"
+    }
   }
 
 
   getNeedReason(reason: string): string {
-    switch (reason){
+    switch (reason) {
       case 'OUTSOURCING':
         return ''
       default:
@@ -184,8 +263,8 @@ export class WmsNeedComponent implements OnInit, AfterViewInit{
     }
   }
 
-  showNeedDetails(need: StorageNeedResponseDto): void{
-    this.router.navigateByUrl("/admin/crm/wms/needs/show/"+need.id).then(r => {})
+  showNeedDetails(need: StorageNeedResponseDto): void {
+    this.router.navigateByUrl("/admin/crm/wms/needs/show/" + need.id).then(r => { })
   }
   protected readonly getLabelFromStorageReasonEnum = getLabelFromStorageReasonEnum;
 }

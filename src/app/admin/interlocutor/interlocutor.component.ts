@@ -1,6 +1,6 @@
-import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
-import {KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {MatButton, MatIconButton} from '@angular/material/button';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
+import { KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import {
   MatCell,
   MatCellDef,
@@ -10,38 +10,38 @@ import {
   MatHeaderRowDef, MatNoDataRow,
   MatRow, MatRowDef, MatTable, MatTableDataSource
 } from '@angular/material/table';
-import {MatIcon} from '@angular/material/icon';
-import {MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/material/input';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, MatSortHeader} from '@angular/material/sort';
-import {MatTabNavPanel} from '@angular/material/tabs';
-import {Router} from '@angular/router';
-import {BehaviorSubject, catchError, EMPTY, filter, of, tap} from 'rxjs';
-import {InterlocutorService} from '../../../services/Leads/interlocutor.service';
-import {MatDialog} from '@angular/material/dialog';
-import {ProspectStatus} from '../../../enums/prospect.status';
-import {AddUpdateInterlocutorComponent} from './add-update-interlocutor/add-update-interlocutor.component';
-import {InterlocutorResDto} from '../../../dtos/response/interlocutor.dto';
-import {ConfirmationDialogComponent} from "../../utils/confirmation-dialog/confirmation-dialog.component";
-import {MatSnackBar} from "@angular/material/snack-bar";
+import { MatIcon } from '@angular/material/icon';
+import { MatFormField, MatInput, MatLabel, MatSuffix } from '@angular/material/input';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { MatTabNavPanel } from '@angular/material/tabs';
+import { Router } from '@angular/router';
+import { BehaviorSubject, catchError, EMPTY, filter, of, tap } from 'rxjs';
+import { InterlocutorService } from '../../../services/Leads/interlocutor.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ProspectStatus } from '../../../enums/prospect.status';
+import { AddUpdateInterlocutorComponent } from './add-update-interlocutor/add-update-interlocutor.component';
+import { InterlocutorResDto } from '../../../dtos/response/interlocutor.dto';
+import { ConfirmationDialogComponent } from "../../utils/confirmation-dialog/confirmation-dialog.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import {ActiveEnum} from "../../../enums/active.enum";
-import {DisplayColumnsInterface} from '../../utils/spider.table';
-import {LocalStorageService} from '../../../services/local.storage.service';
-import {MatOption, provideNativeDateAdapter} from '@angular/material/core';
-import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import {MatSelect} from '@angular/material/select';
-import {PaginatorModule} from 'primeng/paginator';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {DepartmentModel} from '../../../models/department.model';
-import {JobTitleResponseDto} from '../../../dtos/init_data/response/job.title.response.dto';
-import {ProspectResponseDto} from '../../../dtos/response/prospect.response.dto';
-import {ProspectService} from '../../../services/Leads/prospect.service';
-import {JobTitleService} from '../../../services/data/job.title.service';
-import {DepartmentService} from '../../../services/data/department.service';
-import {UsersService} from '../../../services/users.service';
-import {InterlocutorsFilterRequestDto} from '../../../dtos/filters/interlocutorFilterRequestDto';
+import { ActiveEnum } from "../../../enums/active.enum";
+import { DisplayColumnsInterface } from '../../utils/spider.table';
+import { LocalStorageService } from '../../../services/local.storage.service';
+import { MatOption, provideNativeDateAdapter } from '@angular/material/core';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { MatSelect } from '@angular/material/select';
+import { PaginatorModule } from 'primeng/paginator';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { DepartmentModel } from '../../../models/department.model';
+import { JobTitleResponseDto } from '../../../dtos/init_data/response/job.title.response.dto';
+import { ProspectResponseDto } from '../../../dtos/response/prospect.response.dto';
+import { ProspectService } from '../../../services/Leads/prospect.service';
+import { JobTitleService } from '../../../services/data/job.title.service';
+import { DepartmentService } from '../../../services/data/department.service';
+import { UsersService } from '../../../services/users.service';
+import { InterlocutorsFilterRequestDto } from '../../../dtos/filters/interlocutorFilterRequestDto';
 import {
   MatDatepickerModule,
   MatDatepickerToggle,
@@ -50,10 +50,10 @@ import {
   MatEndDate,
   MatStartDate
 } from '@angular/material/datepicker';
-import {MatDrawer, MatDrawerContainer} from '@angular/material/sidenav';
-import {MatToolbar} from '@angular/material/toolbar';
-import {CommentComponent} from '../../utils/comment/comment.component';
-import {TranslatePipe} from '@ngx-translate/core';
+import { MatDrawer, MatDrawerContainer } from '@angular/material/sidenav';
+import { MatToolbar } from '@angular/material/toolbar';
+import { CommentComponent } from '../../utils/comment/comment.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 
 @Component({
@@ -105,7 +105,7 @@ import {TranslatePipe} from '@ngx-translate/core';
   providers: [provideNativeDateAdapter()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InterlocutorComponent implements  OnInit{
+export class InterlocutorComponent implements OnInit {
   interlocutors: BehaviorSubject<InterlocutorResDto[]> = new BehaviorSubject<InterlocutorResDto[]>([]);
   allTableColumns: BehaviorSubject<DisplayColumnsInterface[]> = new BehaviorSubject<DisplayColumnsInterface[]>([
     { order: 0, title: 'select', label: 'Sélectionner' },
@@ -137,29 +137,29 @@ export class InterlocutorComponent implements  OnInit{
   selectedFile: File | null = null;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  dropdownOpen: boolean = false ;
+  dropdownOpen: boolean = false;
   isFiltersVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-  fieldFilterForm!:FormGroup;
+  fieldFilterForm!: FormGroup;
   departements: BehaviorSubject<DepartmentModel[]> = new BehaviorSubject<DepartmentModel[]>([]);
   jobTitles: BehaviorSubject<JobTitleResponseDto[]> = new BehaviorSubject<JobTitleResponseDto[]>([]);
   customers: BehaviorSubject<ProspectResponseDto[]> = new BehaviorSubject<ProspectResponseDto[]>([]);
   users: BehaviorSubject<any> = new BehaviorSubject<any[]>([]);
   constructor(private interlocutorService: InterlocutorService, private dialog: MatDialog, private snackBar: MatSnackBar,
-              protected router: Router, private localStorageService: LocalStorageService, private fb: FormBuilder,
-              private customersService: ProspectService,private jobTitleService: JobTitleService,
-              private departmentService: DepartmentService, private userService: UsersService) {
+    protected router: Router, private localStorageService: LocalStorageService, private fb: FormBuilder,
+    private customersService: ProspectService, private jobTitleService: JobTitleService,
+    private departmentService: DepartmentService, private userService: UsersService) {
     this.fieldFilterForm = fb.group({
       status: [''],
       customersIds: [''],
       departments: [''],
       jobTitlesIds: [''],
-      createdByIds:[''],
-      updatedByIds:[""],
+      createdByIds: [''],
+      updatedByIds: [""],
       createdAtStart: [null],  // Date de début de création
       createdAtEnd: [null],    // Date de fin de création
       updatedAtStart: [null],  // Date de début de mise à jour
       updatedAtEnd: [null],
-      filterType:["OR"]
+      filterType: ["OR"]
     })
   }
 
@@ -175,12 +175,12 @@ export class InterlocutorComponent implements  OnInit{
    * @param {string} [searchValue=""] - An optional search query used to filter the interlocutors by specific fields.
    * @return {void} This method does not return a value. It updates the internal state by triggering changes in observers and data source.
    */
-  loadInterlocutors(companyId:number, searchValue:string = ""): void{
-    this.interlocutorService.getAllInterlocutorsByCompanyId(companyId,searchValue).pipe(
+  loadInterlocutors(companyId: number, searchValue: string = ""): void {
+    this.interlocutorService.getAllInterlocutorsByCompanyId(companyId, searchValue).pipe(
       tap((interlocutors) => {
-      this.interlocutors.next(interlocutors);
-      this.dataSource.data = interlocutors;
-      this.paginator.firstPage()
+        this.interlocutors.next(interlocutors);
+        this.dataSource.data = interlocutors;
+        this.paginator.firstPage()
       }),
       catchError(error => {
         console.error('Error loading interlocutors:', error);
@@ -196,7 +196,7 @@ export class InterlocutorComponent implements  OnInit{
    *
    * @return {void} This method does not return a value.
    */
-  loadDataForFiltersData(): void{
+  loadDataForFiltersData(): void {
     // fetch customers
     this.customersService.getAllCustomers(this.localStorageService.getCurrentCompanyId()).pipe(
       tap((customers) => {
@@ -241,34 +241,34 @@ export class InterlocutorComponent implements  OnInit{
     const dialogRef = this.dialog.open(AddUpdateInterlocutorComponent, {
       maxWidth: '900px',
       maxHeight: '100vh',
-      data: interlocutor ? interlocutor :null
+      data: interlocutor ? interlocutor : null
     });
     dialogRef.afterClosed().pipe(
-        filter(response => !!response), // Proceed only if response is not null/undefined
-        tap(response => {
-          console.log('Dialog closed with response:', response); // Debugging statement
+      filter(response => !!response), // Proceed only if response is not null/undefined
+      tap(response => {
+        console.log('Dialog closed with response:', response); // Debugging statement
 
-          const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
-          console.log("message " ,existingItemIndex)
-          if (existingItemIndex !== -1) {
-            // Update existing item
-            const updatedData = [...this.dataSource.data];
-            updatedData[existingItemIndex] = response;
-            this.dataSource.data = updatedData; // Assign new array to trigger change detection
-          } else {
-            // Add new item
-            this.dataSource.data = [...this.dataSource.data, response]; // Create new array with added item
-          }
-          // Reset paginator to the first page
-          if (this.paginator) {
-            this.paginator.firstPage();
-          }
-        }),
-        catchError(error => {
-          console.error('Error after dialog closed:', error); // Debugging statement
-          this.snackBar.open('Error updating interlocutor list', 'Close', { duration: 3000 });
-          return EMPTY;
-        })
+        const existingItemIndex = this.dataSource.data.findIndex(item => item.id === response.id);
+        console.log("message ", existingItemIndex)
+        if (existingItemIndex !== -1) {
+          // Update existing item
+          const updatedData = [...this.dataSource.data];
+          updatedData[existingItemIndex] = response;
+          this.dataSource.data = updatedData; // Assign new array to trigger change detection
+        } else {
+          // Add new item
+          this.dataSource.data = [...this.dataSource.data, response]; // Create new array with added item
+        }
+        // Reset paginator to the first page
+        if (this.paginator) {
+          this.paginator.firstPage();
+        }
+      }),
+      catchError(error => {
+        console.error('Error after dialog closed:', error); // Debugging statement
+        this.snackBar.open('Error updating interlocutor list', 'Close', { duration: 3000 });
+        return EMPTY;
+      })
     ).subscribe();
   }
 
@@ -431,7 +431,7 @@ export class InterlocutorComponent implements  OnInit{
    * @return {void} Does not return any value.
    */
   showInterlocutorDetails(row: InterlocutorResDto) {
-    this.router.navigateByUrl('/admin/interlocutors/'+ row.id)
+    this.router.navigateByUrl('/admin/interlocutors/' + row.id)
   }
 
   /**
@@ -453,30 +453,30 @@ export class InterlocutorComponent implements  OnInit{
     dialogRef.subscribe((confirmed: boolean) => {
       if (confirmed) {
         this.interlocutorService.deleteInterlocutorById(row.id).pipe(tap({
-              next: () => {
-                // Remove the deleted item from the data source
-                const index = this.dataSource.data.findIndex(p => p.id === row.id);
-                if (index !== -1) {
-                  const updatedData = [...this.dataSource.data]; // Create a new array
-                  updatedData.splice(index, 1); // Remove the item
-                  this.dataSource.data = updatedData; // Assign the new array
-                }
+          next: () => {
+            // Remove the deleted item from the data source
+            const index = this.dataSource.data.findIndex(p => p.id === row.id);
+            if (index !== -1) {
+              const updatedData = [...this.dataSource.data]; // Create a new array
+              updatedData.splice(index, 1); // Remove the item
+              this.dataSource.data = updatedData; // Assign the new array
+            }
 
-                // Show success message
-                this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
-                  duration: 3000,
-                  panelClass: ['success-snackbar'],
-                });
-              },
-              error: (error) => {
-                // Handle server-side errors
-                this.snackBar.open('Échec de la suppression. Veuillez réessayer.', 'Fermer', {
-                  duration: 3000,
-                  panelClass: ['error-snackbar'],
-                });
-                console.error('Error deleting interlocutor:', error);
-              },
-            })
+            // Show success message
+            this.snackBar.open('Suppression confirmée avec succès !', 'Fermer', {
+              duration: 3000,
+              panelClass: ['success-snackbar'],
+            });
+          },
+          error: (error) => {
+            // Handle server-side errors
+            this.snackBar.open('Échec de la suppression. Veuillez réessayer.', 'Fermer', {
+              duration: 3000,
+              panelClass: ['error-snackbar'],
+            });
+            console.error('Error deleting interlocutor:', error);
+          },
+        })
         ).subscribe();
       }
     });
@@ -493,7 +493,7 @@ export class InterlocutorComponent implements  OnInit{
    * this function allows to check displayed columns
    * @param column
    */
-  isColumnsChecked(column: DisplayColumnsInterface): boolean{
+  isColumnsChecked(column: DisplayColumnsInterface): boolean {
     return !!this.displayedColumns.getValue().find(col => col.order === column.order);
   }
 
@@ -508,17 +508,18 @@ export class InterlocutorComponent implements  OnInit{
     if (this.displayedColumns.getValue().map(col => col.title).includes(column.title)) {
       this.displayedColumns.next(this.displayedColumns.getValue()
         .filter((col) => col.title !== column.title)
-        .sort((a, b)=> a.order - b.order))  }
+        .sort((a, b) => a.order - b.order))
+    }
     else {
-      this.displayedColumns.next([... this.displayedColumns.getValue(),column]);
-      this.displayedColumns.getValue().sort((a, b)=> a.order - b.order)
+      this.displayedColumns.next([... this.displayedColumns.getValue(), column]);
+      this.displayedColumns.getValue().sort((a, b) => a.order - b.order)
     }
   }
 
   /**
    * map display columns to array of strings
    */
-  get getDisplayColumnsTable(): string[]{
+  get getDisplayColumnsTable(): string[] {
     return this.displayedColumns.getValue().map(col => col.title);
   }
 
@@ -529,7 +530,7 @@ export class InterlocutorComponent implements  OnInit{
    * @return {void} Does not return anything.
    */
   toggleFilters() {
-    if(!this.isFiltersVisible){
+    if (!this.isFiltersVisible) {
       this.loadInterlocutors(this.localStorageService.getCurrentCompanyId())
     }
     this.isFiltersVisible.next(!this.isFiltersVisible.getValue())
@@ -591,7 +592,7 @@ export class InterlocutorComponent implements  OnInit{
    *
    * @return {void} No return value.
    */
-  bulkSoftDelete():void{
+  bulkSoftDelete(): void {
     const dialogRef = ConfirmationDialogComponent.open(this.dialog, {
       title: 'Confirmer la suppression',
       message: 'Confirmez-vous la suppression de ces interlocuteurs ?',
@@ -601,19 +602,19 @@ export class InterlocutorComponent implements  OnInit{
     });
 
     dialogRef.subscribe(data => {
-      if (data){
+      if (data) {
         this.interlocutorService.bulkSoftDelete(Array.from(this.selectedRows)).pipe(
           tap((response: boolean) => {
-            if (response){
-              this.dataSource.data =  this.dataSource.data.filter(customer => !Array.from(this.selectedRows).includes(customer.id))
+            if (response) {
+              this.dataSource.data = this.dataSource.data.filter(customer => !Array.from(this.selectedRows).includes(customer.id))
               this.interlocutors.next(this.dataSource.data);
-              this.snackBar.open("Les interlocuteurs ont été supprimés avec succès.","OK", {duration:3000})
-            }else{
-              this.snackBar.open("Erreur lors de la suppression des interlocuteurs.","OK", {duration:3000})
+              this.snackBar.open("Les interlocuteurs ont été supprimés avec succès.", "OK", { duration: 3000 })
+            } else {
+              this.snackBar.open("Erreur lors de la suppression des interlocuteurs.", "OK", { duration: 3000 })
             }
           }),
           catchError(err => {
-            this.snackBar.open("Erreur lors de la suppression des interlocuteurs.","OK", {duration:3000})
+            this.snackBar.open("Erreur lors de la suppression des interlocuteurs.", "OK", { duration: 3000 })
             return of(null)
           })
         ).subscribe()
@@ -630,7 +631,7 @@ export class InterlocutorComponent implements  OnInit{
 
     this.interlocutorService.exportExcelFile(this.localStorageService.getCurrentCompanyId(), selectedCustomerIds)
       .pipe(tap((response: BlobPart) => {
-        const blob = new Blob([response], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;

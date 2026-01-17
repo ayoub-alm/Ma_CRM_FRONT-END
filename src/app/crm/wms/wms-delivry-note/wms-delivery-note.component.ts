@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
 import { ProspectResponseDto } from '../../../../dtos/response/prospect.response.dto';
 import { ProspectService } from '../../../../services/Leads/prospect.service';
@@ -19,7 +19,7 @@ import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { getLabelFromStorageReasonEnum } from '../../../../enums/crm/storage.reason.enum';
 import { StorageDeliveryNoteService } from '../../../../services/crm/wms/storage.delivery.note.service';
 import { StorageDeliveryNoteResponseDto } from '../../../../dtos/response/crm/storage.delivery.note.response.dto';
-import {TranslatePipe} from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wms-delivry-note',
@@ -60,6 +60,8 @@ export class WmsDeliveryNoteComponent implements OnInit, AfterViewInit {
       })
     ).subscribe();
 
+    this.setupFilterPredicate();
+
     this.storageDeliveryNoteService.getAllStorageDeliveryNoteByCompanyId(companyId).pipe(
       tap(storageDeliveryNotes => {
         this.storageDeliveryNotes.data = storageDeliveryNotes.sort((a, b) => b.id - a.id);
@@ -70,6 +72,21 @@ export class WmsDeliveryNoteComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.storageDeliveryNotes.paginator = this.paginator;
     this.storageDeliveryNotes.sort = this.sort;
+  }
+
+  setupFilterPredicate(): void {
+    this.storageDeliveryNotes.filterPredicate = (data: StorageDeliveryNoteResponseDto, filter: string) => {
+      const searchTerms = filter.toLowerCase();
+      const ref = (data.number || '').toLowerCase();
+      const customer = (data.storageContract?.customer?.name || '').toLowerCase();
+      const contract = (data.storageContract?.number || '').toLowerCase();
+      const status = (data.status?.name || '').toLowerCase();
+
+      return ref.includes(searchTerms) ||
+        customer.includes(searchTerms) ||
+        contract.includes(searchTerms) ||
+        status.includes(searchTerms);
+    };
   }
 
   /**
@@ -92,6 +109,9 @@ export class WmsDeliveryNoteComponent implements OnInit, AfterViewInit {
   applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.storageDeliveryNotes.filter = filterValue;
+    if (this.storageDeliveryNotes.paginator) {
+      this.storageDeliveryNotes.paginator.firstPage();
+    }
   }
 
   toggleRowSelection(rowId: number): void {
