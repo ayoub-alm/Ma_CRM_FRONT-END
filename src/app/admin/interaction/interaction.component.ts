@@ -12,41 +12,42 @@ import {
   MatTable,
   MatTableDataSource
 } from '@angular/material/table';
-import {InteractionResponseDto} from '../../../dtos/response/interaction.response.dto';
-import {AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort, MatSortHeader} from '@angular/material/sort';
-import {InteractionService} from '../../../services/Leads/interaction.service';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {MatIcon} from '@angular/material/icon';
-import {AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {MatFormField, MatInput, MatLabel, MatSuffix} from '@angular/material/input';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {Router} from '@angular/router';
-import {AddEditInteractionDialogComponent} from './add-edit-interaction-dialog/add-edit-interaction-dialog.component';
-import {ConfirmationDialogComponent} from "../../utils/confirmation-dialog/confirmation-dialog.component";
-import {BehaviorSubject, catchError, tap, throwError} from "rxjs";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {DisplayColumnsInterface} from '../../utils/spider.table';
-import {LocalStorageService} from '../../../services/local.storage.service';
-import {MatOption, provideNativeDateAdapter} from '@angular/material/core';
-import {MatRadioButton, MatRadioGroup} from '@angular/material/radio';
-import {MatSelect} from '@angular/material/select';
-import {ProspectStatus} from '../../../enums/prospect.status';
-import {ProspectResponseDto} from '../../../dtos/response/prospect.response.dto';
-import {ProspectService} from '../../../services/Leads/prospect.service';
-import {InteractionType} from '../../../enums/interaction.type';
-import {InteractionSubject} from '../../../enums/interaction.subject';
-import {UsersService} from '../../../services/users.service';
-import {InterlocutorResDto} from '../../../dtos/response/interlocutor.dto';
-import {InterlocutorService} from '../../../services/Leads/interlocutor.service';
-import {InteractionFilterDto} from '../../../dtos/filters/interaction.filter.request.dto';
+import { InteractionResponseDto } from '../../../dtos/response/interaction.response.dto';
+import { AfterViewInit, ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { InteractionService } from '../../../services/Leads/interaction.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { MatIcon } from '@angular/material/icon';
+import { AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { MatFormField, MatInput, MatLabel, MatSuffix } from '@angular/material/input';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { Router } from '@angular/router';
+import { AddEditInteractionDialogComponent } from './add-edit-interaction-dialog/add-edit-interaction-dialog.component';
+import { ConfirmationDialogComponent } from "../../utils/confirmation-dialog/confirmation-dialog.component";
+import { BehaviorSubject, catchError, tap, throwError } from "rxjs";
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DisplayColumnsInterface } from '../../utils/spider.table';
+import { LocalStorageService } from '../../../services/local.storage.service';
+import { MatOption, provideNativeDateAdapter } from '@angular/material/core';
+import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
+import { MatSelect } from '@angular/material/select';
+import { ProspectStatus } from '../../../enums/prospect.status';
+import { ProspectResponseDto } from '../../../dtos/response/prospect.response.dto';
+import { ProspectService } from '../../../services/Leads/prospect.service';
+import { InteractionType } from '../../../enums/interaction.type';
+import { InteractionSubject } from '../../../enums/interaction.subject';
+import { UsersService } from '../../../services/users.service';
+import { InterlocutorResDto } from '../../../dtos/response/interlocutor.dto';
+import { InterlocutorService } from '../../../services/Leads/interlocutor.service';
+import { InteractionFilterDto } from '../../../dtos/filters/interaction.filter.request.dto';
 import {
   MatDatepickerModule, MatDatepickerToggle, MatDateRangeInput, MatDateRangePicker, MatEndDate, MatStartDate
 } from '@angular/material/datepicker';
-import {TranslatePipe} from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
+import { CalendarComponent } from '../../utils/calendar/calendar.component';
 
 
 @Component({
@@ -56,7 +57,7 @@ import {TranslatePipe} from '@ngx-translate/core';
     DatePipe, MatTable, MatInput, MatButton, MatIconButton, MatMenuItem, MatHeaderRow, MatRow, MatSort, MatDatepickerModule,
     MatSortHeader, MatCellDef, MatHeaderRowDef, MatRowDef, MatNoDataRow, NgClass, NgForOf, NgIf, FormsModule, KeyValuePipe,
     MatFormField, MatLabel, MatOption, MatRadioButton, MatRadioGroup, MatSelect, ReactiveFormsModule, AsyncPipe,
-    MatDateRangeInput, MatDateRangePicker, MatDatepickerToggle, MatEndDate, MatStartDate, MatSuffix, TranslatePipe],
+    MatDateRangeInput, MatDateRangePicker, MatDatepickerToggle, MatEndDate, MatStartDate, MatSuffix, TranslatePipe, CalendarComponent],
   templateUrl: './interaction.component.html',
   styleUrl: './interaction.component.css',
   providers: [provideNativeDateAdapter()],
@@ -68,37 +69,37 @@ export class InteractionComponent implements OnInit, AfterViewInit {
     order: 0,
     title: 'select',
     label: 'Sélectionner'
-  }, {order: 1, title: 'prospectName', label: 'Client'}, {
+  }, { order: 1, title: 'prospectName', label: 'Client' }, {
     order: 2,
     title: 'interlocutorName',
     label: 'Nom de l\'interlocuteur'
-  }, {order: 3, title: 'interactionSubject', label: 'Sujet d\'interaction'}, {
+  }, { order: 3, title: 'interactionSubject', label: 'Sujet d\'interaction' }, {
     order: 4,
     title: 'interactionType',
     label: 'Type d\'interaction'
-  }, {order: 5, title: 'planningDate', label: 'Date de planification'}, {
+  }, { order: 5, title: 'planningDate', label: 'Date de planification' }, {
     order: 6,
     title: 'status',
     label: 'Statut'
-  }, {order: 7, title: 'affectedTo', label: 'Affecté à'}, {order: 8, title: 'actions', label: 'Actions'}]);
+  }, { order: 7, title: 'affectedTo', label: 'Affecté à' }, { order: 8, title: 'actions', label: 'Actions' }]);
 
   displayedColumns: BehaviorSubject<DisplayColumnsInterface[]> = new BehaviorSubject<DisplayColumnsInterface[]>([{
     order: 0,
     title: 'select',
     label: 'Sélectionner'
-  }, {order: 1, title: 'prospectName', label: 'Nom du prospect'}, {
+  }, { order: 1, title: 'prospectName', label: 'Nom du prospect' }, {
     order: 2,
     title: 'interlocutorName',
     label: 'Nom de l\'interlocuteur'
-  }, {order: 3, title: 'interactionSubject', label: 'Sujet d\'interaction'}, {
+  }, { order: 3, title: 'interactionSubject', label: 'Sujet d\'interaction' }, {
     order: 4,
     title: 'interactionType',
     label: 'Type d\'interaction'
-  }, {order: 5, title: 'planningDate', label: 'Date de planification'}, {
+  }, { order: 5, title: 'planningDate', label: 'Date de planification' }, {
     order: 6,
     title: 'status',
     label: 'Statut'
-  }, {order: 7, title: 'affectedTo', label: 'Affecté à'}, {order: 8, title: 'actions', label: 'Actions'}]);
+  }, { order: 7, title: 'affectedTo', label: 'Affecté à' }, { order: 8, title: 'actions', label: 'Actions' }]);
 
   dataSource: MatTableDataSource<InteractionResponseDto> = new MatTableDataSource();
   isAllSelected = false;
@@ -108,6 +109,7 @@ export class InteractionComponent implements OnInit, AfterViewInit {
   fieldFilterForm!: FormGroup;
   isFiltersVisible: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   isShowImportZone: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  viewMode: BehaviorSubject<'table' | 'agenda'> = new BehaviorSubject<'table' | 'agenda'>('table');
   customers: BehaviorSubject<ProspectResponseDto[]> = new BehaviorSubject<ProspectResponseDto[]>([]);
   users: BehaviorSubject<any> = new BehaviorSubject<any[]>([]);
   interlocutors: BehaviorSubject<InterlocutorResDto[]> = new BehaviorSubject<InterlocutorResDto[]>([]);
@@ -152,14 +154,14 @@ export class InteractionComponent implements OnInit, AfterViewInit {
   loadDataForFiltersData(): void {
     // fetch customers
     this.customersService.getAllCustomers(this.localStorageService.getCurrentCompanyId()).pipe(
-      tap((customers) => {this.customers.next(customers);})).subscribe()
+      tap((customers) => { this.customers.next(customers); })).subscribe()
     //fetch all users
     this.userService.getAllUsers().pipe().subscribe(users => {
       this.users.next(users);
     })
     // fetch all interlocutors
     this.interlocutorsService.getAllInterlocutorsByCompanyId(this.localStorageService.getCurrentCompanyId()).pipe(
-      tap(interlocutors => {this.interlocutors.next(interlocutors)})).subscribe()
+      tap(interlocutors => { this.interlocutors.next(interlocutors) })).subscribe()
   }
 
   ngAfterViewInit(): void {
@@ -177,7 +179,7 @@ export class InteractionComponent implements OnInit, AfterViewInit {
   loadInteractions(searchValue: string = ""): void {
     this.interactionService.getAllInteractions(this.localStorageService.getCurrentCompanyId(), searchValue).subscribe({
       next: (data) => {
-        this.dataSource.data = data.sort((a,b) =>  b.id - a.id);
+        this.dataSource.data = data.sort((a, b) => b.id - a.id);
       }, error: (err) => {
         this.snackBar.open("Erreur lors de téléchargement des interaction: " + err.message, "Fermer", {
           duration: 3000,
@@ -300,12 +302,12 @@ export class InteractionComponent implements OnInit, AfterViewInit {
     });
   }
 
-  getChipClass(report: string | null): string {
-    return report !== null && report !== '' ? 'status-complete' : 'status-not-complete';
+  getChipClass(report: string | null | undefined): string {
+    return report !== null && report !== undefined && report !== '' ? 'status-complete' : 'status-not-complete';
   }
 
-  getStatusLabel(report: string | null): string {
-    return report !== null && report !== '' ? 'Terminé' : '\'En attente\'';
+  getStatusLabel(report: string | null | undefined): string {
+    return report !== null && report !== undefined && report !== '' ? 'Terminé' : '\'En attente\'';
   }
 
   /**
@@ -436,7 +438,7 @@ export class InteractionComponent implements OnInit, AfterViewInit {
             return throwError(() => error);
           })).subscribe();
       } else {
-        this.snackBar.open("Suppression annulée.", "Fermer", {duration: 3000, panelClass: ['info-snackbar']});
+        this.snackBar.open("Suppression annulée.", "Fermer", { duration: 3000, panelClass: ['info-snackbar'] });
       }
     });
   }
@@ -459,7 +461,7 @@ export class InteractionComponent implements OnInit, AfterViewInit {
 
     this.interactionService.exportExcelFile(this.localStorageService.getCurrentCompanyId(), selectedInteractionsIds)
       .pipe(tap((response: BlobPart) => {
-        const blob = new Blob([response], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+        const blob = new Blob([response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -510,7 +512,7 @@ export class InteractionComponent implements OnInit, AfterViewInit {
       .pipe(tap(interactions => {
         this.dataSource.data = interactions;
       }), catchError(error => {
-        this.snackBar.open("Erreur lors du filtrage.", "Fermer", {duration: 3000, panelClass: ['error-snackbar']});
+        this.snackBar.open("Erreur lors du filtrage.", "Fermer", { duration: 3000, panelClass: ['error-snackbar'] });
         return throwError(() => error);
       })).subscribe();
   }
@@ -534,5 +536,15 @@ export class InteractionComponent implements OnInit, AfterViewInit {
       filterType: "OR"
     });
     this.loadInteractions();
+  }
+
+  /**
+   * Toggles the view mode between 'table' and 'agenda' (calendar) views.
+   *
+   * @param {string} mode - The view mode to switch to ('table' or 'agenda').
+   * @return {void} This method does not return a value.
+   */
+  toggleViewMode(mode: 'table' | 'agenda'): void {
+    this.viewMode.next(mode);
   }
 }

@@ -1,48 +1,82 @@
-<div class="comment-container border-1 border-primary" >
-  <div class="comment-messages border border-2 "  *ngIf="comments.getValue().length" style="min-height:70vh">
-    <div *ngFor="let comment of comments | async; let i = index"
-         class="comment-bubble"
-         [ngClass]="{'user': comment.userId === authService.getCurrentUserId(), 'ai': comment.userId !== authService.getCurrentUserId()}">
-      <!-- User Info -->
-      <strong class="small">
-        <mat-icon class="mx-1">account_circle</mat-icon>
-        {{ comment.userName }}
-      </strong>
+<article class="comment-container border-1 border-primary" role="region" aria-label="Section des commentaires">
+  <!-- Comments List -->
+  <section class="comment-messages border border-2" *ngIf="comments.getValue().length"
+    style="min-height:70vh; overflow-y: auto;" role="feed" aria-label="Liste des commentaires">
+
+    <article *ngFor="let comment of comments | async; let i = index" class="comment-bubble animate-fade-in" [ngClass]="{
+        'user': comment.userId === authService.getCurrentUserId(), 
+        'ai': comment.userId !== authService.getCurrentUserId()
+      }" role="article" [attr.aria-label]="'Commentaire de ' + comment.userName">
+
+      <!-- User Info Header -->
+      <header class="comment-header d-flex align-items-center justify-content-between mb-2">
+        <div class="user-info d-flex align-items-center">
+          <mat-icon class="me-2" aria-hidden="true">account_circle</mat-icon>
+          <strong class="small user-name">{{ comment.userName }}</strong>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="comment-actions d-flex align-items-center gap-1" role="group" aria-label="Actions du commentaire">
+          <!-- Copy Button -->
+          <button mat-icon-button class="action-btn scale-08" (click)="copyToClipboard(comment.commentTxt, i)"
+            [attr.aria-label]="'Copier le commentaire de ' + comment.userName" title="Copier le commentaire">
+            <mat-icon>content_copy</mat-icon>
+          </button>
+
+          <!-- Delete Button (if user owns the comment) -->
+          <button *ngIf="comment.userId === authService.getCurrentUserId()" mat-icon-button
+            class="action-btn scale-09 delete-btn" (click)="deleteComment(comment.id)"
+            aria-label="Supprimer ce commentaire" title="Supprimer le commentaire">
+            <mat-icon class="text-danger">delete</mat-icon>
+          </button>
+        </div>
+      </header>
 
       <!-- Comment Text -->
-      <p [innerHTML]="comment.commentTxt"></p>
-      <!-- Copy Button -->
+      <div class="comment-content" [innerHTML]="comment.commentTxt"></div>
 
-      <!-- Show "Copied!" Message -->
-      <span *ngIf="copiedMessageIndex === i" class="copied-msg">✅ Copié !</span>
-      <p>
-        <button mat-icon-button class=" scale-08" (click)="copyToClipboard(comment.commentTxt, i)">
-          <mat-icon>content_copy</mat-icon>
-        </button>
+      <!-- Copied Confirmation Message -->
+      <div *ngIf="copiedMessageIndex === i" class="copied-msg animate-fade-in" role="status" aria-live="polite">
+        <mat-icon class="me-1" style="font-size: 16px; vertical-align: middle;">check_circle</mat-icon>
+        Copié !
+      </div>
 
-        <!-- Delete Button (if user owns the comment) -->
-        <button *ngIf="comment.userId === authService.getCurrentUserId()"
-                mat-icon-button class=" scale-09"
-                (click)="deleteComment(comment.id)">
-          <mat-icon class="text-dark">delete</mat-icon>
-        </button>
+      <!-- Optional: Timestamp (if available in your DTO) -->
+      <!-- <footer class="comment-footer mt-2">
+        <small class="text-muted">{{ comment.createdAt | date:'short' }}</small>
+      </footer> -->
+    </article>
+  </section>
+
+  <!-- Empty State -->
+  <section *ngIf="!comments.getValue().length"
+    class="empty-state text-center d-flex flex-column align-items-center justify-content-center" style="min-height:70vh"
+    role="status" aria-label="Aucun commentaire disponible">
+    <div class="empty-state-content">
+      <img src="/empty_file.svg" alt="Aucun commentaire" class="img-fluid mb-4 empty-state-image"
+        style="max-width: 200px; opacity: 0.7;">
+      <h3 class="text-secondary fs-4 mb-2">Aucun commentaire</h3>
+      <p class="text-muted">Soyez le premier à ajouter un commentaire</p>
     </div>
-  </div>
+  </section>
 
-  <div *ngIf="!comments.getValue().length" class="text-center d-flex flex-column" style="min-height:70vh">
-    <p class="col-12 p-4 mt-5">
-      <img src="/empty_file.svg" class="imf-fluid m-auto text-dark ">
-    </p>
-    <p class="text-secondary fs-3 col-12">aucun commentaire</p>
-  </div>
-  <!-- Comment Input -->
-  <form [formGroup]="commentForm" class="chat-input bg-spider rounded-top-2" (ngSubmit)="addComment()">
-    <input type="text" formControlName="comment" placeholder="Ajoutez un commentaire..." class="form-control border-secondary border-1 border-secondary-subtle">
-    <button class="bg-white mx-2 border-secondary" type="submit" mat-icon-button [disabled]="commentForm.invalid">
-      <mat-icon>send</mat-icon>
-    </button>
-  </form>
+  <!-- Comment Input Form -->
+  <footer class="comment-input-wrapper">
+    <form [formGroup]="commentForm" class="chat-input" (ngSubmit)="addComment()" role="form"
+      aria-label="Formulaire d'ajout de commentaire">
 
+      <label for="commentInput" class="visually-hidden">Votre commentaire</label>
+      <input id="commentInput" type="text" formControlName="comment" placeholder="Ajoutez un commentaire..."
+        aria-required="true" aria-describedby="commentHelp" maxlength="500">
 
-</div>
+      <button class="send-btn" type="submit" mat-icon-button [disabled]="commentForm.invalid"
+        aria-label="Envoyer le commentaire" title="Envoyer">
+        <mat-icon>send</mat-icon>
+      </button>
 
+      <span id="commentHelp" class="visually-hidden">
+        Tapez votre commentaire et appuyez sur Entrée ou cliquez sur le bouton Envoyer
+      </span>
+    </form>
+  </footer>
+</article>

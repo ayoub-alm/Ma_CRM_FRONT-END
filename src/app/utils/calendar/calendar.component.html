@@ -1,0 +1,56 @@
+<div class="calendar-container">
+    <!-- Calendar Header -->
+    <div class="calendar-header d-flex justify-content-between align-items-center mb-3">
+        <button mat-icon-button (click)="previousMonth()" aria-label="Mois précédent">
+            <mat-icon>chevron_left</mat-icon>
+        </button>
+
+        <div class="d-flex align-items-center gap-3">
+            <h4 class="mb-0 text-secondary fw-bold">{{ currentMonthYear }}</h4>
+            <button mat-button class="today-btn" (click)="today()">
+                Aujourd'hui
+            </button>
+        </div>
+
+        <button mat-icon-button (click)="nextMonth()" aria-label="Mois suivant">
+            <mat-icon>chevron_right</mat-icon>
+        </button>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="calendar-grid">
+        <!-- Week Days Header -->
+        <div class="calendar-weekdays">
+            <div *ngFor="let day of weekDays" class="weekday-header">
+                {{ day }}
+            </div>
+        </div>
+
+        <!-- Calendar Days -->
+        <div class="calendar-days">
+            <div *ngFor="let calendarDay of calendarDays" class="calendar-day" [ngClass]="{
+          'other-month': !calendarDay.isCurrentMonth,
+          'today': calendarDay.isToday,
+          'has-events': calendarDay.events.length > 0
+        }">
+
+                <div class="day-number">{{ calendarDay.day }}</div>
+
+                <!-- Events for this day -->
+                <div class="day-events" *ngIf="calendarDay.events.length > 0">
+                    <div *ngFor="let event of calendarDay.events.slice(0, 3)" class="event-item"
+                        [ngClass]="getEventStatusClass(event)" (click)="onEventClick(event)"
+                        [title]="event.prospectName || event.name">
+                        <div class="event-dot"></div>
+                        <div class="event-text">{{ event.prospectName || event.name }}</div>
+                    </div>
+
+                    <!-- Show "+X more" if there are more than 3 events -->
+                    <div *ngIf="calendarDay.events.length > 3" class="more-events">
+                        +{{ calendarDay.events.length - 3 }} plus
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

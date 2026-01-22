@@ -1,12 +1,12 @@
-import {AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit} from '@angular/core';
-import {StorageNeedService} from '../../../../../services/crm/wms/storage.need.service';
-import {BehaviorSubject, catchError, concatMap, EMPTY, of, tap, throwError} from 'rxjs';
-import {StorageNeedResponseDto} from '../../../../../dtos/response/crm/storage.need.response.dto';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatCard, MatCardContent} from '@angular/material/card';
-import {MatIcon} from '@angular/material/icon';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
+import { StorageNeedService } from '../../../../../services/crm/wms/storage.need.service';
+import { BehaviorSubject, catchError, concatMap, EMPTY, of, tap, throwError } from 'rxjs';
+import { StorageNeedResponseDto } from '../../../../../dtos/response/crm/storage.need.response.dto';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
 import {
   MatCell,
   MatCellDef,
@@ -19,40 +19,40 @@ import {
   MatRowDef,
   MatTable
 } from '@angular/material/table';
-import {AsyncPipe, DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import { AsyncPipe, DatePipe, NgClass, NgForOf, NgIf } from '@angular/common';
 
-import {getLabelFromStorageReasonEnum} from '../../../../../enums/crm/storage.reason.enum';
-import {EntityEnum} from '../../../../../enums/entity.enum';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import { getLabelFromStorageReasonEnum } from '../../../../../enums/crm/storage.reason.enum';
+import { EntityEnum } from '../../../../../enums/entity.enum';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
 
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatOption} from '@angular/material/core';
-import {ProvisionResponseDto} from '../../../../../dtos/response/crm/provision.response.dto';
-import {SupportService} from '../../../../../services/crm/wms/support.service';
-import {StructureService} from '../../../../../services/crm/wms/structure.service';
-import {TemperatureService} from '../../../../../services/crm/wms/temperature.service';
-import {SupportResponseDto} from '../../../../../dtos/response/crm/support.response.dto';
-import {StructureResponseDto} from '../../../../../dtos/response/crm/structure.response.dto';
-import {TemperatureResponseDto} from '../../../../../dtos/response/crm/temperature.response.dto';
-import {LocalStorageService} from '../../../../../services/local.storage.service';
-import {StockedItemCreateDto} from '../../../../../dtos/request/crm/stockedItem.create.dto';
-import {ProvisionService} from '../../../../../services/crm/wms/provision.service.dto';
-import {MatDialog} from '@angular/material/dialog';
-import {AddStockedItemComponent} from '../add-stocked-item/add-stocked-item.component';
-import {StockedItemResponseDto} from '../../../../../dtos/response/crm/stocked.itemresponse.dto';
-import {PrintService} from '../../../../../services/docs/print.service';
-import {MatFormField, MatLabel} from '@angular/material/form-field';
-import {MatSelect} from '@angular/material/select';
-import {RequirementResponseDto} from '../../../../../dtos/response/crm/requirement.response.dto';
-import {RequirementService} from '../../../../../services/crm/wms/requirement.service';
-import {UnloadingTypeResponseDto} from '../../../../../dtos/response/crm/unloading.type.response.dto';
-import {UnloadingTypeService} from '../../../../../services/crm/wms/unloading.type.service';
-import {TrackingLogComponent} from '../../../../utils/tracking-log/tracking-log.component';
-import {MatBottomSheet, MatBottomSheetModule} from '@angular/material/bottom-sheet';
-import {GeneralInfosComponent} from '../../../../utils/general-infos/general-infos.component';
-import {LivreEnum} from '../../../../../enums/crm/livre.enum';
-import {StorageOfferService} from '../../../../../services/crm/wms/storage.offer.service';
-import {WmsNeedCreateComponent} from '../wms-need-create/wms-need-create.component';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatOption } from '@angular/material/core';
+import { ProvisionResponseDto } from '../../../../../dtos/response/crm/provision.response.dto';
+import { SupportService } from '../../../../../services/crm/wms/support.service';
+import { StructureService } from '../../../../../services/crm/wms/structure.service';
+import { TemperatureService } from '../../../../../services/crm/wms/temperature.service';
+import { SupportResponseDto } from '../../../../../dtos/response/crm/support.response.dto';
+import { StructureResponseDto } from '../../../../../dtos/response/crm/structure.response.dto';
+import { TemperatureResponseDto } from '../../../../../dtos/response/crm/temperature.response.dto';
+import { LocalStorageService } from '../../../../../services/local.storage.service';
+import { StockedItemCreateDto } from '../../../../../dtos/request/crm/stockedItem.create.dto';
+import { ProvisionService } from '../../../../../services/crm/wms/provision.service.dto';
+import { MatDialog } from '@angular/material/dialog';
+import { AddStockedItemComponent } from '../add-stocked-item/add-stocked-item.component';
+import { StockedItemResponseDto } from '../../../../../dtos/response/crm/stocked.itemresponse.dto';
+import { PrintService } from '../../../../../services/docs/print.service';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatSelect } from '@angular/material/select';
+import { RequirementResponseDto } from '../../../../../dtos/response/crm/requirement.response.dto';
+import { RequirementService } from '../../../../../services/crm/wms/requirement.service';
+import { UnloadingTypeResponseDto } from '../../../../../dtos/response/crm/unloading.type.response.dto';
+import { UnloadingTypeService } from '../../../../../services/crm/wms/unloading.type.service';
+import { TrackingLogComponent } from '../../../../utils/tracking-log/tracking-log.component';
+import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { GeneralInfosComponent } from '../../../../utils/general-infos/general-infos.component';
+import { LivreEnum } from '../../../../../enums/crm/livre.enum';
+import { StorageOfferService } from '../../../../../services/crm/wms/storage.offer.service';
+import { WmsNeedCreateComponent } from '../wms-need-create/wms-need-create.component';
 
 @Component({
   selector: 'app-wms-need-show',
@@ -60,15 +60,15 @@ import {WmsNeedCreateComponent} from '../wms-need-create/wms-need-create.compone
   imports: [
     MatButton, MatCard, MatCardContent, MatIcon, MatBottomSheetModule, NgIf, NgForOf,
     DatePipe, MatMenu, MatMenuItem, MatMenuTrigger, FormsModule, MatCell, MatCellDef, MatColumnDef
-    ,MatHeaderCell, MatHeaderRow, MatHeaderRowDef, MatIconButton, MatRow, MatRowDef, MatTable, ReactiveFormsModule,
+    , MatHeaderCell, MatHeaderRow, MatHeaderRowDef, MatIconButton, MatRow, MatRowDef, MatTable, ReactiveFormsModule,
     MatHeaderCellDef, NgClass, AsyncPipe, MatFormField, MatLabel, MatOption, MatSelect, GeneralInfosComponent
   ],
   templateUrl: './wms-need-show.component.html',
   styleUrl: './wms-need-show.component.css',
-  changeDetection:ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class WmsNeedShowComponent implements OnInit, AfterViewInit{
-  storageNeed:BehaviorSubject<StorageNeedResponseDto> = new BehaviorSubject<StorageNeedResponseDto>({} as StorageNeedResponseDto);
+export class WmsNeedShowComponent implements OnInit, AfterViewInit {
+  storageNeed: BehaviorSubject<StorageNeedResponseDto> = new BehaviorSubject<StorageNeedResponseDto>({} as StorageNeedResponseDto);
   expandedElement: any | null = null;
   itemsToStoredisplayedColumns: string[] = [
     'conditionnement',
@@ -81,11 +81,11 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   ];
 
   itemToStoreFormGroup!: FormGroup;
-  provisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
-  selectedProvisions: BehaviorSubject<ProvisionResponseDto[]> =  new BehaviorSubject<ProvisionResponseDto[]>([])
-  provisionsDisplayedColumns: string[] = [ 'name',"unite", "actions"];
+  provisions: BehaviorSubject<ProvisionResponseDto[]> = new BehaviorSubject<ProvisionResponseDto[]>([])
+  selectedProvisions: BehaviorSubject<ProvisionResponseDto[]> = new BehaviorSubject<ProvisionResponseDto[]>([])
+  provisionsDisplayedColumns: string[] = ['name', "unite", "actions"];
   unloadingDataSource: BehaviorSubject<UnloadingTypeResponseDto[]> = new BehaviorSubject<UnloadingTypeResponseDto[]>([]);
-  unloadingTypes: BehaviorSubject<UnloadingTypeResponseDto[]> =  new BehaviorSubject<UnloadingTypeResponseDto[]>([])
+  unloadingTypes: BehaviorSubject<UnloadingTypeResponseDto[]> = new BehaviorSubject<UnloadingTypeResponseDto[]>([])
   supports: BehaviorSubject<SupportResponseDto[]> = new BehaviorSubject<SupportResponseDto[]>([]);
   structures: BehaviorSubject<StructureResponseDto[]> = new BehaviorSubject<StructureResponseDto[]>([]);
   temperatures: BehaviorSubject<TemperatureResponseDto[]> = new BehaviorSubject<TemperatureResponseDto[]>([]);
@@ -93,16 +93,16 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   isAddNewProvision: boolean = false;
   requirementForm!: FormGroup;
   unloadForm!: FormGroup;
-  requirements: BehaviorSubject<RequirementResponseDto[]> =  new BehaviorSubject<RequirementResponseDto[]>([])
-  constructor(private storageNeedService: StorageNeedService, public router: Router,private activeRouter: ActivatedRoute,
-              private snackBar: MatSnackBar, private fb: FormBuilder,private supportService: SupportService, private structureService: StructureService,
-              private temperatureServices: TemperatureService, private localStorageService: LocalStorageService, private provisionService: ProvisionService,
-              private dialog: MatDialog, private cdRef: ChangeDetectorRef, private requirementService: RequirementService,
-              private unloadingTypeService: UnloadingTypeService, private storageOfferService: StorageOfferService) {
+  requirements: BehaviorSubject<RequirementResponseDto[]> = new BehaviorSubject<RequirementResponseDto[]>([])
+  constructor(private storageNeedService: StorageNeedService, public router: Router, private activeRouter: ActivatedRoute,
+    private snackBar: MatSnackBar, private fb: FormBuilder, private supportService: SupportService, private structureService: StructureService,
+    private temperatureServices: TemperatureService, private localStorageService: LocalStorageService, private provisionService: ProvisionService,
+    private dialog: MatDialog, private cdRef: ChangeDetectorRef, private requirementService: RequirementService,
+    private unloadingTypeService: UnloadingTypeService, private storageOfferService: StorageOfferService) {
   }
 
   ngOnInit() {
-    const storageNeedId:number = this.activeRouter.snapshot.params['id'];
+    const storageNeedId: number = this.activeRouter.snapshot.params['id'];
     this.loadStorageNeed(storageNeedId)
     this.initializeItemToStoreForm();
     this.loadTemperatures();
@@ -123,23 +123,24 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
     this.storageNeedService.getStorageNeedById(storageNeedId).pipe(
       tap(data => this.storageNeed.next(data)),
       catchError((err) => {
-        this.snackBar.open("Erreur de téléchargement de données", "ok", {duration: 3000})
-        return of(null);}
-      )).subscribe({
-      next:(data:StorageNeedResponseDto | null)=> {
-        if (data) this.storageNeed.next(data);
-        this.cdRef.detectChanges();
+        this.snackBar.open("Erreur de téléchargement de données", "ok", { duration: 3000 })
+        return of(null);
       }
-    })
+      )).subscribe({
+        next: (data: StorageNeedResponseDto | null) => {
+          if (data) this.storageNeed.next(data);
+          this.cdRef.detectChanges();
+        }
+      })
   }
 
 
   ngAfterViewInit() {
     this.unloadForm.get("unload")?.setValue(
-      this.storageNeed.getValue().unloadingTypes.map(unloadType => { return unloadType.id}))
+      this.storageNeed.getValue().unloadingTypes.map(unloadType => { return unloadType.id }))
 
     this.requirementForm.get("requirement")?.setValue(
-      this.storageNeed.getValue().requirements.map(requirement => { return requirement.id}));
+      this.storageNeed.getValue().requirements.map(requirement => { return requirement.id }));
   }
 
   toggleRow(row: any) {
@@ -147,7 +148,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   }
 
   getNeedStatus(status: string): string {
-    switch (status){
+    switch (status) {
       case 'CREATION':
         return "Crée"
       default:
@@ -196,7 +197,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   /**
    *
    */
-  loadRequirements(){
+  loadRequirements() {
     this.requirementService.getRequirementsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
       tap(data => {
         this.requirements.next(data);
@@ -206,7 +207,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   /**
    *
    */
-  loadUnloadingTypes(): void{
+  loadUnloadingTypes(): void {
     // get unloading types and fill the select box by pushing data in unloading variable
     this.unloadingTypeService.getUnloadingTypeByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
       tap(unloadingTypes => {
@@ -215,7 +216,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
     ).subscribe()
   }
 
-  initializeUnloadForm():void {
+  initializeUnloadForm(): void {
     this.unloadForm = this.fb.group({
       unload: [[]],
     })
@@ -280,7 +281,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
     this.itemToStoreFormGroup.get("provisions")?.valueChanges.pipe(
       tap((selectedProvisionIds: number[]) => {
         // Filter provisions based on selected IDs
-        const  filteredProvisions = this.provisions.getValue()
+        const filteredProvisions = this.provisions.getValue()
           .filter(provision => selectedProvisionIds.includes(provision.id));
         this.selectedProvisions.next(filteredProvisions);
       }),
@@ -294,7 +295,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   /**
    *
    */
-  loadProvisions(): void{
+  loadProvisions(): void {
     this.provisionService.getAllProvisionsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
       tap(data => {
         this.provisions.next(data); // Perform the side effect of updating provisions
@@ -309,9 +310,9 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   /**
    * this function allows to load support
    */
-  loadSupport(): void{
+  loadSupport(): void {
     this.supportService.getAllSupportsByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
-      tap((response: SupportResponseDto[])=>{
+      tap((response: SupportResponseDto[]) => {
         this.supports.next(response);
       }),
       catchError((err) => {
@@ -324,9 +325,9 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   /**
    * this function allows to load structures by company ID
    */
-  loadStructures(): void{
+  loadStructures(): void {
     this.structureService.getAllStructuresByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
-      tap((response: StructureResponseDto[])=>{
+      tap((response: StructureResponseDto[]) => {
         this.structures.next(response);
       }),
       catchError((err) => {
@@ -339,9 +340,9 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   /**
    * this function allows to load structures by company ID
    */
-  loadTemperatures(): void{
+  loadTemperatures(): void {
     this.temperatureServices.getAllTemperaturesByCompanyId(this.localStorageService.getItem("selected_company_id")).pipe(
-      tap((response: TemperatureResponseDto[])=>{
+      tap((response: TemperatureResponseDto[]) => {
         this.temperatures.next(response);
       }),
       catchError((err) => {
@@ -356,8 +357,8 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
    *
    * @param temperatureId
    */
-  getTemperatureById(temperatureId:number): string{
-    const tempName =  this.temperatures.getValue()
+  getTemperatureById(temperatureId: number): string {
+    const tempName = this.temperatures.getValue()
       .find(temp => temp.id === temperatureId)?.name
     if (tempName === undefined) {
       return "N/A"
@@ -369,8 +370,8 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
    *
    * @param structureId
    */
-  getStructureById(structureId:number): string{
-    const structureName =  this.structures.getValue()
+  getStructureById(structureId: number): string {
+    const structureName = this.structures.getValue()
       .find(structure => structure.id === structureId)?.name
     if (structureName === undefined) {
       return "N/A"
@@ -382,8 +383,8 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
    *
    * @param supportId
    */
-  getSupportById(supportId:number): string{
-    const supportName =  this.supports.getValue()
+  getSupportById(supportId: number): string {
+    const supportName = this.supports.getValue()
       .find(support => support.id === supportId)?.name
     if (supportName === undefined) {
       return "N/A"
@@ -405,7 +406,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
       this.selectedProvisions.next([]);
     } else {
       this.itemToStoreFormGroup.markAllAsTouched();
-      this.snackBar.open("Le formulaire n'est pas valide. Veuillez vérifier les champs obligatoires.", "Ok",{duration:3000})
+      this.snackBar.open("Le formulaire n'est pas valide. Veuillez vérifier les champs obligatoires.", "Ok", { duration: 3000 })
     }
   }
 
@@ -417,15 +418,15 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
    * @param prov - The `ProvisionResponseDto` provision to remove.
    */
   removeProvision(element: StockedItemResponseDto, prov: ProvisionResponseDto): void {
-     this.provisionService.removeProvisionFromStockedItem(element.id, prov.id).pipe(
-       tap(data => {
-          if (data){
-            this.loadStorageNeed(this.storageNeed.getValue().id)
-          }else {
-            this.snackBar.open("error durrant la supprission ", "OK", {duration:3000});
-          }
-       })
-     ).subscribe()
+    this.provisionService.removeProvisionFromStockedItem(element.id, prov.id).pipe(
+      tap(data => {
+        if (data) {
+          this.loadStorageNeed(this.storageNeed.getValue().id)
+        } else {
+          this.snackBar.open("error durrant la supprission ", "OK", { duration: 3000 });
+        }
+      })
+    ).subscribe()
   }
 
 
@@ -438,27 +439,27 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   createOfferFromNeed() {
     this.storageOfferService.createStorageOfferFormNeedId(this.storageNeed.getValue().id)
       .pipe(tap(data => {
-        this.snackBar.open("Offer a été bien crée", "OK", {duration:3000})
-        this.router.navigateByUrl('/admin/crm/wms/offers/show/'+data.id).then()
+        this.snackBar.open("Offer a été bien crée", "OK", { duration: 3000 })
+        this.router.navigateByUrl('/admin/crm/wms/offers/show/' + data.id).then()
       })).subscribe({
-      error:(err)=>{
-        console.error(err)
-        return EMPTY;
-      }
-    })
+        error: (err) => {
+          console.error(err)
+          return EMPTY;
+        }
+      })
     // this.router.navigate(['/admin/crm/wms/offers/create'], {state: {data: this.storageNeed.getValue()}})
     //   .then(() => console.log('Navigation successful'))
     //   .catch(err => console.error('Navigation error:', err));
   }
 
   onAddNewStockedItem() {
-    const dialogRef = this.dialog.open(AddStockedItemComponent,{
-      maxWidth: '900px', data:{storageNeedId: this.storageNeed.getValue().id}
+    const dialogRef = this.dialog.open(AddStockedItemComponent, {
+      maxWidth: '900px', data: { storageNeedId: this.storageNeed.getValue().id }
     })
 
     dialogRef.afterClosed().pipe(
-      tap((data:StockedItemResponseDto) => {
-        if (data){
+      tap((data: StockedItemResponseDto) => {
+        if (data) {
           this.loadStorageNeed(this.storageNeed.getValue().id);
         }
       })
@@ -504,7 +505,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
    * @constructor
    */
   UnselectedProvisions(stockedItem: StockedItemResponseDto) {
-    return this.provisions.getValue().filter(prv => !stockedItem.provisionResponseDto?.map(prv =>  prv.id).includes(prv.id))
+    return this.provisions.getValue().filter(prv => !stockedItem.provisionResponseDto?.map(prv => prv.id).includes(prv.id))
   }
 
   /**
@@ -523,7 +524,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
     this.provisionService.addProvisionToStockedItem(element.id, parseInt(inputValue)).pipe(
       tap(() => {
         const addedProvision = this.provisions.getValue().find(prv => prv.id == parseInt(inputValue));
-        if (addedProvision){
+        if (addedProvision) {
           this.storageNeed.getValue().stockedItems.find(item => item.id == element.id)?.provisionResponseDto.push(addedProvision);
         }
         this.snackBar.open("Provision ajoutée avec succès", "Ok", { duration: 3000 });
@@ -542,11 +543,11 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit{
   onSoftDeleteStorageNeed() {
     this.storageNeedService.deleteStorageNeed(this.storageNeed.getValue().id).subscribe({
       next: () => {
-        this.snackBar.open("le Besoin a été bien supprimé", "Ok", {duration: 3000 });
+        this.snackBar.open("le Besoin a été bien supprimé", "Ok", { duration: 3000 });
         this.router.navigateByUrl("/admin/crm/wms/needs");
       },
       error: () => {
-        this.snackBar.open("Erreur lors de la suppression", "OK", {duration: 3000 });
+        this.snackBar.open("Erreur lors de la suppression", "OK", { duration: 3000 });
       }
     });
   }

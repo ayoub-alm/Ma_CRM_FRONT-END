@@ -1,4 +1,4 @@
-export enum EntityEnum{
+export enum EntityEnum {
     PROSPECT = 'PROSPECT',
     INTERACTION = 'INTERACTION',
     INTERLOCUTOR = 'INTERLOCUTOR',

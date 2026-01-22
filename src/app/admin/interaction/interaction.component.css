@@ -1,19 +1,22 @@
-.form-control{
+.form-control {
   box-shadow: none;
   border-color: transparent;
   /*font-size:1rem;*/
   border-bottom: solid 0.5px #005cbb;
-  margin:0% !important;
-  padding:0% !important;
-  padding-left:0.5rem !important;
+  margin: 0% !important;
+  padding: 0% !important;
+  padding-left: 0.5rem !important;
   /*background-color: #e0e2ec !important;*/
 }
 
 .custom-header-row {
   /*background-color: #e0e2ec !important;*/
-  height: 0.8rem !important; /* Adjust the height as needed */
-  line-height: 3rem; /* Align the text vertically */
+  height: 0.8rem !important;
+  /* Adjust the height as needed */
+  line-height: 3rem;
+  /* Align the text vertically */
 }
+
 .add-btn:hover span {
   display: block !important;
   transition: opacity 1.5s ease-in;
@@ -28,13 +31,15 @@
 .add-btn {
   transition: opacity 2s ease-in-out;
   animation: blink 1s;
-  font-family: "Poppins",sans-serif !important;
+  font-family: "Poppins", sans-serif !important;
 }
+
 @keyframes blink {
-  0%{
+  0% {
     opacity: 0;
   }
-  100%{
+
+  100% {
     opacity: 1;
   }
 }
@@ -53,7 +58,8 @@
 }
 
 .drop-zone.drag-over {
-  background-color: #e0f7e0; /* Change background when file is dragged over */
+  background-color: #e0f7e0;
+  /* Change background when file is dragged over */
 }
 
 .close-btn {
@@ -65,10 +71,14 @@
 
 .fixed-header {
   position: sticky;
-  top: 0; /* Fixes the header at the top */
-  z-index: 100; /* Ensure it's above other rows */
-  background-color: #f8f9fa; /* Matches the table header color */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for distinction */
+  top: 0;
+  /* Fixes the header at the top */
+  z-index: 100;
+  /* Ensure it's above other rows */
+  background-color: #f8f9fa;
+  /* Matches the table header color */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  /* Optional shadow for distinction */
 }
 
 
@@ -79,39 +89,59 @@
   cursor: pointer;
 }
 
-.status-active{
-  background-color: #d4edda; /* Soft green for "ACTIVE" */
-  color: #155724; /* Dark green for text */
+.status-active {
+  background-color: #d4edda;
+  /* Soft green for "ACTIVE" */
+  color: #155724;
+  /* Dark green for text */
 }
 
-.status-inactive{
-  background-color: #f8d7da; /* Soft red for "INACTIVE" */
-  color: #721c24; /* Dark red for text */
+.status-inactive {
+  background-color: #f8d7da;
+  /* Soft red for "INACTIVE" */
+  color: #721c24;
+  /* Dark red for text */
 }
 
 
 .search-input {
   /* Removes box shadow */
-  outline: none; /* Removes the default outline */
-  border: none; /* Removes the initial border */
+  outline: none;
+  /* Removes the default outline */
+  border: none;
+  /* Removes the initial border */
   /* border: solid 0.5px #005cbb; !* Defines a subtle border *!*/
-  border-radius: 4px; /* Adds rounded corners for a cleaner look */
-  margin: 0 !important; /* Removes any extra margin */
-  padding: 0.25rem 0.5rem !important; /* Balanced padding for better spacing */
-  transition: all 0.5s ease-in-out; /* Smooth transition for focus and width changes */
-  background-color: #f9f9f9; /* Light background for readability */
-  font-size: 0.8rem; /* Adjust font size for consistency */
-  color: #333; /* Ensures text color contrast */
+  border-radius: 4px;
+  /* Adds rounded corners for a cleaner look */
+  margin: 0 !important;
+  /* Removes any extra margin */
+  padding: 0.25rem 0.5rem !important;
+  /* Balanced padding for better spacing */
+  transition: all 0.5s ease-in-out;
+  /* Smooth transition for focus and width changes */
+  background-color: #f9f9f9;
+  /* Light background for readability */
+  font-size: 0.8rem;
+  /* Adjust font size for consistency */
+  color: #333;
+  /* Ensures text color contrast */
 }
 
 .search-input:focus {
-  outline: none; /* Removes the default outline */
-  border: none; /* Removes the initial border */
-  box-shadow: none; /* No shadow on focus */
-  border-bottom: solid 2px #005cbb; /* Adds a distinct bottom border */
-  width: 100%; /* Expands width smoothly */
-  background-color: #ffffff; /* Ensures focus background contrasts well */
-  color: #000; /* Sharpens text color on focus */
+  outline: none;
+  /* Removes the default outline */
+  border: none;
+  /* Removes the initial border */
+  box-shadow: none;
+  /* No shadow on focus */
+  border-bottom: solid 2px #005cbb;
+  /* Adds a distinct bottom border */
+  width: 100%;
+  /* Expands width smoothly */
+  background-color: #ffffff;
+  /* Ensures focus background contrasts well */
+  color: #000;
+  /* Sharpens text color on focus */
 }
 
 /*  Drop down  */
@@ -132,7 +162,7 @@
 .dropdown-menu {
   position: absolute;
   top: 100%;
-  right:20%;
+  right: 20%;
   z-index: 10000;
   display: block;
   min-width: 200px;
@@ -169,7 +199,8 @@
 }
 
 .drop-zone.drag-over {
-  background-color: #e0f7e0; /* Change background when file is dragged over */
+  background-color: #e0f7e0;
+  /* Change background when file is dragged over */
 }
 
 .close-btn {
@@ -181,51 +212,64 @@
 
 .status-new {
   background-color: lightgreen !important;
-  color:green !important;
+  color: green !important;
   /* Blue for "NEW" */
 }
 
 .status-qualified {
-  background-color: #8bc34a; /* Green for "QUALIFIED" */
+  background-color: #8bc34a;
+  /* Green for "QUALIFIED" */
 }
 
 .status-interested {
-  background-color: #ff9800; /* Orange for "INTERESTED" */
+  background-color: #ff9800;
+  /* Orange for "INTERESTED" */
 
 }
 
 .status-opportunity {
-  background-color: #3f51b5; /* Indigo for "OPPORTUNITY" */
+  background-color: #3f51b5;
+  /* Indigo for "OPPORTUNITY" */
 }
 
 .status-converted {
-  background-color: #4caf50; /* Light green for "CONVERTED" */
+  background-color: #4caf50;
+  /* Light green for "CONVERTED" */
 }
 
 .status-disqualified {
-  background-color: #f44336; /* Red for "DISQUALIFIED" */
+  background-color: #f44336;
+  /* Red for "DISQUALIFIED" */
 }
 
 .status-lost {
-  background-color: #9e9e9e; /* Grey for "LOST" */
+  background-color: #9e9e9e;
+  /* Grey for "LOST" */
 }
 
 .status-nrp {
-  background-color: #607d8b; /* Blue-grey for "NRP" */
+  background-color: #607d8b;
+  /* Blue-grey for "NRP" */
 }
 
 .status-default {
-  background-color: #f5f5f5; /* Light grey for default */
-  color: #000; /* Default black text */
+  background-color: #f5f5f5;
+  /* Light grey for default */
+  color: #000;
+  /* Default black text */
 }
 
 
 .fixed-header {
   position: sticky;
-  top: 0; /* Fixes the header at the top */
-  z-index: 100; /* Ensure it's above other rows */
-  background-color: #f8f9fa; /* Matches the table header color */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for distinction */
+  top: 0;
+  /* Fixes the header at the top */
+  z-index: 100;
+  /* Ensure it's above other rows */
+  background-color: #f8f9fa;
+  /* Matches the table header color */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  /* Optional shadow for distinction */
 }
 
 
@@ -237,14 +281,18 @@
 
 /* Style for Complete status */
 .status-complete {
-  background-color: #d4edda; /* Soft green */
-  color: #155724; /* Dark green */
+  background-color: #d4edda;
+  /* Soft green */
+  color: #155724;
+  /* Dark green */
 }
 
 /* Style for Not Complete status */
 .status-not-complete {
-  background-color: #f8d7da; /* Soft red */
-  color: #721c24; /* Dark red */
+  background-color: #f8d7da;
+  /* Soft red */
+  color: #721c24;
+  /* Dark red */
 }
 
 .file-drop-zone {
@@ -265,3 +313,88 @@
   margin: 0;
 }
 
+/* View Toggle Group */
+.view-toggle-group {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.view-toggle-group button {
+  transition: all 0.3s ease;
+}
+
+.view-toggle-group button.active-view {
+  background-color: rgba(0, 92, 187, 0.1);
+}
+
+.view-toggle-group button:hover {
+  background-color: rgba(0, 92, 187, 0.05);
+}
+
+/* Agenda View Styles */
+.agenda-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.agenda-item {
+  transition: all 0.3s ease;
+}
+
+.agenda-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border-left-width: 6px !important;
+}
+
+.date-badge {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: #f8f9fa;
+}
+
+.small-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  vertical-align: middle;
+}
+
+/* Agenda List Scrolling */
+.agenda-list {
+  max-height: 65vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.agenda-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.agenda-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+.agenda-list::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+.agenda-list::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Responsive Agenda View */
+@media (max-width: 768px) {
+  .agenda-item .row {
+    flex-direction: column;
+  }
+
+  .agenda-item .col-md-2,
+  .agenda-item .col-md-7,
+  .agenda-item .col-md-3 {
+    text-align: center !important;
+    margin-bottom: 10px;
+  }
+}
