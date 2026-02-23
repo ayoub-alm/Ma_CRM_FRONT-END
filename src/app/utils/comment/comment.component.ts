@@ -1,21 +1,18 @@
-import {AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild} from '@angular/core';
-import {MatButton, MatFabButton, MatIconButton} from "@angular/material/button";
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { MatButton, MatFabButton, MatIconButton } from "@angular/material/button";
 
-import {PaginatorModule} from "primeng/paginator";
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgClass, NgIf, NgFor, DatePipe, AsyncPipe} from "@angular/common";
-import {BehaviorSubject, catchError, of, tap} from "rxjs";
-import {MatIcon} from "@angular/material/icon";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatBadge} from '@angular/material/badge';
-import {CommentRequestDto, ReplyRequestDto} from "../../../dtos/request/CreateCommentDto";
-import {CommentResponseDto} from "../../../dtos/response/CommentResponseDto";
-import {CommentService} from "../../../services/comment.service";
-import {EntityEnum} from "../../../enums/entity.enum";
-import {AuthService} from "../../../services/AuthService";
-import {MatSidenavContainer, MatSidenavContent} from '@angular/material/sidenav';
-import {MatToolbar} from '@angular/material/toolbar';
-
+import { PaginatorModule } from "primeng/paginator";
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
+import { NgIf, NgFor, DatePipe, AsyncPipe } from "@angular/common";
+import { BehaviorSubject, catchError, of, tap } from "rxjs";
+import { MatIcon } from "@angular/material/icon";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatBadge } from '@angular/material/badge';
+import { CommentRequestDto, ReplyRequestDto } from "../../../dtos/request/CreateCommentDto";
+import { CommentResponseDto } from "../../../dtos/response/CommentResponseDto";
+import { CommentService } from "../../../services/comment.service";
+import { EntityEnum } from "../../../enums/entity.enum";
+import { AuthService } from "../../../services/AuthService";
 
 
 @Component({
@@ -24,18 +21,16 @@ import {MatToolbar} from '@angular/material/toolbar';
   imports: [
     PaginatorModule,
     ReactiveFormsModule,
-    NgClass,
     NgIf,
     NgFor,
     MatIconButton,
     MatIcon,
-    AsyncPipe,
-    MatToolbar
+    AsyncPipe
   ],
   templateUrl: './comment.component.html',
   styleUrl: './comment.component.css'
 })
-export class CommentComponent implements OnInit, AfterViewInit {
+export class CommentComponent implements OnInit {
   comments: BehaviorSubject<CommentResponseDto[]> = new BehaviorSubject<CommentResponseDto[]>([]);
   @Input() replies: CommentResponseDto[] = [];
   @Input() entity!: EntityEnum;
@@ -52,27 +47,20 @@ export class CommentComponent implements OnInit, AfterViewInit {
   replyIndex: number | null = null;
 
   constructor(private commentService: CommentService,
-              private snackBar: MatSnackBar,
-              private fb: FormBuilder,
-              public authService: AuthService) {
+    private snackBar: MatSnackBar,
+    private fb: FormBuilder,
+    public authService: AuthService) {
     this.commentForm = this.fb.group({
-      comment:['', Validators.required]
+      comment: ['', Validators.required]
     })
 
     this.replyForm = this.fb.group({
-      reply:['', Validators.required]
+      reply: ['', Validators.required]
     })
   }
 
   ngOnInit(): void {
-    // this.loadComments(); // Load comments on component initialization
-  }
-
-
-  ngAfterViewInit() {
-    setTimeout(()=>{
-      this.loadComments()
-    },1000)
+    this.loadComments();
   }
 
   /**
@@ -80,9 +68,9 @@ export class CommentComponent implements OnInit, AfterViewInit {
    */
   loadComments(): void {
     this.commentService.getCommentsByEntityAndEntityId(this.entity, this.entityId)
-        .subscribe((comments: CommentResponseDto[]) => {
-          this.comments.next(comments);
-        });
+      .subscribe((comments: CommentResponseDto[]) => {
+        this.comments.next(comments);
+      });
   }
 
   toggleComment(): void {
@@ -99,7 +87,7 @@ export class CommentComponent implements OnInit, AfterViewInit {
    */
   addComment(): void {
     // alert(this.commentForm.get("comment")?.value);
-    if (this.commentForm.get('comment')?.value?.trim()){
+    if (this.commentForm.get('comment')?.value?.trim()) {
       const commentRequest: CommentRequestDto = {
         entity: this.entity,
         commentTxt: this.commentForm.get('comment')?.value?.trim(),
@@ -109,12 +97,12 @@ export class CommentComponent implements OnInit, AfterViewInit {
       };
       this.commentService.addComment(commentRequest).pipe(
         tap((response: CommentResponseDto) => {
-          this.comments.next([... this.comments.getValue(), response])
-          this.snackBar.open("Commentaire creé", "Fermé",{duration:3000, panelClass:"text-danger"})
+          this.comments.next([...this.comments.getValue(), response])
+          this.snackBar.open("Commentaire ajouté avec succès", "Fermer", { duration: 3000, panelClass: "text-success" })
           this.commentForm.reset();
         }),
         catchError(err => {
-          this.snackBar.open("Error", "Fermé",{duration:3000, panelClass:"text-danger"})
+          this.snackBar.open("Erreur lors de l'ajout", "Fermer", { duration: 3000, panelClass: "text-danger" })
           return of(null)
         })
       ).subscribe();
@@ -129,14 +117,14 @@ export class CommentComponent implements OnInit, AfterViewInit {
     const confirmation = confirm('Êtes-vous sûr de vouloir supprimer ce commentaire ?');
     if (confirmation) {
       this.commentService.deleteComment(index).subscribe({
-        next:()=>{
+        next: () => {
           this.snackBar.open('Commentaire supprimé avec succès', 'Fermer', {
             duration: 3000,
           });
           this.comments.next(
-            this.comments.getValue().filter(comment => comment.id  !== index)
+            this.comments.getValue().filter(comment => comment.id !== index)
           )
-      }
+        }
       })
 
     }

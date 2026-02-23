@@ -3,10 +3,8 @@
   <section class="comment-messages border border-2" *ngIf="comments.getValue().length"
     style="min-height:70vh; overflow-y: auto;" role="feed" aria-label="Liste des commentaires">
 
-    <article *ngFor="let comment of comments | async; let i = index" class="comment-bubble animate-fade-in" [ngClass]="{
-        'user': comment.userId === authService.getCurrentUserId(), 
-        'ai': comment.userId !== authService.getCurrentUserId()
-      }" role="article" [attr.aria-label]="'Commentaire de ' + comment.userName">
+    <article *ngFor="let comment of comments | async; let i = index" class="comment-bubble animate-fade-in"
+      role="article" [attr.aria-label]="'Commentaire de ' + comment.userName">
 
       <!-- User Info Header -->
       <header class="comment-header d-flex align-items-center justify-content-between mb-2">

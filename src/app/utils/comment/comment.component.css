@@ -76,78 +76,21 @@
    ======================================== */
 
 .comment-bubble {
-  max-width: 75%;
+  max-width: 100%;
   padding: 10px 14px;
-  border-radius: 18px;
+  border-radius: 8px;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
   margin-bottom: 12px;
   word-wrap: break-word;
   position: relative;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .comment-bubble:hover {
   transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-
-/* User Bubble (Right side with tail) */
-.comment-bubble.user {
-  align-self: flex-end;
-  background: #9eceff;
-  color: #1a202c;
-  border-bottom-right-radius: 4px;
-  margin-left: auto;
-  margin-right: 8px;
-}
-
-/* User Bubble Tail */
-.comment-bubble.user::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: -8px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 0 20px 10px;
-  border-color: transparent transparent #9eceff transparent;
-}
-
-/* AI Bubble (Left side with tail) */
-.comment-bubble.ai {
-  align-self: flex-start;
-  background: #ffffff;
-  color: #2d3748;
-  border: 1px solid #e2e8f0;
-  border-bottom-left-radius: 4px;
-  margin-right: auto;
-  margin-left: 8px;
-}
-
-/* AI Bubble Tail */
-.comment-bubble.ai::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -9px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 10px 20px 0;
-  border-color: transparent #e2e8f0 transparent transparent;
-}
-
-.comment-bubble.ai::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -8px;
-  width: 0;
-  height: 0;
-  border-style: solid;
-  border-width: 0 10px 20px 0;
-  border-color: transparent #ffffff transparent transparent;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 /* ========================================
@@ -168,34 +111,21 @@
   font-size: 18px;
   width: 18px;
   height: 18px;
+  color: #a0aec0;
 }
 
 .user-name {
   font-weight: 600;
   font-size: 0.8rem;
   opacity: 0.9;
-}
-
-.comment-bubble.user .user-name {
   color: #2d3748;
-}
-
-.comment-bubble.ai .user-name {
-  color: #4a5568;
 }
 
 .comment-content {
   font-size: 0.9rem;
   line-height: 1.4;
-  margin: 4px 0;
+  margin: 4px 0 4px 24px;
   word-break: break-word;
-}
-
-.comment-bubble.user .comment-content {
-  color: #2d3748;
-}
-
-.comment-bubble.ai .comment-content {
   color: #2d3748;
 }
 
@@ -218,6 +148,7 @@
   width: 28px !important;
   height: 28px !important;
   padding: 0 !important;
+  color: #4a5568;
 }
 
 .action-btn mat-icon {
@@ -229,14 +160,6 @@
 .action-btn:hover {
   background-color: rgba(0, 0, 0, 0.08);
   transform: scale(1.15);
-}
-
-.comment-bubble.user .action-btn {
-  color: #2d3748;
-}
-
-.comment-bubble.user .action-btn:hover {
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .delete-btn:hover mat-icon {
@@ -252,22 +175,18 @@
   align-items: center;
   font-size: 0.7rem;
   font-weight: 500;
-  color: #48bb78;
-  background: rgba(72, 187, 120, 0.15);
   padding: 3px 6px;
   border-radius: 4px;
   margin-top: 4px;
+  margin-left: 24px;
+  background: rgba(72, 187, 120, 0.15);
+  color: #22543d;
 }
 
 .copied-msg mat-icon {
   font-size: 14px !important;
   width: 14px !important;
   height: 14px !important;
-}
-
-.comment-bubble.user .copied-msg {
-  background: rgba(72, 187, 120, 0.2);
-  color: #22543d;
 }
 
 /* ========================================
@@ -386,10 +305,6 @@
    ======================================== */
 
 @media (max-width: 768px) {
-  .comment-bubble {
-    max-width: 95%;
-  }
-
   .comment-messages {
     padding: 12px;
     gap: 8px;
