@@ -50,9 +50,13 @@ import { UnloadingTypeService } from '../../../../../services/crm/wms/unloading.
 import { TrackingLogComponent } from '../../../../utils/tracking-log/tracking-log.component';
 import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { GeneralInfosComponent } from '../../../../utils/general-infos/general-infos.component';
+import { CommentComponent } from '../../../../utils/comment/comment.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbar } from '@angular/material/toolbar';
 import { LivreEnum } from '../../../../../enums/crm/livre.enum';
 import { StorageOfferService } from '../../../../../services/crm/wms/storage.offer.service';
 import { WmsNeedCreateComponent } from '../wms-need-create/wms-need-create.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wms-need-show',
@@ -61,7 +65,8 @@ import { WmsNeedCreateComponent } from '../wms-need-create/wms-need-create.compo
     MatButton, MatCard, MatCardContent, MatIcon, MatBottomSheetModule, NgIf, NgForOf,
     DatePipe, MatMenu, MatMenuItem, MatMenuTrigger, FormsModule, MatCell, MatCellDef, MatColumnDef
     , MatHeaderCell, MatHeaderRow, MatHeaderRowDef, MatIconButton, MatRow, MatRowDef, MatTable, ReactiveFormsModule,
-    MatHeaderCellDef, NgClass, AsyncPipe, MatFormField, MatLabel, MatOption, MatSelect, GeneralInfosComponent
+    MatHeaderCellDef, NgClass, AsyncPipe, MatFormField, MatLabel, MatOption, MatSelect, GeneralInfosComponent,
+    TranslatePipe, CommentComponent, MatSidenavModule, MatToolbar
   ],
   templateUrl: './wms-need-show.component.html',
   styleUrl: './wms-need-show.component.css',
@@ -471,7 +476,7 @@ export class WmsNeedShowComponent implements OnInit, AfterViewInit {
 
 
 
-  openBottomSheet(): void {
+  openTrackingLog(): void {
     const storageNeed = this.storageNeed.getValue();
     if (storageNeed && storageNeed.id) {
       const entityType = 'com.sales_scout.entity.crm.wms.need.StorageNeed';

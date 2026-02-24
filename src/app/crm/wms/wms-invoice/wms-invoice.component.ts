@@ -25,6 +25,7 @@ import { StorageDeliveryNoteService } from '../../../../services/crm/wms/storage
 import { getLabelFromStorageReasonEnum } from '../../../../enums/crm/storage.reason.enum';
 import { StorageInvoiceService } from '../../../../services/crm/wms/storage.invoice.service';
 import { StorageInvoiceResponseDto } from '../../../../dtos/response/crm/storage.invoice.response.dto';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wms-invoice',
@@ -33,7 +34,8 @@ import { StorageInvoiceResponseDto } from '../../../../dtos/response/crm/storage
     MatButton, MatIcon, MatMenu, MatMenuItem, MatMenuTrigger, MatIconButton,
     MatInput, DatePipe, MatCell, MatCellDef, MatColumnDef, MatHeaderCell,
     MatHeaderRow, MatHeaderRowDef, MatPaginator, MatRow, MatRowDef,
-    MatSort, MatSortHeader, MatTable, MatNoDataRow, MatHeaderCellDef
+    MatSort, MatSortHeader, MatTable, MatNoDataRow, MatHeaderCellDef,
+    TranslatePipe
   ],
   templateUrl: './wms-invoice.component.html',
   styleUrl: './wms-invoice.component.css'

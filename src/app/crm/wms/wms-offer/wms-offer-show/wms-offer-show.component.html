@@ -1,698 +1,722 @@
-<div class="container-fluid bg-body row ">
-  <!-- Page Header -->
-  <!-- Actions -->
-  <div class="d-flex justify-content-between row">
-    <div class="col-8">
-      <button (click)="router.navigate(['/admin/crm/wms/offers'])" color="primary" mat-button>
-        <mat-icon>arrow_back</mat-icon>
-      </button>
-      <button (click)="router.navigate(['/admin/crm/wms'])" mat-button>
-        <mat-icon class=" primary-blue-color">house</mat-icon>
-        Accueil
-      </button>
-      >
-      <button (click)="router.navigate(['/admin/crm/wms/offers'])" mat-button>
-        <mat-icon class=" primary-blue-color">checklist</mat-icon>
-        Offres
-      </button>
-      >
-      <button (click)="router.navigate(['/admin/crm/wms/needs'])" mat-button>
-        <mat-icon class=" primary-blue-color">details</mat-icon>
-        Détailes
-      </button>
-    </div>
-    <div class="col-2">
-      <button [matMenuTriggerFor]="menu" aria-label="Actions" class="bg-spider scale-08 rounded-2 primary-blue-color"
-        mat-button>
-        Actions
-        <mat-icon>more_vert</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu" class="scale-09">
-        <button (click)="toggleEditing()" mat-menu-item
-          *ngIf="(storageOffer.getValue().status?.id || 0) < 5 || rbacService.canEditAfterValidation()">
-          <mat-icon>edit</mat-icon>
-          {{ isDisabledEditing.getValue() ? 'Activer' : 'Désactiver' }} la modification
+<mat-drawer-container>
+  <div class="container-fluid bg-body row ">
+    <!-- Page Header -->
+    <!-- Actions -->
+    <div class="d-flex justify-content-between row">
+      <div class="col-8">
+        <button (click)="router.navigate(['/admin/crm/wms/offers'])" color="primary" mat-button>
+          <mat-icon>arrow_back</mat-icon>
         </button>
-
-        <button (click)="sendForValidation()" mat-menu-item
-          *ngIf="storageOffer.getValue().status?.id === 1 && rbacService.canSendToValidation()">
-          <mat-icon>send</mat-icon>
-          Envoyer pour la validation
+        <button (click)="router.navigate(['/admin/crm/wms'])" mat-button>
+          <mat-icon class=" primary-blue-color">house</mat-icon>
+          {{ 'HOME' | translate }}
         </button>
-
-        <button (click)="validateOffer()" mat-menu-item
-          *ngIf="storageOffer.getValue().status?.id === 2 && rbacService.canValidateOffer()">
-          <mat-icon>task_alt</mat-icon>
-          Approuvée
+        >
+        <button (click)="router.navigate(['/admin/crm/wms/offers'])" mat-button>
+          <mat-icon class=" primary-blue-color">checklist</mat-icon>
+          {{ 'OFFERS' | translate }}
         </button>
-
-        <button (click)="refuseOffer()" mat-menu-item
-          *ngIf="storageOffer.getValue().status?.id === 2 && rbacService.canValidateOffer()">
-          <mat-icon>thumb_down</mat-icon>
-          Refusé
-        </button>
-
-        <button (click)="sendOffer()" mat-menu-item
-          *ngIf="storageOffer.getValue().status?.id === 3 && rbacService.canSendToValidation()">
-          <mat-icon>forward_to_inbox</mat-icon>
-          Envoyer au client
-        </button>
-
-        <button (click)="acceptOffer()" mat-menu-item
-          *ngIf="storageOffer.getValue().status?.id === 4 && rbacService.canValidateOffer()">
-          <mat-icon>done_all</mat-icon>
-          Accepté par le client
-        </button>
-
-        <button (click)="refuseOffer()" mat-menu-item
-          *ngIf="storageOffer.getValue().status?.id === 4 && rbacService.canValidateOffer()">
-          <mat-icon>cancel</mat-icon>
-          Refusé par le client
-        </button>
-
-        <button (click)="downloadOfferDoc()" mat-menu-item>
-          <mat-icon>download</mat-icon>
-          Télécharger l'offre
-        </button>
-
-        <button (click)="createStorageContractFromOffer()" mat-menu-item
-          *ngIf="(storageOffer.getValue().status?.id || 0) >= 5 && !storageOffer.getValue().hasContract">
-          <mat-icon>note_add</mat-icon>
-          Créé un Contrat
-        </button>
-      </mat-menu>
-
-    </div>
-  </div>
-  <hr>
-</div>
-
-<form *ngIf="storageOfferForm" [formGroup]="storageOfferForm" class="w-100">
-  <section class="d-flex justify-content-center px-2">
-    <div class="row w-100">
-      <!-- Main Storage Information -->
-      <mat-card class="mb-2 bg-white details-card col-lg-8 rounded-2 mat-elevation-z3">
-        <mat-card-content>
-          <p class="fs-6 align-items-center d-flex primary-blue-color">
-            <mat-icon class="scale-08">info</mat-icon>
-            Informations Générales
-          </p>
-          <div class="d-flex justify-content-between row">
-            <p class="col-lg-6 size"><span class="text-secondary"> Référence:</span> {{ storageOffer.getValue().number
-              }}</p>
-            <p class="col-lg-6"><span class="text-secondary">Status:</span>
-              <span
-                [ngClass]="['scale-08 btn btn btn-sm p-1 primary-blue-color px-2 rounded-2', getStatusColor(storageOffer.getValue().status?.id)] ">
-                {{ storageOffer.getValue().status.name }}
-              </span>
-            </p>
-          </div>
-
-          <div class="d-flex justify-content-between row">
-            <p class="col-lg-6">
-              <span class="text-secondary">Raison du Stockage:</span>
-
-              <ng-container *ngIf="isDisabledEditing.getValue(); else editReason">
-                <button class="scale-08 btn btn-sm p-0 px-2 rounded-2 text-warning bg-warning-subtle">
-                  {{ getLabelFromStorageReasonEnum(storageOffer.getValue().storageReason) }}
-                </button>
-              </ng-container>
-
-              <ng-template #editReason>
-                <select formControlName="storageReason" class="form-select form-select-sm custom-input w-100">
-                  <option *ngFor="let reason of StorageReasonEnum | keyvalue" [value]="reason.key">
-                    {{ reason.value }}
-                  </option>
-                </select>
-              </ng-template>
-            </p>
-
-            <p class="col-lg-6">
-              <span class="text-secondary">Livre:</span>
-
-              <ng-container *ngIf="isDisabledEditing.getValue(); else editLiver">
-                <button class="scale-08 btn btn-sm p-0 px-2 rounded-2 text-secondary bg-secondary-subtle">
-                  {{ storageOffer.getValue().liverStatus?.toString() === 'OPEN' ? 'Ouvert' : 'Fermé' }}
-                </button>
-              </ng-container>
-
-              <ng-template #editLiver>
-                <select formControlName="liverStatus" class="form-select form-select-sm custom-input w-100">
-                  <option [value]="'OPEN'">Ouvert</option>
-                  <option [value]="'CLOSE'">Fermé</option>
-                </select>
-              </ng-template>
-            </p>
-          </div>
-
-          <div class="d-flex justify-content-between row">
-            <p class="col-lg-6"><span class="text-secondary">Date:</span> {{ storageOffer.getValue().createdAt |
-              date:'dd-MM-yyyy' }}
-            </p>
-            <p class="col-lg-6"><span class="text-secondary">Durée (Mois):</span>
-              <span *ngIf="isDisabledEditing.getValue()">
-                {{ storageOffer.getValue().duration }}
-              </span>
-              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().duration"
-                class="form-control custom-input form-control-sm" formControlName="duration">
-            </p>
-          </div>
-          <div class="d-flex justify-content-between row">
-            <p class="col-lg-6">
-              <span class="text-secondary">Nombre de SKU:</span>
-              <span *ngIf="isDisabledEditing.getValue()">
-                {{ storageOffer.getValue().numberOfSku }}
-              </span>
-              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().numberOfSku"
-                class="form-control custom-input form-control-sm" formControlName="numberOfSku">
-            </p>
-            <p class="col-lg-6">
-              <span class="text-secondary">Type de Produit:</span>
-              <span *ngIf="isDisabledEditing.getValue()">
-                {{ storageOffer.getValue().productType }}
-              </span>
-              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().productType"
-                class="form-control custom-input form-control-sm" formControlName="productType">
-            </p>
-          </div>
-
-          <div class="d-flex justify-content-between row">
-            <p class="col-lg-6">
-              <span class="text-secondary">Facturation minimale assurée:</span>
-              {{storageOffer.getValue().minimumBillingGuaranteed.toFixed(2)}}
-            </p>
-            <p class="col-lg-6">
-              <span class="text-secondary">Facturation minimale assurée fixée:</span>
-              <span
-                *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().minimumBillingGuaranteedFixed}}</span>
-              <input *ngIf="!isDisabledEditing.getValue()"
-                [value]="storageOffer.getValue().minimumBillingGuaranteedFixed"
-                class="form-control custom-input form-control-sm" (change)="updateMinimalBilling($event)">
-            </p>
-          </div>
-          <div class="d-flex justify-content-between row">
-            <p class="col-lg-6">
-              <span class="text-secondary">Emplacements palettes réservés:</span>
-              <span *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().numberOfReservedPlaces}}</span>
-              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().numberOfReservedPlaces"
-                (change)="updateReservedPlaces($event)" class="form-control custom-input form-control-sm">
-            </p>
-            <p class="col-lg-6">
-              <span class="text-secondary">Frais de gestion:</span>
-              <span *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().managementFees}}</span>
-              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().managementFees"
-                class="form-control custom-input form-control-sm" formControlName="managementFees">
-            </p>
-          </div>
-
-        </mat-card-content>
-      </mat-card>
-
-      <!-- Customer Information -->
-      <mat-card class="mb-2 bg-white details-card col-lg-4 rounded-2 mat-elevation-z3">
-        <mat-card-content>
-          <p class="fs-6 align-items-center d-flex primary-blue-color">
-            <mat-icon class="scale-08">business</mat-icon>
-            Informations du Client
-          </p>
-          <p><span class="text-secondary">Client:</span> {{ storageOffer.getValue().customer?.name }}</p>
-          <p><span class="text-secondary">Interlocuteur:</span> {{ storageOffer.getValue().interlocutor?.fullName }}</p>
-        </mat-card-content>
-        <mat-card-content class="mt-2">
-          <p>
-            <span class="text-secondary">Besoin:</span>
-            <a [href]="'/admin/crm/wms/needs/show/'+storageOffer.getValue().storageNeed.id" target="_blank">
-              {{storageOffer.getValue().storageNeed.number}}
-              <i class="bi bi-box-arrow-up-right"></i></a>
-          </p>
-        </mat-card-content>
-        <mat-card-content class="mt-2">
-          <p><span class="text-secondary">Devise:</span>
-            <span *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().devise}}</span>
-            <select *ngIf="!isDisabledEditing.getValue()" formControlName="devise"
-              class="form-select-sm custom-input w-100">
-              <option value="MAD">MAD</option>
-              <option value="USD">$</option>
-              <option value="EUR">€</option>
-            </select>
-          </p>
-        </mat-card-content>
-        <mat-card-content class="mt-2">
-          <p>
-            <span class="text-secondary">Max remise value %:</span>
-            <span *ngIf="isDisabledEditing.getValue()">{{ storageOffer.getValue().maxDisCountValue + '%' }}</span>
-            <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().maxDisCountValue"
-              formControlName="maxDisCountValue" type="number" step="1" class="form-control custom-input" />
-          </p>
-        </mat-card-content>
-      </mat-card>
-      <!-- Stocked items   -->
-    </div>
-  </section>
-
-  <div class="px-2">
-    <mat-card class="rounded-2 p-3 bg-light my-2">
-      <div class="d-flex justify-content-lg-between primary-blue-color w-100">
-        <div class="fs-6 d-flex align-items-center">
-          <mat-icon class="scale-08">inventory</mat-icon>
-          Type de support
-        </div>
-
-        <button (click)="onAddNewStockedItem()" *ngIf="!isDisabledEditing.getValue()"
-          class="rounded-2 my-2 mat-elevation-z2 primary-blue-color bg-spider scale-08" mat-button>
-          <mat-icon>add</mat-icon>
-          Ajouter
+        >
+        <button (click)="router.navigate(['/admin/crm/wms/needs'])" mat-button>
+          <mat-icon class=" primary-blue-color">details</mat-icon>
+          {{ 'DETAILS' | translate }}
         </button>
       </div>
-      <ng-container *ngFor="let item of storageOffer.getValue().stockedItems" class="col-11">
-        <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z3 border border-secondary-subtle border-1">
+      <div class="col-2">
+        <button [matMenuTriggerFor]="menu" aria-label="Actions" class="bg-spider scale-08 rounded-2 primary-blue-color"
+          mat-button>
+          {{ 'ACTIONS' | translate }}
+          <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" class="scale-09">
+          <button (click)="toggleEditing()" mat-menu-item
+            *ngIf="(storageOffer.getValue().status?.id || 0) < 5 || rbacService.canEditAfterValidation()">
+            <mat-icon>edit</mat-icon>
+            {{ isDisabledEditing.getValue() ? ('ENABLE' | translate) : ('DISABLE' | translate) }} {{ 'EDITING' |
+            translate
+            }}
+          </button>
+
+          <button (click)="sendForValidation()" mat-menu-item
+            *ngIf="storageOffer.getValue().status?.id === 1 && rbacService.canSendToValidation()">
+            <mat-icon>send</mat-icon>
+            {{ 'SEND_FOR_VALIDATION' | translate }}
+          </button>
+
+          <button (click)="validateOffer()" mat-menu-item
+            *ngIf="storageOffer.getValue().status?.id === 2 && rbacService.canValidateOffer()">
+            <mat-icon>task_alt</mat-icon>
+            {{ 'APPROVED' | translate }}
+          </button>
+
+          <button (click)="refuseOffer()" mat-menu-item
+            *ngIf="storageOffer.getValue().status?.id === 2 && rbacService.canValidateOffer()">
+            <mat-icon>thumb_down</mat-icon>
+            {{ 'REFUSED' | translate }}
+          </button>
+
+          <button (click)="sendOffer()" mat-menu-item
+            *ngIf="storageOffer.getValue().status?.id === 3 && rbacService.canSendToValidation()">
+            <mat-icon>forward_to_inbox</mat-icon>
+            {{ 'SEND_TO_CLIENT' | translate }}
+          </button>
+
+          <button (click)="acceptOffer()" mat-menu-item
+            *ngIf="storageOffer.getValue().status?.id === 4 && rbacService.canValidateOffer()">
+            <mat-icon>done_all</mat-icon>
+            {{ 'ACCEPTED_BY_CLIENT' | translate }}
+          </button>
+
+          <button (click)="refuseOffer()" mat-menu-item
+            *ngIf="storageOffer.getValue().status?.id === 4 && rbacService.canValidateOffer()">
+            <mat-icon>cancel</mat-icon>
+            {{ 'REFUSED_BY_CLIENT' | translate }}
+          </button>
+
+          <button (click)="downloadOfferDoc()" mat-menu-item>
+            <mat-icon>download</mat-icon>
+            {{ 'DOWNLOAD_OFFER' | translate }}
+          </button>
+
+          <button (click)="createStorageContractFromOffer()" mat-menu-item
+            *ngIf="(storageOffer.getValue().status?.id || 0) >= 5 && !storageOffer.getValue().hasContract">
+            <mat-icon>note_add</mat-icon>
+            {{ 'CREATE_CONTRACT' | translate }}
+          </button>
+        </mat-menu>
+
+      </div>
+    </div>
+    <hr>
+  </div>
+
+  <form *ngIf="storageOfferForm" [formGroup]="storageOfferForm" class="w-100">
+    <section class="d-flex justify-content-center px-2">
+      <div class="row w-100">
+        <!-- Main Storage Information -->
+        <mat-card class="mb-2 bg-white details-card col-lg-8 rounded-2 mat-elevation-z3">
           <mat-card-content>
-            <div class="row ">
-              <div class="col-11 row text-secondary">
-                <p class=" fw-light col-lg-3 col-6">Support: <span class=" text-dark">{{ item.supportName }}</span></p>
-                <p class=" fw-light col-lg-3 col-6">Structure: <span class=" text-dark">{{ item.structureName }}</span>
-                </p>
-                <p class=" fw-light col-lg-3 col-6">Température: <span class=" text-dark">{{ item.temperatureName
-                    }}</span></p>
-                <p class=" fw-light col-lg-3 col-6">Dimensions L*L*H: <span class=" text-dark"> {{
-                    item.dimension?.length }}*{{ item.dimension?.width }}
-                    * {{ item.dimension?.height }}</span></p>
-                <p class=" fw-light col-lg-3 col-6">Volume: <span class=" text-dark">{{ item.volume }}</span></p>
-                <p class=" fw-light col-lg-3 col-6">Fragile: <span class=" text-dark">{{ item.isFragile ? 'Oui'
-                    :'Non'}}</span></p>
-                <p class=" fw-light col-lg-3 col-6">gerbabilié: <span class=" text-dark">{{ item.stackedLevelName
-                    }}</span></p>
-                <p class=" fw-light col-lg-3 col-6">Poids: <span class=" text-dark">{{ item.weight }}</span></p>
-                <p class=" fw-light col-lg-3 col-6">Uc: <span class=" text-dark">{{ item.uvc }}</span></p>
-                <p class=" fw-light col-lg-3 col-6">Uvc: <span class=" text-dark">{{ item.uc }}</span></p>
-                <p class=" fw-light col-lg-3 col-6  d-flex">Quantité: <span class=" text-dark mx-2">{{ item.quantity
-                    }}</span></p>
-              </div>
-              <div (click)="deleteItemToStoreFromStorageOffer(item.id)" *ngIf="!isDisabledEditing.getValue()"
-                class="col-1 text-end">
-                <button mat-icon-button matTooltip="Supprimer le support">
-                  <mat-icon class="scale-08 text-danger">delete</mat-icon>
-                </button>
-              </div>
-            </div>
-            <div class="card-body">
-              <table *ngIf="item?.provisionResponseDto?.length " class="table small border-secondary">
-                <thead class=" fw-light">
-                  <tr>
-                    <th class="bg-light primary-blue-color fw-light" scope="col">Préstations</th>
-                    <th class="bg-light primary-blue-color fw-light" scope="col">Unité</th>
-                    <th class="bg-light primary-blue-color fw-light" scope="col">Prix de base</th>
-                    <th class="bg-light primary-blue-color fw-light" scope="col">Prix Systéme</th>
-                    <th class="bg-light primary-blue-color fw-light" scope="col">Remise</th>
-                    <th class="bg-light primary-blue-color fw-light" scope="col">Valeur de remise</th>
-                    <th class="bg-light primary-blue-color fw-light" scope="col">Augmentation</th>
-                    <th class="bg-light primary-blue-color fw-light" scope="col">Prix de vente</th>
-                    <th *ngIf="!isDisabledEditing.getValue()" class="bg-light primary-blue-color fw-light" scope="col">
-                      Actions
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let prv of item.provisionResponseDto" class="p-0">
-                    <td>{{ prv.name }}</td>
-                    <td>{{ prv.unitOfMeasurement }}</td> <!-- Uncommented & Fixed -->
-                    <td>{{ prv.initPrice }}</td>
-                    <td>{{ calculateStoragePrice(prv) }}</td>
-                    <td>
-                      <select (change)="selectDiscountTypeForProvision(item, prv, $event)"
-                        [disabled]="isDisabledEditing.getValue()" class="form-select form-select-sm custom-input ">
-                        <option
-                          [selected]="prv.discountType == DiscountTypeEnum.NOTAPPLICABLE || prv.discountType == null "
-                          [value]="DiscountTypeEnum.NOTAPPLICABLE">NA
-                        </option>
-
-                        <option [selected]="prv.discountType == DiscountTypeEnum.RATE" [value]="DiscountTypeEnum.RATE">%
-
-                        <option [selected]="prv.discountType == DiscountTypeEnum.VALUE"
-                          [value]="DiscountTypeEnum.VALUE">Valeur en DH
-                        </option>
-                      </select>
-                    </td>
-
-                    <td>
-                      <input *ngIf="prv.discountType == DiscountTypeEnum.NOTAPPLICABLE || prv.discountType == null "
-                        [disabled]="isDisabledEditing.getValue()" class="form-control custom-input form-control-sm"
-                        disabled placeholder="0.00" type="text" value="0.00">
-                      <input (change)="addDiscountValueForProvision(item, prv, $event)"
-                        *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.VALUE"
-                        [disabled]="isDisabledEditing.getValue()" [value]="prv.discountValue"
-                        class="form-control custom-input  form-control-sm" placeholder="0.00" type="number">
-
-                      <select (change)="addDiscountRateForProvision(item, prv, $event)"
-                        *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.RATE"
-                        [disabled]="isDisabledEditing.getValue()" class="form-select form-select-sm custom-input ">
-                        <option [selected]="prv.increaseValue == 3" [value]="3">3%</option>
-                        <option [selected]="prv.increaseValue == 5" [value]="5">5%</option>
-                        <option [selected]="prv.increaseValue == 10" [value]="10">10%</option>
-                        <option [selected]="prv.increaseValue == 15" [value]="15">15%</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input (change)="addIncreaseValueForProvision(prv, item, $event)"
-                        [disabled]="isDisabledEditing.getValue()" [value]="prv.increaseValue"
-                        class="form-control custom-input  form-control-sm" step="0.1" type="number" />
-                    </td>
-                    <td>{{ prv.salesPrice }}</td>
-                    <td *ngIf="!isDisabledEditing.getValue()">
-                      <button (click)="deleteProvision(prv, item)" class="scale-08 text-danger" mat-icon-button>
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <p *ngIf="!item?.provisionResponseDto?.length" class="text-muted">
-                <em>Aucune provision associée</em>
+            <p class="fs-6 align-items-center d-flex primary-blue-color">
+              <mat-icon class="scale-08">info</mat-icon>
+              {{ 'GENERAL_INFO' | translate }}
+            </p>
+            <div class="d-flex justify-content-between row">
+              <p class="col-lg-6 size"><span class="text-secondary"> {{ 'REFERENCE' | translate }}:</span> {{
+                storageOffer.getValue().number
+                }}</p>
+              <p class="col-lg-6"><span class="text-secondary">{{ 'STATUS' | translate }}:</span>
+                <span
+                  [ngClass]="['scale-08 btn btn btn-sm p-1 primary-blue-color px-2 rounded-2', getStatusColor(storageOffer.getValue().status?.id)] ">
+                  {{ storageOffer.getValue().status.name }}
+                </span>
               </p>
-              <div class="row">
-                <!--            <div class="col-12 text-center">-->
-                <!--              <button mat-icon-button (click)="addProvision(item)"-->
-                <!--                      class="rounded-2 mat-elevation-z1 scale-09 bg-spider ">-->
-                <!--                <mat-icon>add</mat-icon></button>-->
-                <!--            </div>-->
-                <form *ngIf="!isDisabledEditing.getValue()" class="example-form col-10 m-auto ">
-                  <mat-form-field appearance="outline" class="example-full-width w-100 scale-09">
-                    <mat-label>Ajouter une Préstations</mat-label>
-                    <input #input (focus)="filter(item)" (input)="filter(item)"
-                      (keydown.enter)="$event.preventDefault()" [formControl]="myControl" [matAutocomplete]="auto"
-                      matInput placeholder="" type="text">
-                    <mat-autocomplete #auto="matAutocomplete" requireSelection>
-                      @for (prv of filteredOptions; track prv) {
-                      <mat-option (click)="addProvisionToStockedItem(prv,item)" [value]="prv.name">{{ prv.name }}
-                      </mat-option>
-                      }
-                    </mat-autocomplete>
-                  </mat-form-field>
-                </form>
-              </div>
             </div>
+
+            <div class="d-flex justify-content-between row">
+              <p class="col-lg-6">
+                <span class="text-secondary">{{ 'STORAGE_REASON' | translate }}:</span>
+
+                <ng-container *ngIf="isDisabledEditing.getValue(); else editReason">
+                  <button class="scale-08 btn btn-sm p-0 px-2 rounded-2 text-warning bg-warning-subtle">
+                    {{ getLabelFromStorageReasonEnum(storageOffer.getValue().storageReason) }}
+                  </button>
+                </ng-container>
+
+                <ng-template #editReason>
+                  <select formControlName="storageReason" class="form-select form-select-sm custom-input w-100">
+                    <option *ngFor="let reason of StorageReasonEnum | keyvalue" [value]="reason.key">
+                      {{ reason.value }}
+                    </option>
+                  </select>
+                </ng-template>
+              </p>
+
+              <p class="col-lg-6">
+                <span class="text-secondary">{{ 'BOOK' | translate }}:</span>
+
+                <ng-container *ngIf="isDisabledEditing.getValue(); else editLiver">
+                  <button class="scale-08 btn btn-sm p-0 px-2 rounded-2 text-secondary bg-secondary-subtle">
+                    {{ storageOffer.getValue().liverStatus?.toString() === 'OPEN' ? 'Ouvert' : 'Fermé' }}
+                  </button>
+                </ng-container>
+
+                <ng-template #editLiver>
+                  <select formControlName="liverStatus" class="form-select form-select-sm custom-input w-100">
+                    <option [value]="'OPEN'">Ouvert</option>
+                    <option [value]="'CLOSE'">Fermé</option>
+                  </select>
+                </ng-template>
+              </p>
+            </div>
+
+            <div class="d-flex justify-content-between row">
+              <p class="col-lg-6"><span class="text-secondary">{{ 'DATE' | translate }}:</span> {{
+                storageOffer.getValue().createdAt |
+                date:'dd-MM-yyyy' }}
+              </p>
+              <p class="col-lg-6"><span class="text-secondary">{{ 'DURATION_MONTHS' | translate }}:</span>
+                <span *ngIf="isDisabledEditing.getValue()">
+                  {{ storageOffer.getValue().duration }}
+                </span>
+                <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().duration"
+                  class="form-control custom-input form-control-sm" formControlName="duration">
+              </p>
+            </div>
+            <div class="d-flex justify-content-between row">
+              <p class="col-lg-6">
+                <span class="text-secondary">{{ 'NUMBER_OF_SKU' | translate }}:</span>
+                <span *ngIf="isDisabledEditing.getValue()">
+                  {{ storageOffer.getValue().numberOfSku }}
+                </span>
+                <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().numberOfSku"
+                  class="form-control custom-input form-control-sm" formControlName="numberOfSku">
+              </p>
+              <p class="col-lg-6">
+                <span class="text-secondary">{{ 'PRODUCT_TYPE' | translate }}:</span>
+                <span *ngIf="isDisabledEditing.getValue()">
+                  {{ storageOffer.getValue().productType }}
+                </span>
+                <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().productType"
+                  class="form-control custom-input form-control-sm" formControlName="productType">
+              </p>
+            </div>
+
+            <div class="d-flex justify-content-between row">
+              <p class="col-lg-6">
+                <span class="text-secondary">{{ 'MIN_BILLING_GUARANTEED' | translate }}:</span>
+                {{storageOffer.getValue().minimumBillingGuaranteed.toFixed(2)}}
+              </p>
+              <p class="col-lg-6">
+                <span class="text-secondary">{{ 'MIN_BILLING_GUARANTEED_FIXED' | translate }}:</span>
+                <span
+                  *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().minimumBillingGuaranteedFixed}}</span>
+                <input *ngIf="!isDisabledEditing.getValue()"
+                  [value]="storageOffer.getValue().minimumBillingGuaranteedFixed"
+                  class="form-control custom-input form-control-sm" (change)="updateMinimalBilling($event)">
+              </p>
+            </div>
+            <div class="d-flex justify-content-between row">
+              <p class="col-lg-6">
+                <span class="text-secondary">{{ 'RESERVED_PALLET_SLOTS' | translate }}:</span>
+                <span *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().numberOfReservedPlaces}}</span>
+                <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().numberOfReservedPlaces"
+                  (change)="updateReservedPlaces($event)" class="form-control custom-input form-control-sm">
+              </p>
+              <p class="col-lg-6">
+                <span class="text-secondary">{{ 'MANAGEMENT_FEES' | translate }}:</span>
+                <span *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().managementFees}}</span>
+                <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().managementFees"
+                  class="form-control custom-input form-control-sm" formControlName="managementFees">
+              </p>
+            </div>
+
           </mat-card-content>
         </mat-card>
-      </ng-container>
-      <div *ngIf="!(storageOffer.getValue()?.stockedItems?.length)"
-        class="bg-white my-2 border border-1 border-secondary-subtle rounded-3">
-        <p class="rounded-2 text-secondary my-3 px-3 text-center small">
-          Aucun Support. <br>
-          <strong>Ajoutez des éléments</strong>
-        </p>
+
+        <!-- Customer Information -->
+        <mat-card class="mb-2 bg-white details-card col-lg-4 rounded-2 mat-elevation-z3">
+          <mat-card-content>
+            <p class="fs-6 align-items-center d-flex primary-blue-color">
+              <mat-icon class="scale-08">business</mat-icon>
+              {{ 'CLIENT_INFO' | translate }}
+            </p>
+            <p><span class="text-secondary">{{ 'CLIENT' | translate }}:</span> {{ storageOffer.getValue().customer?.name
+              }}</p>
+            <p><span class="text-secondary">{{ 'INTERLOCUTOR' | translate }}:</span> {{
+              storageOffer.getValue().interlocutor?.fullName }}</p>
+          </mat-card-content>
+          <mat-card-content class="mt-2">
+            <p>
+              <span class="text-secondary">{{ 'NEED' | translate }}:</span>
+              <a [href]="'/admin/crm/wms/needs/show/'+storageOffer.getValue().storageNeed.id" target="_blank">
+                {{storageOffer.getValue().storageNeed.number}}
+                <i class="bi bi-box-arrow-up-right"></i></a>
+            </p>
+          </mat-card-content>
+          <mat-card-content class="mt-2">
+            <p><span class="text-secondary">{{ 'CURRENCY' | translate }}:</span>
+              <span *ngIf="isDisabledEditing.getValue()">{{storageOffer.getValue().devise}}</span>
+              <select *ngIf="!isDisabledEditing.getValue()" formControlName="devise"
+                class="form-select-sm custom-input w-100">
+                <option value="MAD">MAD</option>
+                <option value="USD">$</option>
+                <option value="EUR">€</option>
+              </select>
+            </p>
+          </mat-card-content>
+          <mat-card-content class="mt-2">
+            <p>
+              <span class="text-secondary">Max remise value %:</span>
+              <span *ngIf="isDisabledEditing.getValue()">{{ storageOffer.getValue().maxDisCountValue + '%' }}</span>
+              <input *ngIf="!isDisabledEditing.getValue()" [value]="storageOffer.getValue().maxDisCountValue"
+                formControlName="maxDisCountValue" type="number" step="1" class="form-control custom-input" />
+            </p>
+          </mat-card-content>
+        </mat-card>
+        <!-- Stocked items   -->
       </div>
-    </mat-card>
-  </div>
+    </section>
 
-  <div class="d-flex justify-content-around row mx-1">
-    <!--  ****************** Requirements ***********************    -->
-    <!--  <div class="row d-flex justify-content-around p">-->
-    <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-2 mat-elevation-z2 col-12">
-      <p class="primary-blue-color fs-6 d-flex">
-        <mat-icon class="me-2">local_shipping</mat-icon>
-        Dépotage
-      </p>
-      <div class="row">
-        <!-- Formulaire -->
-        <div class="col-lg-12 col-md-12 col-12 ">
-          <form *ngIf="!isDisabledEditing.getValue()" [formGroup]="unloadForm">
-            <mat-form-field appearance="outline" class="example-full-width w-100 scale-09">
-              <mat-label>Ajouter un Dépotage</mat-label>
-              <input #input2 (focus)="filterUnloading()" (input)="filterUnloading()"
-                (keydown.enter)="$event.preventDefault()" [formControl]="addNewUnloadingControl"
-                [matAutocomplete]="auto2" matInput placeholder="" type="text">
-              <mat-autocomplete #auto2="matAutocomplete">
-                <mat-option *ngFor="let unloadingType of filteredUnloadingTypes.getValue()" [value]="unloadingType.name"
-                  (onSelectionChange)="addNewUnloadingType(unloadingType)">
-                  {{ unloadingType.name }}
-                </mat-option>
-              </mat-autocomplete>
-            </mat-form-field>
-          </form>
+    <div class="px-2">
+      <mat-card class="rounded-2 p-3 bg-light my-2">
+        <div class="d-flex justify-content-lg-between primary-blue-color w-100">
+          <div class="fs-6 d-flex align-items-center">
+            <mat-icon class="scale-08">inventory</mat-icon>
+            {{ 'SUPPORT_TYPE' | translate }}
+          </div>
+
+          <button (click)="onAddNewStockedItem()" *ngIf="!isDisabledEditing.getValue()"
+            class="rounded-2 my-2 mat-elevation-z2 primary-blue-color bg-spider scale-08" mat-button>
+            <mat-icon>add</mat-icon>
+            {{ 'ADD' | translate }}
+          </button>
         </div>
-
-        <!-- Tableau -->
-        <div class="col-lg-12 col-md-12 col-12">
-          <table [dataSource]="storageOffer.getValue().unloadingTypes" class="mat-elevation-z1 w-100" mat-table>
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-              <th *matHeaderCellDef mat-header-cell>Désignation</th>
-              <td *matCellDef="let element" mat-cell>{{ element.name }}</td>
-            </ng-container>
-
-            <!-- Price Column -->
-            <ng-container matColumnDef="price">
-              <th *matHeaderCellDef mat-header-cell>Prix</th>
-              <td *matCellDef="let element" mat-cell>{{ element.initPrice }}</td>
-            </ng-container>
-            <!-- System Price Column -->
-            <ng-container matColumnDef="system_price">
-              <th *matHeaderCellDef mat-header-cell>Prix systéme</th>
-              <td *matCellDef="let element" mat-cell>{{ calculateStoragePrice(element) }}</td>
-            </ng-container>
-
-            <!-- Unit Column -->
-            <ng-container matColumnDef="unite">
-              <th *matHeaderCellDef mat-header-cell>Unité</th>
-              <td *matCellDef="let element" mat-cell>{{ element.unitOfMeasurement }}</td>
-            </ng-container>
-
-            <!-- Remise Column -->
-            <ng-container matColumnDef="remise">
-              <th *matHeaderCellDef mat-header-cell>Remise</th>
-              <td *matCellDef="let element" mat-cell>
-                <select (change)="selectDiscountTypeForUnloading(element, $event)"
-                  [disabled]="isDisabledEditing.getValue()" aria-label="Remise"
-                  class="form-select custom-input form-select-sm">
-                  <option [selected]="element.discountType == 'null'" [value]="DiscountTypeEnum.NOTAPPLICABLE">NA
-                  </option>
-                  <option [selected]="element.discountType == 'RATE'" [value]="DiscountTypeEnum.RATE">%</option>
-                  <option [selected]="element.discountType == 'VALUE'" [value]="DiscountTypeEnum.VALUE">Valeur en DH
-                  </option>
-                </select>
-              </td>
-            </ng-container>
-            <!-- Remise value Column -->
-            <ng-container matColumnDef="remiseValue">
-              <th *matHeaderCellDef mat-header-cell>Valeur de remise</th>
-              <td *matCellDef="let element" mat-cell>
-                <p
-                  *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null">
-                  0.00</p>
-                <input (change)="addDiscountValueForUnloading(element, $event)"
-                  *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.VALUE"
-                  [disabled]="isDisabledEditing.getValue()" class="form-control custom-input  form-control-sm"
-                  placeholder="0.00" type="number">
-
-                <select (change)="addDiscountRateForUnloading(element, $event)"
-                  *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.RATE"
-                  [disabled]="isDisabledEditing.getValue()" class="form-select form-select-sm custom-input ">
-                  <option [value]="3">3%</option>
-                  <option [value]="5">5%</option>
-                  <option [value]="10">10%</option>
-                  <option [value]="15">15%</option>
-                </select>
-              </td>
-            </ng-container>
-            <!-- final price -->
-            <ng-container matColumnDef="finalPrice">
-              <th *matHeaderCellDef mat-header-cell>Prix de vente</th>
-              <td *matCellDef="let element" mat-cell>
-                {{ element.salesPrice }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="delete">
-              <th *matHeaderCellDef mat-header-cell></th>
-              <td *matCellDef="let element" mat-cell>
-                <mat-icon *ngIf="!isDisabledEditing.getValue()" (click)="OnDeleteUnloadingFromOffer(element)"
-                  class="text-danger">delete</mat-icon>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="increaseValue">
-              <th *matHeaderCellDef mat-header-cell>Augmentation</th>
-              <td *matCellDef="let element" mat-cell>
-                <input (change)="addIncreaseValueForUnloadingType(element, $event)"
-                  [disabled]="isDisabledEditing.getValue()" [value]="element.increaseValue"
-                  class="form-control form-control-sm custom-input" step="0.1" type="number">
-              </td>
-            </ng-container>
-            <!-- Actions Column -->
-            <ng-container matColumnDef="actions" stickyEnd>
-              <th *matHeaderCellDef mat-header-cell></th>
-              <td *matCellDef="let row" mat-cell>
-                <button [matMenuTriggerFor]="menu" aria-label="Actions" mat-icon-button>
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item>
-                    <mat-icon>edit</mat-icon>
-                    Edit
+        <ng-container *ngFor="let item of storageOffer.getValue().stockedItems" class="col-11">
+          <mat-card class="mt-2 rounded-2 bg-white mat-elevation-z3 border border-secondary-subtle border-1">
+            <mat-card-content>
+              <div class="row ">
+                <div class="col-11 row text-secondary">
+                  <p class=" fw-light col-lg-3 col-6">Support: <span class=" text-dark">{{ item.supportName }}</span>
+                  </p>
+                  <p class=" fw-light col-lg-3 col-6">Structure: <span class=" text-dark">{{ item.structureName
+                      }}</span>
+                  </p>
+                  <p class=" fw-light col-lg-3 col-6">Température: <span class=" text-dark">{{ item.temperatureName
+                      }}</span></p>
+                  <p class=" fw-light col-lg-3 col-6">Dimensions L*L*H: <span class=" text-dark"> {{
+                      item.dimension?.length }}*{{ item.dimension?.width }}
+                      * {{ item.dimension?.height }}</span></p>
+                  <p class=" fw-light col-lg-3 col-6">Volume: <span class=" text-dark">{{ item.volume }}</span></p>
+                  <p class=" fw-light col-lg-3 col-6">Fragile: <span class=" text-dark">{{ item.isFragile ? 'Oui'
+                      :'Non'}}</span></p>
+                  <p class=" fw-light col-lg-3 col-6">gerbabilié: <span class=" text-dark">{{ item.stackedLevelName
+                      }}</span></p>
+                  <p class=" fw-light col-lg-3 col-6">Poids: <span class=" text-dark">{{ item.weight }}</span></p>
+                  <p class=" fw-light col-lg-3 col-6">Uc: <span class=" text-dark">{{ item.uvc }}</span></p>
+                  <p class=" fw-light col-lg-3 col-6">Uvc: <span class=" text-dark">{{ item.uc }}</span></p>
+                  <p class=" fw-light col-lg-3 col-6  d-flex">Quantité: <span class=" text-dark mx-2">{{ item.quantity
+                      }}</span></p>
+                </div>
+                <div (click)="deleteItemToStoreFromStorageOffer(item.id)" *ngIf="!isDisabledEditing.getValue()"
+                  class="col-1 text-end">
+                  <button mat-icon-button matTooltip="Supprimer le support">
+                    <mat-icon class="scale-08 text-danger">delete</mat-icon>
                   </button>
-                  <button mat-menu-item>
-                    <mat-icon>delete</mat-icon>
-                    Delete
-                  </button>
-                </mat-menu>
-              </td>
-            </ng-container>
+                </div>
+              </div>
+              <div class="card-body">
+                <table *ngIf="item?.provisionResponseDto?.length " class="table small border-secondary">
+                  <thead class=" fw-light">
+                    <tr>
+                      <th class="bg-light primary-blue-color fw-light" scope="col">Préstations</th>
+                      <th class="bg-light primary-blue-color fw-light" scope="col">Unité</th>
+                      <th class="bg-light primary-blue-color fw-light" scope="col">Prix de base</th>
+                      <th class="bg-light primary-blue-color fw-light" scope="col">Prix Systéme</th>
+                      <th class="bg-light primary-blue-color fw-light" scope="col">Remise</th>
+                      <th class="bg-light primary-blue-color fw-light" scope="col">Valeur de remise</th>
+                      <th class="bg-light primary-blue-color fw-light" scope="col">Augmentation</th>
+                      <th class="bg-light primary-blue-color fw-light" scope="col">Prix de vente</th>
+                      <th *ngIf="!isDisabledEditing.getValue()" class="bg-light primary-blue-color fw-light"
+                        scope="col">
+                        Actions
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let prv of item.provisionResponseDto" class="p-0">
+                      <td>{{ prv.name }}</td>
+                      <td>{{ prv.unitOfMeasurement }}</td> <!-- Uncommented & Fixed -->
+                      <td>{{ prv.initPrice }}</td>
+                      <td>{{ calculateStoragePrice(prv) }}</td>
+                      <td>
+                        <select (change)="selectDiscountTypeForProvision(item, prv, $event)"
+                          [disabled]="isDisabledEditing.getValue()" class="form-select form-select-sm custom-input ">
+                          <option
+                            [selected]="prv.discountType == DiscountTypeEnum.NOTAPPLICABLE || prv.discountType == null "
+                            [value]="DiscountTypeEnum.NOTAPPLICABLE">NA
+                          </option>
 
-            <!-- Header Row -->
-            <tr *matHeaderRowDef="unloadingDisplayedColumns"
-              class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0" mat-header-row></tr>
+                          <option [selected]="prv.discountType == DiscountTypeEnum.RATE"
+                            [value]="DiscountTypeEnum.RATE">%
 
-            <!-- Data Row -->
-            <tr *matRowDef="let row; columns: unloadingDisplayedColumns;" class="bg-white text-secondary" mat-row></tr>
-          </table>
+                          <option [selected]="prv.discountType == DiscountTypeEnum.VALUE"
+                            [value]="DiscountTypeEnum.VALUE">Valeur en DH
+                          </option>
+                        </select>
+                      </td>
+
+                      <td>
+                        <input *ngIf="prv.discountType == DiscountTypeEnum.NOTAPPLICABLE || prv.discountType == null "
+                          [disabled]="isDisabledEditing.getValue()" class="form-control custom-input form-control-sm"
+                          disabled placeholder="0.00" type="text" value="0.00">
+                        <input (change)="addDiscountValueForProvision(item, prv, $event)"
+                          *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.VALUE"
+                          [disabled]="isDisabledEditing.getValue()" [value]="prv.discountValue"
+                          class="form-control custom-input  form-control-sm" placeholder="0.00" type="number">
+
+                        <select (change)="addDiscountRateForProvision(item, prv, $event)"
+                          *ngIf="prv.discountType !== DiscountTypeEnum.NOTAPPLICABLE && prv.discountType === DiscountTypeEnum.RATE"
+                          [disabled]="isDisabledEditing.getValue()" class="form-select form-select-sm custom-input ">
+                          <option [selected]="prv.increaseValue == 3" [value]="3">3%</option>
+                          <option [selected]="prv.increaseValue == 5" [value]="5">5%</option>
+                          <option [selected]="prv.increaseValue == 10" [value]="10">10%</option>
+                          <option [selected]="prv.increaseValue == 15" [value]="15">15%</option>
+                        </select>
+                      </td>
+                      <td>
+                        <input (change)="addIncreaseValueForProvision(prv, item, $event)"
+                          [disabled]="isDisabledEditing.getValue()" [value]="prv.increaseValue"
+                          class="form-control custom-input  form-control-sm" step="0.1" type="number" />
+                      </td>
+                      <td>{{ prv.salesPrice }}</td>
+                      <td *ngIf="!isDisabledEditing.getValue()">
+                        <button (click)="deleteProvision(prv, item)" class="scale-08 text-danger" mat-icon-button>
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <p *ngIf="!item?.provisionResponseDto?.length" class="text-muted">
+                  <em>{{ 'NO_PROVISION_ASSOCIATED' | translate }}</em>
+                </p>
+                <div class="row">
+                  <!--            <div class="col-12 text-center">-->
+                  <!--              <button mat-icon-button (click)="addProvision(item)"-->
+                  <!--                      class="rounded-2 mat-elevation-z1 scale-09 bg-spider ">-->
+                  <!--                <mat-icon>add</mat-icon></button>-->
+                  <!--            </div>-->
+                  <form *ngIf="!isDisabledEditing.getValue()" class="example-form col-10 m-auto ">
+                    <mat-form-field appearance="outline" class="example-full-width w-100 scale-09">
+                      <mat-label>Ajouter une Préstations</mat-label>
+                      <input #input (focus)="filter(item)" (input)="filter(item)"
+                        (keydown.enter)="$event.preventDefault()" [formControl]="myControl" [matAutocomplete]="auto"
+                        matInput placeholder="" type="text">
+                      <mat-autocomplete #auto="matAutocomplete" requireSelection>
+                        @for (prv of filteredOptions; track prv) {
+                        <mat-option (click)="addProvisionToStockedItem(prv,item)" [value]="prv.name">{{ prv.name }}
+                        </mat-option>
+                        }
+                      </mat-autocomplete>
+                    </mat-form-field>
+                  </form>
+                </div>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </ng-container>
+        <div *ngIf="!(storageOffer.getValue()?.stockedItems?.length)"
+          class="bg-white my-2 border border-1 border-secondary-subtle rounded-3">
+          <p class="rounded-2 text-secondary my-3 px-3 text-center small">
+            {{ 'NO_SUPPORT' | translate }} <br>
+            <strong>{{ 'ADD_ELEMENTS' | translate }}</strong>
+          </p>
         </div>
-      </div>
-    </mat-card>
-
-    <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-2 mat-elevation-z2 col-12">
-      <p class="primary-blue-color fs-6 d-flex">
-        <mat-icon class="me-2">rule</mat-icon>
-        Exigences
-      </p>
-      <div class="row">
-        <!-- Formulaire -->
-        <div class="col-md-12 col-12 ">
-          <form *ngIf="!isDisabledEditing.getValue()" [formGroup]="requirementForm">
-            <mat-form-field appearance="fill" class="w-100">
-              <mat-label>Exigences</mat-label>
-              <mat-select [disabled]="isDisabledEditing.getValue()" formControlName="requirement" multiple>
-                <mat-option *ngFor="let requirement of requirements | async" [value]="requirement.id">
-                  {{ requirement.name }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-          </form>
-        </div>
-
-        <!-- Tableau -->
-        <div class="col-lg-12 col-md-12 col-12">
-          <table [dataSource]="storageOffer.getValue().requirements" class="mat-elevation-z1 w-100" mat-table>
-            <!-- Name Column -->
-            <ng-container matColumnDef="name">
-              <th *matHeaderCellDef mat-header-cell>Désignation</th>
-              <td *matCellDef="let element" mat-cell>{{ element.name }}</td>
-            </ng-container>
-
-            <!-- Price Column -->
-            <ng-container matColumnDef="price">
-              <th *matHeaderCellDef mat-header-cell>Prix</th>
-              <td *matCellDef="let element" mat-cell>{{ element.initPrice }}</td>
-            </ng-container>
-            <!-- System Price Column -->
-            <ng-container matColumnDef="system_price">
-              <th *matHeaderCellDef mat-header-cell>Prix systéme</th>
-              <td *matCellDef="let element" mat-cell>{{ calculateStoragePrice(element) }}</td>
-            </ng-container>
-            <!-- Unit Column -->
-            <ng-container matColumnDef="unite">
-              <th *matHeaderCellDef mat-header-cell>Unité</th>
-              <td *matCellDef="let element" mat-cell>{{ element.unitOfMeasurement }}</td>
-            </ng-container>
-
-            <!-- Remise Column -->
-            <ng-container matColumnDef="remise">
-              <th *matHeaderCellDef mat-header-cell>Remise</th>
-              <td *matCellDef="let element" mat-cell>
-                <select (change)="selectDiscountTypeForRequirement(element, $event)"
-                  [disabled]="isDisabledEditing.getValue()" aria-label="Remise"
-                  class="form-select custom-input form-select-sm">
-                  <option [value]="DiscountTypeEnum.NOTAPPLICABLE" selected>NA</option>
-                  <option [value]="DiscountTypeEnum.RATE">%</option>
-                  <option [value]="DiscountTypeEnum.VALUE">Valeur en DH</option>
-                </select>
-                <!--              </td>-->
-            </ng-container>
-            <!-- Remise value Column -->
-            <ng-container matColumnDef="remiseValue">
-              <th *matHeaderCellDef mat-header-cell>Valeur de remise</th>
-              <td *matCellDef="let element" mat-cell>
-                <p
-                  *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null">
-                  0.00 </p>
-
-                <input (change)="addDiscountValueForRequirement(element, $event)"
-                  *ngIf="element.discount !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.VALUE"
-                  [disabled]="isDisabledEditing.getValue()" [value]="element.discountValue"
-                  class="form-control  custom-input  form-control-sm" placeholder="0.00" type="number">
-
-                <select (change)="addDiscountRateForRequirement(element, $event)"
-                  *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.RATE"
-                  [disabled]="isDisabledEditing.getValue()" class="form-select form-select-sm custom-input ">
-                  <option [value]="3">3%</option>
-                  <option [value]="5">5%</option>
-                  <option [value]="10">10%</option>
-                  <option [value]="15">15%</option>
-                </select>
-              </td>
-            </ng-container>
-
-            <ng-container matColumnDef="increaseValue">
-              <th *matHeaderCellDef mat-header-cell>Augmentation</th>
-              <td *matCellDef="let element" mat-cell>
-                <input (change)="addIncreaseValueForRequirement(element, $event)"
-                  [disabled]="isDisabledEditing.getValue()" [value]="element.increaseValue"
-                  class="form-control custom-input form-control-sm" step="0.1" type="number">
-              </td>
-            </ng-container>
-            <!-- final price -->
-            <ng-container matColumnDef="finalPrice">
-              <th *matHeaderCellDef mat-header-cell>Prix de vente</th>
-              <td *matCellDef="let element" mat-cell>
-                {{ element.salesPrice }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="delete">
-              <th *matHeaderCellDef mat-header-cell></th>
-              <td *matCellDef="let element" mat-cell>
-                <mat-icon *ngIf="!isDisabledEditing.getValue()" (click)="OnDeleteRequirementFromOffer(element)"
-                  class="text-danger">delete</mat-icon>
-              </td>
-            </ng-container>
-            <!-- Actions Column -->
-            <ng-container matColumnDef="actions">
-              <th *matHeaderCellDef mat-header-cell></th>
-              <td *matCellDef="let row" mat-cell>
-                <button [matMenuTriggerFor]="menu" aria-label="Actions" mat-icon-button>
-                  <mat-icon>more_vert</mat-icon>
-                </button>
-                <mat-menu #menu="matMenu">
-                  <button mat-menu-item>
-                    <mat-icon>edit</mat-icon>
-                    Edit
-                  </button>
-                  <button mat-menu-item>
-                    <mat-icon>delete</mat-icon>
-                    Delete
-                  </button>
-                </mat-menu>
-              </td>
-            </ng-container>
-
-            <!-- Header Row -->
-            <tr *matHeaderRowDef="requirementsColumns"
-              class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0" mat-header-row></tr>
-
-            <!-- Data Row -->
-            <tr *matRowDef="let row; columns: requirementsColumns;" class="bg-white text-secondary" mat-row></tr>
-          </table>
-        </div>
-      </div>
-    </mat-card>
-    <!--  </div>-->
-  </div>
-
-  <mat-card class="bg-white p-2 my-2 rounded-2">
-    <div class="">
-      <mat-form-field appearance="outline" class="col-lg-12">
-        <mat-label>Note</mat-label>
-        <textarea [value]="storageOffer.getValue().note" formControlName="note"
-          [disabled]="!isDisabledEditing.getValue()" matInput placeholder=""></textarea>
-      </mat-form-field>
+      </mat-card>
     </div>
-  </mat-card>
-</form>
-<app-general-infos [createdAt]="storageOffer.getValue().createdAt" [createdBy]="storageOffer.getValue().createdBy"
-  [updatedAt]="storageOffer.getValue().updatedAt" [updatedBy]="storageOffer.getValue().updatedBy"></app-general-infos>
+
+    <div class="d-flex justify-content-around row mx-1">
+      <!--  ****************** Requirements ***********************    -->
+      <!--  <div class="row d-flex justify-content-around p">-->
+      <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-2 mat-elevation-z2 col-12">
+        <p class="primary-blue-color fs-6 d-flex">
+          <mat-icon class="me-2">local_shipping</mat-icon>
+          {{ 'UNLOADING' | translate }}
+        </p>
+        <div class="row">
+          <!-- Formulaire -->
+          <div class="col-lg-12 col-md-12 col-12 ">
+            <form *ngIf="!isDisabledEditing.getValue()" [formGroup]="unloadForm">
+              <mat-form-field appearance="outline" class="example-full-width w-100 scale-09">
+                <mat-label>Ajouter un Dépotage</mat-label>
+                <input #input2 (focus)="filterUnloading()" (input)="filterUnloading()"
+                  (keydown.enter)="$event.preventDefault()" [formControl]="addNewUnloadingControl"
+                  [matAutocomplete]="auto2" matInput placeholder="" type="text">
+                <mat-autocomplete #auto2="matAutocomplete">
+                  <mat-option *ngFor="let unloadingType of filteredUnloadingTypes.getValue()"
+                    [value]="unloadingType.name" (onSelectionChange)="addNewUnloadingType(unloadingType)">
+                    {{ unloadingType.name }}
+                  </mat-option>
+                </mat-autocomplete>
+              </mat-form-field>
+            </form>
+          </div>
+
+          <!-- Tableau -->
+          <div class="col-lg-12 col-md-12 col-12">
+            <table [dataSource]="storageOffer.getValue().unloadingTypes" class="mat-elevation-z1 w-100" mat-table>
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th *matHeaderCellDef mat-header-cell>Désignation</th>
+                <td *matCellDef="let element" mat-cell>{{ element.name }}</td>
+              </ng-container>
+
+              <!-- Price Column -->
+              <ng-container matColumnDef="price">
+                <th *matHeaderCellDef mat-header-cell>Prix</th>
+                <td *matCellDef="let element" mat-cell>{{ element.initPrice }}</td>
+              </ng-container>
+              <!-- System Price Column -->
+              <ng-container matColumnDef="system_price">
+                <th *matHeaderCellDef mat-header-cell>Prix systéme</th>
+                <td *matCellDef="let element" mat-cell>{{ calculateStoragePrice(element) }}</td>
+              </ng-container>
+
+              <!-- Unit Column -->
+              <ng-container matColumnDef="unite">
+                <th *matHeaderCellDef mat-header-cell>Unité</th>
+                <td *matCellDef="let element" mat-cell>{{ element.unitOfMeasurement }}</td>
+              </ng-container>
+
+              <!-- Remise Column -->
+              <ng-container matColumnDef="remise">
+                <th *matHeaderCellDef mat-header-cell>Remise</th>
+                <td *matCellDef="let element" mat-cell>
+                  <select (change)="selectDiscountTypeForUnloading(element, $event)"
+                    [disabled]="isDisabledEditing.getValue()" aria-label="Remise"
+                    class="form-select custom-input form-select-sm">
+                    <option [selected]="element.discountType == 'null'" [value]="DiscountTypeEnum.NOTAPPLICABLE">NA
+                    </option>
+                    <option [selected]="element.discountType == 'RATE'" [value]="DiscountTypeEnum.RATE">%</option>
+                    <option [selected]="element.discountType == 'VALUE'" [value]="DiscountTypeEnum.VALUE">Valeur en DH
+                    </option>
+                  </select>
+                </td>
+              </ng-container>
+              <!-- Remise value Column -->
+              <ng-container matColumnDef="remiseValue">
+                <th *matHeaderCellDef mat-header-cell>Valeur de remise</th>
+                <td *matCellDef="let element" mat-cell>
+                  <p
+                    *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null">
+                    0.00</p>
+                  <input (change)="addDiscountValueForUnloading(element, $event)"
+                    *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.VALUE"
+                    [disabled]="isDisabledEditing.getValue()" class="form-control custom-input  form-control-sm"
+                    placeholder="0.00" type="number">
+
+                  <select (change)="addDiscountRateForUnloading(element, $event)"
+                    *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.RATE"
+                    [disabled]="isDisabledEditing.getValue()" class="form-select form-select-sm custom-input ">
+                    <option [value]="3">3%</option>
+                    <option [value]="5">5%</option>
+                    <option [value]="10">10%</option>
+                    <option [value]="15">15%</option>
+                  </select>
+                </td>
+              </ng-container>
+              <!-- final price -->
+              <ng-container matColumnDef="finalPrice">
+                <th *matHeaderCellDef mat-header-cell>Prix de vente</th>
+                <td *matCellDef="let element" mat-cell>
+                  {{ element.salesPrice }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="delete">
+                <th *matHeaderCellDef mat-header-cell></th>
+                <td *matCellDef="let element" mat-cell>
+                  <mat-icon *ngIf="!isDisabledEditing.getValue()" (click)="OnDeleteUnloadingFromOffer(element)"
+                    class="text-danger">delete</mat-icon>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="increaseValue">
+                <th *matHeaderCellDef mat-header-cell>Augmentation</th>
+                <td *matCellDef="let element" mat-cell>
+                  <input (change)="addIncreaseValueForUnloadingType(element, $event)"
+                    [disabled]="isDisabledEditing.getValue()" [value]="element.increaseValue"
+                    class="form-control form-control-sm custom-input" step="0.1" type="number">
+                </td>
+              </ng-container>
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions" stickyEnd>
+                <th *matHeaderCellDef mat-header-cell></th>
+                <td *matCellDef="let row" mat-cell>
+                  <button [matMenuTriggerFor]="menu" aria-label="Actions" mat-icon-button>
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                      <mat-icon>edit</mat-icon>
+                      Edit
+                    </button>
+                    <button mat-menu-item>
+                      <mat-icon>delete</mat-icon>
+                      Delete
+                    </button>
+                  </mat-menu>
+                </td>
+              </ng-container>
+
+              <!-- Header Row -->
+              <tr *matHeaderRowDef="unloadingDisplayedColumns"
+                class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0" mat-header-row></tr>
+
+              <!-- Data Row -->
+              <tr *matRowDef="let row; columns: unloadingDisplayedColumns;" class="bg-white text-secondary" mat-row>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="bg-white p-2 px-lg-3 mb-2 rounded-2 mat-elevation-z2 col-12">
+        <p class="primary-blue-color fs-6 d-flex">
+          <mat-icon class="me-2">rule</mat-icon>
+          {{ 'REQUIREMENTS' | translate }}
+        </p>
+        <div class="row">
+          <!-- Formulaire -->
+          <div class="col-md-12 col-12 ">
+            <form *ngIf="!isDisabledEditing.getValue()" [formGroup]="requirementForm">
+              <mat-form-field appearance="fill" class="w-100">
+                <mat-label>Exigences</mat-label>
+                <mat-select [disabled]="isDisabledEditing.getValue()" formControlName="requirement" multiple>
+                  <mat-option *ngFor="let requirement of requirements | async" [value]="requirement.id">
+                    {{ requirement.name }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </form>
+          </div>
+
+          <!-- Tableau -->
+          <div class="col-lg-12 col-md-12 col-12">
+            <table [dataSource]="storageOffer.getValue().requirements" class="mat-elevation-z1 w-100" mat-table>
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th *matHeaderCellDef mat-header-cell>Désignation</th>
+                <td *matCellDef="let element" mat-cell>{{ element.name }}</td>
+              </ng-container>
+
+              <!-- Price Column -->
+              <ng-container matColumnDef="price">
+                <th *matHeaderCellDef mat-header-cell>Prix</th>
+                <td *matCellDef="let element" mat-cell>{{ element.initPrice }}</td>
+              </ng-container>
+              <!-- System Price Column -->
+              <ng-container matColumnDef="system_price">
+                <th *matHeaderCellDef mat-header-cell>Prix systéme</th>
+                <td *matCellDef="let element" mat-cell>{{ calculateStoragePrice(element) }}</td>
+              </ng-container>
+              <!-- Unit Column -->
+              <ng-container matColumnDef="unite">
+                <th *matHeaderCellDef mat-header-cell>Unité</th>
+                <td *matCellDef="let element" mat-cell>{{ element.unitOfMeasurement }}</td>
+              </ng-container>
+
+              <!-- Remise Column -->
+              <ng-container matColumnDef="remise">
+                <th *matHeaderCellDef mat-header-cell>Remise</th>
+                <td *matCellDef="let element" mat-cell>
+                  <select (change)="selectDiscountTypeForRequirement(element, $event)"
+                    [disabled]="isDisabledEditing.getValue()" aria-label="Remise"
+                    class="form-select custom-input form-select-sm">
+                    <option [value]="DiscountTypeEnum.NOTAPPLICABLE" selected>NA</option>
+                    <option [value]="DiscountTypeEnum.RATE">%</option>
+                    <option [value]="DiscountTypeEnum.VALUE">Valeur en DH</option>
+                  </select>
+                  <!--              </td>-->
+              </ng-container>
+              <!-- Remise value Column -->
+              <ng-container matColumnDef="remiseValue">
+                <th *matHeaderCellDef mat-header-cell>Valeur de remise</th>
+                <td *matCellDef="let element" mat-cell>
+                  <p
+                    *ngIf="element.discountType == DiscountTypeEnum.NOTAPPLICABLE || element.discountType == '' || element.discountType == null">
+                    0.00 </p>
+
+                  <input (change)="addDiscountValueForRequirement(element, $event)"
+                    *ngIf="element.discount !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.VALUE"
+                    [disabled]="isDisabledEditing.getValue()" [value]="element.discountValue"
+                    class="form-control  custom-input  form-control-sm" placeholder="0.00" type="number">
+
+                  <select (change)="addDiscountRateForRequirement(element, $event)"
+                    *ngIf="element.discountType !== DiscountTypeEnum.NOTAPPLICABLE && element.discountType === DiscountTypeEnum.RATE"
+                    [disabled]="isDisabledEditing.getValue()" class="form-select form-select-sm custom-input ">
+                    <option [value]="3">3%</option>
+                    <option [value]="5">5%</option>
+                    <option [value]="10">10%</option>
+                    <option [value]="15">15%</option>
+                  </select>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="increaseValue">
+                <th *matHeaderCellDef mat-header-cell>Augmentation</th>
+                <td *matCellDef="let element" mat-cell>
+                  <input (change)="addIncreaseValueForRequirement(element, $event)"
+                    [disabled]="isDisabledEditing.getValue()" [value]="element.increaseValue"
+                    class="form-control custom-input form-control-sm" step="0.1" type="number">
+                </td>
+              </ng-container>
+              <!-- final price -->
+              <ng-container matColumnDef="finalPrice">
+                <th *matHeaderCellDef mat-header-cell>Prix de vente</th>
+                <td *matCellDef="let element" mat-cell>
+                  {{ element.salesPrice }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="delete">
+                <th *matHeaderCellDef mat-header-cell></th>
+                <td *matCellDef="let element" mat-cell>
+                  <mat-icon *ngIf="!isDisabledEditing.getValue()" (click)="OnDeleteRequirementFromOffer(element)"
+                    class="text-danger">delete</mat-icon>
+                </td>
+              </ng-container>
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th *matHeaderCellDef mat-header-cell></th>
+                <td *matCellDef="let row" mat-cell>
+                  <button [matMenuTriggerFor]="menu" aria-label="Actions" mat-icon-button>
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item>
+                      <mat-icon>edit</mat-icon>
+                      Edit
+                    </button>
+                    <button mat-menu-item>
+                      <mat-icon>delete</mat-icon>
+                      Delete
+                    </button>
+                  </mat-menu>
+                </td>
+              </ng-container>
+
+              <!-- Header Row -->
+              <tr *matHeaderRowDef="requirementsColumns"
+                class="primary-blue-color fixed-header bg-light rounded-3 custom-header-row p-0" mat-header-row></tr>
+
+              <!-- Data Row -->
+              <tr *matRowDef="let row; columns: requirementsColumns;" class="bg-white text-secondary" mat-row></tr>
+            </table>
+          </div>
+        </div>
+      </mat-card>
+      <!--  </div>-->
+    </div>
+
+    <mat-card class="bg-white p-2 my-2 rounded-2">
+      <div class="">
+        <mat-form-field appearance="outline" class="col-lg-12">
+          <mat-label>Note</mat-label>
+          <textarea [value]="storageOffer.getValue().note" formControlName="note"
+            [disabled]="!isDisabledEditing.getValue()" matInput placeholder=""></textarea>
+        </mat-form-field>
+      </div>
+    </mat-card>
+  </form>
+  <app-general-infos [createdAt]="storageOffer.getValue().createdAt" [createdBy]="storageOffer.getValue().createdBy"
+    [updatedAt]="storageOffer.getValue().updatedAt" [updatedBy]="storageOffer.getValue().updatedBy"
+    (onClickOnComment)="drawer.toggle()" (onClickOnTrackingLog)="openTrackingLog()"></app-general-infos>
+
+  <mat-drawer #drawer mode="side" position="end" class="bg-light px-2 py-1 shadow-sm rounded-0">
+    <mat-toolbar class="text-end w-100 d-flex mb-2 justify-content-between bg-spider rounded-2 mat-elevation-z3">
+      <span class="small">💬 {{ 'COMMENTS' | translate }}</span>
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-toolbar>
+    <app-comment [entity]="EntityEnum.STORAGEOFFER" [entityId]="storageOffer.getValue().id"></app-comment>
+  </mat-drawer>
+</mat-drawer-container>

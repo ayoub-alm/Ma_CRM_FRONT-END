@@ -1,22 +1,28 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {GeneralInfosComponent} from '../../../../utils/general-infos/general-infos.component';
-import {MatButton} from '@angular/material/button';
-import {MatCard, MatCardContent} from '@angular/material/card';
-import {MatIcon} from '@angular/material/icon';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {BehaviorSubject, debounceTime, distinctUntilChanged, finalize, tap} from 'rxjs';
-import {StorageDeliveryNoteResponseDto} from '../../../../../dtos/response/crm/storage.delivery.note.response.dto';
-import {StorageDeliveryNoteService} from '../../../../../services/crm/wms/storage.delivery.note.service';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {StorageInvoiceService} from '../../../../../services/crm/wms/storage.invoice.service';
-import {MatDialog} from '@angular/material/dialog';
-import {StorageCreditNoteResponseDto} from '../../../../../dtos/response/crm/storage.credit.note.response.dto';
-import {StorageCreditNoteService} from '../../../../../services/crm/wms/storage.credit.note.service';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {TranslatePipe} from '@ngx-translate/core';
-import {PrintService} from '../../../../../services/docs/print.service';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+import { DatePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { GeneralInfosComponent } from '../../../../utils/general-infos/general-infos.component';
+import { MatButton } from '@angular/material/button';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { BehaviorSubject, debounceTime, distinctUntilChanged, finalize, tap } from 'rxjs';
+import { StorageDeliveryNoteResponseDto } from '../../../../../dtos/response/crm/storage.delivery.note.response.dto';
+import { StorageDeliveryNoteService } from '../../../../../services/crm/wms/storage.delivery.note.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { StorageInvoiceService } from '../../../../../services/crm/wms/storage.invoice.service';
+import { MatDialog } from '@angular/material/dialog';
+import { StorageCreditNoteResponseDto } from '../../../../../dtos/response/crm/storage.credit.note.response.dto';
+import { StorageCreditNoteService } from '../../../../../services/crm/wms/storage.credit.note.service';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { TranslatePipe } from '@ngx-translate/core';
+import { PrintService } from '../../../../../services/docs/print.service';
+import { CommentComponent } from '../../../../utils/comment/comment.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbar } from '@angular/material/toolbar';
+import { EntityEnum } from '../../../../../enums/entity.enum';
+import { TrackingLogComponent } from '../../../../utils/tracking-log/tracking-log.component';
+import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-wms-credit-note-show',
@@ -34,25 +40,27 @@ import {PrintService} from '../../../../../services/docs/print.service';
     NgClass,
     FormsModule,
     ReactiveFormsModule,
-    TranslatePipe
+    TranslatePipe,
+    CommentComponent, MatSidenavModule, MatToolbar, MatBottomSheetModule
   ],
   templateUrl: './wms-credit-note-show.component.html',
   styleUrl: './wms-credit-note-show.component.css'
 })
 export class WmsCreditNoteShowComponent implements OnInit, AfterViewInit {
+  protected readonly EntityEnum = EntityEnum;
   isEditing: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(true);
   creditNote: BehaviorSubject<StorageCreditNoteResponseDto> = new BehaviorSubject<StorageCreditNoteResponseDto>({} as StorageCreditNoteResponseDto);
   creditNoteForm!: FormGroup;
   constructor(private creditNoteService: StorageCreditNoteService, private activeRouter: ActivatedRoute,
-              public router: Router, private snackBar: MatSnackBar, private storageInvoiceService: StorageInvoiceService,
-              private dialog: MatDialog,private fb: FormBuilder, private printService: PrintService) {
+    public router: Router, private snackBar: MatSnackBar, private storageInvoiceService: StorageInvoiceService,
+    private dialog: MatDialog, private fb: FormBuilder, private printService: PrintService) {
     this.creditNoteForm = this.fb.group({
-      id:[this.creditNote.getValue().id, Validators.required],
-      sendDate:[this.creditNote.getValue().sendDate, Validators.required],
-      sendStatus:[this.creditNote.getValue().sendStatus, Validators.required],
-      returnDate:[this.creditNote.getValue().returnDate, Validators.required],
-      returnStatus:[this.creditNote.getValue().returnStatus, Validators.required],
-      totalHt:[this.creditNote.getValue().totalHt, Validators.required],
+      id: [this.creditNote.getValue().id, Validators.required],
+      sendDate: [this.creditNote.getValue().sendDate, Validators.required],
+      sendStatus: [this.creditNote.getValue().sendStatus, Validators.required],
+      returnDate: [this.creditNote.getValue().returnDate, Validators.required],
+      returnStatus: [this.creditNote.getValue().returnStatus, Validators.required],
+      totalHt: [this.creditNote.getValue().totalHt, Validators.required],
     })
   }
 
@@ -81,7 +89,7 @@ export class WmsCreditNoteShowComponent implements OnInit, AfterViewInit {
   /**
    *
    */
-  listenToChangesInFormAndUpdateData(){
+  listenToChangesInFormAndUpdateData() {
     this.creditNoteForm.valueChanges.pipe(
       debounceTime(200),
       distinctUntilChanged(),
@@ -96,5 +104,18 @@ export class WmsCreditNoteShowComponent implements OnInit, AfterViewInit {
 
   onDownLoadCreditNote() {
     this.printService.generateStorageCreditNote(this.creditNote.getValue().id)
+  }
+
+  private _bottomSheet = inject(MatBottomSheet);
+
+  openTrackingLog(): void {
+    const cn = this.creditNote.getValue();
+    if (cn && cn.id) {
+      const entityType = 'com.sales_scout.entity.crm.wms.assets.StorageCreditNote';
+      const entityId = cn.id;
+      this._bottomSheet.open(TrackingLogComponent, {
+        data: { entityType, entityId }
+      });
+    }
   }
 }

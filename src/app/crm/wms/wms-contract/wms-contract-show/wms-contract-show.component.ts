@@ -1,9 +1,9 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import { CurrencyPipe, NgForOf, NgIf} from "@angular/common";
-import {MatButton, MatIconButton} from "@angular/material/button";
-import {MatCard, MatCardContent} from "@angular/material/card";
-import {MatIcon} from "@angular/material/icon";
-import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+import { CurrencyPipe, NgForOf, NgIf } from "@angular/common";
+import { MatButton, MatIconButton } from "@angular/material/button";
+import { MatCard, MatCardContent } from "@angular/material/card";
+import { MatIcon } from "@angular/material/icon";
+import { MatMenu, MatMenuItem, MatMenuTrigger } from "@angular/material/menu";
 import {
   MatCell, MatCellDef, MatColumnDef,
   MatHeaderCell,
@@ -13,27 +13,32 @@ import {
   MatRow,
   MatRowDef, MatTable
 } from '@angular/material/table';
-import {BehaviorSubject, catchError, debounceTime, distinctUntilChanged, EMPTY, of, tap} from 'rxjs';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {EntityEnum} from '../../../../../enums/entity.enum';
-import {getLabelFromStorageReasonEnum} from '../../../../../enums/crm/storage.reason.enum';
-import {DiscountTypeEnum} from '../../../../../enums/discount.type.enum';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {StorageContractService} from '../../../../../services/crm/wms/storage.contract.service';
-import {StorageContractResponseDto} from '../../../../../dtos/response/crm/storage.contract.response.dto';
-import {GeneralInfosComponent} from '../../../../utils/general-infos/general-infos.component';
-import {PrintService} from '../../../../../services/docs/print.service';
-import {ContractDTO, LineItem} from '../../../../../services/docs/contract.dto';
-import {StorageContractUpdateDto} from '../../../../../dtos/request/crm/storage.contract.update.dto';
-import {MatFormField, MatLabel} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
-import {UploadFileComponent} from '../../../../utils/upload-file/upload-file.component';
-import {LivreEnum} from "../../../../../enums/crm/livre.enum";
-import {PaymentMethodResponseDto} from '../../../../../dtos/init_data/response/paymentMethodResponseDto';
-import {PaymentMethodService} from '../../../../../services/data/payemet.method.service';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {TranslatePipe} from '@ngx-translate/core';
+import { BehaviorSubject, catchError, debounceTime, distinctUntilChanged, EMPTY, of, tap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { EntityEnum } from '../../../../../enums/entity.enum';
+import { getLabelFromStorageReasonEnum } from '../../../../../enums/crm/storage.reason.enum';
+import { DiscountTypeEnum } from '../../../../../enums/discount.type.enum';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { StorageContractService } from '../../../../../services/crm/wms/storage.contract.service';
+import { StorageContractResponseDto } from '../../../../../dtos/response/crm/storage.contract.response.dto';
+import { GeneralInfosComponent } from '../../../../utils/general-infos/general-infos.component';
+import { PrintService } from '../../../../../services/docs/print.service';
+import { ContractDTO, LineItem } from '../../../../../services/docs/contract.dto';
+import { StorageContractUpdateDto } from '../../../../../dtos/request/crm/storage.contract.update.dto';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { UploadFileComponent } from '../../../../utils/upload-file/upload-file.component';
+import { LivreEnum } from "../../../../../enums/crm/livre.enum";
+import { PaymentMethodResponseDto } from '../../../../../dtos/init_data/response/paymentMethodResponseDto';
+import { PaymentMethodService } from '../../../../../services/data/payemet.method.service';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { TranslatePipe } from '@ngx-translate/core';
+import { CommentComponent } from '../../../../utils/comment/comment.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbar } from '@angular/material/toolbar';
+import { TrackingLogComponent } from '../../../../utils/tracking-log/tracking-log.component';
+import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 @Component({
   selector: 'app-wms-contract-show',
   standalone: true,
@@ -56,26 +61,27 @@ import {TranslatePipe} from '@ngx-translate/core';
     NgForOf,
     MatIconButton,
     MatMenu, MatMenuItem, MatMenuTrigger, CurrencyPipe, ReactiveFormsModule, GeneralInfosComponent
-    , MatFormField, MatInput, MatLabel, UploadFileComponent, MatSlideToggle, TranslatePipe
+    , MatFormField, MatInput, MatLabel, UploadFileComponent, MatSlideToggle, TranslatePipe,
+    CommentComponent, MatSidenavModule, MatToolbar, MatBottomSheetModule
   ],
   templateUrl: './wms-contract-show.component.html',
   styleUrl: './wms-contract-show.component.css'
 })
-export class WmsContractShowComponent  implements OnInit, AfterViewInit{
+export class WmsContractShowComponent implements OnInit, AfterViewInit {
   protected readonly EntityEnum = EntityEnum;
   protected readonly getLabelFromStorageReasonEnum = getLabelFromStorageReasonEnum;
   protected readonly DiscountTypeEnum = DiscountTypeEnum;
 
-  storageContract:BehaviorSubject<StorageContractResponseDto> = new BehaviorSubject<StorageContractResponseDto>({} as StorageContractResponseDto);
+  storageContract: BehaviorSubject<StorageContractResponseDto> = new BehaviorSubject<StorageContractResponseDto>({} as StorageContractResponseDto);
   disabledEditing: boolean = true;
-  displayedColumns: string[] =  [ 'name', "unite",
+  displayedColumns: string[] = ['name', "unite",
     // "price", "remise", "remiseValue",
     "finalPrice",];
-  storageContractForm!:FormGroup;
-  paymentMethod: BehaviorSubject<PaymentMethodResponseDto[]> =  new BehaviorSubject<PaymentMethodResponseDto[]>([]);
-  constructor(private storageContractService: StorageContractService, public router: Router,private activeRouter: ActivatedRoute,
-              private snackBar: MatSnackBar, private printService: PrintService, private fb: FormBuilder,
-              private paymentMethodService: PaymentMethodService) {
+  storageContractForm!: FormGroup;
+  paymentMethod: BehaviorSubject<PaymentMethodResponseDto[]> = new BehaviorSubject<PaymentMethodResponseDto[]>([]);
+  constructor(private storageContractService: StorageContractService, public router: Router, private activeRouter: ActivatedRoute,
+    private snackBar: MatSnackBar, private printService: PrintService, private fb: FormBuilder,
+    private paymentMethodService: PaymentMethodService) {
   }
 
   ngOnInit() {
@@ -88,7 +94,7 @@ export class WmsContractShowComponent  implements OnInit, AfterViewInit{
       insuranceValue: ["", Validators.required],
       paymentMethodId: [""],
       paymentDeadline: [""],
-      automaticRenewal:[""]
+      automaticRenewal: [""]
     })
 
     this.loadStorageContract();
@@ -99,18 +105,19 @@ export class WmsContractShowComponent  implements OnInit, AfterViewInit{
   }
 
 
-  loadStorageContract():void{
-    const storageNeedId:number = this.activeRouter.snapshot.params['id'];
+  loadStorageContract(): void {
+    const storageNeedId: number = this.activeRouter.snapshot.params['id'];
     this.storageContractService.getStorageContractById(storageNeedId).pipe(
       tap(data => this.storageContract.next(data)),
       catchError((err) => {
-        this.snackBar.open("Erreur de téléchargement de données", "ok", {duration: 3000})
-        return of(null);}
-      )).subscribe({
-      next:()=> {
-        console.log(this.storageContract.getValue());
+        this.snackBar.open("Erreur de téléchargement de données", "ok", { duration: 3000 })
+        return of(null);
       }
-    })
+      )).subscribe({
+        next: () => {
+          console.log(this.storageContract.getValue());
+        }
+      })
   }
   /**
    *
@@ -139,10 +146,10 @@ export class WmsContractShowComponent  implements OnInit, AfterViewInit{
       this.storageContractService.updateStorageContract(updateDate).pipe(
         tap(data => {
           this.storageContract.next(data);
-          this.snackBar.open("La modification a été bien effectuén ", "OK", {duration:3000});
+          this.snackBar.open("La modification a été bien effectuén ", "OK", { duration: 3000 });
         }),
         catchError(err => {
-          this.snackBar.open("Error lors de la modification ", "OK", {duration:3000});
+          this.snackBar.open("Error lors de la modification ", "OK", { duration: 3000 });
           return EMPTY;
         })
       ).subscribe();
@@ -155,12 +162,12 @@ export class WmsContractShowComponent  implements OnInit, AfterViewInit{
    *
    */
   generateContractDocx() {
-      this.printService.generateContractById(this.storageContract.getValue().id)
+    this.printService.generateContractById(this.storageContract.getValue().id)
   }
 
   onUploadComplete($event: boolean) {
-    if ($event){
-     this.loadStorageContract();
+    if ($event) {
+      this.loadStorageContract();
     }
   }
 
@@ -170,6 +177,19 @@ export class WmsContractShowComponent  implements OnInit, AfterViewInit{
    */
   showStorageAnnexe(id: number) {
     this.storageContractService.getStorageAnnexeById(id).subscribe();
+  }
+
+  private _bottomSheet = inject(MatBottomSheet);
+
+  openTrackingLog(): void {
+    const contract = this.storageContract.getValue();
+    if (contract && contract.id) {
+      const entityType = 'com.sales_scout.entity.crm.wms.contract.StorageContract';
+      const entityId = contract.id;
+      this._bottomSheet.open(TrackingLogComponent, {
+        data: { entityType, entityId }
+      });
+    }
   }
 }
 

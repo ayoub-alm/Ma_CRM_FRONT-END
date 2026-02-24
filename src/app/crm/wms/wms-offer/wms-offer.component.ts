@@ -36,6 +36,7 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ProspectService } from '../../../../services/Leads/prospect.service';
 import { ProspectResponseDto } from '../../../../dtos/response/prospect.response.dto';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wms-offer',
@@ -76,7 +77,8 @@ import { ProspectResponseDto } from '../../../../dtos/response/prospect.response
     MatRadioGroup,
     MatRadioButton,
     MatDatepickerModule,
-    AsyncPipe
+    AsyncPipe,
+    TranslatePipe
   ],
   templateUrl: './wms-offer.component.html',
   styleUrl: './wms-offer.component.css',

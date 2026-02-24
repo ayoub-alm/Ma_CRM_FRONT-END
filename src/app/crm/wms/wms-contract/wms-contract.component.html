@@ -1,41 +1,35 @@
 <div class="row d-flex justify-content-start px-2">
   <div class="d-flex justify-content-start align-items-center">
-    <button (click)="router.navigate(['/admin/crm/wms/needs'])" color="primary"  mat-button>
+    <button (click)="router.navigate(['/admin/crm/wms/needs'])" color="primary" mat-button>
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <button mat-button class="text-secondary" (click)="router.navigate(['/admin/crm/wms'])"  >
-      <mat-icon >house</mat-icon>
-      Accueil
+    <button mat-button class="text-secondary" (click)="router.navigate(['/admin/crm/wms'])">
+      <mat-icon>house</mat-icon>
+      {{ 'HOME' | translate }}
     </button>
     >
     <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
       <mat-icon class=" primary-blue-color">checklist</mat-icon>
-      Contrats
+      {{ 'CONTRACTS' | translate }}
     </button>
   </div>
   <!--  Filters on actions -->
   <section class="  row">
     <div class="col-lg-8 p-1 col-12 d-flex justify-content-start">
-      <input
-        #input
-        (keyup)="applyFilter($event)"
-        autofocus
-        class=" rounded-2 mat-elevation-z1  bg-light search-input"
-        matInput
-        placeholder="Recherch"
-      />
+      <input #input (keyup)="applyFilter($event)" autofocus class=" rounded-2 mat-elevation-z1  bg-light search-input"
+        matInput [placeholder]="'SEARCH' | translate" />
 
     </div>
     <!-- Action Buttons -->
     <div class="col-lg-4 my-auto col-12 d-flex justify-content-lg-end  justify-content-end align-items-center">
-<!--      <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button-->
-<!--              style="transform:scale(0.9)">-->
-<!--        <mat-icon><i class="bi bi-funnel"></i></mat-icon>-->
-<!--      </button>-->
-<!--      <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button-->
-<!--              style="transform:scale(0.9)">-->
-<!--        <mat-icon>more_vert</mat-icon>-->
-<!--      </button>-->
+      <!--      <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button-->
+      <!--              style="transform:scale(0.9)">-->
+      <!--        <mat-icon><i class="bi bi-funnel"></i></mat-icon>-->
+      <!--      </button>-->
+      <!--      <button aria-label="Filter" class="rounded-3 bg-light my-auto mat-elevation-z1  " mat-icon-button-->
+      <!--              style="transform:scale(0.9)">-->
+      <!--        <mat-icon>more_vert</mat-icon>-->
+      <!--      </button>-->
     </div>
   </section>
 </div>
@@ -44,36 +38,39 @@
   <div class="table-container  border-top-5 border-secondary w-100">
     <table [dataSource]="storageContratcs" class="text-secondary" mat-table matSort>
       <!-- Columns: Select -->
-      <ng-container matColumnDef="select" >
+      <ng-container matColumnDef="select">
         <th *matHeaderCellDef mat-header-cell>
-          <input (change)="toggleSelectAll()" [checked]="isAllSelected" type="checkbox"/>
+          <input (change)="toggleSelectAll()" [checked]="isAllSelected" type="checkbox" />
         </th>
         <td *matCellDef="let row" mat-cell (click)="$event.stopPropagation()">
-          <input (change)="toggleRowSelection(row.id)" [checked]="isRowSelected(row.id)" type="checkbox"/>
+          <input (change)="toggleRowSelection(row.id)" [checked]="isRowSelected(row.id)" type="checkbox" />
         </td>
       </ng-container>
       <!-- Columns: Fields -->
       <ng-container matColumnDef="ref">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Référence</th>
-        <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.number != "" ? row.number : "N/A" }}</td>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'REFERENCE' | translate }}</th>
+        <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.number != "" ? row.number : "N/A" }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="customer" sticky>
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Client</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'CLIENT' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.customer?.name }}</td>
       </ng-container>
       <ng-container matColumnDef="productType">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Type de produit</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'WMS.PRODUCT_TYPE' |
+          translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.productType }}</td>
       </ng-container>
 
       <ng-container matColumnDef="stockedItem">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Element a stocker</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'WMS.STOCKED_ITEM' |
+          translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>
           <small>
             <ng-container *ngFor="let item of row.stockedItems; let i = index" class="d-flex justify-content-start">
               <small>
-                <button
-                  class="btn btn btn-sm scale-09 p-1 px-1  rounded-1 bg-secondary-subtle">{{ item.supportName + " " + item.structureName + " " + item.temperatureName }}
+                <button class="btn btn btn-sm scale-09 p-1 px-1  rounded-1 bg-secondary-subtle">{{ item.supportName + "
+                  " + item.structureName + " " + item.temperatureName }}
                 </button>
               </small>
               <!--             <button class="btn btn-sm"> {{ item.supportName + ""+item.structureName+" "+ item.temperatureName }} </button><br>-->
@@ -83,7 +80,7 @@
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Statut</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'STATUS' | translate }}</th>
         <td *matCellDef="let row" mat-cell>
           <small>
             <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-info-subtle">{{ row.status.name }}
@@ -92,55 +89,56 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="date">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Date</th>
-        <td *matCellDef="let row" class="full-width-table-celle"
-            mat-cell>{{ row.expirationDate| date:"dd-MM-yyyy hh:mm"  }}
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'DATE' | translate }}</th>
+        <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.expirationDate| date:"dd-MM-yyyy hh:mm"
+          }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="storageReason">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Raison de stockage</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'WMS.STORAGE_REASON' |
+          translate }}</th>
         <td *matCellDef="let row" mat-cell>
           <small>
-            <button
-              class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-warning-subtle">{{ getLabelFromStorageReasonEnum(row.storageReason) }}
+            <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-warning-subtle">{{
+              getLabelFromStorageReasonEnum(row.storageReason) }}
             </button>
           </small>
         </td>
       </ng-container>
       <ng-container matColumnDef="actions" stickyEnd>
         <th *matHeaderCellDef mat-header-cell></th>
-        <td *matCellDef="let row" mat-cell  (click)="$event.stopPropagation()">
+        <td *matCellDef="let row" mat-cell (click)="$event.stopPropagation()">
           <button [matMenuTriggerFor]="menu" aria-label="Actions" mat-icon-button>
             <mat-icon>more_vert</mat-icon>
           </button>
           <mat-menu #menu="matMenu">
-<!--            <button mat-menu-item>-->
-<!--              <mat-icon>edit</mat-icon>-->
-<!--              Edit-->
-<!--            </button>-->
-<!--            <button mat-menu-item>-->
-<!--              <mat-icon>delete</mat-icon>-->
-<!--              Delete-->
-<!--            </button>-->
+            <!--            <button mat-menu-item>-->
+            <!--              <mat-icon>edit</mat-icon>-->
+            <!--              Edit-->
+            <!--            </button>-->
+            <!--            <button mat-menu-item>-->
+            <!--              <mat-icon>delete</mat-icon>-->
+            <!--              Delete-->
+            <!--            </button>-->
           </mat-menu>
         </td>
       </ng-container>
-      <tr *matHeaderRowDef="displayedColumns" class="primary-blue-color  fixed-header bg-light rounded-3  custom-header-row p-0 "
-          mat-header-row></tr>
-      <tr *matRowDef="let row; columns: displayedColumns;" (click)="showContractDetails(row)"
-          [class]="getRowBg(row)" mat-row></tr>
+      <tr *matHeaderRowDef="displayedColumns"
+        class="primary-blue-color  fixed-header bg-light rounded-3  custom-header-row p-0 " mat-header-row></tr>
+      <tr *matRowDef="let row; columns: displayedColumns;" (click)="showContractDetails(row)" [class]="getRowBg(row)"
+        mat-row></tr>
       <!-- Row shown when there is no matching data. -->
       <tr *matNoDataRow class="mat-row">
         <td class="mat-cell text-center" colspan="8">
           <div class="d-flex flex-column align-items-center justify-content-center py-4">
             <ng-container *ngIf="loading$; else noData">
               <mat-spinner diameter="30" class="mb-2"></mat-spinner>
-              <p class="mb-0">Veuillez patienter, chargement des données en cours…</p>
+              <p class="mb-0">{{ 'PLEASE_WAIT_LOADING' | translate }}</p>
             </ng-container>
             <ng-template #noData>
               <img src="/empty_file.svg" alt="empty_data" class="mb-2" style="max-width: 150px;">
-              <p class="mb-0">Aucune donnée</p>
+              <p class="mb-0">{{ 'NO_DATA' | translate }}</p>
             </ng-template>
           </div>
         </td>

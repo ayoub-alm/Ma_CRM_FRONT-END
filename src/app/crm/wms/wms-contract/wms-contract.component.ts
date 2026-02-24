@@ -30,6 +30,7 @@ import { StorageContractResponseDto } from '../../../../dtos/response/crm/storag
 import { Observable } from 'rxjs';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { LoadingService } from '../../../../services/loading.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wms-contract',
@@ -59,7 +60,8 @@ import { LoadingService } from '../../../../services/loading.service';
     MatHeaderCellDef,
     MatNoDataRow,
     MatProgressSpinner,
-    NgIf
+    NgIf,
+    TranslatePipe
   ],
   templateUrl: './wms-contract.component.html',
   styleUrl: './wms-contract.component.css'

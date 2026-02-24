@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { StorageDeliveryNoteService } from '../../../../../services/crm/wms/storage.delivery.note.service';
 import { BehaviorSubject, finalize, tap } from 'rxjs';
 import { StorageDeliveryNoteResponseDto } from '../../../../../dtos/response/crm/storage.delivery.note.response.dto';
@@ -14,6 +14,13 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { StorageInvoiceService } from '../../../../../services/crm/wms/storage.invoice.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModificationRequestDialogComponent } from '../modification-request-dialog/modification-request-dialog.component';
+import { TranslatePipe } from '@ngx-translate/core';
+import { CommentComponent } from '../../../../utils/comment/comment.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbar } from '@angular/material/toolbar';
+import { EntityEnum } from '../../../../../enums/entity.enum';
+import { TrackingLogComponent } from '../../../../utils/tracking-log/tracking-log.component';
+import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'app-wms-delivery-note-show-edit',
@@ -31,12 +38,15 @@ import { ModificationRequestDialogComponent } from '../modification-request-dial
     MatMenuTrigger,
     MatIconButton,
     NgIf,
-    NgClass
+    NgClass,
+    TranslatePipe,
+    CommentComponent, MatSidenavModule, MatToolbar, MatBottomSheetModule
   ],
   templateUrl: './wms-delivery-note-show-edit.component.html',
   styleUrl: './wms-delivery-note-show-edit.component.css'
 })
 export class WmsDeliveryNoteShowEditComponent implements OnInit {
+  protected readonly EntityEnum = EntityEnum;
   isEditing: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(true);
   deliveryNote: BehaviorSubject<StorageDeliveryNoteResponseDto> = new BehaviorSubject<StorageDeliveryNoteResponseDto>({} as StorageDeliveryNoteResponseDto);
 
@@ -236,4 +246,17 @@ export class WmsDeliveryNoteShowEditComponent implements OnInit {
     }
   }
 
+
+  private _bottomSheet = inject(MatBottomSheet);
+
+  openTrackingLog(): void {
+    const dn = this.deliveryNote.getValue();
+    if (dn && dn.id) {
+      const entityType = 'com.sales_scout.entity.crm.wms.deliveryNote.StorageDeliveryNote';
+      const entityId = dn.id;
+      this._bottomSheet.open(TrackingLogComponent, {
+        data: { entityType, entityId }
+      });
+    }
+  }
 }

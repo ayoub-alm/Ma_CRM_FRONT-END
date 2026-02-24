@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { AsyncPipe, DatePipe, KeyValuePipe, NgClass, NgForOf, NgIf } from "@angular/common";
 import { MatButton, MatIconButton } from "@angular/material/button";
 import { MatCard, MatCardContent } from "@angular/material/card";
@@ -32,6 +32,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { StorageOfferResponseDto } from '../../../../../dtos/response/crm/storage.offer.response.dto';
 import { StorageOfferService } from '../../../../../services/crm/wms/storage.offer.service';
 import { EntityEnum } from '../../../../../enums/entity.enum';
+import { CommentComponent } from '../../../../utils/comment/comment.component';
+import { MatToolbar } from '@angular/material/toolbar';
+import { TrackingLogComponent } from '../../../../utils/tracking-log/tracking-log.component';
+import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { getLabelFromStorageReasonEnum, StorageReasonEnum } from '../../../../../enums/crm/storage.reason.enum';
 import { DiscountTypeEnum } from '../../../../../enums/discount.type.enum';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -64,6 +68,7 @@ import { PaymentMethodResponseDto } from '../../../../../dtos/init_data/response
 import { StorageOfferUpdateRequestDto } from '../../../../../dtos/request/crm/storage.offer.update.request.dto';
 import { RbacService, Permissions } from '../../../../../services/rbac.service';
 import { HasPermissionDirective } from '../../../../directives/has-permission.directive';
+import { TranslatePipe } from '@ngx-translate/core';
 
 
 @Component({
@@ -88,7 +93,8 @@ import { HasPermissionDirective } from '../../../../directives/has-permission.di
     NgForOf, MatLabel, MatIconButton, MatSidenavModule,
     DatePipe, MatMenu, MatMenuItem, MatMenuTrigger, ReactiveFormsModule, GeneralInfosComponent, MatFormField,
     MatOption, MatInput, MatAutocompleteTrigger, MatAutocomplete, MatTooltip, MatSelect, AsyncPipe, KeyValuePipe, NgClass,
-    HasPermissionDirective
+    HasPermissionDirective,
+    TranslatePipe, CommentComponent, MatToolbar, MatBottomSheetModule
   ],
   templateUrl: './wms-offer-show.component.html',
   styleUrl: './wms-offer-show.component.css'
@@ -1075,6 +1081,19 @@ export class WmsOfferShowComponent implements OnInit, AfterViewInit {
 
   protected readonly StorageReasonEnum = StorageReasonEnum;
 
+
+  private _bottomSheet = inject(MatBottomSheet);
+
+  openTrackingLog(): void {
+    const offer = this.storageOffer.getValue();
+    if (offer && offer.id) {
+      const entityType = 'com.sales_scout.entity.crm.wms.offer.StorageOffer';
+      const entityId = offer.id;
+      this._bottomSheet.open(TrackingLogComponent, {
+        data: { entityType, entityId }
+      });
+    }
+  }
 }
 
 

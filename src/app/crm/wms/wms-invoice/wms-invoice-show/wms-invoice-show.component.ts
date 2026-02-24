@@ -1,23 +1,29 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {DatePipe, NgClass, NgForOf, NgIf} from '@angular/common';
-import {GeneralInfosComponent} from '../../../../utils/general-infos/general-infos.component';
-import {MatButton, MatIconButton} from '@angular/material/button';
-import {MatCard, MatCardContent} from '@angular/material/card';
-import {MatIcon} from '@angular/material/icon';
-import {MatMenu, MatMenuItem, MatMenuTrigger} from '@angular/material/menu';
-import {BehaviorSubject, tap} from 'rxjs';
-import {ActivatedRoute, Router} from '@angular/router';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {StorageInvoiceService, StorageInvoiceUpdateDto} from '../../../../../services/crm/wms/storage.invoice.service';
-import {StorageInvoiceResponseDto} from '../../../../../dtos/response/crm/storage.invoice.response.dto';
-import {PrintService} from '../../../../../services/docs/print.service';
-import {MatDialog} from '@angular/material/dialog';
-import {AddUpdatePaymentDialogComponent} from '../add-update-payment-dialog/add-update-payment-dialog.component';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {StorageInvoicePaymentService} from '../../../../../services/crm/wms/storage.invoice.payment.service';
-import {StorageInvoicePaymentRequestDto} from '../../../../../dtos/request/crm/storage.invoice.payment.request.dto';
-import {MatSlideToggle} from '@angular/material/slide-toggle';
-import {TranslatePipe} from '@ngx-translate/core';
+import { AfterViewInit, Component, inject, OnInit } from '@angular/core';
+import { DatePipe, NgClass, NgForOf, NgIf } from '@angular/common';
+import { GeneralInfosComponent } from '../../../../utils/general-infos/general-infos.component';
+import { MatButton, MatIconButton } from '@angular/material/button';
+import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatIcon } from '@angular/material/icon';
+import { MatMenu, MatMenuItem, MatMenuTrigger } from '@angular/material/menu';
+import { BehaviorSubject, tap } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { StorageInvoiceService, StorageInvoiceUpdateDto } from '../../../../../services/crm/wms/storage.invoice.service';
+import { StorageInvoiceResponseDto } from '../../../../../dtos/response/crm/storage.invoice.response.dto';
+import { PrintService } from '../../../../../services/docs/print.service';
+import { MatDialog } from '@angular/material/dialog';
+import { AddUpdatePaymentDialogComponent } from '../add-update-payment-dialog/add-update-payment-dialog.component';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { StorageInvoicePaymentService } from '../../../../../services/crm/wms/storage.invoice.payment.service';
+import { StorageInvoicePaymentRequestDto } from '../../../../../dtos/request/crm/storage.invoice.payment.request.dto';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { TranslatePipe } from '@ngx-translate/core';
+import { CommentComponent } from '../../../../utils/comment/comment.component';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbar } from '@angular/material/toolbar';
+import { EntityEnum } from '../../../../../enums/entity.enum';
+import { TrackingLogComponent } from '../../../../utils/tracking-log/tracking-log.component';
+import { MatBottomSheet, MatBottomSheetModule } from '@angular/material/bottom-sheet';
 @Component({
   selector: 'app-wms-invoice-show',
   standalone: true,
@@ -38,18 +44,20 @@ import {TranslatePipe} from '@ngx-translate/core';
     FormsModule,
     ReactiveFormsModule,
     MatSlideToggle,
-    TranslatePipe
+    TranslatePipe,
+    CommentComponent, MatSidenavModule, MatToolbar, MatBottomSheetModule
   ],
   templateUrl: './wms-invoice-show.component.html',
   styleUrl: './wms-invoice-show.component.css'
 })
 export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
+  protected readonly EntityEnum = EntityEnum;
   isEditing: BehaviorSubject<Boolean> = new BehaviorSubject<Boolean>(true);
   invoice: BehaviorSubject<StorageInvoiceResponseDto> = new BehaviorSubject<StorageInvoiceResponseDto>({} as StorageInvoiceResponseDto);
-  invoiceForm!:FormGroup;
-  constructor(private printService: PrintService,private activeRouter: ActivatedRoute, private dialog: MatDialog,
-              public router: Router, private snackBar: MatSnackBar, private storageInvoiceService: StorageInvoiceService,
-              private fb: FormBuilder, private paymentService: StorageInvoicePaymentService) {
+  invoiceForm!: FormGroup;
+  constructor(private printService: PrintService, private activeRouter: ActivatedRoute, private dialog: MatDialog,
+    public router: Router, private snackBar: MatSnackBar, private storageInvoiceService: StorageInvoiceService,
+    private fb: FormBuilder, private paymentService: StorageInvoicePaymentService) {
   }
 
   ngOnInit() {
@@ -62,8 +70,8 @@ export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadStorageInvoice():void{
-    const storageDeliveryNoteId:number = this.activeRouter.snapshot.params['id'];
+  loadStorageInvoice(): void {
+    const storageDeliveryNoteId: number = this.activeRouter.snapshot.params['id'];
     this.storageInvoiceService.getStorageInvoicesById(storageDeliveryNoteId).pipe(tap(storageInvoice => {
       this.invoice.next(storageInvoice);
 
@@ -77,7 +85,7 @@ export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
         dueDate: [storageInvoice.dueDate ?? '']
       });
 
-      if(this.invoice.getValue()?.status.id >= 1){
+      if (this.invoice.getValue()?.status.id >= 1) {
         this.isEditing.next(false);
       }
     })).subscribe()
@@ -90,7 +98,7 @@ export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
 
   onPrintInvoice() {
     this.printService.generateInvoiceById(this.invoice.getValue().id)
-    this.snackBar.open("Le téléchargement va commencer dans quelques secondes...", "ok", {duration:3000})
+    this.snackBar.open("Le téléchargement va commencer dans quelques secondes...", "ok", { duration: 3000 })
   }
 
   OnAddPayment() {
@@ -111,7 +119,7 @@ export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
   getSumOfPayments(): number {
     let total = 0;
     this.invoice.getValue().storageInvoicePaymentRequestDtos.forEach(value => {
-      total +=  value.amount;
+      total += value.amount;
     })
     return total;
   }
@@ -122,10 +130,10 @@ export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
   onUpdateInvoice(): void {
     const invoiceId = this.invoice.getValue().id;
     const updateData = new StorageInvoiceUpdateDto({
-      sendDate : this.invoiceForm.value.sendDate,
-      sendStatus : this.invoiceForm.value.sendStatus,
-      returnDate : this.invoiceForm.value.returnDate,
-      returnStatus : this.invoiceForm.value.returnStatus,
+      sendDate: this.invoiceForm.value.sendDate,
+      sendStatus: this.invoiceForm.value.sendStatus,
+      returnDate: this.invoiceForm.value.returnDate,
+      returnStatus: this.invoiceForm.value.returnStatus,
       invoiceDate: this.invoiceForm.value.invoiceDate,
       dueDate: this.invoiceForm.value.dueDate
     });
@@ -145,11 +153,11 @@ export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
    */
   getPaymentStatus(): string {
     if (this.getSumOfPayments() == 0 || null) return "N'est pas payée"
-    if (this.getSumOfPayments() >= this.invoice.getValue().totalTtc){
+    if (this.getSumOfPayments() >= this.invoice.getValue().totalTtc) {
       return "Payée";
-    }else if (this.getSumOfPayments() < this.invoice.getValue().totalTtc){
+    } else if (this.getSumOfPayments() < this.invoice.getValue().totalTtc) {
       return "Partiellement Payée";
-    }else {
+    } else {
       return "N'est pas payée";
     }
   }
@@ -159,11 +167,11 @@ export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
    */
   getPaymentStatusClass() {
     if (this.getSumOfPayments() == 0 || null) return "btn btn-sm  btn-danger rounded-2 scale-08 text-white "
-    if (this.getSumOfPayments() >= this.invoice.getValue().totalTtc){
+    if (this.getSumOfPayments() >= this.invoice.getValue().totalTtc) {
       return "btn  btn-sm btn-success rounded-2 scale-08 text-white ";
-    }else if (this.getSumOfPayments() < this.invoice.getValue().totalTtc){
+    } else if (this.getSumOfPayments() < this.invoice.getValue().totalTtc) {
       return "btn  btn-sm btn-warning rounded-2 scale-08 text-white ";
-    }else {
+    } else {
       return "btn btn-sm  btn-danger rounded-2 scale-08 text-white ";
     }
   }
@@ -196,5 +204,18 @@ export class WmsInvoiceShowComponent implements OnInit, AfterViewInit {
     this.paymentService.validateStorageInvoicePayment(payment.id).pipe(
       tap(data => this.loadStorageInvoice())
     ).subscribe({})
+  }
+
+  private _bottomSheet = inject(MatBottomSheet);
+
+  openTrackingLog(): void {
+    const invoice = this.invoice.getValue();
+    if (invoice && invoice.id) {
+      const entityType = 'com.sales_scout.entity.crm.wms.invoice.StorageInvoice';
+      const entityId = invoice.id;
+      this._bottomSheet.open(TrackingLogComponent, {
+        data: { entityType, entityId }
+      });
+    }
   }
 }

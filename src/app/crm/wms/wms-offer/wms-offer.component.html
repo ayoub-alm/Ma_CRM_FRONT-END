@@ -5,19 +5,19 @@
     </button>
     <button mat-button class="text-secondary" (click)="router.navigate(['/admin/crm/wms'])">
       <mat-icon>house</mat-icon>
-      Accueil
+      {{ 'HOME' | translate }}
     </button>
     >
     <button mat-button (click)="router.navigate(['/admin/crm/wms/needs'])">
       <mat-icon class=" primary-blue-color">checklist</mat-icon>
-      Offres
+      {{ 'OFFERS' | translate }}
     </button>
   </div>
   <!--  Filters on actions -->
   <section class="  row">
     <div class="col-lg-8 p-1 col-12 d-flex justify-content-start">
       <input #input (keyup)="applyFilter($event)" autofocus class=" rounded-2 mat-elevation-z1  bg-light search-input"
-        matInput placeholder="Recherch" />
+        matInput [placeholder]="'SEARCH' | translate" />
 
     </div>
 
@@ -34,7 +34,7 @@
       <form [formGroup]="fieldFilterForm" class="row w-100">
         <div class="col-9">
           <mat-form-field appearance="outline" class="scale-09 col-4">
-            <mat-label>Client</mat-label>
+            <mat-label>{{ 'CLIENT' | translate }}</mat-label>
             <mat-select formControlName="customerIds" multiple>
               <mat-option *ngFor="let customer of (customers | async)" [value]="customer.id">
                 {{customer.name}}
@@ -43,20 +43,20 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="scale-09 col-4">
-            <mat-label>Type de produit</mat-label>
-            <input matInput formControlName="productType" placeholder="Type de produit">
+            <mat-label>{{ 'WMS.PRODUCT_TYPE' | translate }}</mat-label>
+            <input matInput formControlName="productType" [placeholder]="'WMS.PRODUCT_TYPE' | translate">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="scale-09 col-4">
-            <mat-label>Raison de stockage</mat-label>
-            <input matInput formControlName="storageReason" placeholder="Raison">
+            <mat-label>{{ 'WMS.STORAGE_REASON' | translate }}</mat-label>
+            <input matInput formControlName="storageReason" [placeholder]="'WMS.STORAGE_REASON' | translate">
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="example-form-field scale-09 col-6">
-            <mat-label>Date de création</mat-label>
+            <mat-label>{{ 'CREATION_DATE' | translate }}</mat-label>
             <mat-date-range-input [rangePicker]="createdDatePicker">
-              <input matStartDate placeholder="Date début" formControlName="createdAtStart">
-              <input matEndDate placeholder="Date fin" formControlName="createdAtEnd">
+              <input matStartDate [placeholder]="'START_DATE' | translate" formControlName="createdAtStart">
+              <input matEndDate [placeholder]="'END_DATE' | translate" formControlName="createdAtEnd">
             </mat-date-range-input>
             <mat-datepicker-toggle matIconSuffix [for]="createdDatePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #createdDatePicker></mat-date-range-picker>
@@ -65,13 +65,13 @@
 
         <div class="col-3 px-2 row">
           <mat-radio-group formControlName="filterType" aria-label="Select an option" class="col-12 mx-2 px-3">
-            <mat-radio-button [color]="'primary'" [value]="'AND'">ET</mat-radio-button>
-            <mat-radio-button [color]="'primary'" [value]="'OR'">OU</mat-radio-button>
+            <mat-radio-button [color]="'primary'" [value]="'AND'">{{ 'AND' | translate }}</mat-radio-button>
+            <mat-radio-button [color]="'primary'" [value]="'OR'">{{ 'OR' | translate }}</mat-radio-button>
           </mat-radio-group>
           <div class="col-12">
             <button (click)="resetFilters()" class="rounded-2 bg-success-subtle mx-2 text-success" mat-button>
               <mat-icon>refresh</mat-icon>
-              <span>Réinitialiser</span>
+              <span>{{ 'RESET' | translate }}</span>
             </button>
           </div>
         </div>
@@ -95,20 +95,22 @@
       </ng-container>
       <!-- Columns: Fields -->
       <ng-container matColumnDef="ref">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Référence</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'REFERENCE' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.number }}</td>
       </ng-container>
       <ng-container matColumnDef="customer" sticky>
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Client</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'CLIENT' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.customer?.name }}</td>
       </ng-container>
       <ng-container matColumnDef="productType">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Type de produit</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'WMS.PRODUCT_TYPE' |
+          translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.productType }}</td>
       </ng-container>
 
       <ng-container matColumnDef="stockedItem">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Element a stocker</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'WMS.STOCKED_ITEM' |
+          translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>
           <small>
             <ng-container *ngFor="let item of row.stockedItems; let i = index" class="d-flex justify-content-start">
@@ -124,7 +126,7 @@
       </ng-container>
 
       <ng-container matColumnDef="status">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Statut</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'STATUS' | translate }}</th>
         <td *matCellDef="let row" mat-cell class="full-width-table-celle">
           <small>
             <button [ngClass]="['scale-08 btn btn btn-sm p-1 px-2 rounded-1 ', getStatusColor(row.status?.id)]">{{
@@ -134,14 +136,15 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="date">
-        <th *matHeaderCellDef mat-header-cell mat-sort-header>Date</th>
+        <th *matHeaderCellDef mat-header-cell mat-sort-header>{{ 'DATE' | translate }}</th>
         <td *matCellDef="let row" class="full-width-table-celle" mat-cell>{{ row.expirationDate | date:"dd-MM-yyyy
           hh:mm" }}
         </td>
       </ng-container>
 
       <ng-container matColumnDef="storageReason">
-        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>Raison de stockage</th>
+        <th *matHeaderCellDef class="full-width-table-celle" mat-header-cell mat-sort-header>{{ 'WMS.STORAGE_REASON' |
+          translate }}</th>
         <td *matCellDef="let row" mat-cell>
           <small>
             <button class="scale-08 btn btn btn-sm p-1 px-2 rounded-1 bg-warning-subtle">{{
@@ -178,11 +181,11 @@
           <div class="d-flex flex-column align-items-center justify-content-center py-4">
             <ng-container *ngIf="loading$; else noData">
               <mat-spinner diameter="30" class="mb-2"></mat-spinner>
-              <p class="mb-0">Veuillez patienter, chargement des données en cours…</p>
+              <p class="mb-0">{{ 'PLEASE_WAIT_LOADING' | translate }}</p>
             </ng-container>
             <ng-template #noData>
               <img src="/empty_file.svg" alt="empty_data" class="mb-2" style="max-width: 150px;">
-              <p class="mb-0">Aucune donnée</p>
+              <p class="mb-0">{{ 'NO_DATA' | translate }}</p>
             </ng-template>
           </div>
         </td>

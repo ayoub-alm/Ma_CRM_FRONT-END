@@ -6,6 +6,7 @@ import { MatIcon } from "@angular/material/icon";
 import { BehaviorSubject, catchError, of, tap } from 'rxjs';
 import { WmsDashboardCounts } from '../../../../dtos/response/crm/wms.dashboard.counts';
 import { WmsDashboardService } from '../../../../services/crm/wms/wms-dashboard.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-wms-dashboard',
@@ -14,7 +15,8 @@ import { WmsDashboardService } from '../../../../services/crm/wms/wms-dashboard.
     BaseChartDirective,
     MatButton,
     MatCard,
-    MatIcon
+    MatIcon,
+    TranslatePipe
   ],
   templateUrl: './wms-dashboard.component.html',
   styleUrl: './wms-dashboard.component.css'
